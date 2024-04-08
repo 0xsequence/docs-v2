@@ -12,6 +12,7 @@
     "@0xsequence/indexer": "^1.9.17",
     "@types/react": "latest",
     "add": "^2.0.6",
+    "clsx": "^2.1.0",
     "core-js": "^3.36.1",
     "ethers": "5.7.2",
     "mobx": "^6.12.3",
