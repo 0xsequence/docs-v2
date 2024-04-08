@@ -7,6 +7,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-themed-primary {
+    @apply dark:text-white text-black-80;
+  }
+  .text-themed-secondary {
+    @apply dark:text-white-50 text-black-50;
+  }
+  .hover-fade {
+    @apply opacity-100 hover:opacity-50 transition-opacity;
+  }
+}
 
 #home-install .vocs_CodeGroup {
   display: flex;
@@ -22,7 +33,7 @@
   font-size: 18px;
 }
 
- /* :root.dark {
+/* :root.dark {
   --vocs-color_background: black;
 } */
 
@@ -31,7 +42,7 @@
   /* --vocs-color_link: yellow; */
 }
 
-.vocs_MobileTopNav_navigation{
+.vocs_MobileTopNav_navigation {
   display: block !important;
 }
 
@@ -45,7 +56,6 @@
 /* TODO: add "Build >" button */
 
 /* TODO: perhaps re-sink it.. just make it an icon */
-
 
 .tabs {
   display: flex;
@@ -81,7 +91,10 @@
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust minmax as needed */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Adjust minmax as needed */
   gap: 1rem; /* Adjust the gap as needed */
   padding: 1rem;
   /* background-color: #1a1a1a; Dark background as shown in the image */
@@ -131,7 +144,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 8px;
   text-align: left;
@@ -208,7 +222,7 @@ th, td {
 
 .mint-button {
   margin: 5px;
-  background-image: linear-gradient(to right, #7537f9, #651fff); 
+  background-image: linear-gradient(to right, #7537f9, #651fff);
   color: #fff; /* Light text */
   padding: 11px 24px; /* Spacing around the text */
   border-radius: 30px; /* Rounded corners */
@@ -222,7 +236,7 @@ th, td {
 }
 
 .mint-button:hover {
-  background-image: linear-gradient(to right, #612cd2, #541ad1); 
+  background-image: linear-gradient(to right, #612cd2, #541ad1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
 }
 
@@ -234,7 +248,7 @@ th, td {
 
 .video-container {
   position: relative;
-  width: 560px; 
+  width: 560px;
   height: 315px;
 }
 
