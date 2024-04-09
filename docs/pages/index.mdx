@@ -9,6 +9,7 @@ content:
 ---
 
 import { HomePage } from 'vocs/components'
+import { Header } from '../components/Home/Header'
 import { SolutionsSection } from '../components/Home/SolutionsSection'
 import { GuidesSection } from '../components/Home/GuidesSection'
 import { SDKsSection } from '../components/Home/SDKsSection'
@@ -16,16 +17,10 @@ import { APIsSection } from '../components/Home/APIsSection'
 import { SupportSection } from '../components/Home/SupportSection'
 import { MatrixBackground } from '../components/Home/MatrixBackground'
 import { GradientBackground } from '../components/Home/GradientBackground'
+import { Footer } from '../components/Home/Footer'
 
 <div className="flex flex-col">
-  <MatrixBackground className="pt-20 pb-40 -mb-10 px-5 z-0">
-    <section className="flex flex-col items-center gap-4 max-w-screen-lg mx-auto">
-      <HomePage.Logo className="w-52" />
-      <h2 className="text-xl font-bold text-themed-primary max-w-3xl text-center text-wrap">
-        {`Welcome to Sequence docs. Here you can learn about the modular Sequence products that empower game developers to build engaging web3 games on any Ethereum-compatible chain.`}
-      </h2>
-    </section>
-  </MatrixBackground>
+  <Header logo={<HomePage.Logo className="w-52" />} />
   <div className="px-5 z-10">
     <div className="w-full max-w-screen-lg mx-auto">
       <SolutionsSection />
@@ -36,11 +31,12 @@ import { GradientBackground } from '../components/Home/GradientBackground'
       <GuidesSection />
     </div>
   </GradientBackground>
-  <div className="px-5 mt-30">
+  <div className="px-5 my-30">
     <div className="w-full max-w-screen-lg mx-auto flex flex-col gap-30">
       <SDKsSection />
       <APIsSection />
       <SupportSection />
     </div>
   </div>
+  <Footer logo={<HomePage.Logo className="w-32" />} />
 </div>

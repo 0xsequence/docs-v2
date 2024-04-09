@@ -10,7 +10,7 @@ export function MatrixBackground({
 }) {
   return (
     <div className={clsx('relative', className)}>
-      <div className="absolute inset-0 z-0 flex items-center dark:bg-matrix-gradient-dark bg-matrix-gradient-light mix-blend-normal dark:mix-blend-multiply">
+      <div className="absolute inset-0 z-0 flex items-center dark:bg-matrix-dark bg-matrix-light mix-blend-normal dark:mix-blend-multiply">
         <div
           style={{
             height: '100%',

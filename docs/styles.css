@@ -17,7 +17,7 @@
   .hover-fade {
     @apply opacity-100 hover:opacity-50 transition-opacity;
   }
-  .bg-matrix-gradient-dark {
+  .bg-matrix-dark {
     background: linear-gradient(
         0deg,
         #111 0%,
@@ -36,7 +36,7 @@
     background-size: cover;
     background-position: center center;
   }
-  .bg-matrix-gradient-light {
+  .bg-matrix-light {
     background: linear-gradient(
         0deg,
         #f0f0f0 0%,
@@ -54,6 +54,42 @@
       url(/img/matrix-bg-light.svg);
     background-size: cover;
     background-position: center center;
+  }
+  .bg-gradient-dark {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.75) 50%,
+        rgba(0, 0, 0, 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        #000 0%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0) 60%,
+        #000 100%
+      ),
+      linear-gradient(
+        270deg,
+        rgba(11, 106, 249, 0.25) 0%,
+        rgba(29, 146, 255, 0.3) 100%
+      );
+  }
+  .bg-gradient-light {
+    background: linear-gradient(
+        180deg,
+        #f0f0f0 0%,
+        rgba(255, 255, 255, 0) 49.83%,
+        #f0f0f0 100%
+      ),
+      linear-gradient(
+        90deg,
+        #d2e4ff 0%,
+        rgba(210, 228, 255, 0.5) 25.3%,
+        rgba(255, 255, 255, 0) 49.83%,
+        rgba(210, 228, 255, 0.5) 75.47%,
+        #d2e4ff 100%
+      );
   }
 }
 

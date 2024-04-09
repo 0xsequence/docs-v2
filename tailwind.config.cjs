@@ -16,6 +16,7 @@ module.exports = {
       colors: {
         ['white-10']: 'rgba(255,255,255,0.1)',
         ['white-15']: 'rgba(255,255,255,0.15)',
+        ['white-25']: 'rgba(255,255,255,0.25)',
         ['white-50']: 'rgba(255,255,255,0.5)',
         ['white-80']: 'rgba(255,255,255,0.8)',
         ['black-10']: 'rgba(0,0,0,0.1)',
@@ -30,6 +31,7 @@ module.exports = {
         ['dark-yellow']: '#8D6A17',
       },
       spacing: {
+        ['15']: '3.75rem',
         ['30']: '7.5rem',
       },
       fontSize: {
