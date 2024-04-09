@@ -27,7 +27,7 @@ export const topNav = [
     items: [
       { text: 'Unity', link: '/sdk/unity/01-overview', match: '/sdk/unity/01-overview' },
       { text: 'Unreal', link: '/sdk/unreal/01-overview', match: '/sdk/unreal/01-overview' },
-      { text: 'Typescript', link: '/sdk/typescript/01-overview', match: '/sdk/typescript/01-overview' },
+      { text: 'Typescript', link: '/sdk/typescript/03-guides/overview', match: '/sdk/typescript/03-guides/overview' },
       { text: 'Sequence Kit', link: '/sdk/sequence-kit/01-overview', match: '/sdk/sequence-kit/01-overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
@@ -295,6 +295,7 @@ export const sidebar = {
         ]
        },
         { text: 'TypeScript', collapsed: true, items: [
+          {text: 'Overview', link: '/sdk/typescript/03-guides/overview'},
           {text: 'Connect Wallet', link: '/sdk/typescript/03-guides/01-connect-wallet'},
           {text: 'Authenticate Users with Message Signature', link: '/sdk/typescript/03-guides/02-auth-address'},
           {text: 'Signing & Verifying Messages', link: '/sdk/typescript/03-guides/03-sign-message'},
