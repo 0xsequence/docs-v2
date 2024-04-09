@@ -19,6 +19,7 @@ module.exports = {
         ['white-50']: 'rgba(255,255,255,0.5)',
         ['white-80']: 'rgba(255,255,255,0.8)',
         ['black-10']: 'rgba(0,0,0,0.1)',
+        ['black-7']: 'rgba(0,0,0,0.07)',
         ['black-50']: 'rgba(0,0,0,0.5)',
         ['black-80']: 'rgba(0,0,0,0.8)',
         ['light-purple']: '#F2ECFF',
