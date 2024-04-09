@@ -36,7 +36,7 @@ const SupportItem = ({ title, body }: { title: string; body: string }) => (
         {body}
       </p>
     </div>
-    <a className="px-5 py-3 dark:bg-white-15 bg-black-7 rounded-full w-fit text-sm leading-5 font-bold text-themed-primary">
+    <a className="hover-fade px-5 py-3 dark:bg-white-15 bg-black-7 rounded-full w-fit text-sm leading-5 font-bold text-themed-primary">
       Contact us
     </a>
   </div>

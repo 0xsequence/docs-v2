@@ -57,7 +57,7 @@ const SolutionsGroup = ({ heading, items, theme }: SolutionsGroupProps) => {
               <div className="flex gap-2">
                 <p
                   className={clsx(
-                    'flex items-center gap-2 text-xl leading-7 dark:text-white-80 font-bold',
+                    'flex items-center gap-2 text-xl leading-7 dark:text-white font-bold',
                     {
                       ['text-dark-purple']: theme === 'purple',
                       ['text-dark-green']: theme === 'green',

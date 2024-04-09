@@ -17,6 +17,44 @@
   .hover-fade {
     @apply opacity-100 hover:opacity-50 transition-opacity;
   }
+  .bg-matrix-gradient-dark {
+    background: linear-gradient(
+        0deg,
+        #111 0%,
+        transparent 30%,
+        transparent 70%,
+        #111 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(17, 17, 17, 0.6) 40%,
+        rgba(17, 17, 17, 0.6) 60%,
+        transparent 100%
+      ),
+      url(/img/matrix-bg-dark.svg);
+    background-size: cover;
+    background-position: center center;
+  }
+  .bg-matrix-gradient-light {
+    background: linear-gradient(
+        0deg,
+        #f0f0f0 0%,
+        rgba(240, 240, 240, 0.6) 30%,
+        rgba(240, 240, 240, 0.6) 70%,
+        #f0f0f0 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(240, 240, 240, 0.6) 40%,
+        rgba(240, 240, 240, 0.6) 60%,
+        transparent 100%
+      ),
+      url(/img/matrix-bg-light.svg);
+    background-size: cover;
+    background-position: center center;
+  }
 }
 
 #home-install .vocs_CodeGroup {
