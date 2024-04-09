@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { TwitterIcon, InstagramIcon, DiscordIcon } from './icons'
+import { SmartLink } from './SmartLink'
 
 export const Footer = ({ logo }: { logo: ReactNode }) => {
   const [state, submitToHubspot] = useNewsletterSignup()
@@ -10,7 +11,9 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
     <footer className="border-t border-black-10 px-5 pt-15">
       <div className="w-full max-w-screen-lg mx-auto flex flex-col gap-10">
         <div className="flex flex-col gap-5">
-          {logo}
+          <SmartLink href="https://sequence.xyz" className="hover-fade w-fit">
+            {logo}
+          </SmartLink>
           <div className="flex items-start gap-10">
             <div className="flex-1">
               <form
@@ -67,25 +70,65 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
             <div className="flex-1 flex gap-2 text-xs font-medium text-themed-secondary">
               <div className="flex gap-2 flex-1">
                 <div className="flex flex-col gap-3 flex-1">
-                  <a className="hover-fade">Home</a>
-                  <a className="hover-fade">Pricing</a>
-                  <a className="hover-fade">Blog</a>
-                  <a className="hover-fade">Docs</a>
+                  <SmartLink href="https://sequence.xyz" className="hover-fade">
+                    Home
+                  </SmartLink>
+                  <SmartLink
+                    href="https://sequence.xyz/pricing"
+                    className="hover-fade"
+                  >
+                    Pricing
+                  </SmartLink>
+                  <SmartLink
+                    href="https://sequence.xyz/blog"
+                    className="hover-fade"
+                  >
+                    Blog
+                  </SmartLink>
                 </div>
                 <div className="flex flex-col gap-3 flex-1">
-                  <a className="hover-fade">Terms</a>
-                  <a className="hover-fade">Privacy</a>
+                  <SmartLink
+                    href="https://sequence.xyz/terms"
+                    className="hover-fade"
+                  >
+                    Terms
+                  </SmartLink>
+                  <SmartLink
+                    href="https://sequence.xyz/privacy"
+                    className="hover-fade"
+                  >
+                    Privacy
+                  </SmartLink>
                 </div>
               </div>
               <div className="flex gap-2 flex-1">
                 <div className="flex flex-col gap-3 flex-1">
-                  <a className="hover-fade">Contact</a>
-                  <a className="hover-fade">FAQ</a>
-                  <a className="hover-fade">Media kit</a>
+                  <SmartLink
+                    href="https://sequence.xyz/contact"
+                    className="hover-fade"
+                  >
+                    Contact
+                  </SmartLink>
+                  <SmartLink
+                    href="https://sequence.xyz/pricing"
+                    className="hover-fade"
+                  >
+                    Media kit
+                  </SmartLink>
+                  <SmartLink href="/" className="hover-fade">
+                    Docs
+                  </SmartLink>
                 </div>
                 <div className="flex flex-col gap-3 flex-1">
-                  <a className="hover-fade">Sequence Builder</a>
-                  <a className="hover-fade">Sequence Wallet</a>
+                  <SmartLink
+                    href="https://sequence.build"
+                    className="hover-fade"
+                  >
+                    Sequence Builder
+                  </SmartLink>
+                  <SmartLink href="https://sequence.app" className="hover-fade">
+                    Sequence Wallet
+                  </SmartLink>
                 </div>
               </div>
             </div>
@@ -93,20 +136,31 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
         </div>
         <div className="border-t dark:border-white-10 border-black-10 flex items-center justify-between py-7">
           <div className="flex items-center gap-2">
-            <a className="text-themed-secondary hover-fade">
+            <SmartLink
+              href="https://twitter.com/0xsequence"
+              className="text-themed-secondary hover-fade"
+            >
               <TwitterIcon />
-            </a>
-            <a className="text-themed-secondary hover-fade">
+            </SmartLink>
+            <SmartLink
+              href="https://discord.gg/sequence"
+              className="text-themed-secondary hover-fade"
+            >
               <DiscordIcon />
-            </a>
-            <a className="text-themed-secondary hover-fade">
+            </SmartLink>
+            <SmartLink
+              href="https://www.instagram.com/0xsequence"
+              className="text-themed-secondary hover-fade"
+            >
               <InstagramIcon />
-            </a>
+            </SmartLink>
           </div>
-          <img
-            src="/img/horizon-logo.png"
-            className="max-w-24 dark:invert-0 invert"
-          />
+          <SmartLink href="https://horizon.io" className="hover-fade">
+            <img
+              src="/img/horizon-logo.png"
+              className="max-w-24 dark:invert-0 invert"
+            />
+          </SmartLink>
         </div>
       </div>
     </footer>

@@ -1,3 +1,5 @@
+import { SmartLink } from './SmartLink'
+
 export const GuidesSection = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
     <div className="flex flex-col gap-1 py-5">
@@ -13,30 +15,42 @@ export const GuidesSection = () => (
         body="Follow a step by step guide to build a web-based game demo that
         leverages Sequence Embedded Wallet with custom in-game achievement
         tokens."
+        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Build a web3 game with Unity"
         body="Follow a step by step guide to build a web-based game demo that
         leverages Sequence Embedded Wallet with custom in-game achievement
         tokens."
+        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Create web3 lootboxes"
         body="Follow a step by step guide to build a web-based game demo that
         leverages Sequence Embedded Wallet with custom in-game achievement
         tokens."
+        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Orderbook Marketplace"
         body="Follow a step by step guide to build a web-based game demo that
         leverages Sequence Embedded Wallet with custom in-game achievement
         tokens."
+        link="/solutions/marketplaces/orderbook/01-overview"
       />
     </div>
   </section>
 )
 
-const GuideCard = ({ title, body }: { title: string; body: string }) => {
+const GuideCard = ({
+  title,
+  body,
+  link,
+}: {
+  title: string
+  body: string
+  link: string
+}) => {
   return (
     <div className="flex flex-col gap-4 p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(50%-8px)]">
       <div className="rounded-md overflow-hidden w-full aspect-[2]">
@@ -49,9 +63,12 @@ const GuideCard = ({ title, body }: { title: string; body: string }) => {
       <p className="text-themed-secondary text-md font-medium leading-6">
         {body}
       </p>
-      <a className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit">
+      <SmartLink
+        href={link}
+        className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
+      >
         Read guide
-      </a>
+      </SmartLink>
     </div>
   )
 }

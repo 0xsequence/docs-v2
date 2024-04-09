@@ -11,20 +11,108 @@ export const SolutionsSection = () => (
       </p>
     </div>
     <div className="flex gap-4">
-      {SOLUTIONS_GROUPS.map((group, index) => (
-        <SolutionsGroup key={index} {...group} />
-      ))}
+      <SolutionsGroup
+        theme="purple"
+        heading="Acquire players"
+        items={[
+          {
+            icon: 'WalletIcon',
+            title: 'Universal Wallet',
+            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            link: '/solutions/wallets/universal-wallet/01-overview',
+          },
+          {
+            icon: 'WalletIcon',
+            title: 'Embedded Wallet',
+            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            link: '/solutions/wallets/embedded-wallet/01-overview',
+          },
+          {
+            icon: 'CollectiblesIcon',
+            title: 'Collectibles',
+            body: 'Manage contracts and collections with our no-code Builder.',
+            link: '/solutions/collectibles/contracts/01-deploy-an-item-collection',
+          },
+          {
+            icon: 'AirdropperIcon',
+            title: 'Airdropper',
+            body: 'Create airdrop campaigns and target players with airdrops.',
+            link: '/',
+          },
+        ]}
+      />
+      <SolutionsGroup
+        theme="green"
+        heading="Earn more revenue"
+        items={[
+          {
+            icon: 'MarketplaceIcon',
+            title: 'Marketplace',
+            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            link: '/solutions/marketplaces/white-label-marketplace',
+          },
+          {
+            icon: 'SequenceIcon',
+            title: 'Orderbook API',
+            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            link: '/solutions/marketplaces/orderbook/01-overview',
+          },
+          {
+            icon: 'CartIcon',
+            title: 'NFT Checkout',
+            body: 'Manage contracts and collections with our no-code Builder.',
+            link: '/',
+          },
+          {
+            icon: 'SequenceIcon',
+            title: 'Onramps',
+            body: 'Create airdrop campaigns and target players with airdrops.',
+            link: '/solutions/payments/onramps/01-fiat-on-ramps',
+          },
+        ]}
+      />
+      <SolutionsGroup
+        theme="yellow"
+        heading="Retain and grow"
+        items={[
+          {
+            icon: 'MinterIcon',
+            title: 'Minter',
+            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            link: '/guides/webgl-guide#deploy-a-remote-minter',
+          },
+          {
+            icon: 'AnalyticsIcon',
+            title: 'Analytics',
+            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            link: '/',
+          },
+          {
+            icon: 'DiscordIcon',
+            title: 'Discord Bot',
+            body: 'Manage contracts and collections with our no-code Builder.',
+            link: '/',
+          },
+        ]}
+      />
     </div>
   </section>
 )
 
-type SolutionsGroupProps = {
+const SolutionsGroup = ({
+  heading,
+  items,
+  theme,
+}: {
   heading: string
-  items: { icon: keyof typeof ICONS; title: string; body: string }[]
+  items: {
+    icon: keyof typeof ICONS
+    title: string
+    body: string
+    link: string
+  }[]
   theme: 'purple' | 'green' | 'yellow'
-}
-
-const SolutionsGroup = ({ heading, items, theme }: SolutionsGroupProps) => {
+}) => {
   return (
     <div className="flex-1 h-fit shrink-0 rounded-xl dark:bg-white-10 bg-white overflow-hidden">
       <div className="flex flex-col gap-3 p-4 relative">
@@ -46,13 +134,17 @@ const SolutionsGroup = ({ heading, items, theme }: SolutionsGroupProps) => {
           const IconComponent = ICONS[item.icon]
 
           return (
-            <div
+            <a
               key={index}
-              className={clsx('p-4 dark:bg-white-10 rounded-md z-10', {
-                ['bg-light-purple']: theme === 'purple',
-                ['bg-light-green']: theme === 'green',
-                ['bg-light-yellow']: theme === 'yellow',
-              })}
+              href={item.link}
+              className={clsx(
+                'hover-fade p-4 dark:bg-white-10 rounded-md z-10',
+                {
+                  ['bg-light-purple']: theme === 'purple',
+                  ['bg-light-green']: theme === 'green',
+                  ['bg-light-yellow']: theme === 'yellow',
+                }
+              )}
             >
               <div className="flex gap-2">
                 <p
@@ -72,87 +164,10 @@ const SolutionsGroup = ({ heading, items, theme }: SolutionsGroupProps) => {
               <p className="text-themed-secondary text-sm font-medium">
                 {item.body}
               </p>
-            </div>
+            </a>
           )
         })}
       </div>
     </div>
   )
 }
-
-const SOLUTIONS_GROUPS: SolutionsGroupProps[] = [
-  {
-    theme: 'purple',
-    heading: 'Acquire players',
-    items: [
-      {
-        icon: 'WalletIcon',
-        title: 'Universal Wallet',
-        body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-      },
-      {
-        icon: 'WalletIcon',
-        title: 'Embedded Wallet',
-        body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-      },
-      {
-        icon: 'CollectiblesIcon',
-        title: 'Collectibles',
-        body: 'Manage contracts and collections with our no-code Builder.',
-      },
-      {
-        icon: 'AirdropperIcon',
-        title: 'Airdropper',
-        body: 'Create airdrop campaigns and target players with airdrops.',
-      },
-    ],
-  },
-
-  {
-    theme: 'green',
-    heading: 'Earn more revenue',
-    items: [
-      {
-        icon: 'MarketplaceIcon',
-        title: 'Marketplace',
-        body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-      },
-      {
-        icon: 'SequenceIcon',
-        title: 'Orderbook API',
-        body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-      },
-      {
-        icon: 'CartIcon',
-        title: 'NFT Checkout',
-        body: 'Manage contracts and collections with our no-code Builder.',
-      },
-      {
-        icon: 'SequenceIcon',
-        title: 'Onramps',
-        body: 'Create airdrop campaigns and target players with airdrops.',
-      },
-    ],
-  },
-  {
-    theme: 'yellow',
-    heading: 'Retain and grow',
-    items: [
-      {
-        icon: 'MinterIcon',
-        title: 'Minter',
-        body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-      },
-      {
-        icon: 'AnalyticsIcon',
-        title: 'Analytics',
-        body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-      },
-      {
-        icon: 'DiscordIcon',
-        title: 'Discord Bot',
-        body: 'Manage contracts and collections with our no-code Builder.',
-      },
-    ],
-  },
-]

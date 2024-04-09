@@ -1,3 +1,4 @@
+import { SmartLink } from './SmartLink'
 import * as ICONS from './icons'
 
 export const APIsSection = () => (
@@ -14,31 +15,37 @@ export const APIsSection = () => (
         title="Marketplace API"
         icon="MarketplaceIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/api/marketplace"
       />
       <Card
         title="Indexer API"
         icon="IndexerIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/api/indexer/01-overview"
       />
       <Card
         title="Metadata API"
         icon="SequenceIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/api/metadata"
       />
       <Card
         title="Transactions API"
         icon="SequenceIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/api/relayer"
       />
       <Card
         title="Embedded Wallets API"
         icon="WalletIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/"
       />
       <Card
         title="Node Gateway"
         icon="NodeGatewayIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
+        link="/solutions/builder/node-gateway"
       />
     </div>
   </section>
@@ -48,20 +55,25 @@ const Card = ({
   title,
   body,
   icon,
+  link,
 }: {
   title: string
   body: string
   icon: keyof typeof ICONS
+  link: string
 }) => {
   const IconComponent = ICONS[icon]
 
   return (
-    <div className="p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(33%-(16px/3))]">
+    <SmartLink
+      href={link}
+      className="hover-fade p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(33%-(16px/3))]"
+    >
       <p className="font-bold text-themed-primary text-xl leading-7 flex items-center gap-2">
         <IconComponent />
         {title}
       </p>
       <p className="text-sm font-medium text-themed-secondary">{body}</p>
-    </div>
+    </SmartLink>
   )
 }
