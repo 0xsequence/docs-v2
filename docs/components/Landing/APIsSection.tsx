@@ -14,25 +14,25 @@ export const APIsSection = () => (
       <Card
         title="Marketplace API"
         icon="MarketplaceIcon"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Integrate sell and buy operations through our orderbook interface."
         link="/api/marketplace"
       />
       <Card
         title="Indexer API"
         icon="IndexerIcon"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Query wallets and contracts on Ethereum-compatible chains."
         link="/api/indexer/01-overview"
       />
       <Card
         title="Metadata API"
         icon="SequenceIcon"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Fetch token details on any collection and collectible."
         link="/api/metadata"
       />
       <Card
         title="Transactions API"
         icon="SequenceIcon"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Send and optimize transactions on any chain through our performant Sequence Relayer."
         link="/api/relayer"
       />
       <Card
@@ -44,7 +44,7 @@ export const APIsSection = () => (
       <Card
         title="Node Gateway"
         icon="NodeGatewayIcon"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Leverage Sequence's auto-scaling node service."
         link="/solutions/builder/node-gateway"
       />
     </div>

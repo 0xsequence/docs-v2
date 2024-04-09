@@ -14,25 +14,25 @@ export const SDKsSection = () => (
       <Card
         icon="UnityIcon"
         title="Unity"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Integrate Sequence with our native Unity library."
         link="/sdk/unity/01-overview"
       />
       <Card
         icon="UnrealIcon"
         title="Unreal Engine"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Integrate Sequence with our native Unreal Engine library."
         link="/sdk/unreal/01-overview"
       />
       <Card
         icon="GolangIcon"
         title="Go"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Leverage Sequence APIs easily from your Go backend."
         link="/sdk/go/overview"
       />
       <Card
         icon="NodeJSIcon"
         title="Node.js"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Integrate Sequence APIs with our TypeScript SDK."
         link="/"
       />
       <Card
@@ -56,7 +56,7 @@ export const SDKsSection = () => (
       <Card
         icon="SequenceIcon"
         title="Sequence Kit"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Add web onboarding for any web3 wallet."
         link="/"
       />
     </div>

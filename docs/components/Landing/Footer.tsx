@@ -70,18 +70,21 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
             <div className="flex-1 flex gap-2 text-xs font-medium text-themed-secondary">
               <div className="flex gap-2 flex-1">
                 <div className="flex flex-col gap-3 flex-1">
-                  <SmartLink href="https://sequence.xyz" className="hover-fade">
+                  <SmartLink
+                    href="https://sequence.xyz"
+                    className="hover-fade w-fit"
+                  >
                     Home
                   </SmartLink>
                   <SmartLink
                     href="https://sequence.xyz/pricing"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Pricing
                   </SmartLink>
                   <SmartLink
                     href="https://sequence.xyz/blog"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Blog
                   </SmartLink>
@@ -89,13 +92,13 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
                 <div className="flex flex-col gap-3 flex-1">
                   <SmartLink
                     href="https://sequence.xyz/terms"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Terms
                   </SmartLink>
                   <SmartLink
                     href="https://sequence.xyz/privacy"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Privacy
                   </SmartLink>
@@ -105,28 +108,31 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
                 <div className="flex flex-col gap-3 flex-1">
                   <SmartLink
                     href="https://sequence.xyz/contact"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Contact
                   </SmartLink>
                   <SmartLink
                     href="https://sequence.xyz/pricing"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Media kit
                   </SmartLink>
-                  <SmartLink href="/" className="hover-fade">
+                  <SmartLink href="/" className="hover-fade w-fit">
                     Docs
                   </SmartLink>
                 </div>
                 <div className="flex flex-col gap-3 flex-1">
                   <SmartLink
                     href="https://sequence.build"
-                    className="hover-fade"
+                    className="hover-fade w-fit"
                   >
                     Sequence Builder
                   </SmartLink>
-                  <SmartLink href="https://sequence.app" className="hover-fade">
+                  <SmartLink
+                    href="https://sequence.app"
+                    className="hover-fade w-fit"
+                  >
                     Sequence Wallet
                   </SmartLink>
                 </div>

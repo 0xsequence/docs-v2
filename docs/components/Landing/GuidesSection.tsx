@@ -12,30 +12,22 @@ export const GuidesSection = () => (
     <div className="flex flex-wrap gap-4">
       <GuideCard
         title="Build a web3 game with WebGL"
-        body="Follow a step by step guide to build a web-based game demo that
-        leverages Sequence Embedded Wallet with custom in-game achievement
-        tokens."
+        body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
         link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Build a web3 game with Unity"
-        body="Follow a step by step guide to build a web-based game demo that
-        leverages Sequence Embedded Wallet with custom in-game achievement
-        tokens."
+        body="Learn how to build an engaging iOS and Android game that uses Sequence Embedded Wallets under the hood for an integrated marketplace and in-game currency."
         link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Create web3 lootboxes"
-        body="Follow a step by step guide to build a web-based game demo that
-        leverages Sequence Embedded Wallet with custom in-game achievement
-        tokens."
+        body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
         link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Orderbook Marketplace"
-        body="Follow a step by step guide to build a web-based game demo that
-        leverages Sequence Embedded Wallet with custom in-game achievement
-        tokens."
+        body="Build an API-driven marketplace where players can mint, then sell or buy items using a custom web-based interface leveraging Sequence Orderbook APIs."
         link="/solutions/marketplaces/orderbook/01-overview"
       />
     </div>

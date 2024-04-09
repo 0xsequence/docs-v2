@@ -13,22 +13,22 @@ export const SupportSection = () => (
       <SupportItem
         link="/support"
         title="Chat Support"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Chat with our support team on specific questions."
       />
       <SupportItem
         link="https://discord.gg/sequence"
         title="Community"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Join our Discord community to learn from others building on Sequence."
       />
       <SupportItem
         link="https://support.sequence.xyz"
         title="Contact our team"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Reach out to our integration team to discuss how you can partner with Sequence."
       />
       <SupportItem
         link="https://support.sequence.xyz"
         title="Knowledge Base"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
+        body="Browse FAQs and answers to common support requests."
       />
     </div>
   </section>

@@ -48,25 +48,25 @@ export const SolutionsSection = () => (
           {
             icon: 'MarketplaceIcon',
             title: 'Marketplace',
-            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            body: 'Launch an in-game collectibles marketplace within minutes.',
             link: '/solutions/marketplaces/white-label-marketplace',
           },
           {
             icon: 'SequenceIcon',
             title: 'Orderbook API',
-            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            body: 'Integrate custom in-game marketplaces with our APIs.',
             link: '/solutions/marketplaces/orderbook/01-overview',
           },
           {
             icon: 'CartIcon',
             title: 'NFT Checkout',
-            body: 'Manage contracts and collections with our no-code Builder.',
+            body: 'Offer easy purchases with credit card, crypto, IAP support.',
             link: '/',
           },
           {
             icon: 'SequenceIcon',
             title: 'Onramps',
-            body: 'Create airdrop campaigns and target players with airdrops.',
+            body: 'Allow players to convert from fiat to any crypto globally.',
             link: '/solutions/payments/onramps/01-fiat-on-ramps',
           },
         ]}
@@ -78,13 +78,13 @@ export const SolutionsSection = () => (
           {
             icon: 'MinterIcon',
             title: 'Minter',
-            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            body: 'Securely mint achievement tokens tied to your game.',
             link: '/guides/webgl-guide#deploy-a-remote-minter',
           },
           {
             icon: 'AnalyticsIcon',
             title: 'Analytics',
-            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            body: 'Track every aspect of web3 activity within your games.',
             link: '/',
           },
           {
