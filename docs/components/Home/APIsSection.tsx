@@ -1,3 +1,5 @@
+import * as ICONS from './icons'
+
 export const APIsSection = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
     <div className="flex flex-col gap-1 py-5">
@@ -8,27 +10,58 @@ export const APIsSection = () => (
       </p>
     </div>
     <div className="flex flex-wrap gap-2">
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      <Card
+        title="Marketplace API"
+        icon="MarketplaceIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
+      <Card
+        title="Indexer API"
+        icon="IndexerIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
+      <Card
+        title="Metadata API"
+        icon="SequenceIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
+      <Card
+        title="Transactions API"
+        icon="SequenceIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
+      <Card
+        title="Embedded Wallets API"
+        icon="WalletIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
+      <Card
+        title="Node Gateway"
+        icon="NodeGatewayIcon"
+        body="Easily onboard web3-native players with a complete Universal Wallet."
+      />
     </div>
   </section>
 )
 
-type CardProps = {}
+const Card = ({
+  title,
+  body,
+  icon,
+}: {
+  title: string
+  body: string
+  icon: keyof typeof ICONS
+}) => {
+  const IconComponent = ICONS[icon]
 
-const Card = ({}: CardProps) => {
   return (
     <div className="p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(33%-(16px/3))]">
-      <p className="font-bold text-themed-primary text-xl leading-7">Unity</p>
-      <p className="text-sm font-medium text-themed-secondary">
-        Easily onboard web3-native players with a complete Universal Wallet.
+      <p className="font-bold text-themed-primary text-xl leading-7 flex items-center gap-2">
+        <IconComponent />
+        {title}
       </p>
+      <p className="text-sm font-medium text-themed-secondary">{body}</p>
     </div>
   )
 }

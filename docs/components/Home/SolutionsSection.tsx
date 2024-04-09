@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import * as ICONS from './icons'
 
 export const SolutionsSection = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
@@ -19,7 +20,7 @@ export const SolutionsSection = () => (
 
 type SolutionsGroupProps = {
   heading: string
-  items: { title: string; body: string }[]
+  items: { icon: keyof typeof ICONS; title: string; body: string }[]
   theme: 'purple' | 'green' | 'yellow'
 }
 
@@ -41,34 +42,39 @@ const SolutionsGroup = ({ heading, items, theme }: SolutionsGroupProps) => {
           )}
         />
         <p className="px-4 font-bold text-themed-primary z-10">{heading}</p>
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className={clsx('p-4 dark:bg-white-10 rounded-md z-10', {
-              ['bg-light-purple']: theme === 'purple',
-              ['bg-light-green']: theme === 'green',
-              ['bg-light-yellow']: theme === 'yellow',
-            })}
-          >
-            <div className="flex gap-2">
-              <p
-                className={clsx(
-                  'text-xl leading-7 dark:text-white-80 font-bold',
-                  {
-                    ['text-dark-purple']: theme === 'purple',
-                    ['text-dark-green']: theme === 'green',
-                    ['text-dark-yellow']: theme === 'yellow',
-                  }
-                )}
-              >
-                {item.title}
+        {items.map((item, index) => {
+          const IconComponent = ICONS[item.icon]
+
+          return (
+            <div
+              key={index}
+              className={clsx('p-4 dark:bg-white-10 rounded-md z-10', {
+                ['bg-light-purple']: theme === 'purple',
+                ['bg-light-green']: theme === 'green',
+                ['bg-light-yellow']: theme === 'yellow',
+              })}
+            >
+              <div className="flex gap-2">
+                <p
+                  className={clsx(
+                    'flex items-center gap-2 text-xl leading-7 dark:text-white-80 font-bold',
+                    {
+                      ['text-dark-purple']: theme === 'purple',
+                      ['text-dark-green']: theme === 'green',
+                      ['text-dark-yellow']: theme === 'yellow',
+                    }
+                  )}
+                >
+                  <IconComponent />
+                  {item.title}
+                </p>
+              </div>
+              <p className="text-themed-secondary text-sm font-medium">
+                {item.body}
               </p>
             </div>
-            <p className="text-themed-secondary text-sm font-medium">
-              {item.body}
-            </p>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
@@ -80,18 +86,22 @@ const SOLUTIONS_GROUPS: SolutionsGroupProps[] = [
     heading: 'Acquire players',
     items: [
       {
+        icon: 'WalletIcon',
         title: 'Universal Wallet',
         body: 'Easily onboard web3-native players with a complete Universal Wallet.',
       },
       {
+        icon: 'WalletIcon',
         title: 'Embedded Wallet',
         body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
       },
       {
+        icon: 'CollectiblesIcon',
         title: 'Collectibles',
         body: 'Manage contracts and collections with our no-code Builder.',
       },
       {
+        icon: 'AirdropperIcon',
         title: 'Airdropper',
         body: 'Create airdrop campaigns and target players with airdrops.',
       },
@@ -103,18 +113,22 @@ const SOLUTIONS_GROUPS: SolutionsGroupProps[] = [
     heading: 'Earn more revenue',
     items: [
       {
+        icon: 'MarketplaceIcon',
         title: 'Marketplace',
         body: 'Easily onboard web3-native players with a complete Universal Wallet.',
       },
       {
+        icon: 'SequenceIcon',
         title: 'Orderbook API',
         body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
       },
       {
+        icon: 'CartIcon',
         title: 'NFT Checkout',
         body: 'Manage contracts and collections with our no-code Builder.',
       },
       {
+        icon: 'SequenceIcon',
         title: 'Onramps',
         body: 'Create airdrop campaigns and target players with airdrops.',
       },
@@ -125,14 +139,17 @@ const SOLUTIONS_GROUPS: SolutionsGroupProps[] = [
     heading: 'Retain and grow',
     items: [
       {
+        icon: 'MinterIcon',
         title: 'Minter',
         body: 'Easily onboard web3-native players with a complete Universal Wallet.',
       },
       {
+        icon: 'AnalyticsIcon',
         title: 'Analytics',
         body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
       },
       {
+        icon: 'DiscordIcon',
         title: 'Discord Bot',
         body: 'Manage contracts and collections with our no-code Builder.',
       },
