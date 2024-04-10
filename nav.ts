@@ -188,6 +188,7 @@ export const sidebar = {
           ]},
           { text: 'Sequence v2', collapsed: true, items: [
             {text: 'Deploy', link: '/solutions/technical-references/internals/v2/01-deploy'},
+            {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/04-configuration"},
           ]}
         ]}
       ]
