@@ -1,0 +1,319 @@
+# Token Metadata
+
+Sequence provides a metadata service for fetching token metadata for any ERC721 or ERC1155 contract, on [any EVM chain](/solutions/technical-references/chain-support).
+
+* [Learn how to query token metadata directly for any contract](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+* [Learn about token metadata standards and formats for ERC721 and ERC1155 tokens](/api/metadata/token-metadata#token-metadata-standards)
+
+:::info[PRO TIP: Sequence Indexer also supports token metadata]
+When using the [Sequence Indexer](/api/indexer/overview), pass `"includeMetadata": true` to your request to
+query token metadata for any ERC721 or ERC1155 contract. See below how to fetch
+token metadata directly.
+:::
+
+## Fetch token metadata for any ERC721 or ERC1155 contract
+
+*Sequence Metadata `GetTokenMetadata` Method:*
+
+* Request: POST /rpc/Metadata/GetTokenMetadata
+* Content-Type: application/json
+* Body (in JSON):
+  * `chainID` (string) -- the chain id, as a name or number (ie. "1" or "mainnet", "137" or "polygon", etc.)
+  * `contractAddress` (string) -- the contract address
+  * `tokenIDs` (array of strings) -- array of strings containing token ids to fetch metadata
+
+<br />
+
+**Example: `GetTokenMetadata` of some tokens using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+
+:::info
+This code requires an API Access Key from [Sequence Builder](https://sequence.build).
+:::
+
+:::code-group
+
+```shell [Curl]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/GetTokenMetadata -d '{"chainID":"polygon", "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["65537", "65538", "65539"] }'
+```
+
+```ts [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceMetadata } from '@0xsequence/metadata'
+
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+const tokenMetadata = await metadataClient.getTokenMetadata({
+  chainID: 'polygon',
+  contractAddress: '0x631998e91476DA5B870D741192fc5Cbc55F5a52E',
+  tokenIDs: ['65537', '65538', '65539']
+})
+
+console.log('token metadata: ', tokenMetadata)
+```
+
+```go [Go]
+import (
+	"github.com/0xsequence/go-sequence/metadata"
+)
+
+seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+collectibleInfo, err := seqMetadata.GetTokenMetadata(context.Background(), "polygon", "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", []string{"1", "2"})
+```
+
+```shell [Unity]
+TODO
+```
+
+```shell [Unreal]
+TODO
+```
+
+```shell [Other]
+Please [contact our team](/support) for assistance with integrations to another target.
+```
+
+:::
+
+
+## Refreshing token metadata
+
+When deploying new contracts or metadata updates the refresh token metadata url should be called with an access key from (the Sequence Builder) via a HTTPS POST request by command line or via metadata SDK in a program for data to indexeable in the Sequence Indexer metadata service.
+
+*Sequence Metadata `enqueueTokensForRefresh` Method:*
+
+* Request: POST /rpc/Metadata/EnqueueTokensForRefresh
+* Content-Type: application/json
+* Body (in JSON):
+  * `chainID` (string) -- the chain id, as a name or number (ie. "1" or "mainnet", "137" or "polygon", etc.)
+  * `contractAddress` (string) -- the contract address
+  * `tokenIDs` (array of strings) -- array of strings containing token ids to fetch metadata
+
+
+:::code-group
+
+```shell [Curl]
+curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0pttvJABl8bIuxPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/EnqueueTokensForRefresh -d '{"chainID":"polygon", "contractAddress":"0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["1","2"]}'
+```
+```ts [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceMetadata } from '@0xsequence/metadata'
+
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+const jobID = await metadataClient.enqueueTokensForRefresh({
+    chainID: 'polygon',
+    contractAddress: '0x631998e91476DA5B870D741192fc5Cbc55F5a52E',
+    tokenIDs: ['65537', '65538', '65539']
+})
+
+console.log('refresh job id: ', tokenMetadata)
+```
+
+```go [Go]
+import (
+	"github.com/0xsequence/go-sequence/metadata"
+)
+
+seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+refreshJob, err := seqMetadata.EnqueueTokensForRefresh(context.Background(), "polygon", "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", []string{"1", "2"}, nil)
+```
+
+```shell [Other]
+Please [contact our team](/support) for assistance with integrations to another target.
+```
+
+:::
+
+
+*Sequence Metadata `getTokenRefreshStatus` Method:*
+
+* Request: POST /rpc/Metadata/GetTokenRefreshStatus
+* Content-Type: application/json
+* Body (in JSON):
+  * `taskId` (uint) -- the task id returned from `enqueueTokensForRefresh`
+
+:::code-group
+
+```shell [Curl]
+curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0pttvJABl8bIuxPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/GetTokenRefreshStatus -d '{"taskId": 1234}'
+```
+
+```ts [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceMetadata } from '@0xsequence/metadata'
+
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+const refreshJobStatus = await metadataClient.getTokenRefreshStatus({
+    taskId: 1234
+})
+
+console.log('refresh job status: ', refreshJobStatus)
+```
+
+```go [Go]
+import (
+	"github.com/0xsequence/go-sequence/metadata"
+)
+
+seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+refreshJobStatus, err := seqMetadata.GetTokenRefreshStatus(context.Background(), uint64(1234))
+```
+
+```shell [Other]
+Please [contact our team](/support) for assistance with integrations to another target.
+```
+
+:::
+
+
+### Testing instructions:
+
+1. Check current token metadata using [token metadata fetch](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+2. Modify token metadata content either onchain or via token baseURI 
+3. Call refresh token ID endpoints using [refresh metadata](/api/metadata/token-metadata#refreshing-token-metadata)
+4. Check token metadata changes using [token metadata fetch](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+
+## Token Metadata Standards
+
+Popular token standards like [EIP721](https://eips.ethereum.org/EIPS/eip-721) and [EIP1155](https://eips.ethereum.org/EIPS/eip-1155) both
+have similar metadata standard formats with some subtle differences. In addition to the standards, we've seen in practice that projects
+often slightly deviate from the standards but are sensical, easy to parse and well supported in the ecosystem, include the Sequence Metadata service.
+Below we describe the standards and common practices across projects to help demystify how to format your token metadata for your projects.
+
+
+## Metadata Standards
+
+### ERC721
+
+ERC721 token contracts contain a method on the contract called `tokenURI(uint256) string`. When querying the `tokenURI` method on the contract, it will return a URI which contains additional metadata for that asset.
+
+See EIP for specific details: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
+
+Here is an example Bored Ape (token id 9):
+https://metadata.sequence.app/tokens/mainnet/0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d/9
+
+response:
+
+```json
+{
+  "tokenId": "9",
+  "contractAddress": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+  "name": "",
+  "description": "",
+  "image": "https://ipfs.sequence.info/ipfs/QmUQgKka8EW7exiUHnMwZ4UoXA11wV7NFjHAogVAbasSYy",
+  "decimals": 0,
+  "properties": null,
+  "attributes": [
+    {
+      "trait_type": "Earring",
+      "value": "Silver Stud"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "Sleepy"
+    },
+    {
+      "trait_type": "Mouth",
+      "value": "Small Grin"
+    },
+    {
+      "trait_type": "Fur",
+      "value": "Brown"
+    },
+    {
+      "trait_type": "Hat",
+      "value": "Seaman's Hat"
+    },
+    {
+      "trait_type": "Clothes",
+      "value": "Stunt Jacket"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Purple"
+    }
+  ]
+}
+```
+
+In the case of this Bored Ape, it appears there is no name or description set,
+but they do have "attributes" as an array of `{ "trait_type": string, "value: string }`.
+
+Additionally, see OpenSea for more information: https://docs.opensea.io/docs/metadata-standards
+
+Note that OpenSea technically breaks the ERC1155 standard by suggesting to use "attributes", where in fact,
+the ERC1155 calls uses the field name "properties" instead of "attributes", see
+https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md#erc-1155-metadata-uri-json-schema (read section below).
+However this is completely okay and mixed use of properties / attributes is compatible in practice.
+On Sequence Metadata, we support both structures for token contracts which use either format for their [properties/attributes](/api/metadata/token-metadata#attributes-vs-properties).
+
+Another example is from Neon District: https://metadata.sequence.app/tokens/polygon/0x7227e371540CF7b8e512544Ba6871472031F3335/158456331411102687640546264635
+
+
+### ERC1155
+
+ERC1155 token contracts contain a method on the contract called `uri(uint256) string`. When querying the `uri` method on the
+contract, it will return a URI which contains additional metadata for that asset.
+
+See EIP for specific details: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md#erc-1155-metadata-uri-json-schema
+
+Here is an example Skyweaver card (token id 65548):
+https://metadata.sequence.app/tokens/polygon/0x27A11C1563a5dDa238379B95c91B3AbBaD9C0cf6/65548
+
+```json
+{
+  "tokenId": "65548",
+  "contractAddress": "0x27a11c1563a5dda238379b95c91b3abbad9c0cf6",
+  "name": "Weighted Die (Silver)",
+  "description": "Give +1/+1, armor, and guard to a random ally unit, six times.\n\n\"I will not bow to fate. If the dice fall against me, I'll cut off the hand that cast them.\"\n -Horik",
+  "image": "https://assets.skyweaver.net/LV7xNcQh/webapp/cards/full-cards/6x/12-silver.png",
+  "decimals": 2,
+  "properties": {
+    "artists": {
+      "name": "Artist",
+      "value": [
+        {
+          "id": "xavi",
+          "name": "Henrique Xavier",
+          "url": "https://www.artstation.com/kitexavier"
+        }
+      ]
+    },
+    "baseCardId": 12,
+    "cardType": "Spell",
+    "element": "Metal",
+    "mana": 8,
+    "prism": "Strength",
+    "type": "Silver"
+  },
+  "attributes": null
+}
+```
+
+As you can see, Skyweaver an ERC1155 token's metadata uses the `properties` object, which is an object/dictionary type of arbitrary data.
+
+
+### Attributes vs Properties
+
+As you can see, the standard format of token metadata contains both `attributes` and `properties`. The `attributes` field is an array of
+objects. The `properties` field is an object/dictionary of arbitrary data. In technical terms, the `attributes` type is defined as 
+`[]map<string,any>` and the `properties` type is defined as `map<string,any>`.
+
+In practice, we've seen that many projects use both `attributes` and `properties` to store the same data, and in some cases, they use
+`attributes` to store data that should be in `properties` and vice versa. Sometimes project use both fields, and this is completely fine
+in practice, as marketplaces and services will parse both areas.
+
+Finally, if you are looking to extend the metadata format to suit your project, we recommend to utilize either or both the `attributes`
+and `properties` fields for either ERC721 or ERC1155.
+
+
+### ERC20
+
+Finally, a note on ERC20 tokens. ERC20 tokens are just a single token, so they themselves do not have a token ID, but
+are represented entirely by their contract address. We can infer some information about the token by querying the contract
+methods such as `name` and `decimals`. Additionally, ERC20 tokens can take advantage of the `contractURI` extension used
+by OpenSea and described in more detail in our [Contract metadata](/api/metadata/contract-metadata) section.
