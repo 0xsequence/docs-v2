@@ -1,9 +1,3 @@
-import {
-  TabGroup,
-  Tab,
-  TabPanel,
-} from "../../../../../components/TabGroup.tsx";
-
 import { Callout } from "vocs/components";
 
 # Signing & Verifying Messages
@@ -143,19 +137,11 @@ _Sequence API `IsValidMessageSignature` Method:_
 
 **`IsValidMessageSignature` example usage:**
 
-<TabGroup>
-  <Tab>curl</Tab>
-  <TabPanel>
-
-```bash class=wrap
+:::code-group
+```shell twoslash [curl]
 curl -X POST -H "Content-Type: application/json" https://api.sequence.app/rpc/API/IsValidMessageSignature -d '{ "chainId": "polygon", "walletAddress": "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1", "message": "Hi, please sign this message", "signature": "0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d0001000183d971056b1eca1bcc7289b9a6926677c5b07db4197925346367f61f2d09c732760719a91722acee0b24826f412cb69bd2125e48f231705a5be33d1f5523f9291c020101c50adeadb7fe15bee45dcb820610cdedcd314eb0030002f19915df00d669708608502d3011a09948b32674d6e443202a2ba884a4dcd26c2624ff33a8ee9836cc3ca2fbb8d3aa43382047b73d21646cb66cc2916076c1331c02" }'
 ```
-
-  </TabPanel>
-  <Tab>js</Tab>
-  <TabPanel>
-
-```ts
+```js twoslash [js]
 // Works in both a Webapp (browser) or Node.js:
 import { sequence } from "0xsequence";
 
@@ -174,12 +160,7 @@ const { isValid } = await api.isValidMessageSignature({
 });
 console.log(isValid); // true
 ```
-
-  </TabPanel>
-  <Tab>go</Tab>
-  <TabPanel>
-
-```go
+```go twoslash [go]
 import (
 	"context"
 	"fmt"
@@ -210,14 +191,10 @@ func ValidateMessageSignature() {
 }
 ```
 
-  </TabPanel>
-  <Tab>
-  other
-  </Tab>
-  <TabPanel>
-  Please [contact our team](/support) for assistance with integrations to another target.
-  </TabPanel>
-</TabGroup>
+```shell twoslash [other]
+  Please contact our team for assistance with integrations to another target.
+```
+:::
 
 <br />
 
@@ -236,18 +213,11 @@ _Sequence API `IsValidETHAuthProof` Method:_
 
 **`IsValidETHAuthProof` example usage:**
 
-<TabGroup>
-<Tab>curl</Tab>
-  <TabPanel>
-  ```bash class=wrap
+:::code-group
+```shell twoslash [curl]
 curl -X POST -H "Content-Type: application/json" https://api.sequence.app/rpc/API/IsValidETHAuthProof -d '{"chainId":"polygon", "walletAddress":"0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1","ethAuthProofString": "eth.0x2fa0b551fdfa31a4471c1c52206fdb448ad997d1.eyJhcHAiOiJEZW1vIERhcHAiLCJpYXQiOjAsImV4cCI6MTY2MDIzMTAyOCwidiI6IjEiLCJvZ24iOiJodHRwOi8vbG9jYWxob3N0OjQwMDAifQ.0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d00010001f7dad5ade840bb961cbab889d731bbc080bb4c36fc090435e82fe78e3c152b671505ad544adb562cc25a5933cd06c9108e239a52a82ba797c3d3522645c69cd81b020101c50adeadb7fe15bee45dcb820610cdedcd314eb003000274164fb33c93b4384582c54c30d9a1e2ef219063d03084005edc1da853af2f1f2e67275dbb6ef945d04600b6dd83cfd997cc9ae4173ea61b0c5cc0808fb196681b02"}' 
 ```
-
-  </TabPanel>
-  <Tab>js</Tab>
-  <TabPanel>
-
-```ts
+```js
 // Works in both a Webapp (browser) or Node.js:
 import { sequence } from "0xsequence";
 
@@ -265,13 +235,7 @@ const { isValid } = await api.isValidETHAuthProof({
 console.log(isValid); // true
 ```
 
-  </TabPanel>
-  <Tab>
-  go
-  </Tab>
-  <TabPanel>
-
-```go
+```go twoslash [go]
 import (
 	"context"
 	"fmt"
@@ -296,12 +260,10 @@ func ValidateETHAuth() {
 }
 ```
 
-  </TabPanel>
-  <Tab>other</Tab>
-  <TabPanel>
-Please [contact our team](/support) for assistance with integrations to another target.
-  </TabPanel>
-</TabGroup>
+```shell twoslash [other]
+Please contact our team for assistance with integrations to another target.
+```
+:::
 
 ## How does it work?
 

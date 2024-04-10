@@ -1,7 +1,612 @@
-## Integrate SequenceKit with WaaS
-## Deploy a collectibles contract
-## Deploy a remote minter
-## Mint in-game achievement tokens
-## Burn in-game achievement tokens
-## Integrate an embedded marketplace
-## Leverage purchased items in-game
+import { Callout } from "vocs/components";
+
+# Aviator Web3 Game with WebGL
+
+Time to complete: 40 minutes
+
+In this guide we will go through the process of integrating WebGL in a game, leveraging tools from the Sequence Stack to earn achievements and use custom ERC1155's to play in-game.
+
+<Callout type="info">
+  You can play a live version of the game [here](https://0xsequence.github.io/waas-airplane-demo/)
+
+  Where the full code to this game can be found [here](https://github.com/0xsequence/waas-airplane-demo/tree/cloudflare-integration)
+  
+  And the full template code we'll be using for the guide can be found [here](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter)
+</Callout>
+
+The tools will enable you to perform:
+
+- [1. Project setup with webpack](/guides/webgl-guide#1-project-setup-with-webpack): Enable a project structure with WebGL to be compiled by Webpack
+- [2. Integrate SequenceKit](/guides/webgl-guide#2-integrate-sequencekit): Allow all EOAs and Sequence Wallet to authenticate the user
+- [3. Deploy a collectibles contract](/guides/webgl-guide#3-deploy-a-collectibles-contract): Create your own collectible contract
+- [4. Deploy a remote minter and mint in-game tokens](/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens): Perform gasless relayed transactions with Cloudflare workers
+- [5. Leverage items in-game](/guides/webgl-guide#5-leverage-items-in-game): Integrate collectibles in the game using the Sequence Indexer
+- [6. Burn in-game achievement tokens](/guides/webgl-guide#6-burn-in-game-achievement-tokens): Burn game achievements with wagmi
+- [7. (Optional) Integrate In-Game Wallet into Sequence Kit](/guides/webgl-guide#7-optional-integrate-in-game-wallet-into-sequence-kit): Enable smooth UX without the use of signer signed messages
+
+## 1. Project setup with webpack
+
+#### Clone repo
+
+We'll first start by cloning down a template project, which has a few WebGL based components created using `three`, all compiled using [webpack](https://webpack.js.org/)
+
+[Template WebGL JS Sequence Kit Starter](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter/tree/simple-start)
+
+Clone the above repo down, `cd` into the repo with `cd template-webgl-js-sequence-kit-starter`
+
+#### Update .env
+
+Create a `.env` file (using the `.env.example`) with the environment variables
+
+```
+PROJECT_ACCESS_KEY=
+WALLET_CONNECT_ID=
+```
+
+And, run the following commands to run the app
+
+```
+# or your choice of package manager
+pnpm install
+pnpm run dev
+```
+
+Great, you should see a plane flying over water
+
+## 2. Integrate SequenceKit
+
+Now that we have a project structure set up, we can integrate Sequence Kit
+
+#### setup App.jsx component
+
+Create a folder within the `src` folder called `react` and create 2 files: `App.jsx` and `Login.jsx`
+
+In App.jsx include the following code
+
+```js
+import React from "react";
+import { useOpenConnectModal } from "@0xsequence/kit";
+import { useDisconnect, useAccount } from "wagmi";
+import Login from "./Login.jsx";
+
+import { KitProvider } from "@0xsequence/kit";
+import { getDefaultConnectors } from "@0xsequence/kit-connectors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createConfig, http, WagmiConfig } from "wagmi";
+import { arbitrumSepolia, Chain } from "wagmi/chains";
+
+const queryClient = new QueryClient();
+
+function App(props) {
+  const chains = [arbitrumSepolia];
+  const projectAccessKey = process.env.PROJECT_ACCESS_KEY;
+ 
+  const connectors = getDefaultConnectors({
+    walletConnectProjectId: process.env.WALLET_CONNECT_ID,
+    defaultChainId: 421614,
+    appName: "demo app",
+    projectAccessKey,
+  });
+
+  const transports = {};
+
+  chains.forEach((chain) => {
+    transports[chain.id] = http();
+  });
+
+  const config = createConfig({
+    transports,
+    connectors,
+    chains,
+  });
+
+  return (
+    <WagmiConfig config={config}>
+      <QueryClientProvider client={queryClient}>
+        <KitProvider config={{ defaultTheme: "dark" }}>
+          <Login scene={props.scene}/>
+        </KitProvider>
+      </QueryClientProvider>
+    </WagmiConfig>
+  );
+}
+
+export default App;
+```
+
+Then, in the `Login.jsx` file add the following code in order to create a button at the top of the screen to login to the application
+
+```js
+import React, {useEffect} from "react";
+import { useOpenConnectModal } from "@0xsequence/kit";
+import { useDisconnect, useAccount, useWalletClient } from "wagmi";
+
+function Login(props) {
+  const { setOpenConnectModal } = useOpenConnectModal();
+  const { data: walletClient } = useWalletClient();
+
+  const { isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    if(isConnected){
+        props.scene.login()
+    } else {
+        props.scene.logout()
+    }
+  }, [isConnected])
+
+  const sendBurnToken = async () => {
+    // empty for now
+  }
+
+  useEffect(() => {
+      if (isConnected && walletClient) {
+          props.scene.sequenceController.init(
+              walletClient,
+              sendBurnToken
+          );
+      }
+  }, [isConnected, walletClient]);
+
+  return (
+    <>
+      <div style={{ textAlign: "center" }}>
+        <br />
+        {isConnected && (
+          <div
+            onClick={() => disconnect()}
+            style={{
+              cursor: "pointer",
+              position: "fixed",
+              top: "30px",
+              right: "30px",
+              zIndex: '1'
+            }}
+          >
+            sign out
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+export default Login;
+```
+
+#### render component in javascript index.js
+
+Finally, add in the `index.js` import the `App.jsx` component, and render it to be appended to the `root` id element in `index.html`
+
+```js
+import * as ReactDOM from 'react-dom/client';
+import App from './react/App.jsx'
+
+...
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+root.render(
+    <App scene={mainScene}/>
+);
+```
+##### create a click handler to call the login modal
+
+Add the following code to `Login.jsx` component
+
+```js
+    window.setOpenConnectModal = () => {
+        setOpenConnectModal(true);
+    };
+```
+
+And the following click handler code to `index.js`
+
+```ts
+function handleMouseUp(event) {
+  window.setOpenConnectModal()
+}
+
+document
+  .getElementById('world')
+  .addEventListener('mouseup', handleMouseUp, false);
+```
+
+And add these elements to your `index.html`
+
+```html
+<div id="mintBtn" class="btn" onclick="window.mintPlane()">mint plane</div>
+<div id="mintAchievementBtn" class="btn" onclick="window.mintAchievement()">mint achievement</div>
+<div id="burnBtn" class="btn"  onclick="window.burn()">burn achievement</div>
+
+<div id="login">click to login</div>
+<div class="world" id="world"></div>
+```
+
+Great, now you'll have a button that makes a modal appear
+
+## 3. Deploy a collectibles contract
+
+You'll need to create a collectible from the [Sequence Builder](https://sequence.build) which can be accomplished with the following [guide](/solutions/collectibles/contracts/01-deploy-an-item-collection)
+
+We should create 2 collections: 1 for achievement tokens and the other for the planes
+
+## 4. Deploy a remote minter & mint in-game achievement tokens
+
+Then, in order to send transactions to the blockchain in a seamless fashion that are gasless, implement a [Cloudflare Relayer](/guides/templates/02-building-relaying-server) to mint items from a contract deployed in the previous step, ensuring that the relayer contract address is inputed as a `Minter Role`
+
+We will allow there to be multiple paths to mint collectibles: a plane collectible and an achievement collectible. 
+
+This is accomplished in the code by adding a key/value of `isPlane` to the normal cloudflare request body, and creating an additional `if/else` in the cloudflare relayer.
+
+You can view the code for this in this [github repository](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter/blob/master/cloudflare/noisy-silence-ee19/src/index.ts#L80)
+
+For this guide, we will be running all cloudflare code in a local dev envivronment, which can be accomplished by starting the cloudflare worker in the named project folder, with:
+
+```
+wrangler dev
+```
+
+## 5. Leverage items in-game
+
+This section will be broken into 2 implementations of updating UI with in-game asset ownership changes:
+* Displaying Plane changes based on Wallet assets
+* Displaying UI changes based on Wallet assets
+
+#### Displaying Plane changes based on Wallet assets
+To implement changes to the game based on what the wallet asset owns, you can implement a button that mints a token, then on the response, checks for indexer changes
+
+In the `index.js` we include a button attached to the `onclick` attribute of the element in index.html
+
+```js
+window.mintPlane = () => {
+  const tokenID = 1
+  mainScene.sequenceController.callContract(tokenID, true, (res) => {
+    mainScene.sequenceController.fetchPlaneTokens(tokenID)
+  })
+}
+```
+
+Where `callContract` takes care of the minting by calling a fetch that is wrapped in a mutex to ensure 1 mint happens at a time, to prevent click mashers, added to the `SequenceController` class in `/API/SequenceController.js`
+
+```js
+import { Mutex, E_CANCELED} from 'async-mutex';
+
+const mutexMinting = new Mutex();
+...
+async callContract(tokenId, isPlane, callback) {
+  if(!mutexMinting.isLocked()){
+    try {
+      await mutexMinting.runExclusive(async () => {
+        console.log('Minting token:', tokenId);
+        const url = 'http://localhost:8787';
+        const data = {
+          address: this.walletAddress,
+          tokenId: tokenId,
+          isPlane: isPlane
+        };
+
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          const txHash = await res.text();
+          mutexMinting.release();
+          callback(txHash);
+        } catch(err) {
+          mutexMinting.release();
+          callback(err);
+        }
+      });
+    } catch (err) {
+      if (err === E_CANCELED) {
+        mutexMinting.release();
+      }
+    }
+  } else {
+    console.log('mutex is locked')
+  }
+}
+```
+
+and `fetchPlaneTokens` will poll on the result until there's an asset in your wallet, updating the `plane color` to represent a different plane.
+
+`fetchPlaneTokens` is implemented with the following code, where the balance conditional check is greater than 1, and the `tokenID` is equal to the searched for id.
+
+This UI conditional logic would change based on your application
+
+```js
+import { SequenceIndexer } from '@0xsequence/indexer';
+...
+async fetchPlaneTokens(){
+
+  // a polling wait
+  const wait = (ms) => new Promise((res) => setTimeout(res, ms))
+  let hasFoundPlane = false
+
+  while(!hasFoundPlane) {
+      const response = await this.indexer.getTokenBalances({
+      accountAddress: this.walletAddress,
+      contractAddress: '0x10ac72ada55ed46ee35deed371b8d215c2e870e1', // the collection address
+    })
+    await wait(1000)
+    for(let i = 0; i < response.balances.length; i++){
+      // a check on the inventory
+      if(response.balances[i].tokenID == '1' && Number(response.balances[i].balance) > 0){
+        // implement any UI update here
+        this.scene.airplane.addPlane(Number(response.balances[i].tokenID))
+        hasFoundPlane = true // breaks from the loop
+      }
+    }
+  }
+}
+```
+
+#### Displaying UI changes based on Wallet assets
+
+Next, we implement a UI change where we add a `burn achievement` button, based on if the user has an achievement or not
+
+First, implement the similiar html/js click handler logic like before
+
+where this time, the `isPlane` value of `callContract` is set to `false`
+
+```js
+// index.js
+window.mintAchievement = () => {
+  const tokenID = 0
+  mainScene.sequenceController.callContract(tokenID, false, (res) => {
+    mainScene.sequenceController.fetchTokensFromAchievementMint(tokenID)
+  })
+}
+```
+
+<Callout type="warning">
+  Note: in a real game, this minting of achievement token would happen based on some trigger event in the game, for simplicity we've included of button
+</Callout>
+
+This time, we call `fetchTokensFromAchievementMint` which is added to the `SequenceController`
+
+```js
+  async fetchTokensFromAchievementMint(tokenID) {
+    // check for achievement balance
+    const wait = (ms) => new Promise((res) => setTimeout(res, ms))
+    let hasFoundPlane = false
+    let tokenIDs = []
+    while(!hasFoundPlane) {
+      const response = await this.indexer.getTokenBalances({
+        accountAddress: this.walletAddress,
+        contractAddress: '0x856de99d7647fb7f1d0f60a04c08340db3875340', // you achievements collection address
+      })
+      await wait(1000)
+      for(let i = 0; i < response.balances.length; i++){
+        // can update this logic to see if there is any balance: i.e. if(response.balances.length > 0)
+        if(response.balances[i].tokenID == String(tokenID)){
+          hasFoundPlane = true
+          // making the button appear
+          document.getElementById('burnBtn').style.display = 'flex'
+        }
+      }
+    }
+  }
+```
+This makes it so that only if there's a balance returned from the indexer, does the `display` attribute make the button appear
+
+## 6. Burn in-game achievement tokens
+
+Finally, to burn the achievement token, we can no longer use a cloduflare relayer for actions sent to the blockchain, because when the minting was performed 'on behalf of' the address using the relayer (making the `msg.sender` in the contract one of the `relayer` addresses) for this, we want to make sure the `msg.sender` in the contract proves ownership of the token, and is sent directly from the `user`. We'll use `wagmi` frontend functions as well as some class composition to accomplish this.
+
+```js
+// index.js
+window.burn = () => {
+  const tokenID = 0
+  mainScene.sequenceController.burnToken(tokenID, (res) => {
+    mainScene.sequenceController.fetchTokensFromBurn(tokenID)
+  })
+}
+```
+
+Where `burnToken` is a passed in function from our react component that uses the similiar pattern of using mutexes, and we send the transaction using `sendTransaction` from the `wagmi` package, and wait for a transaction hash update to return the callback
+
+```js
+// react/Login.jsx
+import {
+    useAccount,
+    useWalletClient,
+    useSendTransaction,
+} from 'wagmi';
+import { useMutex } from 'react-context-mutex';
+import { ethers } from 'ethers'
+import { SequenceIndexer } from '@0xsequence/indexer';
+
+let burnCallback = null
+const ContractAddress = '0x856de99d7647fb7f1d0f60a04c08340db3875340';
+
+function Login() {
+  const MutexRunner = useMutex();
+  const mutexBurn = new MutexRunner('sendMutexBurn');
+
+  const { isConnected } = useAccount()
+  const { data: walletClient } = useWalletClient();
+  const { data: txnData, sendTransaction, isLoading: isSendTxnLoading } = useSendTransaction();
+
+  useEffect(() => {
+    if (isConnected && walletClient) {
+        props.scene.sequenceController.init(
+            walletClient,
+            sendBurnToken
+        );
+    }
+  }, [isConnected, walletClient]);
+
+  const sendBurnToken = async (tokenID, callback) => {
+      if(!mutexBurn.isLocked()){
+          const contractABI = ['function burn(uint256 tokenId, uint256 amount)']; // Replace with your contract's ABI
+          const contract = new ethers.Contract(ContractAddress, contractABI);
+
+          // call indexer 
+          // check for achievement balance
+          const indexer = new SequenceIndexer(
+              'https://arbitrum-sepolia-indexer.sequence.app',
+              process.env.PROJECT_ACCESS_KEY
+          );
+
+          const response = await indexer.getTokenBalances({
+              accountAddress: walletClient.account.address,
+              contractAddress: '0x856de99d7647fb7f1d0f60a04c08340db3875340',
+          })
+
+          const data = contract.interface.encodeFunctionData('burn', [
+              tokenID,
+              response.balances[0].balance, // get the balance from the indexer
+          ]);
+
+          try {
+              mutexBurn.lock()
+              burnCallback = callback
+              await sendTransaction({
+                  to: ContractAddress,
+                  data: data,
+                  value: '0',
+                  gas: null,
+              })
+          } catch (error) {
+              console.log(error)
+          callback(error);
+          }
+      } else {
+          console.log('burn in progress')
+      }
+  };
+
+  useEffect(() => {
+    if(txnData && burnCallback && mutexBurn.isLocked()) {
+        mutexBurn.unlock();
+        burnCallback(txnData)
+    }
+  }, [burnCallback, txnData])
+...
+}
+```
+
+And in our `SequenceController`, call the `sendBurnToken` function wrapped in `burnToken` to make the react function accessible to the rest of the application
+
+```js
+async burnToken(tokenID, callback) {
+  this.sendBurnToken(tokenID, callback);
+}
+
+async init(walletClient, sendTransactionBurn) {
+  this.walletAddress = walletClient.account.address;
+
+  this.sendBurnToken = sendTransactionBurn;
+}
+```
+
+Then, to make the burned token have an affect on the UI, we hide the button used to burn the token in the initial place, accomplished with the following code in the `SequenceController`
+
+```js
+async fetchTokensFromBurn(tokenID){
+  const wait = (ms) => new Promise((res) => setTimeout(res, ms))
+  let hasBeenBurned = false
+  while(!hasBeenBurned) {
+    let tokenIDs = [] // create an empty array to include all the tokens
+    const response = await this.indexer.getTokenBalances({
+      accountAddress: this.walletAddress,
+      contractAddress: '0x856de99d7647fb7f1d0f60a04c08340db3875340',
+    })
+    await wait(1000)
+    for(let i = 0; i < response.balances.length; i++){
+        tokenIDs.push(response.balances[i].tokenID)
+    }
+    if(!tokenIDs.includes(String(tokenID))) { // check that the token id is not contained in the array
+      hasBeenBurned = true
+      // can apply any UI logic here
+      document.getElementById('burnBtn').style.display = 'none' // hide the button
+    } 
+  }
+} 
+```
+
+And you're done, you can view a full example of the code [here](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter)
+
+## 7. (Optional) Integrate In-Game Wallet into Sequence Kit
+
+If you'd like to smooth the user journey to allow no user transaction signing across the board, you can enable an In-Game Wallet by updating your configuration of your Sequence Kit react component.
+
+By accomplishing this, we reduce a pop-up when burning tokens with `wagmi`, since rewarding achievement tokens and minting collectibles are completed using a cloudflare relayer for gasless transactions.
+
+This can be accomplished by adding a few environment variables, and switching the type of connector we use.
+
+First update your `.env` file with the following environment secrets
+
+```
+WAAS_CONFIG_KEY=
+GOOGLE_CLIENT_ID=
+APPLE_CLIENT_ID=
+```
+
+Then pass these variables to your sequence kit connector in `App.jsx`
+
+```js
+
+import { getKitConnectWallets } from '@0xsequence/kit';
+import { getDefaultWaasConnectors } from '@0xsequence/kit-connectors';
+import { createConfig, http, WagmiProvider } from 'wagmi';
+...
+const projectAccessKey = process.env.PROJECT_ACCESS_KEY_NEXT;
+const waasConfigKey = process.env.WAAS_CONFIG_KEY;
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const appleClientId = process.env.APPLE_CLIENT_ID;
+
+function App(props) {
+
+  const appleRedirectURI =
+  'https://' + window.location.host + '/waas-airplane-demo';
+
+  const connectors = [
+    ...getDefaultWaasConnectors({
+      walletConnectProjectId: process.env.WALLET_CONNECT_ID,
+      defaultChainId: 421614,
+      waasConfigKey,
+      googleClientId,
+      appleClientId,
+      appleRedirectURI,
+      appName: 'demo app',
+      projectAccessKey,
+      enableConfirmationModal: false,
+    }),
+    ...getKitConnectWallets(projectAccessKey, []),
+  ];
+
+  const transports = {};
+
+  chains.forEach(chain => {
+    transports[chain.id] = http();
+  });
+
+  const config = createConfig({
+    transports,
+    connectors,
+    chains,
+  });
+
+  return (
+    <WagmiProvider config={config}>
+    ...
+    <WagmiProvider/>
+  )
+}
+```
+
+And that's it, no more integration is required for transaction flows to complete
+
+---
+
+<Callout type='info'>
+  To learn more about In-Game Wallets, see [here](/solutions/wallets/embedded-wallet/01-overview)
+</Callout>

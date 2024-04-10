@@ -1,5 +1,4 @@
 import { Callout } from "vocs/components";
-import { TabGroup, Tab, TabPanel } from "../../../../../components/TabGroup.tsx";
 
 ## GetOrderbookOrders
 
@@ -58,11 +57,10 @@ _Sequence Orderbook `GetOrderbookOrders` Method:_
   `max` is required to have orders appear in the query
 </Callout>
 
-<TabGroup>
-    <Tab>curl</Tab>
-    <TabPanel>
 
-```bash class=wrap
+:::code-group
+```shell twoslash [curl] filename="curl"
+
 curl --request POST \
   --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetOrderbookOrders \
   --header 'Content-Type: application/json' \
@@ -93,13 +91,9 @@ curl --request POST \
     },
     "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c"
 }'
-```
+``` 
 
-    </TabPanel>
-    <Tab>js</Tab>
-    <TabPanel>
-
-```ts
+```js twoslash [js]
 // Works in both a Webapp (browser) or Node.js:
 import fetch from "cross-fetch";
 
@@ -136,15 +130,10 @@ import fetch from "cross-fetch";
 })();
 ```
 
-    </TabPanel>
-    <Tab>other</Tab>
-    <TabPanel>
-
-    Please [contact our team](/support) for assistance with integrations to another target.
-
-    </TabPanel>
-
-</TabGroup>
+```shell twoslash [other]
+ Please contact our team for assistance with integrations to another target.
+```
+:::
 
 ### Example implementation
 

@@ -1,5 +1,3 @@
-import { TabGroup, Tab, TabPanel } from "../../../../components/TabGroup.tsx";
-
 # Wallet Configuration
 
 Every Sequence wallet has a configuration defined by a threshold and a list of signers with their corresponding weights.
@@ -64,35 +62,31 @@ Wallets that never have been updated don't store the `imageHash` directly, inste
 
 #### Compute image hash
 
-<TabGroup>
-  <Tab>Solidity</Tab>
-  <TabPanel>
-    ``` 
-    keccak256(abi.encode( uint8 weight_1, address signer_1,
-    keccak256(abi.encode( uint8 weight_2, address signer_2,
-    keccak256(abi.encode( uint8 weight_3, address signer_3,
-    keccak256(abi.encode( uint256 threshold )) )) )) )) 
-    ```
-  </TabPanel>
-  <Tab>Javascript</Tab>
-  <TabPanel>
-    ```ts
-    let tmp = ethers.utils.solidityPack(['uint256'], [configuration.threshold])
+:::code-group 
 
-    for (const signer of configuration.signers) {
-      tmp = ethers.utils.keccak256(
-        ethers.utils.defaultAbiCoder.encode(
-          ['bytes32', 'uint8', 'address'],
-          [tmp, signer.weight, signer.address]
-        )
+```solidity twoslash [solidity]
+  keccak256(abi.encode( uint8 weight_1, address signer_1,
+  keccak256(abi.encode( uint8 weight_2, address signer_2,
+  keccak256(abi.encode( uint8 weight_3, address signer_3,
+  keccak256(abi.encode( uint256 threshold )) )) )) )) 
+```
+
+```js twoslash [js]
+  let tmp = ethers.utils.solidityPack(['uint256'], [configuration.threshold])
+
+  for (const signer of configuration.signers) {
+    tmp = ethers.utils.keccak256(
+      ethers.utils.defaultAbiCoder.encode(
+        ['bytes32', 'uint8', 'address'],
+        [tmp, signer.weight, signer.address]
       )
-    }
+    )
+  }
 
-    const imageHash = tmp
+  const imageHash = tmp
+```
 
-````
-</TabPanel>
-</TabGroup>
+:::
 
 ## Initial wallet configuration
 

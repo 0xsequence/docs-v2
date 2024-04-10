@@ -1,8 +1,6 @@
-import { TabGroup, Tab, TabPanel } from "../../../../../components/TabGroup.tsx";
+import { Callout } from "vocs/components";
 
 ## GetTopOrders
-
-import { Callout } from "vocs/components";
 
 Query the protocol for the top order based on various filters.
 
@@ -40,11 +38,10 @@ Fetch the top orders from the protocol, optionally excluding those created by a 
     - `orderbookContractAddress` (string) -- the orderbook contract address
       ]
 
-<TabGroup>
-  <Tab>curl</Tab>
-  <TabPanel>
-  ```bash class=wrap
-     curl --request POST \
+:::code-group
+ 
+```shell twoslash [curl] filename="curl"
+curl --request POST \
     --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders \
     --header 'Content-Type: application/json' \
     --data '{
@@ -57,12 +54,9 @@ Fetch the top orders from the protocol, optionally excluding those created by a 
         "isListing": true,
         "priceSort": "DESC"
     }'
-    ```
-  </TabPanel>
-  <Tab>js</Tab>
-  <TabPanel>
+```
 
-```ts
+```ts twoslash [js]
 // Works in both a Webapp (browser) or Node.js:
 import fetch from "cross-fetch";
 
@@ -88,14 +82,10 @@ import fetch from "cross-fetch";
 })();
 ```
 
-  </TabPanel>
-  <Tab>other</Tab>
-  <TabPanel>
-
-Please [contact our team](/support) for assistance with integrations to another target.
-
-</TabPanel>
-</TabGroup>
+```shell twoslash [other]
+ Please contact our team for assistance with integrations to another target.
+```
+:::
 
 ### Example implementation
 

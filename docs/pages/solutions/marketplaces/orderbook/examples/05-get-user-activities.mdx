@@ -1,5 +1,3 @@
-import { TabGroup, Tab, TabPanel } from "../../../../../components/TabGroup.tsx";
-
 ## GetUserActivities
 
 Retrieve activity data for a specific user, including orders and trades.
@@ -36,11 +34,10 @@ Retrieve activity data for a specific user, including orders and trades.
 
 **Example: `GetUserActivities` for a user with specific token IDs**
 
-<TabGroup>
-    <Tab>curl</Tab>
-    <TabPanel>
-    
-```bash class=wrap
+
+:::code-group 
+
+```shell twoslash [curl] filename="curl"
 curl -X POST -H "Content-Type: application/json" https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities -d '{
     "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
     "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
@@ -51,12 +48,8 @@ curl -X POST -H "Content-Type: application/json" https://dev-marketplace-api.seq
     "tokenIDs": ["1"]
 }'
 
-````
-    </TabPanel>
-    <Tab>js</Tab>
-    <TabPanel>
-
-```ts
+```
+```js twoslash [js]
 // Works in both a Webapp (browser) or Node.js:
 import fetch from "cross-fetch";
 
@@ -82,15 +75,11 @@ import fetch from "cross-fetch";
 
   console.log("res", await res.json());
 })();
-````
+```
 
-    </TabPanel>
-    <Tab>other</Tab>
-    <TabPanel>
-    Please [contact our team](/support) for assistance with integrations to another target.
-    </TabPanel>
-
-</TabGroup>
+```shell twoslash [other]
+ Please contact our team for assistance with integrations to another target.
+```
 
 ### Example implementation
 
