@@ -1,0 +1,143 @@
+# Wallet Configuration
+
+In the context of Sequence Wallets, the "Wallet Configuration" is a set of parameters that defines the behavior of the wallet, primarily used to define the access control of the wallet, meaning who can sign transactions and how many signatures are needed.
+
+## Top level properties
+
+Sequence v2 configurations contain the following 3 properties:
+
+- `threshold` - The required "weight sum" needed for a signature to be considered valid.
+- `checkpoint` - Used as a salt and ordering mechanism for wallet updates.
+- `tree` - Determines the signers and their weights for the wallet.
+
+### Threshold
+
+The `threshold` is a `uint16`; it can have any value between 0 and 65535. Signatures are only considered valid or invalid if the sum of the weights of the signers that signed the transaction is greater or equal to the threshold.
+
+### Checkpoint
+
+The `checkpoint` is a `uint32`. During wallet creation, a semi-random value can be provided to generate independent wallets with the same initial configuration. Then, during normal operation, the `checkpoint` is used by Light State Sync to ensure that wallet updates are applied in the correct order.
+
+### Tree
+
+The `tree` is an unbalanced binary Merkle tree, where each leaf may contain a signer, a static signature, or a subtree. The tree can represent any combination of signers and weights and can be used to create complex multi-signature wallets.
+
+The possible leaf types are:
+
+#### Signer
+
+Signers are represented by a signer `address` and a `uint8` weight. The weight is how much the signer contributes to the threshold.
+The address can belong to either an `ERC1271` compliant contract or an `EOA` wallet.
+
+The leaf hash is calculated as follows:
+
+```solidity
+bytes32(uint256(weight) << 160 | uint256(uint160(addr)))
+```
+
+#### Subdigest
+
+This represents a static subdigest for which any signature is valid. If a signature for this subdigest is provided, the total weight of the signature is automatically set to `Infinity`.
+
+Notice static subdigests that exist within nested trees will have their "Infinity" weight reduced to the weight of the nested tree.
+
+The leaf hash is calculated as follows:
+
+```solidity
+keccak256(abi.encodePacked('Sequence static digest:\n', subdigest));
+```
+
+#### Subtree (nested configuration)
+
+This represents a whole new wallet configuration, this "nested configuration" has its own:
+
+- External `weight` (`uint8`)
+- Internal `threshold` (`uint16`)
+- Internal `tree`
+
+The way it works is that if a signature reaches the `internal threshold` within the subtree it is considered valid, and the `external weight` is added to the parent tree. Any number of nested configurations can be created, and it is possible to create multiple nesting levels.
+
+This pattern can be used, among other things, to express the following scenarios:
+- Non-linear weight distribution, A and B signers can provide 1 weight each, but together they can provide 3 weight.
+- Limited total weight contribution, A, B, and C signers can provide 1 weight each, but together they can only provide 2 weight.
+- "Department configurations", N departments are required to sign, and each department has its own inner configuration.
+
+The leaf hash is calculated as follows:
+
+```solidity
+keccak256(abi.encodePacked(
+  'Sequence nested config:\n',
+  imageHash(tree),
+  threshold,
+  weight
+))
+```
+
+:::warning
+The wallet contracts have no way of validating the correctness of the configuration, the responsibility of ensuring the configuration is correct is on the SDKs interacting with the contracts.
+
+Things like `threshold == 0` or `threshold > total weight` will result in fully unauthenticated wallets or inaccessible wallets respectively.
+:::
+
+## ImageHash
+
+The `configuration` is never stored as a whole; instead, the Merkle tree is hashed into a single `bytes32` value, this is internally called the `imageHash` of the configuration.
+
+The `imageHash` is calculated as follows:
+
+```solidity
+imageHash := keccak256(abi.encode(
+  keccak256(abi.encode(
+    hashTree(tree),
+    threshold
+  )),
+  checkpoint
+))
+```
+
+The `hashTree` function is a recursive function that hashes the tree into a single `bytes32` value, pseudo code for the `hashTree` function is as follows:
+
+```typescript
+export function hashTree(node: Node | Leaf): string {
+  if (isSignerLeaf(node)) {
+    return ethers.utils.solidityPack(
+      ['uint96', 'address'],
+      [node.weight, node.address]
+    )
+  }
+
+  if (isSubdigestLeaf(node)) {
+    return ethers.utils.solidityKeccak256(
+      ['string', 'bytes32'],
+      ['Sequence static digest:\n', node.subdigest]
+    )
+  }
+
+  if (isNestedLeaf(node)) {
+    const nested = hashTree(node.tree)
+    return ethers.utils.solidityKeccak256(
+      ['string', 'bytes32', 'uint256', 'uint256'],
+      ['Sequence nested config:\n', nested, node.threshold, node.weight]
+    )
+  }
+
+  return ethers.utils.solidityKeccak256(
+    ['bytes32', 'bytes32'],
+    [hashTree(node.left), hashTree(node.right)]
+  )
+}
+```
+
+## Initial Configuration
+
+All Sequence Wallets have an "initial configuration", implemented by using the `imageHash` of the initial configuration as the SALT during the `CREATE2` deployment of the wallet.
+
+Wallets are deployed by calling the `deploy` function of the `Factory` contract, which takes the following parameters:
+- `mainModule`: The address of the initial code implementation of the wallet.
+- `salt`: The `imageHash` of the initial configuration.
+
+:::info
+The `MainModule` should always be used as the initial code implementation of the wallet. The `MainModule` validates the `imageHash` (during signature validation) by re-computing the counterfactual address of the wallet, hence it does not require any storage initialization.
+
+If the `imageHash` is ever changed, `MainModule` will automatically replace the wallet code implementation with `MainModuleUpgradeable`, while handling the storage initialization.
+:::

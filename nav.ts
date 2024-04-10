@@ -174,18 +174,23 @@ export const sidebar = {
         // { text: 'EIP5189 vs. 4337', link: '/solutions/technical-references/5189-4337' },
         { text: 'Smart Contract Wallets', collapsed: true, items: [
           { text: 'Why smart contract wallets?', link: '/solutions/technical-references/wallet-contracts/01-why' },
-          { text: 'Universal Deployer', link: '/solutions/technical-references/wallet-contracts/02-universal-deployer' },
-          {text: 'Wallet Factory', link: '/solutions/technical-references/wallet-contracts/03-wallet-factory'},
-          {text: 'Wallet Configuration', link: '/solutions/technical-references/wallet-contracts/04-wallet-configuration'},
-          // {text: 'Modules & Wallet update', link: 'solutions/technical-references/wallet-contracts/05-modules-and-updates'},
-          // {text: 'MainModuleUpgradeable & configuration migration', link: 'solutions/technical-references/wallet-contracts/06-main-module-upgradeable'},
-          {text: 'Transaction Encoding', link: '/solutions/technical-references/wallet-contracts/07-transaction-encoding'},
-          {text: 'Signature Encoding', link: '/solutions/technical-references/wallet-contracts/08-signature-encoding'},
-          // {text: 'Nested Transaction Batching', link: 'solutions/technical-references/wallet-contracts/09-nested-transaction-batching'},
-          // {text: 'GuestModule and on-demand deployment', link: 'solutions/technical-references/wallet-contracts/10-guest-module'},
-          {text: 'Wallet Context', link: '/solutions/technical-references/wallet-contracts/11-wallet-context'},
-          {text: 'Contract Audits', link: '/solutions/technical-references/wallet-contracts/12-contract-audits'},
-        ] }
+        ] },
+        { text: 'Contract Internals', collapsed: true, items: [
+          {text: 'Deployment', link: '/solutions/technical-references/internals/01-deployment'},
+          { text: 'Sequence v1', collapsed: true, items: [
+            {text: 'Deploy', link: '/solutions/technical-references/internals/v1/01-deploy'},
+            {text: 'Wallet Factory', link: '/solutions/technical-references/internals/v1/03-wallet-factory'},
+            {text: 'Wallet Configuration', link: '/solutions/technical-references/internals/v1/04-wallet-configuration'},
+            // {text: 'Transaction Encoding', link: '/solutions/technical-references/internals/v1/07-transaction-encoding'},
+            {text: 'Signature Encoding', link: '/solutions/technical-references/internals/v1/08-signature-encoding'},
+            {text: 'Wallet Context', link: '/solutions/technical-references/internals/v1/11-wallet-context'},
+            {text: 'Contract Audits', link: '/solutions/technical-references/internals/v1/12-contract-audits'},
+          ]},
+          { text: 'Sequence v2', collapsed: true, items: [
+            {text: 'Deploy', link: '/solutions/technical-references/internals/v2/01-deploy'},
+            {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/04-configuration"},
+          ]}
+        ]}
       ]
     },
     

@@ -7,6 +7,91 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-themed-primary {
+    @apply dark:text-white text-black-80;
+  }
+  .text-themed-secondary {
+    @apply dark:text-white-50 text-black-50;
+  }
+  .hover-fade {
+    @apply opacity-100 hover:opacity-50 transition-opacity;
+  }
+  .bg-matrix-dark {
+    background: linear-gradient(
+        0deg,
+        #111 0%,
+        transparent 30%,
+        transparent 70%,
+        #111 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(17, 17, 17, 0.6) 40%,
+        rgba(17, 17, 17, 0.6) 60%,
+        transparent 100%
+      ),
+      url(/img/matrix-bg-dark.svg);
+    background-size: cover;
+    background-position: center center;
+  }
+  .bg-matrix-light {
+    background: linear-gradient(
+        0deg,
+        #f0f0f0 0%,
+        rgba(240, 240, 240, 0.6) 30%,
+        rgba(240, 240, 240, 0.6) 70%,
+        #f0f0f0 100%
+      ),
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(240, 240, 240, 0.6) 40%,
+        rgba(240, 240, 240, 0.6) 60%,
+        transparent 100%
+      ),
+      url(/img/matrix-bg-light.svg);
+    background-size: cover;
+    background-position: center center;
+  }
+  .bg-gradient-dark {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.75) 50%,
+        rgba(0, 0, 0, 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        #000 0%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0) 60%,
+        #000 100%
+      ),
+      linear-gradient(
+        270deg,
+        rgba(11, 106, 249, 0.25) 0%,
+        rgba(29, 146, 255, 0.3) 100%
+      );
+  }
+  .bg-gradient-light {
+    background: linear-gradient(
+        180deg,
+        #f0f0f0 0%,
+        rgba(255, 255, 255, 0) 49.83%,
+        #f0f0f0 100%
+      ),
+      linear-gradient(
+        90deg,
+        #d2e4ff 0%,
+        rgba(210, 228, 255, 0.5) 25.3%,
+        rgba(255, 255, 255, 0) 49.83%,
+        rgba(210, 228, 255, 0.5) 75.47%,
+        #d2e4ff 100%
+      );
+  }
+}
 
 #home-install .vocs_CodeGroup {
   display: flex;
@@ -22,7 +107,7 @@
   font-size: 18px;
 }
 
- /* :root.dark {
+/* :root.dark {
   --vocs-color_background: black;
 } */
 
@@ -31,7 +116,7 @@
   /* --vocs-color_link: yellow; */
 }
 
-.vocs_MobileTopNav_navigation{
+.vocs_MobileTopNav_navigation {
   display: block !important;
 }
 
@@ -45,7 +130,6 @@
 /* TODO: add "Build >" button */
 
 /* TODO: perhaps re-sink it.. just make it an icon */
-
 
 .tabs {
   display: flex;
@@ -81,7 +165,10 @@
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust minmax as needed */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Adjust minmax as needed */
   gap: 1rem; /* Adjust the gap as needed */
   padding: 1rem;
   /* background-color: #1a1a1a; Dark background as shown in the image */
@@ -131,7 +218,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 8px;
   text-align: left;
@@ -208,7 +296,7 @@ th, td {
 
 .mint-button {
   margin: 5px;
-  background-image: linear-gradient(to right, #7537f9, #651fff); 
+  background-image: linear-gradient(to right, #7537f9, #651fff);
   color: #fff; /* Light text */
   padding: 11px 24px; /* Spacing around the text */
   border-radius: 30px; /* Rounded corners */
@@ -222,7 +310,7 @@ th, td {
 }
 
 .mint-button:hover {
-  background-image: linear-gradient(to right, #612cd2, #541ad1); 
+  background-image: linear-gradient(to right, #612cd2, #541ad1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
 }
 
@@ -234,7 +322,7 @@ th, td {
 
 .video-container {
   position: relative;
-  width: 560px; 
+  width: 560px;
   height: 315px;
 }
 
