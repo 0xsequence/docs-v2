@@ -42,7 +42,7 @@ export const topNav = [
     items: [
       { text: 'Relayer API', link: '/api/relayer' },
       { text: 'Indexer API', link: '/api/indexer/01-overview' },
-      { text: 'Metadata API', link: '/api/metadata' },
+      { text: 'Metadata API', link: '/api/metadata/overview' },
       { text: 'Marketplace API', link: '/api/marketplace' },
       { text: 'Node Gateway', link: '/api/node-gateway' },
     ]
@@ -369,10 +369,10 @@ export const sidebar = {
       text: 'Metadata',
       collapsed: true,
       items: [
-        { text: 'Overview', link: '/api/metadata' },
-        { text: 'Schema', link: '/api/metadata/schema' },
-        { text: 'Metadata API', link: '/api/metadata/api' },
-        { text: 'Metadata Examples', link: '/api/metadata/examples' },
+        { text: 'Overview', link: '/api/metadata/overview' },
+        { text: 'Token Metadata', link: '/api/metadata/token-metadata' },
+        { text: 'Contract Metadata', link: '/api/metadata/contract-metadata' },
+        { text: 'REST API', link: '/api/metadata/rest-api' }
       ]
     },
     {

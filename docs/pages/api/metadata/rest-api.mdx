@@ -1,0 +1,150 @@
+# Metadata REST API Reference & Usage
+
+The Sequence Metadata API service offers a simple and fast API to query token & NFT metadata
+for Ethereum-compatible chains.
+
+Quite simply, the Metadata API allows you to query the token metadata of any ERC20, ERC721 or ERC1155
+contract on a [number of supported Ethereum chains](/multi-chain-support).
+
+As well, the Sequence Metadata service is automatically integrated in the [Sequence Indexer](/indexer). 
+But as we demonstrate below, it's also useful to be able to query the token/contract metadata directly too :)
+
+:::info PRO TIP: RPC vs REST endpoints
+Sequence Metadata service is available with both RPC and REST endpoints. We recommend the RPC endpoints
+for your application, but the REST endpoints are an available option for convenience.
+
+For RPC endpoint see [Token metadata RPC](/metadata/token-metadata) and [Contract metadata RPC](/metadata/contract-metadata).
+:::
+
+## Example
+
+Let's say you'd like to query the metadata of a Skyweaver 1155 card on the Polygon network. Of course,  the
+below example will work for any network / contract / token combination as well.
+
+First, the Skyweaver 1155 assets contract is located at address `0x631998e91476DA5B870D741192fc5Cbc55F5a52E`
+on the Polygon network. Second, let's build the metadata lookup endpoint to query Skyweaver's contract
+for token ID `20`:
+
+
+**Request:**
+https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20
+
+
+**Response:**
+```json
+[
+  {
+    "tokenId": "20",
+    "contractAddress": "0x631998e91476da5b870d741192fc5cbc55f5a52e",
+    "name": "Unstoppable Chop",
+    "description": "Attach Silence to target unit. Do 4 damage to it.",
+    "image": "https://assets.skyweaver.net/TNqWLuJZ/webapp/cards/full-cards/6x/20-silver.png",
+    "decimals": 2,
+    "properties": {
+      "baseCardId": 20,
+      "goldCardId": 131092,
+      "grade": "oldSilver",
+      "id": 20,
+      "silverCardId": 65556
+    },
+    "attributes": null
+  }
+]
+```
+
+If you'd like to query a number of tokens at the same time, you can include more token ids comma-separated:
+https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21,22 -- click
+to see the JSON response to query token ids `20`, `21`, and `22` in a single batched request.
+
+Feel free to try tweaking the metadata.sequence.app URL above for your own contract, or another popular
+project to see how the responses come back. You can change the network to [one of our supported networks](/multi-chain-support)
+and specify any contract and/or token id.
+
+In addition to easily querying *token-level metadata* like in the above example, you can also query *contract-level metadata*.
+Contract-level metadata provides you more information about a contract address such as a name, contract type, logo, and description.
+Simply change the metadata URL above to just query the contract address: https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+
+and see result:
+
+```json
+{
+  "chainId": 137,
+  "address": "0x631998e91476da5b870d741192fc5cbc55f5a52e",
+  "name": "Skyweaver",
+  "type": "ERC1155",
+  "symbol": "SKYWVR",
+  "logoURI": "https://assets.skyweaver.net/_tX5dRVi/webapp/icons/skyweaver-token.png",
+  "extensions": {
+    "link": "https://www.skyweaver.net/",
+    "description": "Skyweaver is a Free-to-Play, trading card game powered by Polygon and Ethereum.",
+    "ogImage": "https://skyweaver.net/images/skyweavercover.jpg",
+    "originAddress": "0x631998e91476da5b870d741192fc5cbc55f5a52e"
+  }
+}
+```
+
+<br />
+
+## Usage
+
+The Metadata API service is accessible either with a simple [REST interface](#rest-endpoints), or a [RPC client](#rpc-client).
+For the RPC client, we offer Web browser, node and Go clients. We recommend the RPC client for most integrations, but
+make the REST interface available for convenience.
+
+<br />
+
+## REST endpoints
+
+As mentioned in the [example](#example) above. The general format of the REST endpoint is:
+
+```
+GET https://metadata.sequence.app/tokens/<network>/<contractAddress>[/<tokenID>]
+```
+
+Where `<network>` must be one of the `Chain ID` or `Chain Handle` of [the supported networks](/multi-chain-support#networks).
+
+<br />
+
+**Fetch contract-level metadata:**
+
+```
+GET https://metadata.sequence.app/tokens/<network>/<contractAddress>
+```
+
+Example: https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+
+<br />
+
+
+**Fetch token-level metadata:**
+
+```
+GET https://metadata.sequence.app/tokens/<network>/<contractAddress>/<tokenID>[,<tokenID>,...]
+```
+
+Examples:
+* https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20
+* https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21
+
+<br />
+
+
+## RPC Client
+
+The Metadata RPC interface offers the full capabilities of the Metadata service.
+
+We provide SDKs for [Web / node.js](https://github.com/0xsequence/sequence.js) and [Go](https://github.com/0xsequence/go-sequence).
+Or if you'd like to integrate the Metadata service with another language target, simply follow the API reference below
+to implement the HTTP requests. Additionally, read the Typescript client source code as [reference
+implementation of the Metadata RPC client](https://github.com/0xsequence/sequence.js/blob/master/packages/metadata/src/metadata.gen.ts) as well.
+
+## Metadata RPC Methods
+
+**Metadata API endpoint:** https://metadata.sequence.app
+
+**Metadata RPC methods:**
+
+* `GetTokenMetadata` - fetch token metadata of ERC721 or ERC1155 tokens from a single contract 
+* `GetTokenMetadataBatch` - fetch token metadata of ERC721 or ERC1155 token from a batch of contracts 
+* `GetContractInfo` - fetch contract metadata of an ERC20, ERC721 or ERC1155 contract address
+* `GetContractInfoBatch` - fetch contract metadata of a batch of ERC20, ERC721 or ERC1155 contract addresses
