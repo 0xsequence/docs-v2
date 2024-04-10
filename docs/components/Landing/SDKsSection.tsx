@@ -36,24 +36,6 @@ export const SDKsSection = () => (
         link="/"
       />
       <Card
-        icon="IOSIcon"
-        title="iOS"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
-        link="/"
-      />
-      <Card
-        icon="AndroidIcon"
-        title="Android"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
-        link="/"
-      />
-      <Card
-        icon="ReactIcon"
-        title="React Native"
-        body="Easily onboard web3-native players with a complete Universal Wallet."
-        link="/"
-      />
-      <Card
         icon="SequenceIcon"
         title="Sequence Kit"
         body="Add web onboarding for any web3 wallet."
