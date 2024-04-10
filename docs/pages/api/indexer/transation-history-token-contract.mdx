@@ -1,10 +1,3 @@
----
-sidebar_label: Token contract transaction history 
----
-
-import { TabGroup, Tab, TabPanel } from "../../../components/TabGroup.tsx";
-
-
 # Contract token history
 
 :::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
@@ -33,7 +26,7 @@ sure to query the indexer of the corresponding network).
 
 :::code-group
 
-```bash [curl]
+```bash [Terminal]
 curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTransactionHistory -d '{ "filter": { "accountAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E" }, "includeMetadata": true }'
 ```
 
@@ -85,3 +78,5 @@ func GetTransactionHistory(accountAddress string) {
 	fmt.Println("transaction history:", history)
 }
 ```
+
+:::

@@ -1,11 +1,3 @@
----
-sidebar_label: Wallet transaction history
----
-
-import { TabGroup, Tab, TabPanel } from "../../../components/TabGroup.tsx";
-
-
-
 # Wallet transaction history
 
 :::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
@@ -44,11 +36,11 @@ The response includes decoded transaction details for easy consumption / renderi
 
 :::code-group
 
-```bash [curl]
+```bash [Terminal]
 curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTransactionHistory -d '{ "filter": { "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9" }, "includeMetadata": true }'
 ```
 
-```typescript [Typescript]
+```ts [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
@@ -93,3 +85,5 @@ func GetTransactionHistory(accountAddress string) {
 	fmt.Println("transaction history:", history)
 }
 ```
+
+:::

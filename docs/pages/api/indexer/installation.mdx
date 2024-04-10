@@ -1,9 +1,3 @@
----
-sidebar_label: Installation
----
-
-import { TabGroup, Tab, TabPanel } from "../../../components/TabGroup.tsx";
-
 # Indexer Installation
 
 :::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
@@ -55,13 +49,9 @@ or
 yarn add 0xsequence ethers
 ```
 
-<strong>
-  This code requires an API Access Key from{" "}
-  <a href="https://sequence.build">
-    <u>**Sequence Builder**</u>
-  </a>{" "}
-</strong>
-then in your app (using your `API_Access_Key`)
+:::info
+This code requires an API Access Key from [Sequence Builder](https://sequence.build).
+:::
 
 ```ts
 import { SequenceIndexer } from '@0xsequence/indexer'
@@ -80,13 +70,13 @@ const tokenBalances = await indexer.getTokenBalances(...)
 
 ### Go Installation
 
-```bash
+```bash [Terminal]
 go get -u github.com/0xsequence/go-sequence@latest
 ```
 
 then in your app,
 
-```go
+```go [Go]
 import (
 	"github.com/0xsequence/go-sequence/indexer"
 )

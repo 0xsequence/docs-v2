@@ -41,7 +41,7 @@ export const topNav = [
     text: 'APIs',
     items: [
       { text: 'Relayer API', link: '/api/relayer' },
-      { text: 'Indexer API', link: '/api/indexer/01-overview' },
+      { text: 'Indexer API', link: '/api/indexer/overview' },
       { text: 'Metadata API', link: '/api/metadata/overview' },
       { text: 'Marketplace API', link: '/api/marketplace' },
       { text: 'Node Gateway', link: '/api/node-gateway' },
@@ -355,14 +355,14 @@ export const sidebar = {
       text: 'Indexer',
       collapsed: true,
       items: [
-        {text: 'Overview', link: '/api/indexer/01-overview'},
-        {text: 'Installation', link: '/api/indexer/02-installation'},
-        {text: 'Fetch Tokens', link: '/api/indexer/03-fetch-tokens'},
-        {text: 'Transaction History', link: '/api/indexer/04-transaction-history'},
-        {text: 'Unique Tokens', link: '/api/indexer/05-unique-tokens'},
-        {text: 'Transaction History Token Contract', link: '/api/indexer/06-transation-history-token-contract'},
-        {text: 'Native Network Balance', link: '/api/indexer/07-native-network-balance'},
-        {text: 'Indexing Tips', link: '/api/indexer/08-metadata-tips'},
+        {text: 'Overview', link: '/api/indexer/overview'},
+        {text: 'Installation', link: '/api/indexer/installation'},
+        {text: 'Fetch Tokens', link: '/api/indexer/fetch-tokens'},
+        {text: 'Transaction History', link: '/api/indexer/transaction-history'},
+        {text: 'Unique Tokens', link: '/api/indexer/unique-tokens'},
+        {text: 'Transaction History Token Contract', link: '/api/indexer/transation-history-token-contract'},
+        {text: 'Native Network Balance', link: '/api/indexer/native-network-balance'},
+        {text: 'Metadata Tips', link: '/api/indexer/metadata-tips'},
       ]
     },
     {

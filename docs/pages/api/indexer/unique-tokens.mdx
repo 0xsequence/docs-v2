@@ -1,10 +1,3 @@
----
-sidebar_label: All unique tokens in a contract
----
-
-import { TabGroup, Tab, TabPanel } from "../../../components/TabGroup.tsx";
-
-
 # Tokens in a contract
 
 :::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
@@ -41,11 +34,11 @@ sure to query the indexer of the corresponding network).
 
 :::code-group
 
-```bash [curl]
+```bash [Terminal]
 curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenSupplies -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "includeMetadata": true }'
 ```
 
-```typescript [Typescript]
+```ts [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
@@ -89,3 +82,5 @@ func GetTokenSupplies(contractAddress string) {
 	fmt.Println("token details:", tokenDetails)
 }
 ```
+
+:::
