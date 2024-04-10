@@ -1,0 +1,37 @@
+# Analytics in Builder
+
+When you use Sequence to build your application, you can see key insights in Sequence Builder. 
+You don't need to do any additional work to see valuable metrics about your project, such as the number
+of connected wallets.
+
+#### How it works
+
+When requests are made with Sequence SDKs/APIs, analytics events are fired and sent to our internal analytics system, Databeat.
+Databeat anonymizes the data and stores it in a database designed for high-volume, real-time applications. The metrics you see in Builder are 
+queried from the database for your project and presented in insightful visualizations. 
+
+## Overview
+
+In the Overview tab of Builder, you will see the key, high-level metrics for your project. Metric cards will show the total for that metric, and
+clicking on one will change the chart to show the historical values. 
+
+:::tip 
+You also have the option to look back at your data beyond the default **Last 30 days** 
+by toggling the value in the top right corner. 
+:::
+
+#### Wallets connected
+*Wallets connected* represents the count of distinct wallet addresses connected via Sequence SDKs for the selected time period. 
+
+![Sequence Builder analytics wallets connected](/img/builder/builder_analytics_wallets_connected.png)
+
+#### Marketplace transactions
+*Marketplace transactions* shows the total number of buy and sell events that occure via the Sequence Marketplace API.
+
+![Sequence Builder analytics marketplace transactions](/img/builder/builder_analytics_market_txns.png)
+
+#### Transaction requests
+
+*Transaction requests* represents the total number of transactions sent by wallets associated with the project.
+
+![Sequence Builder analytics transaction requests](/img/builder/builder_analytics_txn_requests.png)
