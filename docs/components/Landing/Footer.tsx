@@ -113,7 +113,7 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
                     Contact
                   </SmartLink>
                   <SmartLink
-                    href="https://sequence.xyz/pricing"
+                    href="https://40061393.fs1.hubspotusercontent-na1.net/hubfs/40061393/Sequence%20Media%20Kit%202024.pdf"
                     className="hover-fade w-fit"
                   >
                     Media kit
