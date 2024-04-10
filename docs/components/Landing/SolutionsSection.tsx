@@ -137,26 +137,10 @@ const SolutionsGroup = ({
             <a
               key={index}
               href={item.link}
-              className={clsx(
-                'hover-fade p-4 dark:bg-white-10 rounded-md z-10',
-                {
-                  ['bg-light-purple']: theme === 'purple',
-                  ['bg-light-green']: theme === 'green',
-                  ['bg-light-yellow']: theme === 'yellow',
-                }
-              )}
+              className="hover-fade p-4 rounded-md z-10 dark:bg-white-10 bg-black-7"
             >
               <div className="flex gap-2">
-                <p
-                  className={clsx(
-                    'flex items-center gap-2 text-xl leading-7 dark:text-white font-bold',
-                    {
-                      ['text-dark-purple']: theme === 'purple',
-                      ['text-dark-green']: theme === 'green',
-                      ['text-dark-yellow']: theme === 'yellow',
-                    }
-                  )}
-                >
+                <p className="flex items-center gap-2 text-xl leading-7 font-bold text-themed-primary">
                   <IconComponent />
                   {item.title}
                 </p>

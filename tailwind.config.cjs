@@ -23,12 +23,6 @@ module.exports = {
         ['black-7']: 'rgba(0,0,0,0.07)',
         ['black-50']: 'rgba(0,0,0,0.5)',
         ['black-80']: 'rgba(0,0,0,0.8)',
-        ['light-purple']: '#F2ECFF',
-        ['dark-purple']: '#301172',
-        ['light-green']: '#E7F5EB',
-        ['dark-green']: '#07571E',
-        ['light-yellow']: '#F6F1E5',
-        ['dark-yellow']: '#8D6A17',
       },
       spacing: {
         ['15']: '3.75rem',
