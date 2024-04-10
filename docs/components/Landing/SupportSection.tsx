@@ -21,7 +21,7 @@ export const SupportSection = () => (
         body="Join our Discord community to learn from others building on Sequence."
       />
       <SupportItem
-        link="https://support.sequence.xyz"
+        link="https://go.crisp.chat/chat/embed/?website_id=9ef4395b-6bb1-4645-8e02-6071d89290a1"
         title="Contact our team"
         body="Reach out to our integration team to discuss how you can partner with Sequence."
       />
