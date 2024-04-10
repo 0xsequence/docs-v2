@@ -40,11 +40,11 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Marketplace API', link: '/api/marketplace' },
       { text: 'Relayer API', link: '/api/relayer' },
       { text: 'Indexer API', link: '/api/indexer/01-overview' },
-      { text: 'Node Gateway', link: '/api/node-gateway' },
       { text: 'Metadata API', link: '/api/metadata' },
+      { text: 'Marketplace API', link: '/api/marketplace' },
+      { text: 'Node Gateway', link: '/api/node-gateway' },
     ]
   },
 
@@ -68,7 +68,7 @@ export const sidebar = {
     {
       text: 'Wallets',
       items: [
-        {text: 'Overview', link: '/solutions/wallets/overview'},
+        { text: 'Overview', link: '/solutions/wallets/overview' },
         { text: 'In-Game Wallet', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/wallets/embedded-wallet/01-overview'},
           {text: 'Quickstart', link: '/solutions/wallets/embedded-wallet/02-quickstart'},
@@ -340,31 +340,60 @@ export const sidebar = {
       ]
     },
   ],
-    // apis
-    '/api': [
-      {
-        text: 'APIs',
-        // collapsed: true,
-        items: [
-          { text: 'Indexer', collapsed: true,
-          items: [
-            {text: 'Overview', link: '/api/indexer/01-overview'},
-            {text: 'Installation', link: '/api/indexer/02-installation'},
-            {text: 'Fetch Tokens', link: '/api/indexer/03-fetch-tokens'},
-            {text: 'Transaction History', link: '/api/indexer/04-transaction-history'},
-            {text: 'Unique Tokens', link: '/api/indexer/05-unique-tokens'},
-            {text: 'Transaction History Token Contract', link: '/api/indexer/06-transation-history-token-contract'},
-            {text: 'Native Network Balance', link: '/api/indexer/07-native-network-balance'},
-            {text: 'Indexing Tips', link: '/api/indexer/08-metadata-tips'},
-             ]
-            },
-          { text: 'Relayer', link: '/api/relayer' },
-          { text: 'Marketplace', link: '/api/marketplace' },
-          { text: 'Node Gateway RPCs', link: '/api/node-gateway' },
-          { text: 'Metadata', link: '/api/metadata' },
-        ]
-      },
-    ],
+
+  // apis
+  '/api': [
+    {
+      text: 'Relayer',
+      collapsed: true,
+      items: [
+        { text: 'Overview', link: '/api/relayer' },
+        { text: 'Relayer Examples', link: '/api/relayer/examples' },
+      ]
+    },
+    {
+      text: 'Indexer',
+      collapsed: true,
+      items: [
+        {text: 'Overview', link: '/api/indexer/01-overview'},
+        {text: 'Installation', link: '/api/indexer/02-installation'},
+        {text: 'Fetch Tokens', link: '/api/indexer/03-fetch-tokens'},
+        {text: 'Transaction History', link: '/api/indexer/04-transaction-history'},
+        {text: 'Unique Tokens', link: '/api/indexer/05-unique-tokens'},
+        {text: 'Transaction History Token Contract', link: '/api/indexer/06-transation-history-token-contract'},
+        {text: 'Native Network Balance', link: '/api/indexer/07-native-network-balance'},
+        {text: 'Indexing Tips', link: '/api/indexer/08-metadata-tips'},
+      ]
+    },
+    {
+      text: 'Metadata',
+      collapsed: true,
+      items: [
+        { text: 'Overview', link: '/api/metadata' },
+        { text: 'Schema', link: '/api/metadata/schema' },
+        { text: 'Metadata API', link: '/api/metadata/api' },
+        { text: 'Metadata Examples', link: '/api/metadata/examples' },
+      ]
+    },
+    {
+      text: 'Marketplace',
+      collapsed: true,
+      items: [
+        { text: 'Overview', link: '/api/marketplace' },
+        { text: 'Schema', link: '/api/marketplace/schema' },
+        { text: 'Marketplace API', link: '/api/marketplace/api' },
+        { text: 'Marketplace Examples', link: '/api/marketplace/examples' },
+      ]
+    },
+    {
+      text: 'Node Gateway',
+      collapsed: true,
+      items: [
+        { text: 'Overview', link: '/api/node-gateway' },
+        { text: 'Etc', link: '/api/node-gateway/etc' },
+      ]
+    },
+  ],
   
   // Support
   '/support': {
