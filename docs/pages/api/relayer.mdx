@@ -18,3 +18,219 @@ Meta-transactions are the idea of a transaction inside of a transaction. The ben
 The best part: transactions with Sequence Relayer are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
 
 The Sequence Relayer is usable by frontend dapps, or even in your backends.
+
+## Anatomy of a Sequence transaction bundle
+
+A Sequence transaction bundle consists of three things:
+1. A list of Sequence transactions
+2. A Sequence nonce
+3. A Sequence signature
+
+Like Ethereum accounts, Sequence wallets use nonces to enforce transaction ordering and protect against replay attacks.
+Unlike Ethereum accounts, Sequence wallets have a virtually unlimited supply of independent nonces, allowing multiple independent transactions to be executed in parallel.
+A Sequence nonce is encoded as a 160-bit nonce space followed by the 96-bit nonce for that nonce space, big-endian.
+
+```
+|<------------------------- uint256 -------------------------->|
+|<------ nonce space (160 bits) ------>||<- nonce (96 bits) -->|
+ssssssssssssssssssssssssssssssssssssssssnnnnnnnnnnnnnnnnnnnnnnnn
+```
+
+## Gas sponsorship and fees
+
+The relayer only dispatches transactions that either:
+1. Are sponsored in a project via the Sequence Builder, or
+2. Include a fee payment transaction to the relayer.
+
+You can sponsor:
+1. Sequence wallets, so that they can send transactions without needing to pay fees,
+2. Token addresses, so that any user can send those tokens for free,
+3. Contracts, so that any user can interact with them for free,
+4. Arbitrary addresses, so that any user can transfer native tokens to it for free.
+
+To start sponsoring transactions, sign into https://sequence.build, and create a new project for the network you want to transact on.
+
+You can also pay the relayer directly to dispatch your transactions by adding an additional fee payment transaction to the relayer in your bundle.
+The list of accepted fee tokens can be retrieved by calling the `/FeeTokens` endpoint for the network you are interested in:
+
+```sh [curl]
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{}' \
+  https://mainnet-relayer.sequence.app/rpc/Relayer/FeeTokens | jq
+
+{
+  "isFeeRequired": true,
+  "tokens": [
+    {
+      "chainId": 1,
+      "name": "Matic",
+      "symbol": "MATIC",
+      "type": "ERC20_TOKEN",
+      "decimals": 18,
+      "logoURL": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/matic.png",
+      "contractAddress": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+      "tokenID": "0"
+    },
+    {
+      "chainId": 1,
+      "name": "USDC",
+      "symbol": "USDC",
+      "type": "ERC20_TOKEN",
+      "decimals": 6,
+      "logoURL": "https://logos.covalenthq.com/tokens/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+      "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "tokenID": "0"
+    },
+    {
+      "chainId": 1,
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "ERC20_TOKEN",
+      "decimals": 18,
+      "logoURL": "https://logos.covalenthq.com/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+      "contractAddress": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "tokenID": "0"
+    }
+  ]
+}
+```
+
+## API
+
+### Fetching fee options
+
+:::warning
+Fee selection is only necessary if you aren't already using Sequence Builder's gas sponsorship capabilities!
+Create your project in Sequence Builder for ease of development today!
+:::
+
+```typescript [TypeScript]
+import { Session } from '@0xsequence/auth'
+import { ethers } from 'ethers'
+
+const config = {
+  mnemonic: 'YOUR MNEMONIC',
+  projectAccessKey: 'YOUR PROJECT ACCESS KEY',
+  chainId: ChainId.YOUR_CHAIN_ID // e.g. ChainId.MAINNET, ChainId.POLYGON, etc.
+}
+
+const signer = ethers.Wallet.fromMnemonic(config.mnemonic)
+
+const session = await Session.singleSigner({ signer, projectAccessKey: config.projectAccessKey })
+
+const account = session.account.getSigner(config.chainId, {
+  async selectFee(_transactions, options) {
+    // This callback is called with the list of candidate fee options.
+
+    console.log('Fee options:', JSON.stringify(options, undefined, 2))
+
+    // Select the USDC fee option.
+    return options.find(option => option.token.symbol === 'USDC')
+  }
+})
+```
+
+```go [Go]
+mnemonic := "YOUR MNEMONIC"
+projectAccessKey := "YOUR PROJECT ACCESS KEY"
+rpcURL := fmt.Sprintf("https://nodes.sequence.app/YOUR-NETWORK/%v", projectAccessKey)
+relayerURL := "https://YOUR-NETWORK-relayer.sequence.app"
+
+signer, _ := ethwallet.NewWalletFromMnemonic(mnemonic)
+
+wallet, _ := sequence.NewWalletSingleOwner(signer)
+
+provider, _ := ethrpc.NewProvider(rpcURL)
+wallet.SetProvider(provider)
+
+relayer, _ := relayer.NewRpcRelayer(relayerURL, projectAccessKey, provider, nil)
+wallet.SetRelayer(relayer)
+
+transactions := sequence.Transactions{
+  &sequence.Transaction{
+    To:    common.HexToAddress("0x468E8e29F6cfb0F6b7ff10ec6A1AB516ec849c04"),
+    Value: big.NewInt(1000000000000000000),
+  },
+}
+
+options, quote, _ := wallet.FeeOptions(ctx, transactions)
+```
+
+### Sending transactions
+
+```typescript [TypeScript]
+const transactions = [
+  {
+    to: '0x468E8e29F6cfb0F6b7ff10ec6A1AB516ec849c04',
+    value: '1000000000000000000'
+  }
+]
+
+// This sends the transaction to the relayer, and returns immediately once the relayer responds.
+const response = await account.sendTransaction(transactions)
+
+// This waits for the transaction to be confirmed on-chain.
+const receipt = await response.wait()
+
+console.log(JSON.stringify(receipt, undefined, 2))
+```
+
+```go [Go]
+// Select the USDC fee option.
+// Not required if using Sequence Builder's gas sponsorship capabilities!
+var selectedOption *sequence.RelayerFeeOption
+for _, option := range options {
+  if option.Token.Symbol == "USDC" {
+    selectedOption = option
+    break
+  }
+}
+
+// Pay the relayer.
+// Not required if using Sequence Builder's gas sponsorship capabilities!
+data, _ := contracts.IERC20.Encode("transfer", selectedOption.To, selectedOption.Value)
+transactions.Append(sequence.Transactions{&sequence.Transaction{
+  To:            *selectedOption.Token.ContractAddress,
+  Data:          data,
+  RevertOnError: true,
+}})
+
+signed, _ := wallet.SignTransactions(ctx, transactions)
+
+// Send the transaction to the relayer.
+metaTxnID, _, wait, _ := wallet.SendTransaction(ctx, signed, quote)
+
+fmt.Println("meta-transaction ID", metaTxnID)
+
+receipt, _ := wait(ctx)
+
+fmt.Println("transaction hash", receipt.TxHash)
+```
+
+### Fetching transaction receipts
+
+To fetch a transaction receipt for an arbitrary transaction that was dispatched via the relayer, call the `/GetMetaTxnReceipt` endpoint.
+The `metaTxID` is the `txnHash` from the response of the `/SendMetaTxn` endpoint.
+
+```sh [curl]
+curl -s -X POST -H 'Content-Type: application/json' \
+  -d '{"metaTxID":"462de2756e45c93698b89ada5ba4a3c9d1bfb9fb354ad2e7f36f1a9fefbc550b"}' \
+  https://polygon-relayer.sequence.app/rpc/Relayer/GetMetaTxnReceipt | jq
+
+{
+  "receipt": {
+    "id": "462de2756e45c93698b89ada5ba4a3c9d1bfb9fb354ad2e7f36f1a9fefbc550b",
+    "status": "SUCCEEDED",
+    "revertReason": null,
+    "index": 0,
+    "logs": [
+
+...
+```
+
+```typescript [TypeScript]
+const { receipt } = await session.account.relayer(config.chainId).wait('462de2756e45c93698b89ada5ba4a3c9d1bfb9fb354ad2e7f36f1a9fefbc550b')
+```
+
+```go [Go]
+status, receipt, _ := relayer.Wait(ctx, "462de2756e45c93698b89ada5ba4a3c9d1bfb9fb354ad2e7f36f1a9fefbc550b")
+```
