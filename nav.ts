@@ -185,6 +185,11 @@ export const sidebar = {
           // {text: 'GuestModule and on-demand deployment', link: 'solutions/technical-references/wallet-contracts/10-guest-module'},
           {text: 'Wallet Context', link: '/solutions/technical-references/wallet-contracts/11-wallet-context'},
           {text: 'Contract Audits', link: '/solutions/technical-references/wallet-contracts/12-contract-audits'},
+        ] },
+        { text: 'Embedded Wallet', collapsed: true, items: [
+          {text: 'Overview', link: '/solutions/technical-references/embedded-wallet/01-overview'},
+          {text: 'Intents', link: '/solutions/technical-references/embedded-wallet/02-intents'},
+          {text: 'Enclave verification', link: '/solutions/technical-references/embedded-wallet/03-enclave-verification'},
         ] }
       ]
     },

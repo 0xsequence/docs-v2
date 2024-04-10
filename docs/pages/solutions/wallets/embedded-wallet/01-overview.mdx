@@ -2,36 +2,8 @@
 
 Sequence Embedded Wallet (or Wallet-as-a-Service) enables the creation, management and usage of fully functional EVM compatible wallets. These wallets can be created on-demand for each user and allow you to integrate an application with an Ethereum compatible blockchain, while using familiar constructions like RPC APIs.
 
-Sequence Embedded Wallet offers real non-custodial wallets and the system guarantees that each created wallet can only be accessed with the consent of the owner of the wallet.
+Sequence Embedded Wallet offers real non-custodial wallets and the system guarantees that each created wallet can only be accessed with the consent of the owner of the wallet. This is made possible by utilizing the power of [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) to handle sensitive data in a secure environment that nobody can access - not even Sequence.
 
-## Architecture overview
+At the same time, the smooth user experience makes them forget they are interacting with Web3. All the aspects of it are controlled by you, with no popups or interruptions, the wallet abstracted away by a few SDK or API calls.
 
-Sequence Embedded Wallets are native smart contract multisigs, the configuration of the multisig can be seen as a 2/2, both of which are required to sign in order to operate them; each one of the signers protects the wallet from a different facet of possible threats.
-
-### Signer 1: Sequence Auth
-
-Sequence Auth provides a simple way to add account creation, login, session management, and wallet support to your app, enabling applications to provide traditional web experiences (e.g. social login, email login, etc.) while providing access to crypto wallets to interact with smart contracts.
-
-All user and session data is encrypted by a Hardware Security Module operated by a third party. This makes it protected from both external attackers and internal access by Sequence Team or anyone else. **Nobody** can access a user's wallet but the user themselves.
-
-You won't need to trust us, this is a guarantee you can verify yourself: this service is hosted in a cryptographically attested secure enclave on Amazon Nitro platform. And we offer [publicly available independently audited source code](https://github.com/0xsequence/waas-authenticator), so you can rest assured that it hasn't been tampered with.
-
-### Signer 2: Sequence Guard
-
-Sequence Guard is a service hosted by Sequence and contains the other key of the wallets. It's meant to be another line of defense, verifying not only user's _identity_ but also their _intent_. It achieves this in two different ways:
-
-1 - Limits and allowlists: you can (from the development dashboard) configure what kind of actions are allowed, this means that the guard will only sign transactions within these constraints. For example, you can define that only NFT contract X can be called, and the guard will enforce that no other transactions can take place.
-
-2 - Authenticating the user: the Sequence Guard will authenticate the user **independently of the Sequence Auth**, it performs this action either by using a 3rd party OAuth 2.0 id token (from Meta, Google, X, etc.) or by directly communicating with the user via email/phone number with an OTP code. The direct communication is not always required and, when it does happen, it's seamless and branded with your project details.
-
-## Threat model
-
-With these safeguards in place wallets are **safe** against the following scenarios:
-
-1. Sequence.app backend is compromised, or guard keys are leaked: in this scenario, the user's identity must still be verified by Sequence Auth.
-
-2. Sequence Auth is compromised: in this scenario the Sequence Guard protects the wallets, because it independently authenticates the user, an attacker in this scenario wouldn't be able to access any wallets.
-
-The model also provides partial protection against the scenario:
-
-3. Partner frontend is compromised, or MITM on the partner side: If an attacker were to be able to vulnerate the frontend of the partner, it could gain access to wallets at the time of login, but it cannot gain access to wallets of users who are currently inactive. This means that recovery from such a scenario is possible, with limited damage.
+Project-scoped wallets on your terms but with unmatched security giving your users peace of mind? Yes, now you can eat your cake and have it too.
