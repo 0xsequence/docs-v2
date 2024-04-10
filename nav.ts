@@ -171,7 +171,7 @@ export const sidebar = {
       text: 'Technical References',
       items: [
         { text: 'Chain Support', link: '/solutions/technical-references/chain-support' },
-        { text: 'EIP5189 vs. 4337', link: '/solutions/technical-references/5189-4337' },
+        // { text: 'EIP5189 vs. 4337', link: '/solutions/technical-references/5189-4337' },
         { text: 'Smart Contract Wallets', collapsed: true, items: [
           { text: 'Why smart contract wallets?', link: '/solutions/technical-references/wallet-contracts/01-why' },
           { text: 'Universal Deployer', link: '/solutions/technical-references/wallet-contracts/02-universal-deployer' },
