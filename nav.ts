@@ -164,6 +164,7 @@ export const sidebar = {
         {text: 'Node Gateway', link: '/solutions/builder/node-gateway'},
         {text: 'Marketplaces', link: '/solutions/builder/marketplaces'},
         {text: 'Indexer', link: '/solutions/builder/indexer'},
+        {text: 'Analytics', link: '/solutions/builder/analytics'},
         {text: 'Settings', link: '/solutions/builder/project-settings'},
       ]
     },
