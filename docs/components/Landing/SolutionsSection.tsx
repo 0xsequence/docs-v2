@@ -33,12 +33,12 @@ export const SolutionsSection = () => (
             body: 'Manage contracts and collections with our no-code Builder.',
             link: '/solutions/collectibles/contracts/01-deploy-an-item-collection',
           },
-          {
-            icon: 'AirdropperIcon',
-            title: 'Airdropper',
-            body: 'Create airdrop campaigns and target players with airdrops.',
-            link: '/',
-          },
+          // {
+          //   icon: 'AirdropperIcon',
+          //   title: 'Airdropper',
+          //   body: 'Create airdrop campaigns and target players with airdrops.',
+          //   link: '/',
+          // },
         ]}
       />
       <SolutionsGroup
@@ -87,12 +87,12 @@ export const SolutionsSection = () => (
             body: 'Track every aspect of web3 activity within your games.',
             link: '/',
           },
-          {
-            icon: 'DiscordIcon',
-            title: 'Discord Bot',
-            body: 'Manage contracts and collections with our no-code Builder.',
-            link: '/',
-          },
+          // {
+          //   icon: 'DiscordIcon',
+          //   title: 'Discord Bot',
+          //   body: 'Manage contracts and collections with our no-code Builder.',
+          //   link: '/',
+          // },
         ]}
       />
     </div>
