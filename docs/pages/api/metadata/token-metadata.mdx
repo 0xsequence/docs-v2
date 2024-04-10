@@ -1,12 +1,12 @@
 # Token Metadata
 
-Sequence provides a metadata service for fetching token metadata for any ERC721 or ERC1155 contract, on [any EVM chain](/multi-chain-support).
+Sequence provides a metadata service for fetching token metadata for any ERC721 or ERC1155 contract, on [any EVM chain](/solutions/technical-references/chain-support).
 
-* [Learn how to query token metadata directly for any contract](/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
-* [Learn about token metadata standards and formats for ERC721 and ERC1155 tokens](/metadata/token-metadata#token-metadata-standards)
+* [Learn how to query token metadata directly for any contract](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+* [Learn about token metadata standards and formats for ERC721 and ERC1155 tokens](/api/metadata/token-metadata#token-metadata-standards)
 
 :::info[PRO TIP: Sequence Indexer also supports token metadata]
-When using the [Sequence Indexer](/indexer), pass `"includeMetadata": true` to your request to
+When using the [Sequence Indexer](/api/indexer/overview), pass `"includeMetadata": true` to your request to
 query token metadata for any ERC721 or ERC1155 contract. See below how to fetch
 token metadata directly.
 :::
@@ -172,10 +172,10 @@ Please [contact our team](/support) for assistance with integrations to another 
 
 ### Testing instructions:
 
-1. Check current token metadata using [token metadata fetch](/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+1. Check current token metadata using [token metadata fetch](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
 2. Modify token metadata content either onchain or via token baseURI 
-3. Call refresh token ID endpoints using [refresh metadata](/metadata/token-metadata#refreshing-token-metadata)
-4. Check token metadata changes using [token metadata fetch](/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
+3. Call refresh token ID endpoints using [refresh metadata](/api/metadata/token-metadata#refreshing-token-metadata)
+4. Check token metadata changes using [token metadata fetch](/api/metadata/token-metadata#fetch-token-metadata-for-any-erc721-or-erc1155-contract)
 
 ## Token Metadata Standards
 
@@ -249,7 +249,7 @@ Note that OpenSea technically breaks the ERC1155 standard by suggesting to use "
 the ERC1155 calls uses the field name "properties" instead of "attributes", see
 https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md#erc-1155-metadata-uri-json-schema (read section below).
 However this is completely okay and mixed use of properties / attributes is compatible in practice.
-On Sequence Metadata, we support both structures for token contracts which use either format for their [properties/attributes](/metadata/token-metadata#attributes-vs-properties).
+On Sequence Metadata, we support both structures for token contracts which use either format for their [properties/attributes](/api/metadata/token-metadata#attributes-vs-properties).
 
 Another example is from Neon District: https://metadata.sequence.app/tokens/polygon/0x7227e371540CF7b8e512544Ba6871472031F3335/158456331411102687640546264635
 
@@ -316,4 +316,4 @@ and `properties` fields for either ERC721 or ERC1155.
 Finally, a note on ERC20 tokens. ERC20 tokens are just a single token, so they themselves do not have a token ID, but
 are represented entirely by their contract address. We can infer some information about the token by querying the contract
 methods such as `name` and `decimals`. Additionally, ERC20 tokens can take advantage of the `contractURI` extension used
-by OpenSea and described in more detail in our [Contract metadata](/metadata/contract-metadata) section.
+by OpenSea and described in more detail in our [Contract metadata](/api/metadata/contract-metadata) section.

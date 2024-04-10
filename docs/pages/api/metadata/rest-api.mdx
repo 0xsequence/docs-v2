@@ -4,16 +4,16 @@ The Sequence Metadata API service offers a simple and fast API to query token & 
 for Ethereum-compatible chains.
 
 Quite simply, the Metadata API allows you to query the token metadata of any ERC20, ERC721 or ERC1155
-contract on a [number of supported Ethereum chains](/multi-chain-support).
+contract on a [number of supported Ethereum chains](/solutions/technical-references/chain-support).
 
-As well, the Sequence Metadata service is automatically integrated in the [Sequence Indexer](/indexer). 
+As well, the Sequence Metadata service is automatically integrated in the [Sequence Indexer](/api/indexer/overview). 
 But as we demonstrate below, it's also useful to be able to query the token/contract metadata directly too :)
 
 :::info[PRO TIP: RPC vs REST endpoints]
 Sequence Metadata service is available with both RPC and REST endpoints. We recommend the RPC endpoints
 for your application, but the REST endpoints are an available option for convenience.
 
-For RPC endpoint see [Token metadata RPC](/metadata/token-metadata) and [Contract metadata RPC](/metadata/contract-metadata).
+For RPC endpoint see [Token metadata RPC](/api/metadata/token-metadata) and [Contract metadata RPC](/api/metadata/contract-metadata).
 :::
 
 ## Example
@@ -57,7 +57,7 @@ https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc5
 to see the JSON response to query token ids `20`, `21`, and `22` in a single batched request.
 
 Feel free to try tweaking the metadata.sequence.app URL above for your own contract, or another popular
-project to see how the responses come back. You can change the network to [one of our supported networks](/multi-chain-support)
+project to see how the responses come back. You can change the network to [one of our supported networks](/)
 and specify any contract and/or token id.
 
 In addition to easily querying *token-level metadata* like in the above example, you can also query *contract-level metadata*.
@@ -101,7 +101,7 @@ As mentioned in the [example](#example) above. The general format of the REST en
 GET https://metadata.sequence.app/tokens/<network>/<contractAddress>[/<tokenID>]
 ```
 
-Where `<network>` must be one of the `Chain ID` or `Chain Handle` of [the supported networks](/multi-chain-support#networks).
+Where `<network>` must be one of the `Chain ID` or `Chain Handle` of [the supported networks](/).
 
 <br />
 

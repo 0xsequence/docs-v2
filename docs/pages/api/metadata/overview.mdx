@@ -4,20 +4,20 @@ The Sequence Metadata API service offers a simple and fast API to query token & 
 for Ethereum-compatible chains.
 
 To learn how to use the Sequence Metadata service, please read:
-* [Token metadata API & standards](/metadata/token-metadata)
-* [Contract-level metadata API & standards](/metadata/contract-metadata)
-* [Alternative, REST API Usage](/metadata/rest-api)
+* [Token metadata API & standards](/api/metadata/token-metadata)
+* [Contract-level metadata API & standards](/api/metadata/contract-metadata)
+* [Alternative, REST API Usage](/api/metadata/rest-api)
 
 
 ---
 
 ### Web / node.js Installation
 
-```bash
+```bash [Terminal]
 npm install 0xsequence
 ```
 or
-```bash
+```bash [Terminal]
 npm install @0xsequence/metadata
 ```
 
@@ -25,7 +25,7 @@ npm install @0xsequence/metadata
 This installation requires an API Access Key from [Sequence Builder](https://sequence.build).
 :::
 
-then in your app (using your `API_Access_Key`),
+then in your app (using your `API Access Key`),
 
 ```ts
 import { SequenceMetadata } from '@0xsequence/metadata'
@@ -58,6 +58,6 @@ contractInfo, err := seqMetadata.GetContractInfo(context.Background(), "polygon"
 
 ### Unity or Unreal Installation
 
-The Sequence Metadata is integrated directly inside of the respective [Sequence Web3 Unity](/games-sdk) and [Sequence Web3 Unreal](/games-sdk) SDKs.
+The Sequence Metadata is integrated directly inside of the respective [Sequence Unity](/) and [Sequence Unreal](/) SDKs.
 
 <br />
