@@ -69,7 +69,7 @@ export const sidebar = {
       text: 'Wallets',
       items: [
         { text: 'Overview', link: '/solutions/wallets/overview' },
-        { text: 'In-Game Wallet', collapsed: true, items: [
+        { text: 'Embedded Wallet', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/wallets/embedded-wallet/01-overview'},
           {text: 'Quickstart', link: '/solutions/wallets/embedded-wallet/02-quickstart'},
           {text: 'Examples', collapsed: true, items: [
@@ -239,7 +239,7 @@ export const sidebar = {
     {
       text: 'Templates',
       items: [
-        { text: 'In-Game Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
+        { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
         { text: 'Build a Backend Transaction Manager', link: '/guides/templates/02-building-relaying-server' },
         { text: 'Serverless Minting of Collectibles', link: '/guides/templates/03-mint-collectibles-serverless' }
         // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }

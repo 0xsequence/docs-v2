@@ -22,7 +22,7 @@ The tools will enable you to perform:
 - [4. Deploy a remote minter and mint in-game tokens](/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens): Perform gasless relayed transactions with Cloudflare workers
 - [5. Leverage items in-game](/guides/webgl-guide#5-leverage-items-in-game): Integrate collectibles in the game using the Sequence Indexer
 - [6. Burn in-game achievement tokens](/guides/webgl-guide#6-burn-in-game-achievement-tokens): Burn game achievements with wagmi
-- [7. (Optional) Integrate In-Game Wallet into Sequence Kit](/guides/webgl-guide#7-optional-integrate-in-game-wallet-into-sequence-kit): Enable smooth UX without the use of signer signed messages
+- [7. (Optional) Integrate Embedded Wallet into Sequence Kit](/guides/webgl-guide#7-optional-integrate-in-game-wallet-into-sequence-kit): Enable smooth UX without the use of signer signed messages
 
 ## 1. Project setup with webpack
 
@@ -534,9 +534,9 @@ async fetchTokensFromBurn(tokenID){
 
 And you're done, you can view a full example of the code [here](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter)
 
-## 7. (Optional) Integrate In-Game Wallet into Sequence Kit
+## 7. (Optional) Integrate Embedded Wallet into Sequence Kit
 
-If you'd like to smooth the user journey to allow no user transaction signing across the board, you can enable an In-Game Wallet by updating your configuration of your Sequence Kit react component.
+If you'd like to smooth the user journey to allow no user transaction signing across the board, you can enable an Embedded Wallet by updating your configuration of your Sequence Kit react component.
 
 By accomplishing this, we reduce a pop-up when burning tokens with `wagmi`, since rewarding achievement tokens and minting collectibles are completed using a cloudflare relayer for gasless transactions.
 
@@ -608,5 +608,5 @@ And that's it, no more integration is required for transaction flows to complete
 ---
 
 <Callout type='info'>
-  To learn more about In-Game Wallets, see [here](/solutions/wallets/embedded-wallet/01-overview)
+  To learn more about Embedded Wallets, see [here](/solutions/wallets/embedded-wallet/01-overview)
 </Callout>
