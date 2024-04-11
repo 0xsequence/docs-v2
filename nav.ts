@@ -191,10 +191,10 @@ export const sidebar = {
             {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/04-configuration"},
           ]}
         ]},
-        { text: 'Embedded Wallet', collapsed: true, items: [
-            {text: 'Overview', link: '/solutions/technical-references/embedded-wallet/01-overview'},
-            {text: 'Intents', link: '/solutions/technical-references/embedded-wallet/02-intents'},
-            {text: 'Enclave verification', link: '/solutions/technical-references/embedded-wallet/03-enclave-verification'},
+        { text: 'Wallet as a Service', collapsed: true, items: [
+            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/01-overview'},
+            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/02-intents'},
+            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/03-enclave-verification'},
           ] }
       ]
     },

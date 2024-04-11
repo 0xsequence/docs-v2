@@ -1,10 +1,10 @@
 # Intents
 
-All user interactions with their account, sessions and wallet are performed through actions called "intents." This page provides details on how they work internally. While it will further your understanding of the entire system as a whole, it is not required as the official SDKs handle all of the complexity transparently.
+All user interactions with their account, sessions and wallet are performed through actions called "intents." This page provides details on how they work internally. While it will further your understanding of the entire system as a whole, it is not required as the official SDKs handle all the complexity transparently.
 
 ## What are they?
 
-At a high level an intent is simply a JSON object specifying the action the user intents to perform and signed using their session key. For example, to sign a message, the client would send the following intent to the Embedded Wallet API:
+At a high level an intent is simply a JSON object specifying the action the user intents to perform and signed using their session key. For example, to sign a message, the client would send the following intent to the WaaS API:
 
 ```
 {
@@ -30,7 +30,7 @@ Let's take a closer look at the intent anatomy, starting from the bottom.
 
 ## Signatures
 
-Normally a single signature is specified, representing the user's session. A session here is nothing more but a locally created assymmetric key pair where the public key becomes part of the `sessionId` while the private key never leaves the device. As it gives anyone access to the user's wallet, it must be stored securely, in a secure on-device enclave whenever possible. The session must be registered with the Embedded Wallet API before use.
+Normally a single signature is specified, representing the user's session. A session here is nothing more but a locally created assymmetric key pair where the public key becomes part of the `sessionId` while the private key never leaves the device. As it gives anyone access to the user's wallet, it must be stored securely, in a secure on-device enclave whenever possible. The session must be registered with the WaaS API before use.
 
 The signature is an EIP-191 of the canonical representation of the intent (keys ordered alphabetically, without whitespace) JSON without the `signatures` field.
 
