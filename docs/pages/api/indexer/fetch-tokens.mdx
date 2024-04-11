@@ -65,7 +65,7 @@ func GetTokenBalances(accountAddress string) {
 
 	includeMetadata := true
 
-	tokenBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, nil, &includeMetadata, nil)
+	tokenBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, nil, &includeMetadata, nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

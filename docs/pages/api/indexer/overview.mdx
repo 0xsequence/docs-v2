@@ -14,13 +14,20 @@ Our **Indexer** service is now managed through **[Sequence Builder](https://sequ
 
 The Sequence Indexer is a powerful tool that can be used to build wallets, games, and dapps that
 need to query on-chain data. It is designed to be fast, reliable, and easy to use. It leverages
-the [Node Gateway](/api/node-gateway) infrastructure to provide a high-availability service. This
-means that Node providers going down are no longer a problem, as the Node Gateway will automatically
-switch to a different provider if one goes down and Indexer will continue to work seamlessly. The other
-benefit of using the Indexer is that it is using next-generation LSM-tree based databases to store
-the data, which makes it super fast to query and index data. The data is available in real-time with
-low latency. You can query it using a simple REST API or one of our SDKs. The Indexer API allows you
-to query all token balances, history, metadata and other information for all Ethereum compatible chains.
+the [Sequence Node Gateway](/api/node-gateway) which monitors nodes health, intelligently routes
+requests to the available nodes and caches the most recent request responses. This means that Node
+providers going down are no longer a problem, as the Node Gateway will automatically route to a
+healthy provider making sure that Indexer always stays at the top of the chain with no downtime.
+
+The other benefit of using the Indexer is that it is using built in-house, next-generation, LSM-tree
+based databases to store the data. It makes it super fast to query and index data. The data is
+available in real-time with low latency. You can query it using a simple REST API or one of our SDKs.
+
+The Indexer API allows you to query all token balances, history and other information for
+all Ethereum compatible chains. In order to make it one go to place for all your token data needs,
+we have included [Sequence Metadata](/api/metadata/overview) support for all tokens. This means that
+you can easily render tokens in your apps, games, or wallets without the need to fetch metadata from
+a separate API.
 
 In fact, the Sequence Wallet uses the Indexer behind the scenes so it can seamlessly
 render all token information in any wallet. But of course, the Indexer is a modular piece
