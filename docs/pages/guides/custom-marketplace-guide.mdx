@@ -16,15 +16,15 @@ The tools will enable you to perform:
 
 ## 1. Minting
 
-The first step is to create a collectible from the sequence Builder and mint a few tokens, which can be accomplished with this [guide](/solutions/collectibles/contracts/01-deploy-an-item-collection) and to use the `tokenId` you minted in the following steps to query and fulfill orders.
+The first step is to create a collectible from the sequence Builder and mint a few tokens, which can be accomplished with this [guide](/solutions/collectibles/contracts/deploy-an-item-collection) and to use the `tokenId` you minted in the following steps to query and fulfill orders.
 
 ## 2. Wallet Authentication
 
 For your project, you'll need a way to authenticate your user with a wallet.
 
-Your choice from the Sequence stack is to use either an [Embedded Wallet](/solutions/wallets/embedded-wallet/01-overview) for headless and web2-like UX, or a [Universal Wallet](/solutions/wallets/universal-wallet/01-overview) with [Sequence Kit](/sdk/sequence-kit/01-overview) to reach more types of wallets.
+Your choice from the Sequence stack is to use either an [In-Game Wallet](/solutions/wallets/in-game-wallet/overview) for headless and web2-like UX, or a [Universal Wallet](/solutions/wallets/universal-wallet/overview) with [Sequence Kit](/sdk/sequence-kit/overview) to reach more types of wallets.
 
-For this guide we'll use an `Universal Sequence Wallet` with `Sequence Kit` connector (with an option for an `Embedded-Wallet`) which can authenticate users using Google or Apple auth, in addition to user brought wallets like Coinbase or Metamask.
+For this guide we'll use an `Universal Sequence Wallet` with `Sequence Kit` connector (with an option for an `In-Game Wallet`) which can authenticate users using Google or Apple auth, in addition to user brought wallets like Coinbase or Metamask.
 
 ### Install packages
 
@@ -670,9 +670,9 @@ Great, everything is complete if you add the function click handler attached to 
 
 ## 7. (Optional) Integrate In-Game Wallet into Sequence Kit
 
-In order to make your sequence kit connector as [Embedded Wallet](/solutions/wallets/embedded-wallet/01-overview) enabled, we'll need to install a few package version and update our `config.ts` we used at the beginning of the guide
+In order to make your sequence kit connector as [In-Game Wallet](/solutions/wallets/in-game-wallet/overview) enabled, we'll need to install a few package version and update our `config.ts` we used at the beginning of the guide
 
-The Embedded Wallet feature allows no-confirmation transactions, which can create a smoother UX
+The In-Game Wallet feature allows no-confirmation transactions, which can create a smoother UX
 
 ```
 pnpm i @0xsequence/kit@2.0.5-beta.9 @0xsequence/kit-connectors@2.0.5-beta.9

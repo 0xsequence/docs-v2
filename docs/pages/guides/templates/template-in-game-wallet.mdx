@@ -1,0 +1,50 @@
+# Quickstart
+
+## Try a Demo
+:::info
+Try out seamless UX of our in-game wallet at our [demo](https://0xsequence.github.io/demo-waas-auth/)
+:::
+
+
+## Template
+:::info
+Get started quickly with a [template](https://github.com/0xsequence/demo-waas-auth) leveraging our in-game wallet.
+:::
+
+
+
+
+## Getting Started
+
+### SDK Installation
+
+We provide TypeScript and Unity SDKs for the In-Game Wallet authentication system. You can install the TypeScript SDK with:
+
+```bash
+pnpm install @0xsequence/waas
+```
+
+For more information on the Unity In-Game Wallet SDK, please refer to the TODO add link [Unity SDK documentation](#TODO)
+
+### Project Setup
+
+Sequence In-Game Wallet is currently only available as a closed beta. To start using the In-Game Wallet SDKs, you'll need to contact the Sequence team and acquire API credentials. Once this is done, you will be provided with two keys:
+
+- Project access key
+- In-Game Wallet configuration key
+
+### Library Setup
+
+To start using Sequence In-Game Wallet SDK, you'll need to create a new instance of the `waas` class:
+
+```typescript
+import { SequenceWaaS } from '@0xsequence/waas'
+
+const waas = new SequenceWaaS({
+  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+  network: 'mumbai'
+}, defaults.TEST)
+```
+
+Note that the library is operational, but it can't be used to interact with any wallet until you have authenticated **as a user**.

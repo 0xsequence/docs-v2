@@ -1,0 +1,42 @@
+# In-Game Wallet in Builder
+You can configure a [Sequence In-Game Wallet](/solutions/wallets/in-game-wallet/overview) in Builder and integrate your own OAuth accounts to enable easy onboarding to your games. Configuration page in Builder [is available here](https://sequence.build/project/default/wallet/in-game-wallet).
+
+## Login Providers
+Sequence In-Game Wallet supports the following login providers:
+
+### Google Auth
+If you would like to support Google Auth, you need to make sure that a project is configured at your [Google Cloud Console](https://console.cloud.google.com/) along with the proper OAuth 2.0 client ID. You can find the relevant section under APIs & Services > [Credentials](https://console.cloud.google.com/apis/credentials). After setting up the proper origins and redirect URIs for your project, copy the Client ID and paste it into the Google Client ID field after adding a Google login provider.
+
+You can find a detailed tutorial on [how to configure Google Auth here](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
+
+### Apple Auth
+If you would like to offer Apple Auth, you need to make sure that an application is configured at your [Apple Developer Console](https://developer.apple.com/account) account. More information on how to configure Sign in with Apple [can be found here](https://developer.apple.com/help/account/configure-app-capabilities/configure-sign-in-with-apple-for-the-web/). Once you have all requirements completed, share the unique identifier for the Services ID you created as part of your onboarding package after adding an Apple login provider.
+
+## Allowed Origins
+This additional security measure will prevent unauthorized usage of your WaaS configuration outside of domains you whitelisted. Add any development and production URLs under Allowed Origins. By default all subpaths under theses hosts will be allowed.
+
+You must define allowed origins with a valid scheme (i.e. `https`).
+
+## Recovery Wallet
+WaaS requires the public address for a recovery wallet that you control. This recovery wallet will be used for recovering user wallets in a disaster scenario, so it must be controlled by you and must be kept safe at all times.
+
+We recommend that:
+
+- You use [Gnosis Safe](https://safe.global/) for setting up the wallet
+- You ensure you have at least 2, ideally 3+ signers configured and required for every transaction
+- Every signer is protected by a hardware wallet
+
+Once the recovery wallet is setup properly, provide the public address for it. Recovery wallet cannot be modified once your configuration is saved.
+
+## Initial Configuration and Update Code
+Once you have all information prepared, go ahead and create your In-Game Wallet configuration. During initial setup, Builder will provide you with an update code. This code will be required for all subsequent modifications to your In-Game Wallet configuration, so it must be stored safely.
+
+## Configuration Changes
+To make modifications to your In-Game Wallet configuration, navigate to the In-Game Wallet section again and make the necessary changes. Then click "Save Configuration" and enter your update code to deploy the changes.
+
+## SDK Integrations
+Now that you have your In-Game Wallet configuration up, go ahead and follow our guides on how to integrate with the SDKs:
+
+- [TypeScript SDK](/solutions/wallets/in-game-wallet/overview)
+- [Unity SDK](/sdk/unity/overview)
+- [Unreal SDK](/sdk/unreal/overview)

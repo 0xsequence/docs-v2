@@ -23,9 +23,9 @@ export const SolutionsSection = () => (
           },
           {
             icon: 'WalletIcon',
-            title: 'Embedded Wallet',
+            title: 'In-Game Wallet',
             body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-            link: '/solutions/wallets/embedded-wallet/01-overview',
+            link: '/solutions/wallets/in-game-wallet/01-overview',
           },
           {
             icon: 'CollectiblesIcon',

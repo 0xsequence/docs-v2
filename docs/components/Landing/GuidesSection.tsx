@@ -12,12 +12,12 @@ export const GuidesSection = () => (
     <div className="flex flex-wrap gap-4">
       <GuideCard
         title="Build a web3 game with WebGL"
-        body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
+        body="Follow a step by step guide to build a web-based game demo that leverages Sequence In-Game Wallet with custom in-game achievement tokens."
         link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard
         title="Build a web3 game with Unity"
-        body="Learn how to build an engaging iOS and Android game that uses Sequence Embedded Wallets under the hood for an integrated marketplace and in-game currency."
+        body="Learn how to build an engaging iOS and Android game that uses Sequence In-Game Wallets under the hood for an integrated marketplace and in-game currency."
         link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
       />
       <GuideCard

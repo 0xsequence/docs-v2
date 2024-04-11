@@ -1,0 +1,152 @@
+import { Callout } from "vocs/components";
+
+# Sequence Market Orderbook Transactions
+
+All transactions run through a contract at address `0xB537a160472183f2150d42EB1c3DD6684A55f74c` on all currently offered networks:
+
+- polygon
+- mumbai
+- arbitrum-sepolia
+- avalanche
+- avalanche-testnet
+
+<Callout type="info">
+  The following transactions require a logged in sequence session, more on how
+  to accomplish this
+  [here](/solutions/wallets/universal-wallet/examples/connect-wallet)
+</Callout>
+
+## Create a Request
+
+In order to create a request with the sequence marketplace protocol, a prior transaction must take place where the token (ERC1155 or ERC721) you are submitting to the marketplace is approved to be transferred by the marketplace contract.
+
+A batched transaction can be performed to fullfill this requirement of approval (transaction 1), while also sending the transaction for the creation of the request (transaction 2).
+
+Using a universal wallet, this would look something like this:
+
+## transaction 1: `setApprovalForAll`
+
+- `operator`: (string) - address of the marketplace acting on the token
+- `approved`: (bool) - the approval status of the operator
+
+## transaction 2: `createRequest`
+
+- `creator`: (string) - the wallet that is creating the order request
+- `isListing`: (bool) - whether the order is to list (true) or offer orders (false)
+- `isERC1155`: (bool) - whether the order is for an ERC1155 contract (false for ERC721s)
+- `tokenContract`: (string) - the token you're looking to create an order for
+- `tokenId`: (string) - the tokenId you're looking to create an order for
+- `quantity`: (number) - the number of tokens you're looking to sell
+- `expiry`: (number) - a number formated to ISO time
+- `currency`: (string) - the ERC20 currency token you're transacting in
+- `pricePerToken`: (big number) - the ERC20 price of the token in big number
+
+### example
+
+```js
+const wallet = sequence.getWallet();
+const signer = wallet.getSigner(421614); // on arbitrum-sepolia
+
+const sequenceMarketInterface = new ethers.utils.Interface(
+  "function createRequest(tuple(bool isListing, bool isERC1155, address tokenContract, uint256 tokenId, uint256 quantity, uint96 expiry, address currency, uint256 pricePerToken)) external nonReentrant returns (uint256 requestId)"
+);
+
+const erc1155Interface = new ethers.utils.Interface([
+  "function setApprovalForAll(address operator, bool approved) external",
+]);
+
+const amountBigNumber = ethers.utils.parseUnits(String(price), 18); // currency price based on correct decimals for token contract
+
+const request = {
+  creator: await wallet.getAddress(),
+  isListing: true,
+  isERC1155: true,
+  tokenContract: "0x1693ffc74edbb50d6138517fe5cd64fd1c917709", // collectible you're looking to list or create an offer for
+  tokenId: selectedId,
+  quantity: quantity,
+  expiry: expiry,
+  currency: "0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7",
+  pricePerToken: amountBigNumber,
+};
+
+const dataCreateRequest = sequenceMarketInterface.encodeFunctionData(
+  "createRequest",
+  [request]
+);
+
+const dataApprove = erc1155Interface.encodeFunctionData("setApprovalForAll", [
+  "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  true,
+]);
+
+const tx = {
+  to: "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  data: dataCreateRequest,
+};
+
+const txApprove = {
+  to: "0x1693ffc74edbb50d6138517fe5cd64fd1c917709", // an ERC1155 token contract
+  data: dataApprove,
+};
+
+await signer.sendTransaction([txApprove, tx]);
+```
+
+## Accept a Request
+
+In order to accept an existing request, one would need to use one of the `get` requests endpoints (like [getTopOrders](/solutions/marketplaces/orderbook/examples/get-top-orders)) to acquire a `orderId` inputted into the `requestId` parameter to submit a transaction, with a prior transaction of approving the currency for the request.
+
+A batched transaction can be performed to fullfill this requirement of currency approval (transaction 1), while also sending the transaction for the fullfillment of the request (transaction 2).
+
+Using a universal wallet, this would look something like this:
+
+## transaction 1: `approve`
+
+- `spender`: (string) - address of the marketplace acting on the token
+- `amount`: (bool) - the approval amount for the spender
+
+## transaction 2: `acceptRequest`
+
+- `requestId`: (string) - The ID of the request
+- `quantity`: (bool) - The quantity of tokens to accept
+- `additionalFees`: (number[]) - The additional fees to pay
+- `additionalFeeRecipients`: (address[]) - the addresses to send the additional fees to
+
+### example
+
+```js
+const wallet = sequence.getWallet();
+const signer = wallet.getSigner(421614); // on arbitrum-sepolia
+
+const erc20Interface = new ethers.utils.Interface([
+  "function approve(address spender, uint256 amount) public returns (bool)",
+]);
+
+const sequenceMarketInterface = new ethers.utils.Interface([
+  "function acceptRequest(uint256 requestId, uint256 quantity, address recipient, uint256[] calldata additionalFees, address[] calldata additionalFeeRecipients)",
+]);
+
+const amountBigNumber = ethers.utils.parseUnits(String(price), 18); // currency price based on correct decimals for token contract
+
+const dataApprove = erc20Interface.encodeFunctionData("approve", [
+  "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  amountBigNumber,
+]);
+
+const dataAcceptRequest = sequenceMarketInterface.encodeFunctionData(
+  "acceptRequest",
+  [requestId, quantity, recipientAddress, [], []]
+);
+
+const txApprove = {
+  to: "0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7", // an ERC20 token contract
+  data: dataApprove,
+};
+
+const tx = {
+  to: "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  data: dataAcceptRequest,
+};
+
+await signer.sendTransaction([txApprove, tx]);
+```
