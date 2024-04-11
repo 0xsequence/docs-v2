@@ -1,51 +1,51 @@
 # Quickstart
 
-## Try a Demo
+You can quickly try out a Sequence Embedded Wallet integration before doing a complete configuration specific to your application. There are several ways to test out the features:
 
-:::info
-Try out seamless UX of our embedded wallet at our [demo](https://0xsequence.github.io/demo-waas-auth/)
-:::
+- Try out [Sequence WaaS demo](https://waas-demo.sequence.xyz/), showcasing a sample authentication and transaction flow leveraging Sequence Kit for web applications
+- Play with [Aviator](https://0xsequence.github.io/waas-airplane-demo/), a complete WebGL game built using Embedded Wallet, leveraging [Sequence Marketplace API](/solutions/marketplaces/orderbook/01-overview) as well as [serverless Cloudflare Worker](/guides/templates/03-mint-collectibles-serverless) for minting
+- Browse [Jelly Forest source code](https://github.com/0xsequence-demos/jelly-forest), our Unity WaaS SDK demo implementation that natively runs on iOS and Android
 
-## Template
+You can also do a quick integration of Embedded Wallet into your own application by using the following test configuration keys:
 
-:::info
-Get started quickly with a [template](https://github.com/0xsequence/demo-waas-auth) leveraging our embedded wallet.
-:::
+- Project Access Key: `AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI`
+- WaaS Configuration Key: `eyJwcm9qZWN0SWQiOjE2ODE1LCJycGNTZXJ2ZXIiOiJodHRwczovL3dhYXMuc2VxdWVuY2UuYXBwIn0=`
 
-## Getting Started
+These will leverage Sequence's own Google and Apple test authentication configurations and are whitelisted for `localhost` usage only. They cannot be used in a production setup.
+
+To see how to integrate these keys into a sample demo application, you can browse the [Demo WaaS repository](https://github.com/0xsequence/demo-waas-auth).
+
+You can also view SDK-specific guides here:
+
+- [TypeScript SDK](/solutions/wallets/embedded-wallet/02-quickstart)
+- [Unity SDK](/sdk/unity/01-overview)
+- [Unreal SDK](/sdk/unreal/01-overview)
+
+When you are ready to configure your own Embedded Wallet, you can [follow the Builder guide here](/solutions/builder/embedded-wallet).
+
+## Getting Started with TypeScript SDK
 
 ### SDK Installation
-
-We provide TypeScript and Unity SDKs for the Embedded Wallet authentication system. You can install the TypeScript SDK with:
+You can install the TypeScript SDK with:
 
 ```bash
 pnpm install @0xsequence/waas
 ```
 
-For more information on the Unity Embedded Wallet SDK, please refer to the TODO add link [Unity SDK documentation](#TODO)
-
 ### Project Setup
-
-Sequence Embedded Wallet is currently only available as a closed beta. To start using the Embedded Wallet SDKs, you'll need to contact the Sequence team and acquire API credentials. Once this is done, you will be provided with two keys:
-
-- Project access key
-- Embedded Wallet configuration key
+You can test out the library with the Project Access Key and WaaS Configuration Key provided above. Once you are ready to configure your own Embedded Wallet, follow [the Builder guide here](/solutions/builder/embedded-wallet).
 
 ### Library Setup
-
 To start using Sequence Embedded Wallet SDK, you'll need to create a new instance of the `waas` class:
 
 ```typescript
-import { SequenceWaaS } from "@0xsequence/waas";
+import { SequenceWaaS } from '@0xsequence/waas'
 
-const waas = new SequenceWaaS(
-  {
-    projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-    waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
-    network: "mumbai",
-  },
-  defaults.TEST
-);
+const waas = new SequenceWaaS({
+  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+  network: 'arbitrum-nova'
+})
 ```
 
 Note that the library is operational, but it can't be used to interact with any wallet until you have authenticated **as a user**.
