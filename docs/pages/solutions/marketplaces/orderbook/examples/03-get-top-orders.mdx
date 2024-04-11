@@ -2,6 +2,55 @@ import { Callout } from "vocs/components";
 
 ## GetTopOrders
 
+With the use of the `GetTopOrders` api developers can build bots to retrieve best orders to execute on, or, just simple notifiers to track the best orders to take action.
+
+:::code-group
+ 
+```shell twoslash [curl] filename="curl"
+curl --request POST \
+    --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
+        "currencyAddresses": [
+            "0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7"
+        ],
+        "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
+        "tokenIDs": ["0","1", "2", "3", "4", "5"],
+        "isListing": true,
+        "priceSort": "DESC"
+    }'
+```
+
+```ts twoslash [js]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        collectionAddress: "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
+        currencyAddresses: ["0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7"],
+        orderbookContractAddress: "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
+        tokenIDs: ["0", "1", "2", "3", "4", "5"],
+        isListing: true,
+        priceSort: "DESC",
+      }),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+### Schema
+
 Query the protocol for the top order based on various filters.
 
 Fetch the top orders from the protocol, optionally excluding those created by a specific user.
@@ -38,55 +87,4 @@ Fetch the top orders from the protocol, optionally excluding those created by a 
     - `orderbookContractAddress` (string) -- the orderbook contract address
       ]
 
-:::code-group
- 
-```shell twoslash [curl] filename="curl"
-curl --request POST \
-    --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders \
-    --header 'Content-Type: application/json' \
-    --data '{
-        "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
-        "currencyAddresses": [
-            "0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7"
-        ],
-        "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
-        "tokenIDs": ["0","1", "2", "3", "4", "5"],
-        "isListing": true,
-        "priceSort": "DESC"
-    }'
-```
 
-```ts twoslash [js]
-// Works in both a Webapp (browser) or Node.js:
-import fetch from "cross-fetch";
-
-(async () => {
-  const res = await fetch(
-    "https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        collectionAddress: "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
-        currencyAddresses: ["0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7"],
-        orderbookContractAddress: "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
-        tokenIDs: ["0", "1", "2", "3", "4", "5"],
-        isListing: true,
-        priceSort: "DESC",
-      }),
-    }
-  );
-  console.log("res", await res.json());
-})();
-```
-
-```shell twoslash [other]
- Please contact our team for assistance with integrations to another target.
-```
-:::
-
-### Example implementation
-
-With the use of the `GetTopOrders` api developers can build bots to retrieve best orders to execute on, or, just simple notifiers to track the best orders to take action.

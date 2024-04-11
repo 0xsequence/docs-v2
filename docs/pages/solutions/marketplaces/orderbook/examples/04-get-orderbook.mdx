@@ -2,55 +2,14 @@ import { Callout } from "vocs/components";
 
 ## GetOrderbookOrders
 
-Query the protocol for orders based on various filters.
+With the use of the `GetOrderbookOrders` api developers can build custom marketplaces around the api, as an example, one can implement a frontend to fulfill certain orders (not just the best price) for a collectible
 
-_Sequence Orderbook `GetOrderbookOrders` Method:_
+![GetOrderbookOrders](/img/marketplace/custom-marketplace-listings.png)
 
-- Request: POST /rpc/Marketplace/GetOrderbookOrders
-- Content-Type: application/json
-- Body (in JSON):
-  - `orderbookContractAddress` (string) -- the address of the protocol contract
-  - `collectionAddress` (string) -- the address of the NFT collection
-  - `currencyAddresses` (string[]) -- an array of currency contract addresses
-  - `filters` (OrderbookOrderFilter) -- filters to apply to the query
-    - `tokenIds` (string[]) -- the token ids of the assets you're looking at
-    - `isListing?` (bool) -- `true` if it is an order, `false` if it's an offer
-    - `userAddress?` (string) -- the address of the user
-  - `orderStatuses` (OrderStatus[]) (optional) -- filter orders by their statuses as `OPEN`, `CLOSED`, `CANCELLED` strings
-  - `metadataFilter` (Filter) (optional) -- filter orders by metadata
-    - `text?` (string) -- text to search
-    - `properties?` (PropertyFilter[]) --
-      - `name` (string) -- name of the property, eg: hero
-      - `type`: (PropertyType) -- type of the values of the property as an enum from: `"INT"`,`"STRING"`,`"ARRAY"`, or `"GENERIC"`
-      - `min?`: (int64) -- used if type is int, gives range of values for filtering
-      - `max?`: (int64) -- used if type is int, gives range of values for filtering
-      - `values?`: []any -- if string then array of values, eg: ["Ada", "Ari", "Axel", "Banjo" ...]
-  - `beforeExpiryTimestamp` (int64) -- filter orders expiring before the given timestamp
-  - `page?` -- page object to sort by
-    - `sort` (Sort[]) -- with an object of keys `"column"` and `"order"` with example `"createdAt"` and `"ASC"`, respectively
-- Response (in JSON):
-  - `page`
-    - `page` (i32) -- number of the page
-    - `pageSize` (i32) -- number of orders on the page
-    - `more` (bool) -- if there are more orders
-  - `orders` (OrderbookOrder[])
-    [
-    - `orderId` (string) -- order id
-    - `tokenContract` (string) -- the collection contract
-    - `tokenId` (string) -- the tokenId of the collection in the order
-    - `isListing` (bool) -- is true if it's a listing for sale, or false if it's an offer
-    - `quantity` (string) -- the number of tokens the order is for
-    - `quantityRemaining` (string) -- the number of tokens after the order
-    - `currencyAddress` (string) -- the currency the token is trading in
-    - `pricePerToken` (string) -- the price per token
-    - `expiry` (string) -- the expiry of when the order is no longer valid
-    - `orderStatus` (OrderStatus) -- the status of the order as an enum fom `"OPEN"`, `"CLOSED"`, `"CANCELLED"`
-    - `createdBy` (string) -- the address the order was created by
-    - `createdAt` (uint64) -- the time the order was created
-    - `orderbookContractAddress` (string) -- the orderbook contract address
-      ]
 
-**Example: `GetOrderbookOrders` of token ids from a collection address on Polygon**
+### Example
+
+ `GetOrderbookOrders` of token ids from a collection address on Sepolia:
 
 <Callout type="info">
   Note: If using the metadata.properties key to filter, the use of `min` and
@@ -129,14 +88,54 @@ import fetch from "cross-fetch";
   console.log("res", await res.json());
 })();
 ```
-
-```shell twoslash [other]
- Please contact our team for assistance with integrations to another target.
-```
 :::
 
-### Example implementation
+### Schema
 
-With the use of the `GetOrderbookOrders` api developers can build custom marketplaces around the api, as an example, one can implement a frontend to fulfill certain orders (not just the best price) for a collectible
+Query the protocol for orders based on various filters.
 
-![GetOrderbookOrders](/img/marketplace/custom-marketplace-listings.png)
+_Sequence Orderbook `GetOrderbookOrders` Method:_
+
+- Request: POST /rpc/Marketplace/GetOrderbookOrders
+- Content-Type: application/json
+- Body (in JSON):
+  - `orderbookContractAddress` (string) -- the address of the protocol contract
+  - `collectionAddress` (string) -- the address of the NFT collection
+  - `currencyAddresses` (string[]) -- an array of currency contract addresses
+  - `filters` (OrderbookOrderFilter) -- filters to apply to the query
+    - `tokenIds` (string[]) -- the token ids of the assets you're looking at
+    - `isListing?` (bool) -- `true` if it is an order, `false` if it's an offer
+    - `userAddress?` (string) -- the address of the user
+  - `orderStatuses` (OrderStatus[]) (optional) -- filter orders by their statuses as `OPEN`, `CLOSED`, `CANCELLED` strings
+  - `metadataFilter` (Filter) (optional) -- filter orders by metadata
+    - `text?` (string) -- text to search
+    - `properties?` (PropertyFilter[]) --
+      - `name` (string) -- name of the property, eg: hero
+      - `type`: (PropertyType) -- type of the values of the property as an enum from: `"INT"`,`"STRING"`,`"ARRAY"`, or `"GENERIC"`
+      - `min?`: (int64) -- used if type is int, gives range of values for filtering
+      - `max?`: (int64) -- used if type is int, gives range of values for filtering
+      - `values?`: []any -- if string then array of values, eg: ["Ada", "Ari", "Axel", "Banjo" ...]
+  - `beforeExpiryTimestamp` (int64) -- filter orders expiring before the given timestamp
+  - `page?` -- page object to sort by
+    - `sort` (Sort[]) -- with an object of keys `"column"` and `"order"` with example `"createdAt"` and `"ASC"`, respectively
+- Response (in JSON):
+  - `page`
+    - `page` (i32) -- number of the page
+    - `pageSize` (i32) -- number of orders on the page
+    - `more` (bool) -- if there are more orders
+  - `orders` (OrderbookOrder[])
+    [
+    - `orderId` (string) -- order id
+    - `tokenContract` (string) -- the collection contract
+    - `tokenId` (string) -- the tokenId of the collection in the order
+    - `isListing` (bool) -- is true if it's a listing for sale, or false if it's an offer
+    - `quantity` (string) -- the number of tokens the order is for
+    - `quantityRemaining` (string) -- the number of tokens after the order
+    - `currencyAddress` (string) -- the currency the token is trading in
+    - `pricePerToken` (string) -- the price per token
+    - `expiry` (string) -- the expiry of when the order is no longer valid
+    - `orderStatus` (OrderStatus) -- the status of the order as an enum fom `"OPEN"`, `"CLOSED"`, `"CANCELLED"`
+    - `createdBy` (string) -- the address the order was created by
+    - `createdAt` (uint64) -- the time the order was created
+    - `orderbookContractAddress` (string) -- the orderbook contract address
+      ]

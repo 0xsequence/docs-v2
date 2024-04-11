@@ -1,42 +1,14 @@
 ## GetUserActivities
 
-Retrieve activity data for a specific user, including orders and trades.
+Enables you to retrieve activity data for a specific user, including orders and trades. With the use of the `GetUserActivities` api developers can build custom and personalized social or tracking experiences to follow certain users in various interfaces.
 
-- Request: POST /api/Marketplace/GetUserActivities
-- Content-Type: application/json
-- Body (in JSON):
-  - `orderbookContractAddress` (string) -- the address of the protocol contract.
-  - `collectionAddress` (string) -- the address of the NFT collection.
-  - `currencyAddresses` (string[]) -- an array of currency contract addresses.
-  - `userAddress` (string) -- the address of the user whose activities are being queried.
-  - `tokenIDs` (string[]) -- an array of token IDs to filter the activities by.
-- Response (in JSON):
-  - `page`
-    - `page` (i32) -- number of the page
-    - `pageSize` (i32) -- number of orders on the page
-    - `more` (bool) -- if there are more orders
-  - `orders` (OrderbookOrder[])
-    [
-    - `orderId` (string) -- order id
-    - `tokenContract` (string) -- the collection contract
-    - `tokenId` (string) -- the tokenId of the collection in the order
-    - `isListing` (bool) -- is true if it's a listing for sale, or false if it's an offer
-    - `quantity` (string) -- the number of tokens the order is for
-    - `quantityRemaining` (string) -- the number of tokens after the order
-    - `currencyAddress` (string) -- the currency the token is trading in
-    - `pricePerToken` (string) -- the price per token
-    - `expiry` (string) -- the expiry of when the order is no longer valid
-    - `orderStatus` (OrderStatus) -- the status of the order as an enum fom `"OPEN"`, `"CLOSED"`, `"CANCELLED"`
-    - `createdBy` (string) -- the address the order was created by
-    - `createdAt` (uint64) -- the time the order was created
-    - `orderbookContractAddress` (string) -- the orderbook contract address
-      ]
+![GetUserActivities](/img/marketplace/activities.png)
 
-**Example: `GetUserActivities` for a user with specific token IDs**
+### Example
+`GetUserActivities` for a user with specific token IDs:
 
 
 :::code-group 
-
 ```shell twoslash [curl] filename="curl"
 curl -X POST -H "Content-Type: application/json" https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities -d '{
     "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
@@ -75,14 +47,37 @@ import fetch from "cross-fetch";
 
   console.log("res", await res.json());
 })();
-```
+``` 
+:::
 
-```shell twoslash [other]
- Please contact our team for assistance with integrations to another target.
-```
+### Schema
 
-### Example implementation
-
-With the use of the `GetUserActivities` api developers can build custom and personalized social or tracking experiences to follow certain users in various interfaces.
-
-![GetUserActivities](/img/marketplace/activities.png)
+- Request: POST /api/Marketplace/GetUserActivities
+- Content-Type: application/json
+- Body (in JSON):
+  - `orderbookContractAddress` (string) -- the address of the protocol contract.
+  - `collectionAddress` (string) -- the address of the NFT collection.
+  - `currencyAddresses` (string[]) -- an array of currency contract addresses.
+  - `userAddress` (string) -- the address of the user whose activities are being queried.
+  - `tokenIDs` (string[]) -- an array of token IDs to filter the activities by.
+- Response (in JSON):
+  - `page`
+    - `page` (i32) -- number of the page
+    - `pageSize` (i32) -- number of orders on the page
+    - `more` (bool) -- if there are more orders
+  - `orders` (OrderbookOrder[])
+    [
+    - `orderId` (string) -- order id
+    - `tokenContract` (string) -- the collection contract
+    - `tokenId` (string) -- the tokenId of the collection in the order
+    - `isListing` (bool) -- is true if it's a listing for sale, or false if it's an offer
+    - `quantity` (string) -- the number of tokens the order is for
+    - `quantityRemaining` (string) -- the number of tokens after the order
+    - `currencyAddress` (string) -- the currency the token is trading in
+    - `pricePerToken` (string) -- the price per token
+    - `expiry` (string) -- the expiry of when the order is no longer valid
+    - `orderStatus` (OrderStatus) -- the status of the order as an enum fom `"OPEN"`, `"CLOSED"`, `"CANCELLED"`
+    - `createdBy` (string) -- the address the order was created by
+    - `createdAt` (uint64) -- the time the order was created
+    - `orderbookContractAddress` (string) -- the orderbook contract address
+      ]

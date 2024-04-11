@@ -43,7 +43,7 @@ export const topNav = [
       { text: 'Relayer API', link: '/api/relayer/overview' },
       { text: 'Indexer API', link: '/api/indexer/overview' },
       { text: 'Metadata API', link: '/api/metadata/overview' },
-      { text: 'Marketplace API', link: '/api/marketplace' },
+      { text: 'Marketplace API', link: '/api/marketplace/overview' },
       { text: 'Node Gateway', link: '/api/node-gateway' },
     ]
   },
@@ -119,7 +119,7 @@ export const sidebar = {
           {text: 'Get Top Orders', link: '/solutions/marketplaces/orderbook/examples/03-get-top-orders'},
           {text: 'Get Orderbook', link: '/solutions/marketplaces/orderbook/examples/04-get-orderbook'},
           {text: 'Get User Activities', link: '/solutions/marketplaces/orderbook/examples/05-get-user-activities'},
-          {text: 'Orderbook Transactions', link: '/solutions/marketplaces/orderbook/examples/06-orderbook-transactions'},
+          {text: 'Creating Market Transactions', link: '/solutions/marketplaces/orderbook/examples/06-orderbook-transactions'},
             ]
           }
         ]
@@ -393,10 +393,14 @@ export const sidebar = {
       text: 'Marketplace',
       collapsed: true,
       items: [
-        { text: 'Overview', link: '/api/marketplace' },
-        { text: 'Schema', link: '/api/marketplace/schema' },
-        { text: 'Marketplace API', link: '/api/marketplace/api' },
+        { text: 'Overview', link: '/api/marketplace/overview' },
+        // { text: 'Schema', link: '/api/marketplace/schema' },
+        // { text: 'Marketplace API', link: '/api/marketplace/api' },
         {text: 'Examples', collapsed: true, items: [
+            {text: 'Get Top Orders', link: '/solutions/marketplaces/orderbook/examples/03-get-top-orders'},
+            {text: 'Get Orderbook', link: '/solutions/marketplaces/orderbook/examples/04-get-orderbook'},
+            {text: 'Get User Activities', link: '/solutions/marketplaces/orderbook/examples/05-get-user-activities'},
+            {text: 'Creating Market Transactions', link: '/solutions/marketplaces/orderbook/examples/06-orderbook-transactions'},
         ]
       }
       ]
