@@ -1,7 +1,7 @@
 # Tokens API
 
 :::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
-Our **Indexer** service is now managed through **[Sequence Builder](https://sequence.build)**. Sign up to grab your API access key. 
+Our **Indexer** service is now managed through **[Sequence Builder](https://sequence.build)**. Sign up to grab your API access key.
 
 [Get started with the **Sequence Builder** Free Plan today!](https://sequence.build)
 :::
@@ -18,7 +18,7 @@ Our **Indexer** service is now managed through **[Sequence Builder](https://sequ
 	* `metadataOptions` (object - optional) -- additional options for metadata
 		- `verifiedOnly` (boolean - optional) -- return only contracts which are 'verified' to help reduce spam
 		- `includeContracts` ([]string - optional) -- list of specific contract addresses to always be included, even if verifiedOnly is enabled.
-
+    * `includeCollectionTokens` (boolean - optional - default: true) -- toggle to represent ERC721 / ERC1155 tokens as a single summary item in the response
 <br />
 
 **Example: `GetTokenBalances` of a wallet account address on Polygon using an `API_Access_Key`**
@@ -83,7 +83,7 @@ Please [contact our team](/support) for assistance with integrations to another 
 
 :::info[PRO TIP: fetching ERC721/1155 token IDs]
 You'll notice that, by default, `GetTokenBalances` will return at most one token instance from each contract.
-In order to fetch ERC721/1155 token balances, you must pass the `contractAddress` to the `GetTokenBalances` method. 
+In order to fetch ERC721/1155 token balances, you must pass the `contractAddress` to the `GetTokenBalances` method.
 This will return all of the tokens owned by `accountAddress` from the specified `contractAddress`.
 See section below for more information.
 :::
@@ -101,7 +101,6 @@ See section below for more information.
 	* `metadataOptions` (object - optional) -- additional options for metadata
 		- `verifiedOnly` (boolean - optional) -- return only contracts which are 'verified' to help reduce spam
 		- `includeContracts` ([]string - optional) -- list of specific contract addresses to always be included, even if verifiedOnly is enabled.
-
 <br />
 
 **Example: `GetTokenBalances` of a contract + account address on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
@@ -148,7 +147,7 @@ func GetTokenBalances(contractAddress, accountAddress string) {
 
 	includeMetadata := true
 
-	nftBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, &contractAddress, &includeMetadata, nil)
+	nftBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, &contractAddress, &includeMetadata, nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
