@@ -366,10 +366,11 @@ export const sidebar = {
   '/api': [
     {
       text: 'Relayer',
-      collapsed: true,
+      collapsed: false,
       items: [
         { text: 'Overview', link: '/api/relayer/overview' },
-        {text: 'Examples', collapsed: true, items: [
+        { text: 'Installation', link: '/api/relayer/installation' },
+        {text: 'Examples', collapsed: false, items: [
           { text: 'Fetch Fee Options', link: '/api/relayer/examples/fetch-fee-options' },
           { text: 'Send Transactions', link: '/api/relayer/examples/send-transactions' },
           { text: 'Fetch Transaction Receipts', link: '/api/relayer/examples/fetch-transaction-receipts' },
@@ -379,11 +380,11 @@ export const sidebar = {
     },
     {
       text: 'Indexer',
-      collapsed: true,
+      collapsed: false,
       items: [
         {text: 'Overview', link: '/api/indexer/overview'},
         {text: 'Installation', link: '/api/indexer/installation'},
-        {text: 'Examples', collapsed: true, items: [
+        {text: 'Examples', collapsed: false, items: [
         {text: 'Fetch Tokens', link: '/api/indexer/examples/fetch-tokens'},
         {text: 'Transaction History', link: '/api/indexer/examples/transaction-history'},
         {text: 'Unique Tokens', link: '/api/indexer/examples/unique-tokens'},
@@ -396,22 +397,25 @@ export const sidebar = {
     },
     {
       text: 'Metadata',
-      collapsed: true,
+      collapsed: false,
       items: [
         { text: 'Overview', link: '/api/metadata/overview' },
+        {text: 'Examples', collapsed: false, items: [
         { text: 'Token Metadata', link: '/api/metadata/token-metadata' },
         { text: 'Contract Metadata', link: '/api/metadata/contract-metadata' },
         { text: 'REST API', link: '/api/metadata/rest-api' }
+          ]
+        }
       ]
     },
     {
       text: 'Marketplace',
-      collapsed: true,
+      collapsed: false,
       items: [
         { text: 'Overview', link: '/api/marketplace/overview' },
         // { text: 'Schema', link: '/api/marketplace/schema' },
         // { text: 'Marketplace API', link: '/api/marketplace/api' },
-        {text: 'Examples', collapsed: true, items: [
+        {text: 'Examples', collapsed: false, items: [
             {text: 'Get Top Orders', link: '/solutions/marketplaces/orderbook/examples/03-get-top-orders'},
             {text: 'Get Orderbook', link: '/solutions/marketplaces/orderbook/examples/04-get-orderbook'},
             {text: 'Get User Activities', link: '/solutions/marketplaces/orderbook/examples/05-get-user-activities'},
@@ -422,7 +426,7 @@ export const sidebar = {
     },
     {
       text: 'Node Gateway',
-      collapsed: true,
+      collapsed: false,
       items: [
         { text: 'Overview', link: '/api/node-gateway' }      ]
     },

@@ -47,13 +47,13 @@ export const SolutionsSection = () => (
         items={[
           {
             icon: 'MarketplaceIcon',
-            title: 'Marketplace',
+            title: 'White-Label Marketplace',
             body: 'Launch an in-game collectibles marketplace within minutes.',
             link: '/solutions/marketplaces/white-label-marketplace',
           },
           {
             icon: 'SequenceIcon',
-            title: 'Orderbook API',
+            title: 'Marketplace APIs',
             body: 'Integrate custom in-game marketplaces with our APIs.',
             link: '/solutions/marketplaces/orderbook/01-overview',
           },

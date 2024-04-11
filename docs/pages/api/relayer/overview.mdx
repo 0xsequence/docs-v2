@@ -17,7 +17,7 @@ Meta-transactions are the idea of a transaction inside of a transaction. The ben
 
 The best part: transactions with Sequence Relayer are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
 
-The Sequence Relayer is usable by frontend dapps, or even in your backends.
+The Sequence Relayer is usable by frontend dapps, or even in your backends. Be sure to install the corresponding SDK for your preferred language such as [Typescript](/sdk/typescript/03-guides/overview) or [Go](/sdk/go/overview).
 
 ## Anatomy of a Sequence transaction bundle
 
@@ -29,6 +29,8 @@ A Sequence transaction bundle consists of three things:
 Like Ethereum accounts, Sequence wallets use nonces to enforce transaction ordering and protect against replay attacks.
 Unlike Ethereum accounts, Sequence wallets have a virtually unlimited supply of independent nonces, allowing multiple independent transactions to be executed in parallel.
 A Sequence nonce is encoded as a 160-bit nonce space followed by the 96-bit nonce for that nonce space, big-endian.
+
+
 
 ```
 |<------------------------- uint256 -------------------------->|
