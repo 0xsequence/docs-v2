@@ -194,9 +194,9 @@ export const sidebar = {
           ]}
         ]},
         { text: 'Wallet as a Service', collapsed: true, items: [
-            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/01-overview'},
-            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/02-intents'},
-            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/03-enclave-verification'},
+            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/overview'},
+            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/intents'},
+            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/enclave-verification'},
           ] }
       ]
     },

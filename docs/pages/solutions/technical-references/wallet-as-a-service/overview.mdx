@@ -13,4 +13,4 @@ The WaaS Enclave is the only entity able to use the encrypted wallet data. Its s
 
 1. The AWS Nitro hypervisor generates and signs a cryptographic attestation based on the actually running enclave code. The document includes a PCR0 (a hash of the enclave code) signed by the Amazon Public Key Infrastructure.
 2. The KMS operated by the Trusted Third Party specifies a policy that only allows access to the cryptographic operations if the attestation is valid and the PCR0 hash of the enclave matches the expected value. This means that any - even the smallest - change to the enclave will result in a different attestation and PCR0 hash, effectively invalidating it.
-3. The enclave code is open source and anyone may audit it and verify that the service uses the exact audited version of the source code. [Learn more about verification](/solutions/technical-references/embedded-wallet/03-enclave-verification).
+3. The enclave code is open source and anyone may audit it and verify that the service uses the exact audited version of the source code. [Learn more about verification](/solutions/technical-references/wallet-as-a-service/enclave-verification).
