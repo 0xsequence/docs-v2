@@ -424,6 +424,10 @@ export const sidebar = {
       { text: 'We\'re hiring!', link: 'https://horizon.io/careers' },
       { text: 'Contact Us', link: 'https://support.sequence.xyz' },
     ]
-  }
+  },
+
+
+
+
 
 } as Sidebar
