@@ -1,0 +1,43 @@
+# Intents
+
+All user interactions with their account, sessions and wallet are performed through actions called "intents." This page provides details on how they work internally. While it will further your understanding of the entire system as a whole, it is not required as the official SDKs handle all the complexity transparently.
+
+## What are they?
+
+At a high level an intent is simply a JSON object specifying the action the user intents to perform and signed using their session key. For example, to sign a message, the client would send the following intent to the WaaS API:
+
+```
+{
+    "version": "0.0.0",
+    "issuedAt": 1712775116,
+    "expiresAt": 1712775416,
+    "name": "signMessage",
+    "data": {
+      "wallet": "0x7B7D7BA79542584f9AeF539F6696c070a4e1Ced6",
+      "network": "1",
+      "message": "0x48656c6c6f2c20686176652061206e69636520646179"
+    },
+    "signatures": [
+      {
+        "sessionId": "0x01047de46debeeb83e1270b80ae65996ea64ad2c033e330cfffe9b725bf078423140124dce0cfe0cab9a61b385ca74fe77cd5e8a7147bfd87052f334cfbadc45c79a",
+        "signature": "0x28ec6ddcdbc0987a99dde19792ff0c9be69ad2be873fb9351353171b74d2df3380f0ffcae2b8cb37a0659e374859420500b4399a2aab0209ee7919aaea575ac7"
+      }
+    ]
+}
+```
+
+Let's take a closer look at the intent anatomy, starting from the bottom.
+
+## Signatures
+
+Normally a single signature is specified, representing the user's session. A session here is nothing more but a locally created assymmetric key pair where the public key becomes part of the `sessionId` while the private key never leaves the device. As it gives anyone access to the user's wallet, it must be stored securely, in a secure on-device enclave whenever possible. The session must be registered with the WaaS API before use.
+
+The signature is an EIP-191 of the canonical representation of the intent (keys ordered alphabetically, without whitespace) JSON without the `signatures` field.
+
+## Name and data
+
+These depend on the intent in question and will be different for each intent. The type of the intent and thus the data it contains is specified by the name.
+
+## Timestamps
+
+These are unix timestamps of when the intent becomes and stops being valid. They are validated by the API to ensure old intents cannot be reused again in the future.
