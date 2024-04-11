@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import * as ICONS from './icons'
 
 export const SolutionsSection = () => (
-  <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
+  <section className="flex flex-col gap-5 border-t border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Solutions</h3>
       <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80">
@@ -85,7 +85,7 @@ export const SolutionsSection = () => (
             icon: 'AnalyticsIcon',
             title: 'Analytics',
             body: 'Track every aspect of web3 activity within your games.',
-            link: '/',
+            link: '/solutions/builder/analytics',
           },
           // {
           //   icon: 'DiscordIcon',

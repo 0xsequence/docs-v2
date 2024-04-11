@@ -1,0 +1,95 @@
+# Relayer API
+
+:::note
+[Relayer API documentation and endpoints](https://0xsequence.redoc.ly/tag/relayer)
+:::
+
+The Sequence Relayer service offers a simple interface for dispatching meta-transactions on Ethereum-compatible networks.
+
+Meta-transactions are the idea of a transaction inside of a transaction. The benefits of Sequence meta-transactions are that they allow:
+
+- Gas abstraction -- whereby users can pay for network gas in a variety of tokens (ie. USDC, DAI, etc.)
+- Sponsored gas -- projects may sponsor the gas of specific contracts to allow free gas for their users
+- Batched transactions -- group a bunch of independent transactions and allow them to be mined as a single transaction
+- Parallel transactions -- parallelize the dispatch of transactions in some cases
+- Fire + forget model -- easily send transactions to the relayer which will automatically manage nonces, bump gas, and other features which will ensure fast delivery
+- Optimal gas pricing for transactions
+
+The best part: transactions with Sequence Relayer are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
+
+The Sequence Relayer is usable by frontend dapps, or even in your backends.
+
+## Anatomy of a Sequence transaction bundle
+
+A Sequence transaction bundle consists of three things:
+1. A list of Sequence transactions
+2. A Sequence nonce
+3. A Sequence signature
+
+Like Ethereum accounts, Sequence wallets use nonces to enforce transaction ordering and protect against replay attacks.
+Unlike Ethereum accounts, Sequence wallets have a virtually unlimited supply of independent nonces, allowing multiple independent transactions to be executed in parallel.
+A Sequence nonce is encoded as a 160-bit nonce space followed by the 96-bit nonce for that nonce space, big-endian.
+
+```
+|<------------------------- uint256 -------------------------->|
+|<------ nonce space (160 bits) ------>||<- nonce (96 bits) -->|
+ssssssssssssssssssssssssssssssssssssssssnnnnnnnnnnnnnnnnnnnnnnnn
+```
+
+## Gas sponsorship and fees
+
+The relayer only dispatches transactions that either:
+1. Are sponsored in a project via the Sequence Builder, or
+2. Include a fee payment transaction to the relayer.
+
+You can sponsor:
+1. Sequence wallets, so that they can send transactions without needing to pay fees,
+2. Token addresses, so that any user can send those tokens for free,
+3. Contracts, so that any user can interact with them for free,
+4. Arbitrary addresses, so that any user can transfer native tokens to it for free.
+
+To start sponsoring transactions, sign into https://sequence.build, and create a new project for the network you want to transact on.
+
+You can also pay the relayer directly to dispatch your transactions by adding an additional fee payment transaction to the relayer in your bundle.
+The list of accepted fee tokens can be retrieved by calling the `/FeeTokens` endpoint for the network you are interested in:
+
+```sh [curl]
+$ curl -s -X POST -H 'Content-Type: application/json' -d '{}' \
+  https://mainnet-relayer.sequence.app/rpc/Relayer/FeeTokens | jq
+
+{
+  "isFeeRequired": true,
+  "tokens": [
+    {
+      "chainId": 1,
+      "name": "Matic",
+      "symbol": "MATIC",
+      "type": "ERC20_TOKEN",
+      "decimals": 18,
+      "logoURL": "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/matic.png",
+      "contractAddress": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+      "tokenID": "0"
+    },
+    {
+      "chainId": 1,
+      "name": "USDC",
+      "symbol": "USDC",
+      "type": "ERC20_TOKEN",
+      "decimals": 6,
+      "logoURL": "https://logos.covalenthq.com/tokens/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+      "contractAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "tokenID": "0"
+    },
+    {
+      "chainId": 1,
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "type": "ERC20_TOKEN",
+      "decimals": 18,
+      "logoURL": "https://logos.covalenthq.com/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+      "contractAddress": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "tokenID": "0"
+    }
+  ]
+}
+```
