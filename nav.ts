@@ -40,7 +40,7 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Relayer API', link: '/api/relayer' },
+      { text: 'Relayer API', link: '/api/relayer/overview' },
       { text: 'Indexer API', link: '/api/indexer/overview' },
       { text: 'Metadata API', link: '/api/metadata/overview' },
       { text: 'Marketplace API', link: '/api/marketplace' },
@@ -329,7 +329,7 @@ export const sidebar = {
             {text: 'FAQ', link: '/sdk/typescript/connectors/08-FAQ'},
              ]
           }
-        ] 
+        ]
       },
         { text: 'Go', collapsed: true, items: [
           {text: 'Overview', link: '/sdk/go/overview'},]
@@ -353,8 +353,13 @@ export const sidebar = {
       text: 'Relayer',
       collapsed: true,
       items: [
-        { text: 'Overview', link: '/api/relayer' },
-        { text: 'Relayer Examples', link: '/api/relayer/examples' },
+        { text: 'Overview', link: '/api/relayer/overview' },
+        {text: 'Examples', collapsed: true, items: [
+          { text: 'Fetch Fee Options', link: '/api/relayer/examples/fetch-fee-options' },
+          { text: 'Send Transactions', link: '/api/relayer/examples/send-transactions' },
+          { text: 'Fetch Transaction Receipts', link: '/api/relayer/examples/fetch-transaction-receipts' },
+          ]
+        }
       ]
     },
     {
@@ -363,12 +368,15 @@ export const sidebar = {
       items: [
         {text: 'Overview', link: '/api/indexer/overview'},
         {text: 'Installation', link: '/api/indexer/installation'},
-        {text: 'Fetch Tokens', link: '/api/indexer/fetch-tokens'},
-        {text: 'Transaction History', link: '/api/indexer/transaction-history'},
-        {text: 'Unique Tokens', link: '/api/indexer/unique-tokens'},
-        {text: 'Transaction History Token Contract', link: '/api/indexer/transation-history-token-contract'},
-        {text: 'Native Network Balance', link: '/api/indexer/native-network-balance'},
+        {text: 'Examples', collapsed: true, items: [
+        {text: 'Fetch Tokens', link: '/api/indexer/examples/fetch-tokens'},
+        {text: 'Transaction History', link: '/api/indexer/examples/transaction-history'},
+        {text: 'Unique Tokens', link: '/api/indexer/examples/unique-tokens'},
+        {text: 'Transaction History Token Contract', link: '/api/indexer/examples/transation-history-token-contract'},
+        {text: 'Native Network Balance', link: '/api/indexer/examples/native-network-balance'},
         {text: 'Metadata Tips', link: '/api/indexer/metadata-tips'},
+          ]
+        }
       ]
     },
     {
@@ -388,16 +396,16 @@ export const sidebar = {
         { text: 'Overview', link: '/api/marketplace' },
         { text: 'Schema', link: '/api/marketplace/schema' },
         { text: 'Marketplace API', link: '/api/marketplace/api' },
-        { text: 'Marketplace Examples', link: '/api/marketplace/examples' },
+        {text: 'Examples', collapsed: true, items: [
+        ]
+      }
       ]
     },
     {
       text: 'Node Gateway',
       collapsed: true,
       items: [
-        { text: 'Overview', link: '/api/node-gateway' },
-        { text: 'Etc', link: '/api/node-gateway/etc' },
-      ]
+        { text: 'Overview', link: '/api/node-gateway' }      ]
     },
   ],
   

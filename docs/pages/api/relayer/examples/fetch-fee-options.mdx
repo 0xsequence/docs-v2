@@ -1,0 +1,61 @@
+## Fetching fee options
+
+:::warning
+Fee selection is only necessary if you aren't already using Sequence Builder's gas sponsorship capabilities!
+Create your project in Sequence Builder for ease of development today!
+:::
+
+
+:::code-group
+```typescript [TypeScript]
+import { Session } from '@0xsequence/auth'
+import { ethers } from 'ethers'
+
+const config = {
+  mnemonic: 'YOUR MNEMONIC',
+  projectAccessKey: 'YOUR PROJECT ACCESS KEY',
+  chainId: ChainId.YOUR_CHAIN_ID // e.g. ChainId.MAINNET, ChainId.POLYGON, etc.
+}
+
+const signer = ethers.Wallet.fromMnemonic(config.mnemonic)
+
+const session = await Session.singleSigner({ signer, projectAccessKey: config.projectAccessKey })
+
+const account = session.account.getSigner(config.chainId, {
+  async selectFee(_transactions, options) {
+    // This callback is called with the list of candidate fee options.
+
+    console.log('Fee options:', JSON.stringify(options, undefined, 2))
+
+    // Select the USDC fee option.
+    return options.find(option => option.token.symbol === 'USDC')
+  }
+})
+```
+
+```go [Go]
+mnemonic := "YOUR MNEMONIC"
+projectAccessKey := "YOUR PROJECT ACCESS KEY"
+rpcURL := fmt.Sprintf("https://nodes.sequence.app/YOUR-NETWORK/%v", projectAccessKey)
+relayerURL := "https://YOUR-NETWORK-relayer.sequence.app"
+
+signer, _ := ethwallet.NewWalletFromMnemonic(mnemonic)
+
+wallet, _ := sequence.NewWalletSingleOwner(signer)
+
+provider, _ := ethrpc.NewProvider(rpcURL)
+wallet.SetProvider(provider)
+
+relayer, _ := relayer.NewRpcRelayer(relayerURL, projectAccessKey, provider, nil)
+wallet.SetRelayer(relayer)
+
+transactions := sequence.Transactions{
+  &sequence.Transaction{
+    To:    common.HexToAddress("0x468E8e29F6cfb0F6b7ff10ec6A1AB516ec849c04"),
+    Value: big.NewInt(1000000000000000000),
+  },
+}
+
+options, quote, _ := wallet.FeeOptions(ctx, transactions)
+```
+:::

@@ -35,12 +35,12 @@ export const APIsSection = () => (
         body="Send and optimize transactions on any chain through our performant Sequence Relayer."
         link="/api/relayer"
       />
-      <Card
+      {/* <Card
         title="Embedded Wallets API"
         icon="WalletIcon"
         body="Easily onboard web3-native players with a complete Universal Wallet."
         link="/"
-      />
+      /> */}
       <Card
         title="Node Gateway"
         icon="NodeGatewayIcon"
