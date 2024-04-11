@@ -202,13 +202,13 @@ export const sidebar = {
       text: 'Build a game with WebGL',
       collapsed: true,
       items: [
-        { text: 'Integrate SequenceKit with WaaS', link: '/guides/webgl-guide#integrate-sequencekit-with-waas' },
-        { text: 'Deploy a collectibles contract', link: '/guides/webgl-guide#deploy-a-collectibles-contract' },
-        { text: 'Deploy a remote minter', link: '/guides/webgl-guide#deploy-a-remote-minter' },
-        { text: 'Mint in-game achievement tokens', link: '/guides/webgl-guide#mint-in-game-achievement-tokens' },
-        { text: 'Burn in-game achievement tokens', link: '/guides/webgl-guide#burn-in-game-achievement-tokens' },
-        { text: 'Integrate an embedded marketplace', link: '/guides/webgl-guide#integrate-an-embedded-marketplace' },
-        { text: 'Leverage purchased items in-game', link: '/guides/webgl-guide#leverage-purchased-items-in-game' },
+        { text: 'Project setup with webpack', link: '/guides/webgl-guide#1-project-setup-with-webpack' },
+        { text: 'Integrate Sequence Kit', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
+        { text: 'Deploy collectibles contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
+        { text: 'Deploy a remote minter & mint in-game achievement tokens', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
+        { text: 'Leverage items in-game', link: '/guides/webgl-guide#5-leverage-items-in-game' },
+        { text: 'Burn in-game achievement tokens', link: '/guides/webgl-guide#6-burn-in-game-achievement-tokens' },
+        { text: 'Integrate In-Game Wallet into Sequence Kit', link: '/guides/webgl-guide#7-optional-integrate-in-game-wallet-into-sequence-kit' },
       ]
     },
     {
