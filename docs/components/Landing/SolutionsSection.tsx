@@ -85,7 +85,7 @@ export const SolutionsSection = () => (
             icon: 'AnalyticsIcon',
             title: 'Analytics',
             body: 'Track every aspect of web3 activity within your games.',
-            link: '/',
+            link: '/solutions/builder/analytics',
           },
           // {
           //   icon: 'DiscordIcon',
