@@ -18,7 +18,7 @@ export const topNav = [
     items: [
       { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
+      { text: 'Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
       { text: 'Custom Marketplace', link: '/guides/template-marketplace-api', match: '/guides/template-marketplace-api' }
     ]
   },
@@ -226,7 +226,7 @@ export const sidebar = {
     },
     {
       text: 'Build a lootbox with AI minting',
-      link: '/guides/lootbox'
+      link: '/guides/lootbox-guide'
     },
     {
       text: 'Building a Custom Marketplace',

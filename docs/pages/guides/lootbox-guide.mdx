@@ -1,0 +1,182 @@
+import { Callout } from "vocs/components";
+
+# Lootbox with AI Minting
+
+Time to complete: X minutes
+
+In this guide we will go through the process of integrating a static html/js maze into a web3 enabled react app, leveraging tools from the Sequence Stack to mint AI generated loot from lootboxes.
+
+<Callout type="info">
+  You can play a live version of the game [here](https://lootbox-client.vercel.app/)
+
+  Where the full code can be found in the respective repositories
+  - [Web3 react dapp](https://github.com/moskalyk/lootbox-client/)
+  - [Maze frontend](https://github.com/moskalyk/maze)
+  - [Diablo loot API](https://github.com/moskalyk/diablo-loot-api)
+  - [Cloudflare worker relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/master)
+</Callout>
+
+The tools will enable you to perform:
+
+- [1. Builder Console signup & project creation](/guides/lootbox-guide#1-builder--console-signup--project-creation): Create a project with the Builder
+- [2. Access key management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
+- [3. Sequence kit integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
+- [4. Iframe-to-webapp communication](/guides/lootbox-guide#4-iframe-to-webapp-communication): Send iframe messages from a seperately deployed frontend to a react app
+- [5. Deploy a contract & sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
+- [6. Deploy a cloudflare worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
+- [7. Generating AI prompts & images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
+- [8. Uploading metadata to Sequence metadata service](/guides/lootbox-guide#8-uploading-metadata-to-sequence-metadata-service): Upload collection and token metadata to Sequence
+- [9. Securing your cloudflare worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
+
+## 1. Builder Console signup & project creation
+
+First start by following [this walk-through](/solutions/builder/project-management) for how to sign up to the [Builder Console](https://sequence.build/) and to learn how to create a project.
+
+In order to use certain features, like `Gas Sponsoring` and the use of the `Sequence Relayer`, you'll need to upgrade your project plan [using this walk-through](/solutions/builder/project-settings#5-billing-settings)
+
+## 2. Access key management
+
+Now that you have a project, you'll need to acquire 2 different Access Keys for your project.
+1. Public Access Key used for the wallet & relayer, which can be done [here](/solutions/builder/getting-started#step-3-optional-for-development-claim-an-api-access-key)
+2. Secret Access Key used for the Metadata Service, which can be done with the following instructions:
+
+First start by accessing settings, and selecting the API Keys
+
+![builder settings access keys](/img/builder/builder_settings_access_keys.png)
+
+Scroll down and select `+ Add Service Account`
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account.png)
+
+Then change the access to `write` and `confirm`
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account_confirm.png)
+
+Finally `copy` the key and store it in a safe location, as you will not have access to this in the future from the Builder Console.
+
+## 3. Sequence kit integration
+
+We'll start from scratch building up the project with the necessary peices. 
+
+First start by creating a project folder with `mkdir <project>`, then `cd <project>` and create a `vite` project using:
+
+```
+pnpm create vite
+
+# or 
+yarn create vite
+
+# or 
+npm create vite
+```
+
+Next, we'll install the correct packages to use Sequence Kit.
+
+```
+
+```
+
+In the `/src` folder you'll find a `main.tsx`, in there update the code to be the following, that incorporates the Sequence Kit connector and `@0xsequence/design-system` `ThemeProvider`
+
+This code uses `arbitrum-sepolia` as the network, as well as the following options to login: email, google, & apple.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+import { ThemeProvider } from '@0xsequence/design-system'
+import { KitProvider, getKitConnectWallets } from '@0xsequence/kit'
+import { google, apple, metamask, email } from '@0xsequence/kit-connectors'
+import { KitWalletProvider } from '@0xsequence/kit-wallet'
+
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { arbitrumSepolia } from 'wagmi/chains'
+
+function Dapp() {
+	const { chains, publicClient, webSocketPublicClient } = configureChains(
+		[arbitrumSepolia],
+		[publicProvider()],
+	)
+  
+	const connectors = getKitConnectWallets([
+		google({
+			chains,
+			options: {
+				defaultNetwork: 421614
+			}
+		}),
+		apple({
+			chains,
+			options: {
+				defaultNetwork: 421614
+			}
+		}),
+		metamask({
+			chains,
+		}),
+		email({
+			chains,
+			options: {
+				defaultNetwork: 421614
+			}
+		})
+	])  
+    
+	const config = createConfig({
+		autoConnect: true,
+		publicClient,
+		webSocketPublicClient,
+		connectors
+	})
+
+  const kitConfig: any = {
+		projectAccessKey: '<project access key>',
+		position: 'center',
+		defaultTheme: 'dark',
+		displayedAssets: [
+			{
+				contractAddress: '<replace with deployed contract in step 5>',
+				chainId: 421614
+			}
+		],
+		signIn: {
+			projectName: 'lootbox',
+			showEmailInput: true,
+			socialAuthOptions: ['google', 'apple'],
+			walletAuthOptions: []
+		}
+	}
+
+  return (
+    <WagmiConfig config={config}>
+      <KitProvider config={kitConfig}>
+		<KitWalletProvider>
+			<ThemeProvider>
+				<App />
+			</ThemeProvider>
+		</KitWalletProvider>
+      </KitProvider>
+    </WagmiConfig>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <Dapp />
+  </React.StrictMode>,
+)
+```
+## 4. Iframe-to-webapp communication
+
+## 5. Deploy a contract & sponsor gas
+
+## 6. Deploy a cloudflare worker
+
+## 7. Generating AI prompts & images
+
+## 8. Uploading metadata to Sequence metadata service
+
+## 9. Securing your cloudflare worker
