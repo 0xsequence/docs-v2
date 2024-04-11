@@ -33,7 +33,7 @@ export const APIsSection = () => (
         title="Transactions API"
         icon="SequenceIcon"
         body="Send and optimize transactions on any chain through our performant Sequence Relayer."
-        link="/api/relayer"
+        link="/api/relayer/overview"
       />
       {/* <Card
         title="Embedded Wallets API"
