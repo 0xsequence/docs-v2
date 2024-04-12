@@ -9,10 +9,11 @@ Check out our [demo](https://0xsequence-demos.github.io/aviator-custom-marketpla
 ## Template
 
 :::info
-Get started quickly with a [template](https://github.com/0xsequence-demos/aviator-custom-marketplace) leveraging our Marketplace API.
+Get started quickly with a [template](https://github.com/0xsequence-demos/aviator-custom-marketplace) leveraging our Marketplace API to use as a starting point for your own.
 :::
 
-## Try an API Call
+## Example API Call
+Pulling top orders for a specific collection:
 
 ```bash class=wrap
 curl --request POST \
@@ -29,3 +30,9 @@ curl --request POST \
     "priceSort": "DESC"
 }'
 ```
+
+For more resources on leveraging the Sequence Market Protocol, check out the [in-depth documentation](/api/marketplace/examples/orderbook-transactions).
+
+
+## Walkthrough
+Lastly, take a look at our [end to end guide](/guides/custom-marketplace-guide) to get you off the ground running with your own marketplace & learn about the infrastructure that powers Sequence. This guide leverages several components of the sequence stack such as our Marketplace APIs and Indexer - all the components needed for accelerating development time & building a scalable in-game or browser based marketplace.

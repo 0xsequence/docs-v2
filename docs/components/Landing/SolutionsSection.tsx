@@ -57,12 +57,12 @@ export const SolutionsSection = () => (
             body: 'Integrate custom in-game marketplaces with our APIs.',
             link: '/solutions/marketplaces/orderbook/01-overview',
           },
-          {
-            icon: 'CartIcon',
-            title: 'NFT Checkout',
-            body: 'Offer easy purchases with credit card, crypto, IAP support.',
-            link: '/',
-          },
+          // {
+          //   icon: 'CartIcon',
+          //   title: 'NFT Checkout',
+          //   body: 'Offer easy purchases with credit card, crypto, IAP support.',
+          //   link: '/',
+          // },
           {
             icon: 'SequenceIcon',
             title: 'Onramps',

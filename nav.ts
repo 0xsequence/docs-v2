@@ -115,13 +115,7 @@ export const sidebar = {
         { text: 'Build your Custom Marketplace', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/marketplaces/orderbook/overview'},
           {text: 'Quickstart', link: '/solutions/marketplaces/orderbook/quickstart'},
-          {text: 'Examples', collapsed: true, items: [
-          {text: 'Get Top Orders', link: '/solutions/marketplaces/orderbook/examples/get-top-orders'},
-          {text: 'Get Orderbook', link: '/solutions/marketplaces/orderbook/examples/get-orderbook'},
-          {text: 'Get User Activities', link: '/solutions/marketplaces/orderbook/examples/get-user-activities'},
-          {text: 'Creating Market Transactions', link: '/solutions/marketplaces/orderbook/examples/orderbook-transactions'},
-            ]
-          }
+          
         ]
        }
       ]
@@ -174,9 +168,7 @@ export const sidebar = {
       items: [
         { text: 'Chain Support', link: '/solutions/technical-references/chain-support' },
         // { text: 'EIP5189 vs. 4337', link: '/solutions/technical-references/5189-4337' },
-        { text: 'Smart Contract Wallets', collapsed: true, items: [
-          { text: 'Why smart contract wallets?', link: '/solutions/technical-references/wallet-contracts/why' },
-        ] },
+        { text: 'Why Smart Contract Wallets?', link: '/solutions/technical-references/wallet-contracts/why' },
         { text: 'Contract Internals', collapsed: true, items: [
           {text: 'Deployment', link: '/solutions/technical-references/internals/deployment'},
           { text: 'Sequence v1', collapsed: true, items: [
@@ -423,13 +415,13 @@ export const sidebar = {
         { text: 'Overview', link: '/api/marketplace/overview' },
         // { text: 'Schema', link: '/api/marketplace/schema' },
         // { text: 'Marketplace API', link: '/api/marketplace/api' },
-        {text: 'Examples', collapsed: false, items: [
-            {text: 'Get Top Orders', link: '/solutions/marketplaces/orderbook/examples/get-top-orders'},
-            {text: 'Get Orderbook', link: '/solutions/marketplaces/orderbook/examples/get-orderbook'},
-            {text: 'Get User Activities', link: '/solutions/marketplaces/orderbook/examples/get-user-activities'},
-            {text: 'Creating Market Transactions', link: '/solutions/marketplaces/orderbook/examples/orderbook-transactions'},
-        ]
-      }
+        {text: 'Examples', collapsed: true, items: [
+          {text: 'Creating Market Orders & Listings', link: '/api/marketplace/examples/orderbook-transactions'},
+          {text: 'Get Top Orders', link: '/api/marketplace/examples/get-top-orders'},
+          {text: 'Get Orderbook', link: '/api/marketplace/examples/get-orderbook'},
+          {text: 'Get User Activities', link: '/api/marketplace/examples/get-user-activities'},
+            ]
+          }
       ]
     },
     {
