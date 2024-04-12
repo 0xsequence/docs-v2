@@ -55,7 +55,7 @@ In the Sequence Market protocol, a request is simply creating a listing. In this
 
 ## Accept a Request
 
-In order to accept an existing request, one would need to use one of the `get` requests endpoints (like [getTopOrders](/solutions/marketplaces/orderbook/examples/get-top-orders)) to acquire a `orderId` inputted into the `requestId` parameter to submit a transaction, with a prior transaction of approving the currency for the request.
+In order to accept an existing request, one would need to use one of the `get` requests endpoints (like [getTopOrders](/api/marketplace/examples/get-top-orders)) to acquire a `orderId` inputted into the `requestId` parameter to submit a transaction, with a prior transaction of approving the currency for the request.
 
 A batched transaction can be performed to fullfill this requirement of currency approval (transaction 1), while also sending the transaction for the fullfillment of the request (transaction 2).
 
