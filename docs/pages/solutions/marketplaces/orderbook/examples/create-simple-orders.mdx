@@ -1,0 +1,113 @@
+import { Callout } from "vocs/components";
+
+# Create an Order via Blockexplorer
+
+All transactions run through a contract at address `0xB537a160472183f2150d42EB1c3DD6684A55f74c` on all currently offered networks:
+
+- polygon
+- mumbai
+- arbitrum-sepolia
+- avalanche
+- avalanche-testnet
+
+<Callout type="info">
+  The following transactions require a logged in sequence session, more on how
+  to accomplish this
+  [here](/solutions/wallets/universal-wallet/examples/connect-wallet)
+</Callout>
+
+## Create a Request via Blockexplorer
+
+In the Sequence Market protocol, a request is simply creating a listing. In this example, we'll leverage a blockexplorer to call the marketplace contract method `createRequest` to create an order for a given token.
+
+1. First, we need to go to the contract address on a blockexplorer for a supported chain. For this example, we'll use [Arbitrum Sepolia](https://sepolia.etherscan.io/address/0xB537a160472183f2150d42EB1c3DD6684A55f74c#writeContract#F5).
+
+2. The `createRequest` pane should be able and we need to provide a few parameters. Here's a reference below of what each parameter requires:
+  
+  `createRequest` schema.
+
+- `isListing`: (bool) - whether the order is to list (true) or offer orders (false)
+- `isERC1155`: (bool) - whether the order is for an ERC1155 contract (false for ERC721s)
+- `tokenContract`: (string) - the token you're looking to create an order for
+- `tokenId`: (string) - the tokenId you're looking to create an order for
+- `quantity`: (number) - the number of tokens you're looking to sell
+- `expiry`: (number) - a number formated to ISO time
+- `currency`: (string) - the ERC20 currency token you're transacting in
+- `pricePerToken`: (big number) - the ERC20 price of the token in big number
+
+3. Before inputting the information, we need to make sure we deploy and mint a few tokens so we are able to list them. This can be done conveniently through Sequence Builder by following our [collectibles guide](/solutions/collectibles/contracts/deploy-an-item-collection).
+4. Now, we need to fill out the variables before submitting our transaction, below you can see an example submission but please make sure to change the variables to your contract address, expiry time, and more:
+
+- `isListing`: true - we want to list the token in this case.
+- `isERC1155`: false - the token is not an ERC1155
+- `tokenContract`: 0xb0b059a23875e2e08b905688ec68384cad2fe77a - contract address of the ERC721 we deployed via Builder.
+- `tokenId`: 1 - token ID we want to list
+- `quantity`: 1
+- `expiry`: 1713001644188 - expiry date in ISO time of the listing.
+- `currency`: 0xf3C3351D6Bd0098EEb33ca8f830FAf2a141Ea2E1 - USDC address on Arbitrum Sepolia
+- `pricePerToken`: 10000 - listing price in BigNumber format. For example, this was converted using the ethers.js library with teh following call `ethers.utils.parseUnits(String("0.01"), 6)`, where 6 is the decimals of the ERC20 currency contract.
+
+
+(true,false,0xde6ea6d5c88708375f2c5a440a014a82bf375b88,1,1,1713001644188,0xf3C3351D6Bd0098EEb33ca8f830FAf2a141Ea2E1,10000)
+
+
+
+
+## Accept a Request
+
+In order to accept an existing request, one would need to use one of the `get` requests endpoints (like [getTopOrders](/solutions/marketplaces/orderbook/examples/get-top-orders)) to acquire a `orderId` inputted into the `requestId` parameter to submit a transaction, with a prior transaction of approving the currency for the request.
+
+A batched transaction can be performed to fullfill this requirement of currency approval (transaction 1), while also sending the transaction for the fullfillment of the request (transaction 2).
+
+Using a universal wallet, this would look something like this:
+
+## transaction 1: `approve`
+
+- `spender`: (string) - address of the marketplace acting on the token
+- `amount`: (bool) - the approval amount for the spender
+
+## transaction 2: `acceptRequest`
+
+- `requestId`: (string) - The ID of the request
+- `quantity`: (bool) - The quantity of tokens to accept
+- `additionalFees`: (number[]) - The additional fees to pay
+- `additionalFeeRecipients`: (address[]) - the addresses to send the additional fees to
+
+### example
+
+```js
+const wallet = sequence.getWallet();
+const signer = wallet.getSigner(421614); // on arbitrum-sepolia
+
+const erc20Interface = new ethers.utils.Interface([
+  "function approve(address spender, uint256 amount) public returns (bool)",
+]);
+
+const sequenceMarketInterface = new ethers.utils.Interface([
+  "function acceptRequest(uint256 requestId, uint256 quantity, address recipient, uint256[] calldata additionalFees, address[] calldata additionalFeeRecipients)",
+]);
+
+const amountBigNumber = ethers.utils.parseUnits(String(price), 18); // currency price based on correct decimals for token contract
+
+const dataApprove = erc20Interface.encodeFunctionData("approve", [
+  "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  amountBigNumber,
+]);
+
+const dataAcceptRequest = sequenceMarketInterface.encodeFunctionData(
+  "acceptRequest",
+  [requestId, quantity, recipientAddress, [], []]
+);
+
+const txApprove = {
+  to: "0xa9c88358862211870db6f18bc9b3f6e4f8b3eae7", // an ERC20 token contract
+  data: dataApprove,
+};
+
+const tx = {
+  to: "0xB537a160472183f2150d42EB1c3DD6684A55f74c", // sequence market contract (same address on all offered networks)
+  data: dataAcceptRequest,
+};
+
+await signer.sendTransaction([txApprove, tx]);
+```
