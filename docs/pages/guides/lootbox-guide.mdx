@@ -7,10 +7,10 @@ Time to complete: X minutes
 In this guide we will go through the process of integrating a static html/js maze into a web3 enabled react app, leveraging tools from the Sequence Stack to mint AI generated loot from lootboxes.
 
 <Callout type="info">
-  You can play a live version of the game [here](https://lootbox-client.vercel.app/)
+  You can play a live version of the game [here](https://0xsequence-demos.github.io/demo-lootbox/)
 
   Where the full code can be found in the respective repositories
-  - [Web3 react dapp](https://github.com/moskalyk/lootbox-client/)
+  - [Web3 react dapp](https://github.com/0xsequence-demos/demo-lootbox)
   - [Maze frontend](https://github.com/moskalyk/maze)
   - [Diablo loot API](https://github.com/moskalyk/diablo-loot-api)
   - [Cloudflare worker relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/master)
@@ -168,6 +168,18 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Dapp />
   </React.StrictMode>,
 )
+```
+
+Once your `main.tsx` is ready, lets create a login button
+
+In `App.tsx` use the following code that checks to see if a user is connected, and makes 2 different screens appear given this information.
+
+```
+function App() {
+    const { setOpenConnectModal } = useOpenConnectModal()
+    const { isConnected, address } = useAccount()
+    const { disconnect } = useDisconnect()
+}
 ```
 ## 4. Iframe-to-webapp communication
 
