@@ -28,6 +28,9 @@ jobs:
 
     - name: Touch CNAME
       run: echo "docs-v2.sequence.xyz" > ./docs/dist/CNAME
+
+    - name: Copy 404
+      run: cp 404.html ./docs/dist/404.html
       
     - name: Push
       uses: s0/git-publish-subdir-action@develop
