@@ -344,3 +344,7 @@ td {
   border: none;
   display: none;
 }
+
+.network-logo {
+  border-radius: 15px;
+}
