@@ -72,11 +72,19 @@ export const sidebar = {
         { text: 'Embedded Wallet', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/wallets/embedded-wallet/overview'},
           {text: 'Quickstart', link: '/solutions/wallets/embedded-wallet/quickstart'},
-          {text: 'Examples', collapsed: true, items: [
-          {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
-          {text: 'Use Wallets', link: '/solutions/wallets/embedded-wallet/examples/use-wallets'},
-          {text: 'Validation', link: '/solutions/wallets/embedded-wallet/examples/validation'},
-          {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
+          {
+            text: 'Examples', collapsed: true, items: [
+            {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
+            {text: 'Use Wallets', link: '/solutions/wallets/embedded-wallet/examples/use-wallets'},
+            {text: 'Validation', link: '/solutions/wallets/embedded-wallet/examples/validation'},
+            {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
+            ]
+          },
+          {
+            text: 'Implementation Details', collapsed: true, items: [
+            {text: 'Action payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/action-payloads'},
+            {text: 'Response payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/response-payloads'},
+            {text: 'Trust contract recovery flow', link: '/solutions/wallets/embedded-wallet/implementation-details/trust-contract-recovery-flow'},
             ]
           }
         ]

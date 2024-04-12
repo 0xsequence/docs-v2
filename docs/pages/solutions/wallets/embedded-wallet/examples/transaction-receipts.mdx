@@ -41,7 +41,7 @@ The relevant fields are:
 - `receipt.status`: The status of the transaction. `SUCCEEDED` or `FAILED`.
 - `receipt.revertReason`: If the transaction was executed but reverted, it includes the reason.
 
-To view the full response object, see the [Transaction Receipt Response] section.
+To view the full response object, see the [Response payloads](/solutions/wallets/embedded-wallet/implementation-details/response-payloads) section.
 
 ```json
 {
@@ -82,9 +82,9 @@ To view the full response object, see the [Transaction Receipt Response] section
 
 ## Failed transaction response
 
-An Embedded Wallet will try to catch any failing transactions before they are sent to the network. This is done by simulating the transaction on the network before sending it. If the simulation fails, the transaction will not be sent to the network and a `FailedTransactionResponse` will be returned.
+An In-Game Wallet will try to catch any failing transactions before they are sent to the network. This is done by simulating the transaction on the network before sending it. If the simulation fails, the transaction will not be sent to the network and a `FailedTransactionResponse` will be returned.
 
-To view the full response object, see the TODO: link to wallet API [Transaction Receipt Response] section.
+To view the full response object, see the wallet [Response payloads](/solutions/wallets/embedded-wallet/implementation-details/response-payloads) section.
 
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";

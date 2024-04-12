@@ -4,7 +4,7 @@ To fetch a transaction receipt for an arbitrary transaction that was dispatched 
 The `metaTxID` is the `txnHash` from the response of the `/SendMetaTxn` endpoint.
 
 :::code-group
-```sh [curl]
+```sh [cURL]
 curl -s -X POST -H 'Content-Type: application/json' \
   -d '{"metaTxID":"462de2756e45c93698b89ada5ba4a3c9d1bfb9fb354ad2e7f36f1a9fefbc550b"}' \
   https://polygon-relayer.sequence.app/rpc/Relayer/GetMetaTxnReceipt | jq

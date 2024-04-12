@@ -71,7 +71,7 @@ Wallets that never have been updated don't store the `imageHash` directly, inste
   keccak256(abi.encode( uint256 threshold )) )) )) )) 
 ```
 
-```js twoslash [js]
+```js twoslash [TypeScript]
   let tmp = ethers.utils.solidityPack(['uint256'], [configuration.threshold])
 
   for (const signer of configuration.signers) {

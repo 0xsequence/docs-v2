@@ -55,7 +55,7 @@ To start sponsoring transactions, sign into https://sequence.build, and create a
 You can also pay the relayer directly to dispatch your transactions by adding an additional fee payment transaction to the relayer in your bundle.
 The list of accepted fee tokens can be retrieved by calling the `/FeeTokens` endpoint for the network you are interested in:
 
-```sh [curl]
+```sh [cURL]
 $ curl -s -X POST -H 'Content-Type: application/json' -d '{}' \
   https://mainnet-relayer.sequence.app/rpc/Relayer/FeeTokens | jq
 

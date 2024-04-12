@@ -43,7 +43,7 @@ Using invalid parameters will result on a proxy contract that **may not** be usa
 
 Sequence wallets are counter-factual by design, this means that the wallet's address can be known before the wallet is deployed; any two combinations of the `mainModule` and `salt` values will result in the same wallet address.
 
-This property alongside the use of [SingletonDeployer](#TODO) or [UniversalDeployer](#TODO) is the reason why Sequence wallets can obtain the same address on multiple chains.
+This property alongside the use of [NanoUniversalDeployer](/solutions/technical-references/internals/v1/deploy#1---deploy-nanouniversaldeployer) or [UniversalDeployer](/solutions/technical-references/internals/v1/deploy#2---deploy-universaldeployer2) is the reason why Sequence wallets can obtain the same address on multiple chains.
 
 <Callout type="tip">
   Gas-free wallet creation <br /> Sequence wallets are **100% counterfactual**,

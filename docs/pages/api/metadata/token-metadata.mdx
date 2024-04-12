@@ -32,7 +32,7 @@ This code requires an API Access Key from [Sequence Builder](https://sequence.bu
 
 :::code-group
 
-```shell [Curl]
+```shell [cURL]
 curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/GetTokenMetadata -d '{"chainID":"polygon", "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["65537", "65538", "65539"] }'
 ```
 
@@ -62,11 +62,11 @@ collectibleInfo, err := seqMetadata.GetTokenMetadata(context.Background(), "poly
 ```
 
 ```shell [Unity]
-TODO
+To be completed
 ```
 
 ```shell [Unreal]
-TODO
+To be completed
 ```
 
 ```shell [Other]
@@ -92,7 +92,7 @@ When deploying new contracts or metadata updates the refresh token metadata url 
 
 :::code-group
 
-```shell [Curl]
+```shell [cURL]
 curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0pttvJABl8bIuxPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/EnqueueTokensForRefresh -d '{"chainID":"polygon", "contractAddress":"0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["1","2"]}'
 ```
 ```ts [Typescript]
@@ -136,7 +136,7 @@ Please [contact our team](/support) for assistance with integrations to another 
 
 :::code-group
 
-```shell [Curl]
+```shell [cURL]
 curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0pttvJABl8bIuxPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/GetTokenRefreshStatus -d '{"taskId": 1234}'
 ```
 

@@ -1,1 +1,341 @@
-# TODO - Replace with Code Groups from Vocs
+import { Callout } from "vocs/components";
+
+# Signing & Verifying Messages
+
+## Signing Messages
+
+Sequence wallets are able to sign arbitrary messages.
+
+**To request a user's signature of a simple message:**
+
+```ts
+const signer = wallet.getSigner();
+const message = "Hello World!";
+
+const signature = await signer.signMessage(message);
+console.log(signature);
+```
+
+**To request a user's signature of a typed-data ([EIP712](https://eips.ethereum.org/EIPS/eip-712)) message:**
+
+```ts
+const typedData: sequence.utils.TypedData = {
+  domain: {
+    name: "Ether Mail",
+    version: "1",
+    chainId: await wallet.getChainId(),
+    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+  },
+  types: {
+    Person: [
+      { name: "name", type: "string" },
+      { name: "wallet", type: "address" },
+    ],
+  },
+  message: {
+    name: "Bob",
+    wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+  },
+};
+
+const signer = wallet.getSigner();
+
+const signature = await signer.signTypedData(
+  typedData.domain,
+  typedData.types,
+  typedData.message
+);
+console.log(signature);
+```
+
+<br />
+
+## Verifying Message Signatures
+
+Once you have a signature, you'll often want to verify the validity of the data
+either from your app or from your server. The Sequence SDKs make this easy to do
+from either your frontend or backend.
+
+Given a message and signature, you can check if a particular wallet signed that message:
+
+```ts
+// Here we fetch the different parameters, but in practice you may have these values
+// encoded and passed separately.
+const wallet = sequence.getWallet();
+const provider = wallet.getProvider();
+const walletAddress = wallet.getAddress();
+const chainId = wallet.getChainId();
+
+// The sequence utils `isValidMessageSignature` method can validate signatures
+// from any kind of wallet (ie. EOA or Smart Wallet) which includes Metamask, Coinbase,
+// and Sequence.
+const isValid = await wallet.utils.isValidMessageSignature(
+  walletAddress,
+  message,
+  signature,
+  chainId
+);
+
+console.log(isValid);
+```
+
+<Callout type='info'>
+Sequence is a Smart Contract based account
+These signatures are by default encoded using EIP-6492, see https://eips.ethereum.org/EIPS/eip-6492.
+
+This means that the signatures can be verified using the standard process defined in the `UniversalVerified` contract on EIP-6492.
+
+The `wallet.utils.isValidMessageSignature` implements EIP-6492 verification, it can be used to verify signatures from any kind of wallet.
+
+</Callout>
+
+<br />
+
+## Verifying Message Signatures (via Sequence API)
+
+<Callout type="warning">
+  Notice that signing non-EIP6492 signatures requires the wallet to be deployed
+  onchain, and thus the user will be prompted to deploy the wallet onchain
+  before being able to sign the message. If the network has fees (like
+  Ethereum), the user will also be prompted to pay the transaction fees.
+</Callout>
+
+<Callout type="danger">
+INTRODUCING THE SEQUENCE BUILDER - https://sequence.build
+
+Our API services are now managed through **[Sequence Builder](https://sequence.build)**. Sign up to grab your API access key.
+
+[Get started with the **Sequence Builder** Free Plan today!](https://sequence.build)
+
+</Callout>
+
+The Sequence API also offers the convenience to verify any wallet message signature
+by making a simple remote API call.
+
+The Sequence API (https://api.sequence.app) supports the following RPC methods:
+
+- `/rpc/API/IsValidMessageSignature` -- verifying a simple text message signature
+- `/rpc/API/IsValidTypedDataSignature` -- verifying a EIP712 typed data object
+- `/rpc/API/IsValidSignature` -- verifying an arbitrary message digest
+- `/rpc/API/IsValidETHAuthProof` -- verifying an [ETHAuth](https://github.com/0xsequence/ethauth.js) proof
+
+The most common methods are `IsValidMessageSignature` and `IsValidETHAuthProof`.
+
+### Verifying message signature from any kind of wallet (ie. Metamask or Sequence)
+
+_Sequence API `IsValidMessageSignature` Method:_
+
+- Request: POST https://api.sequence.app/rpc/API/IsValidMessageSignature
+- Content-Type: application/json
+- Body (in JSON):
+  - `chainId` (string) -- the chain id of the signature, ie. "1" or "mainnet", or "137" or "polygon", etc
+  - `walletAddress` (string) -- the wallet address
+  - `message` (string) -- the message in utf8 text encoding
+  - `signature` (string) -- the signature in hex encoding
+
+<br />
+
+**`IsValidMessageSignature` example usage:**
+
+:::code-group
+```shell twoslash [cURL]
+curl -X POST -H "Content-Type: application/json" https://api.sequence.app/rpc/API/IsValidMessageSignature -d '{ "chainId": "polygon", "walletAddress": "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1", "message": "Hi, please sign this message", "signature": "0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d0001000183d971056b1eca1bcc7289b9a6926677c5b07db4197925346367f61f2d09c732760719a91722acee0b24826f412cb69bd2125e48f231705a5be33d1f5523f9291c020101c50adeadb7fe15bee45dcb820610cdedcd314eb0030002f19915df00d669708608502d3011a09948b32674d6e443202a2ba884a4dcd26c2624ff33a8ee9836cc3ca2fbb8d3aa43382047b73d21646cb66cc2916076c1331c02" }'
+```
+```js twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js:
+import { sequence } from "0xsequence";
+
+const chainId = "polygon";
+const walletAddress = "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1";
+const message = "Hi, please sign this message";
+const signature =
+  "0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d0001000183d971056b1eca1bcc7289b9a6926677c5b07db4197925346367f61f2d09c732760719a91722acee0b24826f412cb69bd2125e48f231705a5be33d1f5523f9291c020101c50adeadb7fe15bee45dcb820610cdedcd314eb0030002f19915df00d669708608502d3011a09948b32674d6e443202a2ba884a4dcd26c2624ff33a8ee9836cc3ca2fbb8d3aa43382047b73d21646cb66cc2916076c1331c02";
+
+const api = new sequence.api.SequenceAPIClient("https://api.sequence.app");
+const { isValid } = await api.isValidMessageSignature({
+  chainId,
+  walletAddress,
+  message,
+  signature,
+});
+console.log(isValid); // true
+```
+```go twoslash [go]
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/api"
+)
+
+func ValidateMessageSignature() {
+	seqAPI := api.NewAPIClient("https://api.sequence.app", http.DefaultClient)
+
+	chainID := "polygon"
+	walletAddress := "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1"
+
+	// NOTE: you can also pass the message in EIP191 format as well. If you do not pass
+	// the EIP191 prefix, it will automatically be added at the time of validation.
+	// message := fmt.Sprintf("\x19Ethereum Signed Message:\n%d%s", len(message), message)
+	message := "Hi, please sign this message"
+
+	signature := "0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d0001000183d971056b1eca1bcc7289b9a6926677c5b07db4197925346367f61f2d09c732760719a91722acee0b24826f412cb69bd2125e48f231705a5be33d1f5523f9291c020101c50adeadb7fe15bee45dcb820610cdedcd314eb0030002f19915df00d669708608502d3011a09948b32674d6e443202a2ba884a4dcd26c2624ff33a8ee9836cc3ca2fbb8d3aa43382047b73d21646cb66cc2916076c1331c02"
+
+	isValid, err := seqAPI.IsValidMessageSignature(context.Background(), chainID, walletAddress, message, signature)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("isValid?", isValid)
+}
+```
+
+```shell twoslash [other]
+  Please contact our team for assistance with integrations to another target.
+```
+:::
+
+<br />
+
+### Verifying ETHAuth proof upon connecting a Sequence Wallet
+
+_Sequence API `IsValidETHAuthProof` Method:_
+
+- Request: POST https://api.sequence.app/rpc/API/IsValidETHAuthProof
+- Content-Type: application/json
+- Body (in JSON):
+  - `chainId` (string) -- the chain id of the signature, ie. "1" or "mainnet", or "137" or "polygon", etc
+  - `walletAddress` (string) -- the wallet address
+  - `ethAuthProofString` (string) -- the ETHAuth encoded signature
+
+<br />
+
+**`IsValidETHAuthProof` example usage:**
+
+:::code-group
+```shell twoslash [cURL]
+curl -X POST -H "Content-Type: application/json" https://api.sequence.app/rpc/API/IsValidETHAuthProof -d '{"chainId":"polygon", "walletAddress":"0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1","ethAuthProofString": "eth.0x2fa0b551fdfa31a4471c1c52206fdb448ad997d1.eyJhcHAiOiJEZW1vIERhcHAiLCJpYXQiOjAsImV4cCI6MTY2MDIzMTAyOCwidiI6IjEiLCJvZ24iOiJodHRwOi8vbG9jYWxob3N0OjQwMDAifQ.0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d00010001f7dad5ade840bb961cbab889d731bbc080bb4c36fc090435e82fe78e3c152b671505ad544adb562cc25a5933cd06c9108e239a52a82ba797c3d3522645c69cd81b020101c50adeadb7fe15bee45dcb820610cdedcd314eb003000274164fb33c93b4384582c54c30d9a1e2ef219063d03084005edc1da853af2f1f2e67275dbb6ef945d04600b6dd83cfd997cc9ae4173ea61b0c5cc0808fb196681b02"}' 
+```
+```js twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js:
+import { sequence } from "0xsequence";
+
+const chainId = "polygon";
+const walletAddress = "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1";
+const ethAuthProofString =
+  "eth.0x2fa0b551fdfa31a4471c1c52206fdb448ad997d1.eyJhcHAiOiJEZW1vIERhcHAiLCJpYXQiOjAsImV4cCI6MTY2MDIzMTAyOCwidiI6IjEiLCJvZ24iOiJodHRwOi8vbG9jYWxob3N0OjQwMDAifQ.0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d00010001f7dad5ade840bb961cbab889d731bbc080bb4c36fc090435e82fe78e3c152b671505ad544adb562cc25a5933cd06c9108e239a52a82ba797c3d3522645c69cd81b020101c50adeadb7fe15bee45dcb820610cdedcd314eb003000274164fb33c93b4384582c54c30d9a1e2ef219063d03084005edc1da853af2f1f2e67275dbb6ef945d04600b6dd83cfd997cc9ae4173ea61b0c5cc0808fb196681b02";
+
+const api = new sequence.api.SequenceAPIClient("https://api.sequence.app");
+const { isValid } = await api.isValidETHAuthProof({
+  chainId: chainId,
+  walletAddress: walletAddress,
+  ethAuthProofString: ethAuthProofString,
+});
+console.log(isValid); // true
+```
+
+```go twoslash [go]
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/api"
+)
+
+func ValidateETHAuth() {
+	seqAPI := api.NewAPIClient("https://api.sequence.app", http.DefaultClient)
+
+	chainID := "polygon"
+	walletAddress := "0x2fa0b551fdFa31a4471c1C52206fdb448ad997d1"
+	ethAuthProofString := "eth.0x2fa0b551fdfa31a4471c1c52206fdb448ad997d1.eyJhcHAiOiJEZW1vIERhcHAiLCJpYXQiOjAsImV4cCI6MTY2MDIzMTAyOCwidiI6IjEiLCJvZ24iOiJodHRwOi8vbG9jYWxob3N0OjQwMDAifQ.0x000501032a44625bec3b842df681db00a92a74dda5e42bcf0203596af90cecdbf9a768886e771178fd5561dd27ab005d00010001f7dad5ade840bb961cbab889d731bbc080bb4c36fc090435e82fe78e3c152b671505ad544adb562cc25a5933cd06c9108e239a52a82ba797c3d3522645c69cd81b020101c50adeadb7fe15bee45dcb820610cdedcd314eb003000274164fb33c93b4384582c54c30d9a1e2ef219063d03084005edc1da853af2f1f2e67275dbb6ef945d04600b6dd83cfd997cc9ae4173ea61b0c5cc0808fb196681b02"
+
+	isValid, err := seqAPI.IsValidETHAuthProof(context.Background(), chainID, walletAddress, ethAuthProofString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("isValid?", isValid)
+}
+```
+
+```shell twoslash [other]
+Please contact our team for assistance with integrations to another target.
+```
+:::
+
+## How does it work?
+
+### Notes on Signature Validation with EIP1271 + EIP6492
+
+Smart Wallets like Sequence rely on the [EIP1271](https://eips.ethereum.org/EIPS/eip-1271) standard for signature validation.
+
+The [EIP1271](https://eips.ethereum.org/EIPS/eip-1271) is a single function on a contract defined as:
+
+```solidity
+function isValidSignature(
+  bytes32 _hash,
+  bytes memory _signature
+) public view returns (bytes4 magicValue)
+```
+
+The first `_hash` argument accepts the hash of the message digest, and the second argument `_signature`
+is the signed payload returned by the wallet upon signing.
+
+Additionally, Smart Wallets don't always deploy a contract onchain every time a new wallet is created.
+Instead, they compute the wallet address deterministically, and the wallet is only deployed when a transaction needs to be made.
+
+In this case, we can't use the [EIP1271](https://eips.ethereum.org/EIPS/eip-1271) function directly, because the wallet contract doesn't exist yet.
+Instead, we use the [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) standard, which defined a method for bootstrapping the wallet
+contract and calling the [EIP1271](https://eips.ethereum.org/EIPS/eip-1271) function, in a single operation.
+
+For Javascript/Typescript signature verification, you can use `0xsequence` utility functions like so:
+
+```ts
+import { 0xsequence } from '0xsequence'
+
+const wallet = sequence.getWallet()
+
+const isValid = await wallet.utils.isValidSignature(
+  walletAddress,
+  digest,
+  signature,
+  chainId
+)
+
+console.log(isValid) // returns true/false
+```
+
+Additionally you can also use `wallet.utils.isValidMessageSignature` or `wallet.utils.isValidTypedDataSignature`
+which are just syntactic sugar for `wallet.utils.isValidSignature`.
+
+As well, for convenience the signature validation functions above support verifying EOA or Smart Wallet signatures.
+This allows you to use a single code path in your Dapp to verify any kind of signature and support multiple wallets at
+the same time, like Metamask, Coinbase, Sequence, WalletConnect, Argent, Rainbow, etc. -- all Ethereum compatible wallets, EOA
+or Smart Wallets, will _just work_.
+
+## Legacy non-EIP6492 Signing
+
+By default, all the signing methods will generate [EIP-6492](https://eips.ethereum.org/EIPS/eip-6492) encoded signatures.
+This avoids the need to deploy the wallet onchain before being able to validate the signature, and is the recommended way to sign messages.
+
+However, if you need to generate legacy non-EIP6492 signatures, you can do so by setting the last argument of the signing methods to `false`:
+
+```ts
+const signer = wallet.getSigner();
+const message = "Hello World!";
+
+const signature = await signer.signMessage(message, { eip6492: false });
+console.log(signature);
+```
+
+These legacy signatures can be validated using the `wallet.utils.isValidSignature method`, but they can also be validated using
+the isValidSignature method defined on the wallet contract, as specified by the [EIP1271](https://eips.ethereum.org/EIPS/eip-1271) standard.
+
+<Callout type="warning">
+  Notice that signing non-EIP6492 signatures requires the wallet to be deployed
+  onchain, and thus the user will be prompted to deploy the wallet onchain
+  before being able to sign the message. If the network has fees (like
+  Ethereum), the user will also be prompted to pay the transaction fees.
+</Callout>

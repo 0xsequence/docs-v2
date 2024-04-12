@@ -24,11 +24,11 @@ One of `contractAddresses`, `accounts` must be provided in the filter.
 
 :::code-group
 
-```bash [Terminal]
+```bash [cURL]
 curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/AddWebhookListener -d '{ "url": "https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf", "filters": [{"accounts": ["0x631998e91476DA5B870D741192fc5Cbc55F5a52E"]}]'
 ```
 
-```typescript [Typescript]
+```typescript [TypeScript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 

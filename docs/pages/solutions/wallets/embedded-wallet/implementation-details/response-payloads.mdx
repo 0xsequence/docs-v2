@@ -1,0 +1,388 @@
+# Response Payloads
+
+When interacting with the Sequence Embedded Wallet API, each intent payload will trigger a corresponding response payload. This could be either a successful response or a prompt for a different action.
+
+## General Response Structure
+
+Regardless of the specific response type, all responses have a standard structure with the following fields:
+
+| Name  | Type   | Description                           | Optional |
+|-------|--------|---------------------------------------|----------|
+| code  | string | Identifies the type of response       | No       |
+| data  | object | Holds content defined by response type| No       |
+
+## Types of Responses
+
+### Transaction Receipt Response
+
+Triggered upon successful execution of a [send transaction intent](/waas/implementation/payloads#send-transaction-payload). The code for this response is `transactionReceipt`.
+
+The `data` field contains:
+
+| Name           | Type              | Description                                          | Optional |
+|----------------|-------------------|------------------------------------------------------|----------|
+| txHash         | string            | Transaction hash of the Ethereum transaction         | No       |
+| metaTxHash     | string            | Hash of the meta transaction                         | No       |
+| request        | [SendTransactionPayload](https://docs.sequence.xyz/waas/implementation/payloads/#send-transaction-payload)| The original request packet of the transaction       | No       |
+| receipt        | MetaTxnReceipt    | Receipt of the meta transaction                      | No       |
+| nativeReceipt  | any               | Native receipt of the Ethereum transaction           | Yes      |
+| simulations    | SimulateResult[]  | Array of simulation results                          | Yes      |
+
+`MetaTxnReceipt`:
+
+| Name          | Type                 | Description                                  | Optional |
+|---------------|----------------------|----------------------------------------------|----------|
+| id            | string               | Unique identifier for the receipt            | No       |
+| status        | string               | Status of the transaction                    | No       |
+| revertReason  | string \| null       | Reason for transaction revert, if any        | Yes      |
+| index         | number               | Index number of the receipt                  | No       |
+| logs          | MetaTxnReceiptLog[]  | Array of logs for the meta transaction       | No       |
+| receipts      | MetaTxnReceipt[]     | Array of meta transaction receipts           | No       |
+| txnReceipt    | string               | String representation of the transaction     | No       |
+
+`MetaTxnReceiptLog`:
+
+| Name         | Type          | Description                              | Optional |
+|--------------|---------------|------------------------------------------|----------|
+| address      | string        | The address that generated the log       | No       |
+| topics       | string[]      | List of topics associated with the log   | No       |
+| data         | string        | Data sent with the log                   | No       |
+| blockNumber  | number        | The block number where this log was emitted | No   |
+| transactionHash | string     | Hash of the transaction that generated the log | No |
+| transactionIndex | number    | Index of the transaction in the block    | No       |
+| blockHash    | string        | Hash of the block containing the log     | No       |
+| logIndex     | number        | Index of the log in the block            | No       |
+| removed      | boolean       | Whether the log was removed due to a chain reorganization | No |
+
+`SimulateResult`:
+
+| Name       | Type            | Description                                 | Optional |
+|------------|-----------------|---------------------------------------------|----------|
+| executed   | boolean         | Whether the simulation was executed         | No       |
+| succeeded  | boolean         | Whether the simulation succeeded            | No       |
+| result     | string \| null  | The result of the simulation                | Yes      |
+| reason     | string \| null  | Reason for failure, if simulation failed    | Yes      |
+| gasUsed    | number          | Amount of gas used in the simulation        | No       |
+| gasLimit   | number          | Gas limit for the simulation                | No       |
+
+#### Example
+
+```json
+{
+  "code": "transactionReceipt",
+  "data": {
+    "txHash": "0xf2e9f728abd65089f25efda5852e605ced377f4e2c89dbf143b124623ed09b2c",
+    "metaTxHash": "acc36ed4ef40db74137266e48d863083a5c7e85e2735d69adafcb5b362b6cfc0",
+    "nativeReceipt": {
+      "blockHash": "0x49be8c81414fae655f1f4615f5b437ca5160bdd4e4d8ce06275338ec6fe2e20b",
+      "blockNumber": "0x2f63834",
+      "contractAddress": "0x0000000000000000000000000000000000000000",
+      "cumulativeGasUsed": "0xdb374",
+      "gasUsed": "0x14a00",
+      "logs": [
+        {
+          "address": "0x4d4ee1b8583e31fe789eaf2e1b6e011c220c10b6",
+          "blockHash": "0x49be8c81414fae655f1f4615f5b437ca5160bdd4e4d8ce06275338ec6fe2e20b",
+          "blockNumber": "0x2f63834",
+          "data": "0x0000000000000000000000001119e72b4af230becebd933d0e07f0eec51d8c2a0000000000000000000000000000000000000000000000000000000000000001",
+          "logIndex": "0x14",
+          "removed": false,
+          "topics": [
+            "0x1f180c27086c7a39ea2a7b25239d1ab92348f07ca7bb59d1438fcf527568f881"
+          ],
+          "transactionHash": "0xf2e9f728abd65089f25efda5852e605ced377f4e2c89dbf143b124623ed09b2c",
+          "transactionIndex": "0x5"
+        },
+        {
+          "address": "0x4d4ee1b8583e31fe789eaf2e1b6e011c220c10b6",
+          "blockHash": "0x49be8c81414fae655f1f4615f5b437ca5160bdd4e4d8ce06275338ec6fe2e20b",
+          "blockNumber": "0x2f63834",
+          "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "logIndex": "0x15",
+          "removed": false,
+          "topics": [
+            "0x5c4eeb02dabf8976016ab414d617f9a162936dcace3cdef8c69ef6e262ad5ae7",
+            "0xacc36ed4ef40db74137266e48d863083a5c7e85e2735d69adafcb5b362b6cfc0"
+          ],
+          "transactionHash": "0xf2e9f728abd65089f25efda5852e605ced377f4e2c89dbf143b124623ed09b2c",
+          "transactionIndex": "0x5"
+        },
+        {
+          "address": "0x0000000000000000000000000000000000001010",
+          "blockHash": "0x49be8c81414fae655f1f4615f5b437ca5160bdd4e4d8ce06275338ec6fe2e20b",
+          "blockNumber": "0x2f63834",
+          "data": "0x000000000000000000000000000000000000000000000000001284e7c67266000000000000000000000000000000000000000000000000014c0fa753f2298415000000000000000000000000000000000000000000001386f7e2c243dcc978070000000000000000000000000000000000000000000000014bfd226c2bb71e15000000000000000000000000000000000000000000001386f7f5472ba33bde07",
+          "logIndex": "0x16",
+          "removed": false,
+          "topics": [
+            "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+            "0x0000000000000000000000000000000000000000000000000000000000001010",
+            "0x00000000000000000000000000e91788bcb998379027d36e6407a9187d7f313c",
+            "0x000000000000000000000000959c65b72147faf3450d8b50a0de57e72ffc5e0d"
+          ],
+          "transactionHash": "0xf2e9f728abd65089f25efda5852e605ced377f4e2c89dbf143b124623ed09b2c",
+          "transactionIndex": "0x5"
+        }
+      ],
+      "logsBloom": "0x00000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000008800000002000000000001004000000000000000000000000000000000800000000000000000000100000000400000000200400000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000002000000000000000000000000000000004000008000000000000001000000000000000000000000000000100000020000000000000000000000002000000020020002020040000000000000000040100000",
+      "root": "0x",
+      "status": "0x1",
+      "transactionHash": "0xf2e9f728abd65089f25efda5852e605ced377f4e2c89dbf143b124623ed09b2c",
+      "transactionIndex": "0x5"
+    },
+    "receipt": {
+      "id": "acc36ed4ef40db74137266e48d863083a5c7e85e2735d69adafcb5b362b6cfc0",
+      "index": 0,
+      "logs": [
+        {
+          "address": "0x4d4EE1b8583e31fe789eAF2e1b6e011C220c10B6",
+          "data": "0x0000000000000000000000001119e72b4af230becebd933d0e07f0eec51d8c2a0000000000000000000000000000000000000000000000000000000000000001",
+          "topics": [
+            "0x1f180c27086c7a39ea2a7b25239d1ab92348f07ca7bb59d1438fcf527568f881"
+          ]
+        },
+        {
+          "address": "0x4d4EE1b8583e31fe789eAF2e1b6e011C220c10B6",
+          "data": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "topics": [
+            "0x5c4eeb02dabf8976016ab414d617f9a162936dcace3cdef8c69ef6e262ad5ae7",
+            "0xacc36ed4ef40db74137266e48d863083a5c7e85e2735d69adafcb5b362b6cfc0"
+          ]
+        }
+      ],
+      "receipts": [
+        {
+          "id": "acc36ed4ef40db74137266e48d863083a5c7e85e2735d69adafcb5b362b6cfc0",
+          "index": 0,
+          "logs": null,
+          "receipts": null,
+          "revertReason": null,
+          "status": "SUCCEEDED",
+          "txnReceipt": ""
+        }
+      ],
+      "revertReason": null,
+      "status": "SUCCEEDED"
+    },
+    "request": {
+      "code": "sendTransaction",
+      "expires": 1699440762,
+      "identifier": "ts-sdk-1699440462686-0x153824576D03629b264683B430bBF9AcEA1d0975",
+      "issued": 1699440462,
+      "network": "137",
+      "transactions": [
+        {
+          "data": "0x",
+          "to": "0x4d4EE1b8583e31fe789eAF2e1b6e011C220c10B6",
+          "type": "transaction",
+          "value": "0x00"
+        }
+      ],
+      "wallet": "0x4d4EE1b8583e31fe789eAF2e1b6e011C220c10B6"
+    },
+    "simulations": [
+      {
+        "executed": true,
+        "gasLimit": 1147,
+        "gasUsed": 860,
+        "reason": null,
+        "result": "0x",
+        "succeeded": true
+      }
+    ]
+  }
+}
+```
+
+#### How to Detect
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isSentTransactionResponse(res)) {
+  // It's a transaction receipt
+}
+```
+
+### Failed Transaction Response
+
+Triggered upon failed to execute a [send transaction intent](/waas/implementation/payloads#send-transaction-payload). The code for this response is `transactionFailed`.
+
+The `data` field contains:
+
+| Field               | Type                    | Description                                                  |
+|---------------------|-------------------------|--------------------------------------------------------------|
+| error               | string                  | The error message describing why the transaction failed.     |
+| request             | [SendTransactionPayload](https://docs.sequence.xyz/waas/implementation/payloads/#send-transaction-payload)      | The packet of transactions that were attempted.              |
+| simulations         | SimulateResult[]        | Results from the transaction simulation attempts.            |
+
+`SimulateResult`:
+
+| Name       | Type            | Description                                 | Optional |
+|------------|-----------------|---------------------------------------------|----------|
+| executed   | boolean         | Whether the simulation was executed         | No       |
+| succeeded  | boolean         | Whether the simulation succeeded            | No       |
+| result     | string \| null  | The result of the simulation                | Yes      |
+| reason     | string \| null  | Reason for failure, if simulation failed    | Yes      |
+| gasUsed    | number          | Amount of gas used in the simulation        | No       |
+| gasLimit   | number          | Gas limit for the simulation                | No       |
+
+
+```json
+{
+  "code": "transactionFailed",
+  "data": {
+    "error": "This is an error message",
+    "request": {
+      "code": "sendTransaction",
+      "expires": 1699443005,
+      "identifier": "ts-sdk-1699442705965-0x153824576D03629b264683B430bBF9AcEA1d0975",
+      "issued": 1699442705,
+      "network": "137",
+      "transactions": [
+        {
+          "data": "0x",
+          "to": "0x839eE023B21f4Ffe2294025DE0AC30Ba7278D6Fd",
+          "type": "transaction",
+          "value": "0x00"
+        }
+      ],
+      "wallet": "0x4d4EE1b8583e31fe789eAF2e1b6e011C220c10B6"
+    },
+    "simulations": [
+      {
+        "executed": true,
+        "gasLimit": 7908,
+        "gasUsed": 5931,
+        "reason": "This is an error message",
+        "result": null,
+        "succeeded": false
+      }
+    ]
+  }
+}
+```
+
+#### How to Detect
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isFailedTransactionResponse(res)) {
+  // It's a failed transaction
+}
+```
+
+### Signed Message Response
+
+Triggered after a successful [sign message intent](/waas/implementation/payloads#sign-message-payload). The code is `signedMessage`.
+
+The `data` field contains:
+
+| Name      | Type   | Description            | Optional |
+|-----------|--------|------------------------|----------|
+| message   | string | The signed message     | No       |
+| signature | string | The signature          | No       |
+
+#### Example
+
+```json
+{
+  "code": "signedMessage",
+  "data": {
+    "message": "Hello World",
+    "signature": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+  }
+}
+```
+
+#### How to Detect
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isSignedMessageResponse(res)) {
+  // It's a signed message
+}
+```
+
+### Session Opened Response
+
+Occurs after successfully executing an [open session intent](/waas/implementation/payloads#open-session-payload). The code is `sessionOpened`.
+
+The `data` field contains:
+
+| Name      | Type   | Description                      | Optional |
+|-----------|--------|----------------------------------|----------|
+| sessionId | string | Session ID (resembling an address)| No       |
+| wallet    | string | The Sequence wallet address      | No       |
+
+#### Example
+
+```json
+{
+  "code": "sessionOpened",
+  "data": {
+    "sessionId": "0xBdeAfd3ee0550a73f615D2BaEA2E3D6d48FC857D",
+    "wallet": "0x44c2Ea42Fb006a613a7b41D142576eD6B5055902"
+  }
+}
+```
+
+#### How to Detect
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isOpenSessionResponse(res)) {
+  // It's a session opened
+}
+```
+
+### Validation Required Response
+
+Some actions may necessitate additional validation. In such cases, the response code is `validationRequired`.
+
+The `data` field contains:
+
+| Name      | Type   | Description                      | Optional |
+|-----------|--------|----------------------------------|----------|
+| sessionId | string | Session ID (resembling an address)| No       |
+
+#### How to Detect
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isValidationRequiredResponse(res)) {
+  // Validation is required
+}
+```
+
+### Note
+
+Both `sendTransaction` and `signMessage` intents could require validation. Always check for a `validationRequired` response before assuming you've received a transaction receipt or a signed message.
+
+```ts
+import { payloads } from '@0xsequence/waas';
+
+const res = ... // response from the Embedded Wallet API
+
+if (payloads.responses.isValidationRequiredResponse(res)) {
+  // Handle validation
+}
+
+if (payloads.responses.isSendTransactionResponse(res)) {
+  // It's a transaction receipt
+}
+```

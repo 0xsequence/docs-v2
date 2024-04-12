@@ -125,12 +125,6 @@
   color: red;
 } */
 
-/* TODO: can we move the menu to left..? */
-/* TODO: put search on right..? ya.. */
-/* TODO: add "Build >" button */
-
-/* TODO: perhaps re-sink it.. just make it an icon */
-
 .tabs {
   display: flex;
 }
