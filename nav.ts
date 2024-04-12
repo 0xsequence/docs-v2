@@ -155,7 +155,7 @@ export const sidebar = {
         {text: 'Contracts', link: '/solutions/builder/contracts'},
         {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
         {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
-        {text: 'Embedded Wallet', link: '/solutions/builder/in-game-wallet'},
+        {text: 'Embedded Wallet', link: '/solutions/builder/embedded-wallet'},
         {text: 'Node Gateway', link: '/solutions/builder/node-gateway'},
         {text: 'Marketplaces', link: '/solutions/builder/marketplaces'},
         {text: 'Indexer', link: '/solutions/builder/indexer'},
