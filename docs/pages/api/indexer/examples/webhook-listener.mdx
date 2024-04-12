@@ -14,9 +14,11 @@ You can listen to transactions via webhooks using the Sequence Indexer. Our filt
     * `Filters` ([]object) -- an array of filters
         * `contractAddresses` ([]string) -- a ERC20 / ERC721 / ERC1155 contract address
         * `accounts` ([]string) -- wallet addresses
-        * `tokenIDs` ([]int) -- an array of token ids
+        * `tokenIDs` ([]int) *optional* -- an array of token ids
 
 <br />
+
+One of `contractAddresses`, `accounts` must be provided in the filter.
 
 **Example: `AddWebhookListener`**
 
@@ -42,12 +44,12 @@ const req = {
 }
 
 
-const resp = await indexer.addWebhookListener({
+const ok = await indexer.addWebhookListener({
 	Url: req.url,
     Filters: req.filters
 })
 	
-console.log('resp', resp)
+console.log('ok', ok)
 ```
 
 ```go [Go]
@@ -63,7 +65,7 @@ import (
 func GetTransactionHistory(accountAddress string) {
 	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
 
-	s, err := seqIndexer.AddWebhookListener(context.Background(),
+	ok, err := seqIndexer.AddWebhookListener(context.Background(),
 		&proto.WebhookListener{
 			Url: "https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf",
 			Filters: &proto.WebhookEventFilter{
@@ -73,7 +75,7 @@ func GetTransactionHistory(accountAddress string) {
 			},
 		},
 	)
-	fmt.Println(s, err)
+	fmt.Println(ok, err)
 }
 ```
 
