@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Page Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Page Not Found</h1>
+    <p>The page you are looking for could not be found, <a href="/">you check the docs index here</a>.</p>
+    <script>
+        // Define the list of old paths and target paths
+        var paths = [
+            { oldPath: '/waas/intro/', targetPath: '/solutions/wallets/embedded-wallet/overview/' },
+            
+        ];
+
+        var currentPath = window.location.pathname;
+
+        for (var i = 0; i < paths.length; i++) {
+            if (paths[i].oldPath === currentPath) {
+                window.location.href = paths[i].targetPath;
+                break;
+            }
+        }
+    </script>
+</body>
+</html>

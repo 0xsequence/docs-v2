@@ -1,0 +1,84 @@
+# Webhook
+
+## Listen to Blockchain Events with Webhooks
+
+You can listen to transactions via webhooks using the Sequence Indexer. Our filters allow you to listen to events with a particular contract address and/or account address and specific token ids.
+
+### Registering a Webhook
+*Sequence Indexer `AddWebhookListener` Method:*
+
+* Request: POST /rpc/Indexer/AddWebhookListener
+* Content-Type: application/json
+* Body (in JSON):
+    * `Url` (string) -- the URL to send the webhook to
+    * `Filters` ([]object) -- an array of filters
+        * `contractAddresses` ([]string) -- a ERC20 / ERC721 / ERC1155 contract address
+        * `accounts` ([]string) -- wallet addresses
+        * `tokenIDs` ([]int) *optional* -- an array of token ids
+
+<br />
+
+One of `contractAddresses`, `accounts` must be provided in the filter.
+
+**Example: `AddWebhookListener`**
+
+:::code-group
+
+```bash [Terminal]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/AddWebhookListener -d '{ "url": "https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf", "filters": [{"accounts": ["0x631998e91476DA5B870D741192fc5Cbc55F5a52E"]}]'
+```
+
+```typescript [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+
+const req = {
+    url: 'https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf',
+    filters: [
+        {
+            accounts: ['0x631998e91476DA5B870D741192fc5Cbc55F5a52E']
+        }
+    ]
+}
+
+
+const ok = await indexer.addWebhookListener({
+	Url: req.url,
+    Filters: req.filters
+})
+	
+console.log('ok', ok)
+```
+
+```go [Go]
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/indexer"
+)
+
+func GetTransactionHistory(accountAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+	ok, err := seqIndexer.AddWebhookListener(context.Background(),
+		&proto.WebhookListener{
+			Url: "https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf",
+			Filters: &proto.WebhookEventFilter{
+				Accounts: []prototyp.Hash{prototyp.HashFromString("0xd4Bbf5d234CC95441A8Af0a317D8874eE425e74d")},
+                // ContractAddresses: []prototyp.Hash{prototyp.HashFromString("0xC852bf35CB7B54a33844B181e6fD163387D85868")},
+				// TokenIDs:          []prototyp.BigInt{prototyp.NewBigInt(1)},
+			},
+		},
+	)
+	fmt.Println(ok, err)
+}
+```
+
+:::
+
+Now you can listen to events on the blockchain with your webhook.
