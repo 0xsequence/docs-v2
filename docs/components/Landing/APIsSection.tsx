@@ -15,19 +15,19 @@ export const APIsSection = () => (
         title="Marketplace API"
         icon="MarketplaceIcon"
         body="Integrate sell and buy operations through our orderbook interface."
-        link="/api/marketplace"
+        link="/api/marketplace/overview"
       />
       <Card
         title="Indexer API"
         icon="IndexerIcon"
         body="Query wallets and contracts on Ethereum-compatible chains."
-        link="/api/indexer/01-overview"
+        link="/api/indexer/overview"
       />
       <Card
         title="Metadata API"
         icon="SequenceIcon"
         body="Fetch token details on any collection and collectible."
-        link="/api/metadata"
+        link="/api/metadata/overview"
       />
       <Card
         title="Transactions API"
@@ -39,7 +39,7 @@ export const APIsSection = () => (
         title="Node Gateway"
         icon="NodeGatewayIcon"
         body="Leverage Sequence's auto-scaling node service."
-        link="/solutions/builder/node-gateway"
+        link="/api/node-gateway"
       />
     </div>
   </section>

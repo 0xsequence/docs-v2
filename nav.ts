@@ -5,7 +5,7 @@ export const topNav = [
   items: [
     { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
     { text: 'Marketplace', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
-    { text: 'Collectibles', link: '/solutions/collectibles/contracts/01-deploy-an-item-collection', match: '/solutions/collectibles/contracts/01-deploy-an-item-collection' },
+    { text: 'Collectibles', link: '/solutions/collectibles/contracts/deploy-an-item-collection', match: '/solutions/collectibles/contracts/deploy-an-item-collection' },
     { text: 'Payments', link: '/solutions/nft-checkout', match: '/solutions/nft-checkout' },
     { text: 'Builder Console', link: '/solutions/builder/overview', match: '/solutions/builder/overview', items: [
       { text: 'Overview', link: '/solutions/builder/overview', match: '/solutions/builder/overview' }, 
@@ -415,7 +415,7 @@ export const sidebar = {
         { text: 'Overview', link: '/api/marketplace/overview' },
         // { text: 'Schema', link: '/api/marketplace/schema' },
         // { text: 'Marketplace API', link: '/api/marketplace/api' },
-        {text: 'Examples', collapsed: true, items: [
+        {text: 'Examples', collapsed: false, items: [
           {text: 'Creating Market Orders & Listings', link: '/api/marketplace/examples/orderbook-transactions'},
           {text: 'Get Top Orders', link: '/api/marketplace/examples/get-top-orders'},
           {text: 'Get Orderbook', link: '/api/marketplace/examples/get-orderbook'},

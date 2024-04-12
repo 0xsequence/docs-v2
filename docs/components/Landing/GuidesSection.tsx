@@ -13,22 +13,22 @@ export const GuidesSection = () => (
       <GuideCard
         title="Build a web3 game with WebGL"
         body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
-        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
+        link="/guides/webgl-guide"
       />
       <GuideCard
         title="Build a web3 game with Unity"
         body="Learn how to build an engaging iOS and Android game that uses Sequence In-Game Wallets under the hood for an integrated marketplace and in-game currency."
-        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
+        link="/guides/unity-guide"
       />
       <GuideCard
         title="Create web3 lootboxes"
         body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
-        link="/guides/webgl-guide/#integrate-sequencekit-with-waas"
+        link="/guides/lootbox"
       />
       <GuideCard
         title="Orderbook Marketplace"
         body="Build an API-driven marketplace where players can mint, then sell or buy items using a custom web-based interface leveraging Sequence Orderbook APIs."
-        link="/solutions/marketplaces/orderbook/01-overview"
+        link="/guides/custom-marketplace-guide"
       />
     </div>
   </section>

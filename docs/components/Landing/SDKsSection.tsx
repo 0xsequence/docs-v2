@@ -15,13 +15,13 @@ export const SDKsSection = () => (
         icon="UnityIcon"
         title="Unity"
         body="Integrate Sequence with our native Unity library."
-        link="/sdk/unity/01-overview"
+        link="/sdk/unity/overview"
       />
       <Card
         icon="UnrealIcon"
         title="Unreal Engine"
         body="Integrate Sequence with our native Unreal Engine library."
-        link="/sdk/unreal/01-overview"
+        link="/sdk/unreal/overview"
       />
       <Card
         icon="GolangIcon"
@@ -31,15 +31,15 @@ export const SDKsSection = () => (
       />
       <Card
         icon="NodeJSIcon"
-        title="Node.js"
+        title="Typescript"
         body="Integrate Sequence APIs with our TypeScript SDK."
-        link="/"
+        link="/sdk/typescript/guides/overview"
       />
       <Card
         icon="SequenceIcon"
         title="Sequence Kit"
         body="Add web onboarding for any web3 wallet."
-        link="/"
+        link="/sdk/sequence-kit/overview"
       />
     </div>
   </section>

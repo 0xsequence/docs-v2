@@ -19,19 +19,19 @@ export const SolutionsSection = () => (
             icon: 'WalletIcon',
             title: 'Universal Wallet',
             body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-            link: '/solutions/wallets/universal-wallet/01-overview',
+            link: '/solutions/wallets/universal-wallet/overview',
           },
           {
             icon: 'WalletIcon',
             title: 'Embedded Wallet',
             body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-            link: '/solutions/wallets/embedded-wallet/01-overview',
+            link: '/solutions/wallets/embedded-wallet/overview',
           },
           {
             icon: 'CollectiblesIcon',
             title: 'Collectibles',
             body: 'Manage contracts and collections with our no-code Builder.',
-            link: '/solutions/collectibles/contracts/01-deploy-an-item-collection',
+            link: '/solutions/collectibles/contracts/deploy-an-item-collection',
           },
           // {
           //   icon: 'AirdropperIcon',
@@ -55,7 +55,7 @@ export const SolutionsSection = () => (
             icon: 'SequenceIcon',
             title: 'Marketplace APIs',
             body: 'Integrate custom in-game marketplaces with our APIs.',
-            link: '/solutions/marketplaces/orderbook/01-overview',
+            link: '/solutions/marketplaces/orderbook/overview',
           },
           // {
           //   icon: 'CartIcon',
@@ -67,7 +67,7 @@ export const SolutionsSection = () => (
             icon: 'SequenceIcon',
             title: 'Onramps',
             body: 'Allow players to convert from fiat to any crypto globally.',
-            link: '/solutions/payments/onramps/01-fiat-on-ramps',
+            link: '/solutions/payments/onramps/fiat-on-ramps',
           },
         ]}
       />
@@ -79,7 +79,7 @@ export const SolutionsSection = () => (
             icon: 'MinterIcon',
             title: 'Minter',
             body: 'Securely mint achievement tokens tied to your game.',
-            link: '/guides/webgl-guide#deploy-a-remote-minter',
+            link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test',
           },
           {
             icon: 'AnalyticsIcon',
