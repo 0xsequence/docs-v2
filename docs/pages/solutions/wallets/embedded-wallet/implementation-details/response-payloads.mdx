@@ -15,7 +15,7 @@ Regardless of the specific response type, all responses have a standard structur
 
 ### Transaction Receipt Response
 
-Triggered upon successful execution of a [send transaction intent](/waas/implementation/payloads#send-transaction-payload). The code for this response is `transactionReceipt`.
+Triggered upon successful execution of a [send transaction intent](/solutions/wallets/embedded-wallet/implementation-details/action-payloads#send-transaction-payload). The code for this response is `transactionReceipt`.
 
 The `data` field contains:
 
@@ -23,7 +23,7 @@ The `data` field contains:
 |----------------|-------------------|------------------------------------------------------|----------|
 | txHash         | string            | Transaction hash of the Ethereum transaction         | No       |
 | metaTxHash     | string            | Hash of the meta transaction                         | No       |
-| request        | [SendTransactionPayload](https://docs.sequence.xyz/waas/implementation/payloads/#send-transaction-payload)| The original request packet of the transaction       | No       |
+| request        | [SendTransactionPayload](https://docs.sequence.xyz/solutions/wallets/embedded-wallet/implementation-details/action-payloads#send-transaction-payload)| The original request packet of the transaction       | No       |
 | receipt        | MetaTxnReceipt    | Receipt of the meta transaction                      | No       |
 | nativeReceipt  | any               | Native receipt of the Ethereum transaction           | Yes      |
 | simulations    | SimulateResult[]  | Array of simulation results                          | Yes      |
@@ -208,14 +208,14 @@ if (payloads.responses.isSentTransactionResponse(res)) {
 
 ### Failed Transaction Response
 
-Triggered upon failed to execute a [send transaction intent](/waas/implementation/payloads#send-transaction-payload). The code for this response is `transactionFailed`.
+Triggered upon failed to execute a [send transaction intent](/solutions/wallets/embedded-wallet/implementation-details/action-payloads#send-transaction-payload). The code for this response is `transactionFailed`.
 
 The `data` field contains:
 
 | Field               | Type                    | Description                                                  |
 |---------------------|-------------------------|--------------------------------------------------------------|
 | error               | string                  | The error message describing why the transaction failed.     |
-| request             | [SendTransactionPayload](https://docs.sequence.xyz/waas/implementation/payloads/#send-transaction-payload)      | The packet of transactions that were attempted.              |
+| request             | [SendTransactionPayload](https://docs.sequence.xyz//solutions/embedded-wallet/implementation-details/response-payloads/#send-transaction-payload)      | The packet of transactions that were attempted.              |
 | simulations         | SimulateResult[]        | Results from the transaction simulation attempts.            |
 
 `SimulateResult`:
@@ -279,7 +279,7 @@ if (payloads.responses.isFailedTransactionResponse(res)) {
 
 ### Signed Message Response
 
-Triggered after a successful [sign message intent](/waas/implementation/payloads#sign-message-payload). The code is `signedMessage`.
+Triggered after a successful [sign message intent](/solutions/wallets/embedded-wallet/implementation-details/action-payloads#sign-message-payload). The code is `signedMessage`.
 
 The `data` field contains:
 
@@ -314,7 +314,7 @@ if (payloads.responses.isSignedMessageResponse(res)) {
 
 ### Session Opened Response
 
-Occurs after successfully executing an [open session intent](/waas/implementation/payloads#open-session-payload). The code is `sessionOpened`.
+Occurs after successfully executing an [open session intent](/solutions/wallets/embedded-wallet/implementation-details/action-payloads#open-session-payload). The code is `sessionOpened`.
 
 The `data` field contains:
 
