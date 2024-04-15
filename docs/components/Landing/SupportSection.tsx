@@ -9,7 +9,7 @@ export const SupportSection = () => (
         monetization and retention with the power of web3.
       </p>
     </div>
-    <div className="flex flex-wrap gap-x-10 gap-y-5">
+    <div className="flex flex-wrap gap-x-10 gap-y-5 md:flex-row flex-col">
       <SupportItem
         link="/support"
         title="Chat Support"
@@ -43,7 +43,7 @@ const SupportItem = ({
   body: string
   link: string
 }) => (
-  <div className="w-[calc(50%-20px)] border-t dark:border-white-10 border-black-10 flex flex-col gap-3 py-5">
+  <div className="md:w-[calc(50%-20px)] border-t dark:border-white-10 border-black-10 flex flex-col gap-3 py-5">
     <div>
       <p className="text-themed-primary font-bold text-xl leading-7">{title}</p>
       <p className="text-themed-secondary font-medium text-sm leading-5">

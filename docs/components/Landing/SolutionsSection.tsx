@@ -10,7 +10,7 @@ export const SolutionsSection = () => (
         monetization and retention with the power of web3.
       </p>
     </div>
-    <div className="flex gap-4">
+    <div className="flex md:flex-row flex-col gap-4">
       <SolutionsGroup
         theme="purple"
         heading="Acquire players"

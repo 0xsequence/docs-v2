@@ -10,7 +10,7 @@ export const APIsSection = () => (
         on-chain data through easy-to-use interfaces.
       </p>
     </div>
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 md:flex-row flex-col">
       <Card
         title="Marketplace API"
         icon="MarketplaceIcon"
@@ -61,7 +61,7 @@ const Card = ({
   return (
     <SmartLink
       href={link}
-      className="hover-fade p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(33%-(16px/3))]"
+      className="hover-fade p-4 dark:bg-white-10 bg-white rounded-xl md:w-[calc(33%-(16px/3))]"
     >
       <p className="font-bold text-themed-primary text-xl leading-7 flex items-center gap-2">
         <IconComponent />
