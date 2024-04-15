@@ -18,8 +18,8 @@ export const topNav = [
     items: [
       { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Serverless Minting of Collectibles', link: '/guides/unity-guide', match: '/guides/mint-collectibles-serverless' },
-      { text: 'Dungeon Crawler with AI Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
+      { text: 'Serverless Minting', link: '/guides/unity-guide', match: '/guides/mint-collectibles-serverless' },
+      { text: 'AI Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace-guide', match: '/guides/custom-marketplace-guide' }
     ]
   },
@@ -91,13 +91,6 @@ export const sidebar = {
             {text: 'Intents', link: '/solutions/wallets/embedded-wallet/implementation-details/intents'},
             ]
           },
-
-          { text: 'Wallet as a Service', collapsed: true, items: [
-            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/overview'},
-            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/intents'},
-            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/enclave-verification'},
-          ] 
-        }
         ]
       },
         { text: 'Universal Wallet', collapsed: true, 
