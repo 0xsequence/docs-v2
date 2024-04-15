@@ -53,6 +53,7 @@ export const topNav = [
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
+      { text: 'Restricted Regions', link: '/support/restricted-regions' },
       { text: 'Token Directory', link: '/support/token-directory' },
       { text: 'FAQ', link: 'https://support.sequence.xyz' },
       { text: 'Discord', link: 'https://discord.gg/sequence' },
@@ -445,6 +446,7 @@ export const sidebar = {
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
+      { text: 'Restricted Regions', link: '/support/restricted-regions' },
       { text: 'FAQ', link: 'https://support.sequence.xyz' },
       { text: 'Token Directory', link: '/support/token-directory' },
       { text: 'Discord', link: 'https://discord.gg/sequence' },
