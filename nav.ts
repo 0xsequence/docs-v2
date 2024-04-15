@@ -6,7 +6,7 @@ export const topNav = [
     { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
     { text: 'Marketplace', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
     { text: 'Collectibles', link: '/solutions/collectibles/contracts/deploy-an-item-collection', match: '/solutions/collectibles/contracts/deploy-an-item-collection' },
-    { text: 'Payments', link: '/solutions/nft-checkout', match: '/solutions/nft-checkout' },
+    { text: 'Payments', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
     { text: 'Builder Console', link: '/solutions/builder/overview', match: '/solutions/builder/overview', items: [
       { text: 'Overview', link: '/solutions/builder/overview', match: '/solutions/builder/overview' }, 
     ]
@@ -18,7 +18,7 @@ export const topNav = [
     items: [
       { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Serverless Minting', link: '/guides/unity-guide', match: '/guides/mint-collectibles-serverless' },
+      { text: 'Serverless Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'AI Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace-guide', match: '/guides/custom-marketplace-guide' }
     ]
