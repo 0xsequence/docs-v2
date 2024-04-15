@@ -14,7 +14,7 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
           <SmartLink href="https://sequence.xyz" className="hover-fade w-fit">
             {logo}
           </SmartLink>
-          <div className="flex items-start gap-10">
+          <div className="flex gap-10 md:items-start md:flex-row flex-col">
             <div className="flex-1">
               <form
                 onSubmit={e => {
@@ -68,75 +68,29 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
               </form>
             </div>
             <div className="flex-1 flex gap-2 text-xs font-medium text-themed-secondary">
-              <div className="flex gap-2 flex-1">
-                <div className="flex flex-col gap-3 flex-1">
-                  <SmartLink
-                    href="https://sequence.xyz"
-                    className="hover-fade w-fit"
-                  >
-                    Home
-                  </SmartLink>
-                  <SmartLink
-                    href="https://sequence.xyz/pricing"
-                    className="hover-fade w-fit"
-                  >
-                    Pricing
-                  </SmartLink>
-                  <SmartLink
-                    href="https://sequence.xyz/blog"
-                    className="hover-fade w-fit"
-                  >
-                    Blog
-                  </SmartLink>
+              {LINKS.map((linkListGroup, groupIndex) => (
+                <div
+                  key={groupIndex}
+                  className="w-1/2 flex md:flex-row flex-col gap-2.5"
+                >
+                  {linkListGroup.map((linkList, listIndex) => (
+                    <div
+                      key={listIndex}
+                      className="md:grow flex flex-col gap-3"
+                    >
+                      {linkList.map((link, linkIndex) => (
+                        <SmartLink
+                          key={linkIndex}
+                          href={link.href}
+                          className="w-fit hover-fade"
+                        >
+                          {link.text}
+                        </SmartLink>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-                <div className="flex flex-col gap-3 flex-1">
-                  <SmartLink
-                    href="https://sequence.xyz/terms"
-                    className="hover-fade w-fit"
-                  >
-                    Terms
-                  </SmartLink>
-                  <SmartLink
-                    href="https://sequence.xyz/privacy"
-                    className="hover-fade w-fit"
-                  >
-                    Privacy
-                  </SmartLink>
-                </div>
-              </div>
-              <div className="flex gap-2 flex-1">
-                <div className="flex flex-col gap-3 flex-1">
-                  <SmartLink
-                    href="https://sequence.xyz/contact"
-                    className="hover-fade w-fit"
-                  >
-                    Contact
-                  </SmartLink>
-                  <SmartLink
-                    href="https://40061393.fs1.hubspotusercontent-na1.net/hubfs/40061393/Sequence%20Media%20Kit%202024.pdf"
-                    className="hover-fade w-fit"
-                  >
-                    Media kit
-                  </SmartLink>
-                  <SmartLink href="/" className="hover-fade w-fit">
-                    Docs
-                  </SmartLink>
-                </div>
-                <div className="flex flex-col gap-3 flex-1">
-                  <SmartLink
-                    href="https://sequence.build"
-                    className="hover-fade w-fit"
-                  >
-                    Sequence Builder
-                  </SmartLink>
-                  <SmartLink
-                    href="https://sequence.app"
-                    className="hover-fade w-fit"
-                  >
-                    Sequence Wallet
-                  </SmartLink>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -172,6 +126,34 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
     </footer>
   )
 }
+
+const LINKS: { text: string; href: string }[][][] = [
+  [
+    [
+      { text: 'Home', href: 'https://sequence.xyz' },
+      { text: 'Pricing', href: 'https://sequence.xyz/pricing' },
+      { text: 'Blog', href: 'https://sequence.xyz/blog' },
+    ],
+    [
+      { text: 'Terms', href: 'https://sequence.xyz/terms' },
+      { text: 'Privacy', href: 'https://sequence.xyz/privacy' },
+    ],
+  ],
+  [
+    [
+      { text: 'Contact', href: 'https://sequence.xyz/contact' },
+      {
+        text: 'Media Kit',
+        href: 'https://40061393.fs1.hubspotusercontent-na1.net/hubfs/40061393/Sequence%20Media%20Kit%202024.pdf',
+      },
+      { text: 'Docs', href: 'https://docs.sequence.xyz' },
+    ],
+    [
+      { text: 'Sequence Builder', href: 'https://sequence.build' },
+      { text: 'Sequence Wallet', href: 'https://sequence.app' },
+    ],
+  ],
+]
 
 type NewsletterSignupState =
   | 'initial'
