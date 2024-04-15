@@ -2,15 +2,15 @@ import clsx from 'clsx'
 import * as ICONS from './icons'
 
 export const SolutionsSection = () => (
-  <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
+  <section className="flex flex-col gap-5 border-t border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Solutions</h3>
-      <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80">
+      <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80 mr-8">
         Follow our solution guides to boost your game's acquisition,
         monetization and retention with the power of web3.
       </p>
     </div>
-    <div className="flex gap-4">
+    <div className="flex md:flex-row flex-col gap-4">
       <SolutionsGroup
         theme="purple"
         heading="Acquire players"
@@ -19,19 +19,19 @@ export const SolutionsSection = () => (
             icon: 'WalletIcon',
             title: 'Universal Wallet',
             body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-            link: '/solutions/wallets/universal-wallet/01-overview',
+            link: '/solutions/wallets/universal-wallet/overview',
           },
           {
             icon: 'WalletIcon',
             title: 'Embedded Wallet',
             body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
-            link: '/solutions/wallets/embedded-wallet/01-overview',
+            link: '/solutions/wallets/embedded-wallet/overview',
           },
           {
             icon: 'CollectiblesIcon',
             title: 'Collectibles',
             body: 'Manage contracts and collections with our no-code Builder.',
-            link: '/solutions/collectibles/contracts/01-deploy-an-item-collection',
+            link: '/solutions/collectibles/contracts/deploy-an-item-collection',
           },
           // {
           //   icon: 'AirdropperIcon',
@@ -47,27 +47,27 @@ export const SolutionsSection = () => (
         items={[
           {
             icon: 'MarketplaceIcon',
-            title: 'Marketplace',
+            title: 'White-Label Marketplace',
             body: 'Launch an in-game collectibles marketplace within minutes.',
             link: '/solutions/marketplaces/white-label-marketplace',
           },
           {
             icon: 'SequenceIcon',
-            title: 'Orderbook API',
+            title: 'Marketplace APIs',
             body: 'Integrate custom in-game marketplaces with our APIs.',
-            link: '/solutions/marketplaces/orderbook/01-overview',
+            link: '/solutions/marketplaces/orderbook/overview',
           },
-          {
-            icon: 'CartIcon',
-            title: 'NFT Checkout',
-            body: 'Offer easy purchases with credit card, crypto, IAP support.',
-            link: '/',
-          },
+          // {
+          //   icon: 'CartIcon',
+          //   title: 'NFT Checkout',
+          //   body: 'Offer easy purchases with credit card, crypto, IAP support.',
+          //   link: '/',
+          // },
           {
             icon: 'SequenceIcon',
             title: 'Onramps',
             body: 'Allow players to convert from fiat to any crypto globally.',
-            link: '/solutions/payments/onramps/01-fiat-on-ramps',
+            link: '/solutions/payments/onramps/fiat-on-ramps',
           },
         ]}
       />
@@ -79,13 +79,13 @@ export const SolutionsSection = () => (
             icon: 'MinterIcon',
             title: 'Minter',
             body: 'Securely mint achievement tokens tied to your game.',
-            link: '/guides/webgl-guide#deploy-a-remote-minter',
+            link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test',
           },
           {
             icon: 'AnalyticsIcon',
             title: 'Analytics',
             body: 'Track every aspect of web3 activity within your games.',
-            link: '/',
+            link: '/solutions/builder/analytics',
           },
           // {
           //   icon: 'DiscordIcon',
@@ -140,8 +140,10 @@ const SolutionsGroup = ({
               className="hover-fade p-4 rounded-md z-10 dark:bg-white-10 bg-black-7"
             >
               <div className="flex gap-2">
-                <p className="flex items-center gap-2 text-xl leading-7 font-bold text-themed-primary">
-                  <IconComponent />
+                <p className="flex items-start gap-2 text-xl leading-7 font-bold text-themed-primary">
+                  <span className="mt-1">
+                    <IconComponent />
+                  </span>
                   {item.title}
                 </p>
               </div>

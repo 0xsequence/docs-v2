@@ -1,0 +1,105 @@
+---
+sidebar_label: Using Wagmi
+---
+
+# Using Wagmi
+
+The Sequence wallet used with Wagmi through the connector.
+
+:::tip Try it live :)
+Try [a live Dapp example](https://0xsequence.github.io/demo-dapp-wagmi/) using Sequence + Metamask + Wallet Connect with wagmi.
+
+Source code is available too: [https://github.com/0xsequence/demo-dapp-wagmi](https://github.com/0xsequence/demo-dapp-wagmi)
+:::
+
+## Installation
+
+The connector is installed via the npm package `@0xsequence/wagmi-connector`. If you are using the latest version of wagmi (>= 1.0.0) the latest version of the wagmi-connector package can be installed with the following command:
+
+```shell
+npm install @0xsequence/wagmi-connector 0xsequence ethers
+```
+
+or
+
+```shell
+yarn add @0xsequence/wagmi-connector 0xsequence ethers
+```
+
+## Usage
+
+The connector is then imported and added to the list of connectors alongside the other wagmi connectors.
+
+```js
+import { SequenceConnector } from "@0xsequence/wagmi-connector";
+
+const connectors = [
+  new SequenceConnector({
+    chains,
+    options: {
+      defaultNetwork: "polygon",
+      connect: {
+        app: "Demo-app",
+      },
+    },
+  }),
+  ...otherConnectors,
+];
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+  webSocketPublicClient,
+});
+```
+
+## Parameters
+
+### chains
+
+Chains supported by app. This is the same parameter as would be passed to other RainbowKit wallets.
+
+### options.connect (optional)
+
+Connection details that will be passed to Sequence upon connection, including app name, network id, etc...
+A more in depth description of the connect options is available [here](/solutions/wallets/universal-wallet/examples/connect-wallet#wallet-login-and-connect-options).
+
+### options.defaultNetwork (optional)
+
+The default network to connect to. Sequence will default all operations to this network. It can also be defined using a number (e.g. 1 for Mainnet, 5 for Goerli, etc...).
+
+## Using older versions of Wagmi (\<\= 0.12.x)
+
+If you are using an older version of Wagmi (\<\= 0.12.x), which is based on ethers instead of viem, use the following command to install the appropriate version of the wagmi connector:
+
+```shell
+npm install @0xsequence/wagmi-connector@1.0 0xsequence ethers
+```
+
+or
+
+```shell
+yarn add @0xsequence/wagmi-connector@1.0 0xsequence ethers
+```
+
+## Using NextJs
+
+There are special considerations to take into account when using Wagmi with NextJs such that it functions harmoniously with the server-side rendering of NextJs.
+The correct technique to use differs depending on whether the application uses the older `pages` router or the more recent `app` router.
+
+See [this section](https://docs.sequence.xyz/wallet/connectors/FAQ/#how-do-i-use-a-wallet-library-and-connector-with-nextjs-using-the-app-directory-version-13-and-above-only) for an explanation on using the Wagmi connector with `app` router.  
+See [the example app](https://github.com/0xsequence/demo-dapp-wagmi-next/tree/use-client-method) which uses the `app` router structure.
+
+See [this section](https://docs.sequence.xyz/wallet/connectors/FAQ/#how-do-i-use-a-wallet-library-and-connector-with-nextjs-using-the-pages-directory-all-versions-of-nextjs) for an explanation on using the Wagmi connector with `pages` router.  
+See [the example app](https://github.com/0xsequence/demo-dapp-wagmi-next/tree/mount-hook) which uses the `pages` router structure.
+
+## Examples
+
+Below are example dapps using various versions of wagmi and libraries.
+
+A demo app for the lastest version of Wagmi is available [here](https://github.com/0xsequence/demo-dapp-wagmi/tree/wagmi-1-0-0).  
+A demo app is available for older version of Wagmi(\<\=0.12.x) is available [here](https://github.com/0xsequence/demo-dapp-wagmi/tree/wagmi-0-12-x).
+
+A demo app for Wagmi + NextJs with the `app` router structure [here](https://github.com/0xsequence/demo-dapp-wagmi-next/tree/use-client-method).  
+A demo app for Wagmi + NextJs with the older `pages` router structure [here](https://github.com/0xsequence/demo-dapp-wagmi-next/tree/mount-hook).

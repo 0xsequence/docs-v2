@@ -1,0 +1,296 @@
+# Action payloads
+
+Every Sequence Embedded Wallet action that involves a write operation makes use of a payload. Payloads are JSON objects that contain all information about the intent of the action, alongside with the signature of the user that is performing the action.
+
+Payloads are generated with the Embedded Wallet SDK and should be sent to the Embedded Wallet API in order to complete the action.
+
+:::tip
+Calls to the Embedded Wallet API are authenticated with the Embedded Wallet API key, including calls to the `/sendPayload` endpoint.
+
+The Embedded Wallet API key is a secret key that should be kept safe and should never be shared with anyone, nor stored in a client-side application.
+:::
+
+## Payload structure
+
+It's important to notice that integrating Embedded Wallet **does not** require you to manually manipulate the contents of the payload; yet they are strictly defined, and you can use them if you need to.
+
+The payload structure is as follows:
+
+| Name           | Type        | Description                                                   | Optional |
+| ---            | ---         | ---                                                           | ---      |
+| version        | string      | The version of the SDK that generated the payload             | No       |
+| * packet         | object      | Contents, defined by each payload type                        | No       |
+| signatures     | signature[] | Payload signatures by existing sessions                       | Yes      |
+| packet.code    | string      | Identifier of the payload type                                | No       |
+| packet.issued  | number      | Timestamp of when the payload was issued, in seconds          | No       |
+| packet.expires | number      | Timestamp of when the payload will expire, in seconds         | No       |
+
+\* packet must be organized such that its fields (in JSON structure) appear alphabetically by name.
+
+> The wallet is optional when openning a new session
+
+#### signature type
+
+| Name         | Type   | Description                                           | Optional |
+| ---          | ---    | ---                                                   | ---      |
+| session      | string | Identifier of the signing session                     | No       |
+| * signature    | string | Signature of the session for the given payload        | No       |
+
+\* signature should be an EIP-191 signature. See https://eips.ethereum.org/EIPS/eip-191
+
+```json
+{
+  "version": "1.0.0",
+  "packet": {
+    "code": "signMessage",
+    "expires": 1600086400,
+    "issued": 1600000000,
+    "message": "Join game: #284892",
+    "network": "137",
+    "wallet": "0xBc5F07A5852fdF3DBd57A76835109220D0ADd8E8"
+  },
+  "signatures": [{
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696",
+    "signature": "0x4b0fc0c7d42566958d60f92115ab95167c837c891e2f4fa62a75bfed30d86af7291051fe5c88985269286548a42bed5b70bb16588e48998206a2e7a547f527d101"
+  }]
+}
+```
+
+### Open session payload
+
+This payload is generated when openning a new client-side session on the Embedded Wallet SDK. It contains the "proof" that will be used to authenticate the user, and the session data to associate to it.
+
+| Name           | Type   | Description                                        | Optional |
+| ---            | ---    | ---                                                | ---      |
+| code           | string | The "code" of the payload (`openSession`).         | No       |
+| session        | string | The unique identifier for the session              | No       |
+| proof          | object | Contains authentication details like JWT and email | No       |
+| proof.idToken  | string | OAuth2 id token                                    | Yes      |
+| proof.email    | string | User's email address                               | Yes      |
+
+Notice that either `idToken`, `email` or a valid signature *MUST* be present. If `email` is provided, the Embedded Wallet will send an email on the user's first transaction with this session, asking them to confirm it. 
+
+:::info
+The `wallet` parameter is optional *ONLY* for this payload. If passed it will enforce that the opened session matches the requested wallet.
+:::
+
+```json
+{
+  "version": "1.0.0",
+  "packet": {
+    "code": "openSession",
+    "expires": 1600086400,
+    "issued": 1600000000,
+    "proof": {
+      "idToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vbXktZG9tYWluLmF1dGgwLmNvbSIsInN1YiI6ImF1dGgwfDEyMzQ1NiIsImF1ZCI6IjEyMzRhYmNkZWYiLCJleHAiOjEzMTEyODE5NzAsImlhdCI6MTMxMTI4MDk3MCwibmFtZSI6IkphbmUgRG9lIiwiZ2l2ZW5fbmFtZSI6IkphbmUiLCJmYW1pbHlfbmFtZSI6IkRvZSJ9.bql-jxlG9B_bielkqOnjTY9Di9FillFb6IMQINXoYsw",
+      "email": "user@email.com"
+    },
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696"
+  }
+}
+```
+
+### Sign message payload
+
+This payload is generated when `signMessage` is called on the SDK.
+
+| Name    | Type   | Description                                | Optional |
+| ---     | ---    | ---                                        | ---      |
+| code    | string | The "code" of the payload (`signMessage`). | No       |
+| wallet  | string | Address of the wallet.                     | No       |
+| network | string | Network on which to send the transactions. | No       |
+| message | string | Message to be signed.                      | No       |
+
+
+```json
+{
+  "version": "1.0.0",
+  "packet": {
+    "code": "signMessage",
+    "expires": 1600086400,
+    "issued": 1600000000,
+    "message": "Join game: #284892"
+    "network": "1",
+    "wallet": "0xBc5F07A5852fdF3DBd57A76835109220D0ADd8E8",
+  },
+  "signatures": [{
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696",
+    "signature": "0x4f9555c73908b6a5b61e0a744cb4e00fce7b20743d5799e4cb1774081bc6b2ec192c740e50f1adec84605636e09c9cdf4d2f6629f9ce64d8d0f3ae10305ef90400"
+  }]
+}
+```
+
+### Send transaction payload
+
+This payload is generated when `sendTransaction` is called on the SDK.
+
+| Name         | Type                                                       | Description                                    | Optional |
+| ---          | ---                                                        | ---                                            | ---      |
+| code         | string                                                     | The "code" of the payload (`sendTransaction`). | No       |
+| identifier   | string                                                     | Unique identifier for the transaction          | No       |
+| wallet       | string                                                     | Address of the wallet.                         | No       |
+| network      | string                                                     | Network on which to send the transactions.     | No       |
+| transactions | (transaction \| erc20send \| erc721send \| erc1155send \| delayedEncode)[]  | Array of transaction objects.                  | No       |
+
+#### Raw transaction
+
+| Name   | Type   | Description                               | Optional |
+| ---    | ---    | ---                                       | ---      |
+| type   | string | Transaction type, should be "transaction" | No       |
+| to     | string | The recipient Ethereum address            | No       |
+| value  | string | The value to be transferred               | Yes      |
+| data   | string | Additional data for the transaction       | Yes      |
+
+Notice that transactions with `to === wallet` are strictly forbidden, and will get rejected.
+
+#### sendERC20
+
+| Name   | Type   | Description                                   | Optional |
+| ---    | ---    | ---                                           | ---      |
+| type   | string | Transaction type, should be "erc20send"       | No       |
+| token  | string | The ERC20 token contract address              | No       |
+| to     | string | The recipient Ethereum address                | No       |
+| value  | string | Amount of tokens to send                      | No       |
+
+#### sendERC721
+
+| Name   | Type   | Description                                   | Optional |
+| ---    | ---    | ---                                           | ---      |
+| type   | string | Transaction type, should be "erc721send"      | No       |
+| token  | string | The ERC721 token contract address             | No       |
+| to     | string | The recipient Ethereum address                | No       |
+| id     | string | Token ID to send                              | No       |
+| safe   | bool   | Whether to use the safeTransferFrom function  | Yes      |
+| data   | string | Additional data for the transaction           | Yes      |
+
+Notice that `data` can only be used if `safe === true`.
+
+#### sendERC1155
+
+| Name          | Type       | Description                                   | Optional |
+| ---           | ---        | ---                                           | ---      |
+| type          | string     | Transaction type, should be "erc1155send"     | No       |
+| token         | string     | The ERC1155 token contract address            | No       |
+| to            | string     | The recipient Ethereum address                | No       |
+| vals          | object[]   | Array of objects with id and amount           | No       |
+| vals[].id     | string     | The ID of the token                           | No       |
+| vals[].amount | string     | Amount of tokens with this ID to send         | No       |
+| data          | string     | Additional data for the transaction           | Yes      |
+
+#### delayedEncode
+
+Delayed encode transactions have their payload data not encoded on the client, it instead is left to be encoded by the Embedded Wallet API. This reduces the burden on the client, and makes it easier to integrate in environments with limited libraries.
+
+| Type                     | Field   | Data Type                                       | Description                                                               |
+|--------------------------|---------|--------------------------------------------------|---------------------------------------------------------------------------|
+| DelayedEncodeData        | abi     | string                                           | The ABI (Application Binary Interface) for the contract.                   |
+|                          | func    | string                                           | The function to call within the smart contract.                            |
+|                          | args    | (string \| DelayedEncodeData)[] \| \{ [key: string]: (string \| DelayedEncodeData) \}  | The arguments to pass to the function. Can be an array or an object. |
+| DelayedEncodeSubpacket   | type    | 'delayedEncode'                                  | The type of the subpacket, in this case, it's `'delayedEncode'`.           |
+|                          | to      | string                                           | The address to which the transaction is sent.                              |
+|                          | value   | string                                           | The value being sent in the transaction, usually in Ether for Ethereum.    |
+|                          | data    | DelayedEncodeData                                | The data payload, containing the ABI, function to call, and arguments.     |
+
+Hope this helps!
+
+```json
+{
+  "version": "1.0.0",
+  "packet": {
+    "code": "sendTransaction",
+    "expires": 1600086400,
+    "identifier": "tx-id1-1600000000",
+    "issued": 1600000000,
+    "network": "137",
+    "transactions": [
+      {
+        "data": "0x3251ba32",
+        "to": "0x479F6a5b0C1728947318714963a583C56A78366A",
+        "type": "transaction",
+        "value": "39381"
+      },
+      {
+        "to": "0x7b1Bd3474D789e18e2E329E2c53F819B6E687b4A",
+        "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "type": "erc20send",
+        "value": "1000"
+      },
+      {
+        "data": "0x112233",
+        "id": "7",
+        "safe": true,
+        "to": "0x17fFA2d95b58228e1ECb0C6Ac25A6EfD20BA08E4",
+        "token": "0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d",
+        "type": "erc721send"
+      },
+      {
+        "data": "0x223344",
+        "to": "0x91E8aC543C5fEDf9F3Ef8b9dA1500dB84305681F",
+        "token": "0x631998e91476da5b870d741192fc5cbc55f5a52e",
+        "type": "erc1155send",
+        "vals": [{
+          "amount": "5",
+          "id": "2"
+        }, {
+          "amount": "1",
+          "id": "500"
+        }]
+      },
+			{
+				"data": {
+					"abi": "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_orderId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"_maxCost\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_fees\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"fillOrKillOrder\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"otherMethods\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+					"args": [
+						"0x6bd55a2877890bd58871eefe886770a7734077a74981910a75d7b1f044b5bf28",
+						"1000000000000000000",
+						"[\"0x095aE61E8207C7856eA273235D6BAdb69d815F5e\", \"0xC9D9B33231d24dd8cC53fDD64F7ABdd156f2a7E2\"]",
+						{
+							"abi": "notExpired(uint256,string)",
+							"args": [
+								"1600000000",
+								"Nov 1st, 2020"
+							],
+							"func": "notExpired"
+						}
+					],
+					"func": "fillOrKillOrder"
+				},
+        "to": "0x140d72763D1ce39Ad4E2e73EC6e8FC53E5b73B64",
+				"type": "delayedEncode",
+        "value": "0"
+			}
+    ],
+    "wallet": "0xBc5F07A5852fdF3DBd57A76835109220D0ADd8E8"
+  },
+  "signatures": [{
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696",
+    "signature": "0x4f9555c73908b6a5b61e0a744cb4e00fce7b20743d5799e4cb1774081bc6b2ec192c740e50f1adec84605636e09c9cdf4d2f6629f9ce64d8d0f3ae10305ef90400"
+  }]
+}
+```
+
+### Close session payload
+
+This payload is generated when the client requests clossing a given session. Notice that the client *MAY* close the current session, or some other session.
+
+| Name     | Type   | Description                                | Optional |
+| ---      | ---    | ---                                        | ---      |
+| code     | string | The "code" of the payload (`closeSession`).| No       |
+| wallet   | string | Address of the wallet.                     | No       |
+| session  | string | Identifier for the session to be closed    | No       |
+
+```json
+{
+  "version": "1.0.0",
+  "packet": {
+    "code": "closeSession",
+    "expires": 1600086400,
+    "issued": 1600000000,
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696",
+    "wallet": "0xBc5F07A5852fdF3DBd57A76835109220D0ADd8E8"
+  },
+  "signatures": [{
+    "session": "0xCF67BCbD9D5DFD373b03f4fc8143e1c6744B5696",
+    "signature": "0x4f9555c73908b6a5b61e0a744cb4e00fce7b20743d5799e4cb1774081bc6b2ec192c740e50f1adec84605636e09c9cdf4d2f6629f9ce64d8d0f3ae10305ef90400"
+  }]
+}
+```

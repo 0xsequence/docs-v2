@@ -58,16 +58,16 @@
   .bg-gradient-dark {
     background: linear-gradient(
         90deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.75) 50%,
-        rgba(0, 0, 0, 0) 100%
+        rgba(17, 17, 17, 0) 0%,
+        rgba(17, 17, 17, 0.75) 50%,
+        rgba(17, 17, 17, 0) 100%
       ),
       linear-gradient(
         180deg,
-        #000 0%,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(0, 0, 0, 0) 60%,
-        #000 100%
+        #111 0%,
+        rgba(17, 17, 17, 0) 40%,
+        rgba(17, 17, 17, 0) 60%,
+        #111 100%
       ),
       linear-gradient(
         270deg,
@@ -124,12 +124,6 @@
 .vocs_H1 {
   color: red;
 } */
-
-/* TODO: can we move the menu to left..? */
-/* TODO: put search on right..? ya.. */
-/* TODO: add "Build >" button */
-
-/* TODO: perhaps re-sink it.. just make it an icon */
 
 .tabs {
   display: flex;
@@ -343,4 +337,8 @@ td {
   height: 100%;
   border: none;
   display: none;
+}
+
+.network-logo {
+  border-radius: 15px;
 }

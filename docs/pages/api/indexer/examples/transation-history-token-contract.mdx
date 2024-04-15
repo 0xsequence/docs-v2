@@ -1,0 +1,77 @@
+# Contract token history
+
+### Fetch / listen to the transaction history for any ERC20, ERC721, ERC1155 contract.
+
+This query is helpful to track transaction history of a particular token contract.
+In this example, we use the Skyweaver token contract address 0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+on the Polygon network. You may query any contract address on any of the supported networks (but make
+sure to query the indexer of the corresponding network).
+
+*Sequence Indexer `GetTransactionHistory` Method:*
+
+* Request: POST /rpc/Indexer/GetTransactionHistory
+* Content-Type: application/json
+* Body (in JSON):
+	* `filter` (object) 
+		* `contractAddress` (string) -- a ERC20 / ERC721 / ERC1155 contract address
+
+<br />
+
+**Example: `GetTransactionHistory` of Skyweaver contract on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+
+:::code-group
+
+```bash [cURL]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTransactionHistory -d '{ "filter": { "accountAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E" }, "includeMetadata": true }'
+```
+
+```typescript [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+
+// here we query the Skyweaver contract address, but you can use any
+const contractAddress = '0x631998e91476DA5B870D741192fc5Cbc55F5a52E'
+
+// query Sequence Indexer for all token details / supplies
+// try any contract address you'd like :)
+const filter = {
+	contractAddress: contractAddress
+}
+
+// query Sequence Indexer for all token transaction history on Polygon
+const transactionHistory = await indexer.getTransactionHistory({
+	filter: filter
+})
+	
+console.log('transaction history of contract:', transactionHistory)
+```
+
+```go [Go]
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/indexer"
+)
+
+func GetTransactionHistory(accountAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+	filter := &indexer.TransactionHistoryFilter{
+		ContractAddress: &contractAddress,
+	}
+	includeMetadata := true
+
+	_, history, err := seqIndexer.GetTransactionHistory(context.Background(), filter, nil, &includeMetadata)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("transaction history:", history)
+}
+```
+
+:::

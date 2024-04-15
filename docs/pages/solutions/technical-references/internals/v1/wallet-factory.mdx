@@ -1,0 +1,53 @@
+import { Callout } from "vocs/components";
+
+# Wallet Factory
+
+Sequence Wallets are created using the [Factory](https://github.com/0xsequence/wallet-contracts/blob/e0c5382636a88b4db4bcf0a70623355d7cd30fb4/contracts/Factory.sol) contract, when called it creates child [MinimalUpgradeableProxies](https://github.com/0xsequence/wallet-contracts/blob/e0c5382636a88b4db4bcf0a70623355d7cd30fb4/contracts/Wallet.sol) contracts, which are in essence the "boot" code of all Sequence wallets.
+
+## Factory API
+
+### deploy
+
+```solidity
+  function deploy(
+    address _mainModule,
+    bytes32 _salt
+  ) public payable returns (address _contract)
+```
+
+Creates a child MinimalUpgradeableProxy using [CREATE2](https://eips.ethereum.org/EIPS/eip-1014), the proxy initially points to the provided `_mainModule`.
+No initialize code is executed.
+
+#### Parameters:
+
+| Name         | Type    | Description                                                                                                                                                              |
+| ------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| \_mainModule | address | Initial implementation for the new proxy contract, expected to point to a valid Sequence wallet implementation with support for counter-factual initialization.          |
+| \_salt       | bytes32 | Arbitrary value to be used as `create2` salt. Sequence's `mainModule` uses the salt to obtain a hash with the initial configuration for the wallet (See [ImageHash](#)). |
+
+#### Return Values:
+
+| Name       | Type    | Description                            |
+| ---------- | ------- | -------------------------------------- |
+| \_contract | address | Address of the created proxy contract. |
+
+<Callout type="warning">
+  Unsanitized input <br />
+  The Factory contract **does not** check if the provided `_mainModule` is a valid Sequence wallet implementation, or if `_salt` is a valid Sequence configuration.
+
+Using invalid parameters will result on a proxy contract that **may not** be usable, and could result in loss of funds.
+
+</Callout>
+
+## Counter factual addresses
+
+Sequence wallets are counter-factual by design, this means that the wallet's address can be known before the wallet is deployed; any two combinations of the `mainModule` and `salt` values will result in the same wallet address.
+
+This property alongside the use of [NanoUniversalDeployer](/solutions/technical-references/internals/v1/deploy#1---deploy-nanouniversaldeployer) or [UniversalDeployer](/solutions/technical-references/internals/v1/deploy#2---deploy-universaldeployer2) is the reason why Sequence wallets can obtain the same address on multiple chains.
+
+<Callout type="tip">
+  Gas-free wallet creation <br /> Sequence wallets are **100% counterfactual**,
+  meaning that funds can be safely transferred to the wallet's address without
+  the need for calling the `deploy` function. Deploying the wallet is only
+  required before the first transaction is sent **from** the wallet.
+</Callout>

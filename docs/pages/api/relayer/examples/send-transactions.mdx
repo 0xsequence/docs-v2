@@ -1,0 +1,54 @@
+## Sending transactions
+
+
+:::code-group
+```typescript [TypeScript]
+const transactions = [
+  {
+    to: '0x468E8e29F6cfb0F6b7ff10ec6A1AB516ec849c04',
+    value: '1000000000000000000'
+  }
+]
+
+// This sends the transaction to the relayer, and returns immediately once the relayer responds.
+const response = await account.sendTransaction(transactions)
+
+// This waits for the transaction to be confirmed on-chain.
+const receipt = await response.wait()
+
+console.log(JSON.stringify(receipt, undefined, 2))
+```
+
+```go [Go]
+// Select the USDC fee option.
+// Not required if using Sequence Builder's gas sponsorship capabilities!
+var selectedOption *sequence.RelayerFeeOption
+for _, option := range options {
+  if option.Token.Symbol == "USDC" {
+    selectedOption = option
+    break
+  }
+}
+
+// Pay the relayer.
+// Not required if using Sequence Builder's gas sponsorship capabilities!
+data, _ := contracts.IERC20.Encode("transfer", selectedOption.To, selectedOption.Value)
+transactions.Append(sequence.Transactions{&sequence.Transaction{
+  To:            *selectedOption.Token.ContractAddress,
+  Data:          data,
+  RevertOnError: true,
+}})
+
+signed, _ := wallet.SignTransactions(ctx, transactions)
+
+// Send the transaction to the relayer.
+metaTxnID, _, wait, _ := wallet.SendTransaction(ctx, signed, quote)
+
+fmt.Println("meta-transaction ID", metaTxnID)
+
+receipt, _ := wait(ctx)
+
+fmt.Println("transaction hash", receipt.TxHash)
+```
+:::
+

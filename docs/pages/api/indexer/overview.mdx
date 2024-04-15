@@ -6,15 +6,22 @@
 
 The Sequence Indexer is a modular web3 service that makes it easy to query blockchain token and NFT data from Ethereum-compatible networks. The Indexer automatically indexes every ERC20, ERC721 and ERC1155 token from Ethereum-compatible chains.
 
-:::warning[INTRODUCING THE SEQUENCE BUILDER - https://sequence.build]
-Our **Indexer** service is now managed through **[Sequence Builder](https://sequence.build)**. Sign up to grab your API access key. 
+The Sequence Indexer is a powerful tool that can be used to build wallets, games, and dapps that
+need to query on-chain data. It is designed to be fast, reliable, and easy to use. It leverages
+the [Sequence Node Gateway](/api/node-gateway) which monitors nodes health, intelligently routes
+requests to the available nodes and caches the most recent request responses. This means that Node
+providers going down are no longer a problem, as the Node Gateway will automatically route to a
+healthy provider making sure that Indexer always stays at the top of the chain with no downtime.
 
-[Get started with the **Sequence Builder** Free Plan today!](https://sequence.build)
-:::
+The other benefit of using the Indexer is that it is using built in-house, next-generation, LSM-tree
+based databases to store the data. It makes it super fast to query and index data. The data is
+available in real-time with low latency. You can query it using a simple REST API or one of our SDKs.
 
-The Sequence Indexer is a modular web3 service that makes it easy to query blockchain token
-and NFT data from Ethereum-compatible networks. The Indexer **automatically indexes every
-ERC20, ERC721 and ERC1155 token** from Ethereum-compatible chains.
+The Indexer API allows you to query all token balances, history and other information for
+all Ethereum compatible chains. In order to make it one go to place for all your token data needs,
+we have included [Sequence Metadata](/api/metadata/overview) support for all tokens. This means that
+you can easily render tokens in your apps, games, or wallets without the need to fetch metadata from
+a separate API.
 
 In fact, the Sequence Wallet uses the Indexer behind the scenes so it can seamlessly
 render all token information in any wallet. But of course, the Indexer is a modular piece
@@ -40,10 +47,10 @@ You can see the [full list of supported networks here](/solutions/technical-refe
 
 Here are a few example queries you can make to a blockchain from your dapp, game, or wallet:
 
-- [Fetch all tokens & NFTS in any wallet including all metadata](/api/indexer/fetch-tokens)
-- [Fetch the transaction history for any wallet address](/api/indexer/transaction-history)
-- [Fetch all unique tokens in a particular ERC20/721/1155 contract, including total supplies](/api/indexer/unique-tokens)
+- [Fetch all tokens & NFTS in any wallet including all metadata](/api/indexer/examples/fetch-tokens)
+- [Fetch the transaction history for any wallet address](/api/indexer/examples/transaction-history)
+- [Fetch all unique tokens in a particular ERC20/721/1155 contract, including total supplies](/api/indexer/examples/unique-tokens)
 - [What is the total token supply of an ERC20 token? What is the total token supply of
-  all the ERC1155 tokens in a particular contract?](/api/indexer/unique-tokens)
-- [Fetch the transaction history for any token contract address](/api/indexer/transation-history-token-contract)
-
+  all the ERC1155 tokens in a particular contract?](/api/indexer/examples/unique-tokens)
+- [Fetch the transaction history for any token contract address](/api/indexer/examples/transation-history-token-contract)
+- [Listen to transactions for particular tokens/contracts/addresses via webhooks](/api/indexer/examples/webhook-listener)

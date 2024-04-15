@@ -17,7 +17,7 @@ const TableCell = ({ content, imgSrc }: any) => {
     return (
       <td>
         <div className="cell-content">
-        {imgSrc && <img src={imgSrc} alt="" className="cell-image" />}
+        {imgSrc && <img src={imgSrc} alt="" className="cell-image network-logo" />}
         <span className="cell-text">{content}</span>
       </div>
       </td>

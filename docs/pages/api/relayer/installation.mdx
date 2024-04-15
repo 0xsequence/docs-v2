@@ -1,0 +1,46 @@
+# Installation
+
+We provide SDKs for [Web / node.js](https://github.com/0xsequence/sequence.js) and [Go](https://github.com/0xsequence/go-sequence).
+Or if you'd like to integrate the Relayer with another language target, simply follow the API reference below
+to implement the HTTP requests. Additionally, read the Typescript client source code as [reference
+implementation of the Relayer API client](https://github.com/0xsequence/sequence.js/blob/master/packages/relayer/src/rpc-relayer/relayer.gen.ts) as well.
+
+:::info
+Sequence Relayer offers the same API across a variety of EVM networks. Make sure to check the endpoints
+and use the corresponding host for your dapp/game. For example, on Ethereum mainnet the Sequence Relayer endpoint is
+https://mainnet-relayer.sequence.app and Polygon is https://polygon-relayer.sequence.app.
+
+🌄 [View the full list of supported networks and Relayer endpoints here](/solutions/technical-references/chain-support)
+:::
+
+### Web / node.js Installation
+
+```sh
+npm install 0xsequence ethers
+```
+
+or
+
+```sh
+pnpm install 0xsequence ethers
+```
+
+or
+
+```sh
+yarn add 0xsequence ethers
+```
+
+### Go Installation
+
+```bash [Terminal]
+go get -u github.com/0xsequence/go-sequence@latest
+```
+
+then in your app,
+
+```go [Go]
+import (
+	"github.com/0xsequence/go-sequence/relayer"
+)
+```

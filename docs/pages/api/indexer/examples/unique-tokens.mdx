@@ -1,0 +1,80 @@
+# Tokens in a contract
+
+### Fetch all unique tokens in a particular ERC20/721/1155 contract, including total supplies
+
+**Fetches token supplies and metadata for any ERC20, ERC721, ERC1155 contract.**
+
+This query is helpful to render all tokens in a token contract, or to query the total token supplies.
+In this example, we use the Skyweaver token contract address 0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+on the Polygon network. You may query any contract address on any of the supported networks (but make
+sure to query the indexer of the corresponding network).
+
+
+*Sequence Indexer `GetTokenSupplies` Method:*
+
+* Request: POST /rpc/Indexer/GetTokenSupplies
+* Content-Type: application/json
+* Body (in JSON):
+	* `contractAddress` (string) -- a ERC20 / ERC721 / ERC1155 contract address
+	* `includeMetadata` (boolean - optional - default: false) -- toggle token metadata to be included in the response
+	* `metadataOptions` (object - optional) -- additional options for metadata
+		- `verifiedOnly` (boolean - optional) -- return only contracts which are 'verified' to help reduce spam
+		- `includeContracts` ([]string - optional) -- list of specific contract addresses to always be included, even if verifiedOnly is enabled.
+
+
+<br />
+
+**Example: `GetTokenSupplies` of Skyweaver contract on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+
+:::code-group
+
+```bash [cURL]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenSupplies -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "includeMetadata": true }'
+```
+
+```ts [Typescript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+
+// here we query the Skyweaver contract address, but you can use any
+const contractAddress = '0x631998e91476DA5B870D741192fc5Cbc55F5a52E'
+
+// query Sequence Indexer for all token details / supplies
+const tokenDetails = await indexer.getTokenSupplies({
+	contractAddress: contractAddress,
+	includeMetadata: true
+})
+console.log('token details of contract:', tokenDetails)
+```
+
+
+```go [Go]
+go
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/indexer"
+)
+
+func GetTokenSupplies(contractAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+
+	filter := &indexer.TransactionHistoryFilter{
+		ContractAddress: &contractAddress,
+	}
+	includeMetadata := true
+
+	_, tokenDetails, err := seqIndexer.GetTokenSupplies(context.Background(), filter, nil, &includeMetadata)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("token details:", tokenDetails)
+}
+```
+
+:::
