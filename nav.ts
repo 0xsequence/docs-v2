@@ -13,11 +13,12 @@ export const topNav = [
   }
 ]
 },
-  { 
+  {
     text: 'Guides',
     items: [
       { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
+      { text: 'Serverless Minting of Collectibles', link: '/guides/unity-guide', match: '/guides/mint-collectibles-serverless' },
       { text: 'Dungeon Crawler with AI Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace-guide', match: '/guides/custom-marketplace-guide' }
     ]
@@ -80,13 +81,23 @@ export const sidebar = {
             {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
             ]
           },
+          {text: 'Architecture', link: '/solutions/wallets/embedded-wallet/architecture'},
           {
             text: 'Implementation Details', collapsed: true, items: [
             {text: 'Action payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/action-payloads'},
             {text: 'Response payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/response-payloads'},
-            {text: 'Trust contract recovery flow', link: '/solutions/wallets/embedded-wallet/implementation-details/trust-contract-recovery-flow'},
+            {text: 'Trust Contract Recovery Flow', link: '/solutions/wallets/embedded-wallet/implementation-details/trust-contract-recovery-flow'},
+            {text: 'Enclave-Verification', link: '/solutions/wallets/embedded-wallet/implementation-details/enclave-verification'},
+            {text: 'Intents', link: '/solutions/wallets/embedded-wallet/implementation-details/intents'},
             ]
-          }
+          },
+
+          { text: 'Wallet as a Service', collapsed: true, items: [
+            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/overview'},
+            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/intents'},
+            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/enclave-verification'},
+          ] 
+        }
         ]
       },
         { text: 'Universal Wallet', collapsed: true, 
@@ -193,11 +204,6 @@ export const sidebar = {
             {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/configuration"},
           ]}
         ]},
-        { text: 'Wallet as a Service', collapsed: true, items: [
-            {text: 'Overview', link: '/solutions/technical-references/wallet-as-a-service/overview'},
-            {text: 'Intents', link: '/solutions/technical-references/wallet-as-a-service/intents'},
-            {text: 'Enclave verification', link: '/solutions/technical-references/wallet-as-a-service/enclave-verification'},
-          ] }
       ]
     },
     
@@ -218,15 +224,17 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Build a mobile Unity game',
+      text: 'Build a Unity game',
       collapsed: true,
       items: [
-        { text: 'Integrate SequenceKit with WaaS', link: '/guides/unity-guide#integrate-sequencekit-with-waas' },
-        { text: 'Deploy a collectibles contract', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
-        { text: 'Deploy a remote minter', link: '/guides/unity-guide#deploy-a-remote-minter' },
-        { text: 'Mint in-game achievement tokens', link: '/guides/unity-guide#mint-in-game-achievement-tokens' },
-        { text: 'Burn in-game achievement tokens', link: '/guides/unity-guide#burn-in-game-achievement-tokens' },
-        { text: 'Integrate an embedded marketplace', link: '/guides/unity-guide#integrate-an-embedded-marketplace' },
+        { text: 'Introduction', link: '/guides/unity-guide#intro-to-jelly-forest' },
+        { text: 'Build a Game Loop', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
+        { text: 'Integrate Embedded Wallets', link: '/guides/unity-guide#deploy-a-remote-minter' },
+        { text: 'Deploy Collectibles', link: '/guides/unity-guide#mint-in-game-achievement-tokens' },
+        { text: 'Deploy Remote Minter', link: '/guides/unity-guide#burn-in-game-achievement-tokens' },
+        { text: 'Minting Tokens to Inventory', link: '/guides/unity-guide#mint-in-game-tokens-to-the-players-inventory' },
+        { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#burn-in-game-tokens-in-exchange-for-others' },
+        { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#building-the-shop-pages-and-setting-the-minting-requirements' },
         { text: 'Leverage purchased items in-game', link: '/guides/unity-guide#leverage-purchased-items-in-game' },
       ]
     },
@@ -284,7 +292,6 @@ export const sidebar = {
           { text: 'Packaging', link: '/sdk/unreal/packaging' }
           ] 
         },
-
         { text: 'Unity', collapsed: true, items: [
           { text: 'Overview', link: '/sdk/unity/overview' },
           { text: 'Installation', link: '/sdk/unity/installation' },
