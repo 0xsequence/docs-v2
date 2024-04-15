@@ -1,3 +1,5 @@
+import {Callout} from 'vocs/components'
+
 # Mint Collectibles Using a Gasless Serverless Relayer
 
 Time to complete: 20-30 minutes
@@ -6,19 +8,19 @@ The Sequence Relayer can be implemented on a serverless [Cloudflare](https://clo
 
 The following steps will guide you through how to build your hosted minter API in 4 steps:
 
-1. [Setup Cloudflare environment with wrangler cli and deploy a test](/guides/templates/03-mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli--deploy-a-test)
-2. [Deploy, sponsor and update Metadata for an ERC1155 contract with Builder](/guides/templates/03-mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder)
-3. [Use EthAuthProof to prevent EOA DDoS](/guides/templates/03-mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos)
-4. [Mint a collectible to wallet](/guides/templates/03-mint-collectibles-serverless#4-mint-a-collectible-to-wallet)
+1. [Setup Cloudflare environment with wrangler cli and deploy a test](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli--deploy-a-test)
+2. [Deploy, sponsor and update Metadata for an ERC1155 contract with Builder](/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder)
+3. [Use EthAuthProof to prevent EOA DDoS](/guides/mint-collectibles-serverless#use-ethauthproof-to-prevent-eoa-ddos)
+4. [Mint a collectible to wallet](/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet)
 
 The result, a secure API with the following specs:
 
 - HTTPS GET: returns blockNumber
 - HTTPS POST(proof, address): mints a collectible & returns transaction hash
 
-:::info Difficulty
+<Callout type='danger'>
 You need basic knowledge of wrangler cli, npm, and Sequence Builder in order to complete this implementation.
-:::
+</Callout>
 
 ## 1. Setup Cloudflare environment with wrangler cli and deploy a test
 
@@ -47,9 +49,10 @@ To complete this step, you should press enter 4 times after `wrangler init` with
 
 This will clone down a starter repository that can be used to deploy code to the cloud.
 
-:::info Local API Testing
+<Callout type='info'>
+Local API Testing <br/>
 At any point in the guide, you can use the `wrangler dev` command in the project folder for local testing
-:::
+</Callout>
 
 #### Deploy Test
 
@@ -335,7 +338,7 @@ Press the `connect` button and then `copy to clipboard`.
 
 It should be noted, it is best not to share this `ETHAuthProof` with anyone as this means someone can prove ownership of your wallet and interact with specific APIs.
 
-Finally, replace the `url` with your app from [this step](/guides/templates/03-mint-collectibles-serverless#deploy-test), the `<some_proof>` with the generated value copied from the viewer dapp, and `<some_address>` with your wallet address and it should return just the mocked `0x` string.
+Finally, replace the `url` with your app from [this step](/guides/mint-collectibles-serverless#deploy-test), the `<some_proof>` with the generated value copied from the viewer dapp, and `<some_address>` with your wallet address and it should return just the mocked `0x` string.
 
 ```
 curl -X POST https://your-worker.your-subdomain.workers.dev \
@@ -421,6 +424,6 @@ const callContract = async (request: Request, env: Env, address: string, tokenId
 }
 ```
 
-Once these steps are complete, you can redeploy and test with the steps outlined in this [prior step](/guides/templates/03-mint-collectibles-serverless#testing), and this time the POST request should return a transaction hash for the completed mint and the GET request would return a block number.
+Once these steps are complete, you can redeploy and test with the steps outlined in this [prior step](/guides/mint-collectibles-serverless#testing), and this time the POST request should return a transaction hash for the completed mint and the GET request would return a block number.
 
 If you want to browse the full code, see [an example implementation here](https://github.com/0xsequence-demos/cloudflare-worker-sequence-relayer)
