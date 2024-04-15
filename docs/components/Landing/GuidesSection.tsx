@@ -4,7 +4,7 @@ export const GuidesSection = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Guides</h3>
-      <p className="text-md leading-6 font-medium dark:text-white-80 text-black-80">
+      <p className="text-md leading-6 font-medium dark:text-white-80 text-black-80 mr-8">
         Follow our step-by-step guides and open source code templates to
         accelerate your time to market.
       </p>
