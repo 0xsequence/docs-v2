@@ -17,15 +17,15 @@ export const SolutionsSection = () => (
         items={[
           {
             icon: 'WalletIcon',
-            title: 'Universal Wallet',
-            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
-            link: '/solutions/wallets/universal-wallet/overview',
-          },
-          {
-            icon: 'WalletIcon',
             title: 'Embedded Wallet',
             body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
             link: '/solutions/wallets/embedded-wallet/overview',
+          },
+          {
+            icon: 'WalletIcon',
+            title: 'Universal Wallet',
+            body: 'Easily onboard web3-native players with a complete Universal Wallet.',
+            link: '/solutions/wallets/universal-wallet/overview',
           },
           {
             icon: 'CollectiblesIcon',
