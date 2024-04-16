@@ -51,7 +51,7 @@ The WaaS Enclave is the only entity able to use the encrypted wallet data. Its s
 ## Simplified Data Flow
 Below we illustrate the data flow of a common use case such as signing a transaction via embedded wallets.
 
-![data-flow-architecture](/img/diagrams/waas/auth-overview.drawio.svg)
+![data-flow-architecture](/img/diagrams/waas/standalone-overview.drawio.svg)
 :::note
 Simplified layout describing the lifecycle of a transaction on the WaaS system.
 Blue: software provided by the partner, yellow: software provided by Sequence but run and managed by the partner, violet: software provided and run by Sequence.
@@ -69,9 +69,9 @@ The intent and its corresponding signature are sent to the partner's backend. Th
 
 The backend identifies the user without using the intent as the source of truth.
 
-#### 3. Backend Forwards the Intent to the DSS (Dapp Signing Service)
+#### 3. Backend Forwards the Intent to the Partner Signing Service (PSS)
 
-The DSS asks the WaaS API to build a transaction for the given intent and then validates that the transaction does not deviate from the original intent.
+The partner signing service housed in the Nitro Enclave asks the WaaS API to build a transaction for the given intent and then validates that the transaction does not deviate from the original intent.
 
 Then it uses the partner's hotkey to sign the transaction. It forwards the transaction, intent, and signature to the WaaS API.
 
