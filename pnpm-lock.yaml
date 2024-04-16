@@ -14,6 +14,9 @@ importers:
       '@0xsequence/indexer':
         specifier: ^1.9.17
         version: 1.9.18
+      '@databeat/tracker':
+        specifier: ^0.9.1
+        version: 0.9.1
       '@types/react':
         specifier: latest
         version: 18.2.79

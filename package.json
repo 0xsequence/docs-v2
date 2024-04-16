@@ -10,6 +10,7 @@
   "dependencies": {
     "0xsequence": "^1.9.17",
     "@0xsequence/indexer": "^1.9.17",
+    "@databeat/tracker": "^0.9.1",
     "@types/react": "latest",
     "add": "^2.0.6",
     "clsx": "^2.1.0",
