@@ -17,7 +17,7 @@ jobs:
     
     - name: Install dependencies
       run: |
-        npm install -g pnpm
+        npm install -g pnpm@8.15.4
         pnpm install
     
     - name: Build
