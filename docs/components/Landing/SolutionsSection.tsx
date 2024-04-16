@@ -79,7 +79,7 @@ export const SolutionsSection = () => (
             icon: 'MinterIcon',
             title: 'Minter',
             body: 'Securely mint achievement tokens tied to your game.',
-            link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test',
+            link: '/guides/mint-collectibles-serverless/',
           },
           {
             icon: 'AnalyticsIcon',
