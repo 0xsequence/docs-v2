@@ -21,7 +21,7 @@ With the use of the `GetOrderbookOrders` api developers can build custom marketp
 ```shell twoslash [cURL] filename="cURL"
 
 curl --request POST \
-  --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetOrderbookOrders \
+  --url https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetOrderbookOrders \
   --header 'Content-Type: application/json' \
   --data '{
     "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
@@ -58,7 +58,7 @@ import fetch from "cross-fetch";
 
 (async () => {
   const res = await fetch(
-    "https://dev-marketplace-api.sequence.app/polygon/rpc/Marketplace/GetOrderbookOrders",
+    "https://marketplace-api.sequence.app/polygon/rpc/Marketplace/GetOrderbookOrders",
     {
       method: "POST",
       headers: {
