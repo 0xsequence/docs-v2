@@ -16,11 +16,14 @@ export const topNav = [
   {
     text: 'Guides',
     items: [
-      { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
+      { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide', items: [
+        { text: 'Overview', link: '/guides/webgl-guide', match: '/guides/webgl-guide' }, 
+      ] 
+    },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
       { text: 'Serverless Collectibles', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
-      { text: 'Custom Marketplace', link: '/guides/template-marketplace-api', match: '/guides/template-marketplace-api' }
+      { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
     ]
   },
   { 
@@ -205,6 +208,10 @@ export const sidebar = {
 
   '/guides': [
     {
+      text: 'Guides',
+      collapsed: false,
+      items: [
+    {
       text: 'Build a game with WebGL',
       collapsed: true,
       items: [
@@ -221,12 +228,14 @@ export const sidebar = {
       text: 'Build a Unity game',
       collapsed: true,
       items: [
-        { text: 'Integrate SequenceKit with WaaS', link: '/guides/unity-guide#integrate-sequencekit-with-waas' },
-        { text: 'Deploy a collectibles contract', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
-        { text: 'Deploy a remote minter', link: '/guides/unity-guide#deploy-a-remote-minter' },
-        { text: 'Mint in-game achievement tokens', link: '/guides/unity-guide#mint-in-game-achievement-tokens' },
-        { text: 'Burn in-game achievement tokens', link: '/guides/unity-guide#burn-in-game-achievement-tokens' },
-        { text: 'Integrate an embedded marketplace', link: '/guides/unity-guide#integrate-an-embedded-marketplace' },
+        { text: 'Introduction', link: '/guides/unity-guide#intro-to-jelly-forest' },
+        { text: 'Build a Game Loop', link: '/guides/unity-guide#build-a-game-loop' },
+        { text: 'Integrate Embedded Wallets', link: '/guides/unity-guide#integrate-social-sign-in-and-sequences-embedded-wallet-solution' },
+        { text: 'Deploy Collectibles', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
+        { text: 'Deploy Remote Minter', link: '/guides/unity-guide#deploy-a-remote-minter'},
+        { text: 'Minting Tokens to Inventory', link: '/guides/unity-guide#mint-in-game-tokens-to-the-players-inventory' },
+        { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#burn-in-game-tokens-in-exchange-for-others' },
+        { text: 'Building an in-game shop', link: '/guides/unity-guide#building-the-shop-pages-and-setting-the-minting-requirements' },
         { text: 'Leverage purchased items in-game', link: '/guides/unity-guide#leverage-purchased-items-in-game' },
       ]
     },
@@ -258,7 +267,7 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Building a custom marketplace',
+      text: 'Build a Custom Marketplace',
       collapsed: true,
       items: [
         { text: 'Minting', link: '/guides/custom-marketplace#1-minting' },
@@ -269,7 +278,9 @@ export const sidebar = {
         { text: 'Order accepting', link: '/guides/custom-marketplace#6-order-accepting' },
         { text: '(Optional) Enable Embedded Wallet', link: '/guides/custom-marketplace#7-optional-integrate-embedded-wallet-into-sequence-kit' },
       ]
-    },
+    } 
+  ]
+},
     // {
     //   text: 'Integrate token rewards into your Discord server',
     //   link: '/guides/discord'
@@ -282,7 +293,7 @@ export const sidebar = {
         // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
       ]
     }
-  ],
+],
 
   // SDKs
   '/sdk': [
