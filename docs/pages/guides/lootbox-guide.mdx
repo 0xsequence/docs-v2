@@ -1,0 +1,772 @@
+import { Callout } from "vocs/components";
+
+# Lootbox with AI Minting
+
+Time to complete: 50-60 minutes
+
+In this guide we will go through the process of integrating a static html/js maze into a web3 enabled react app, leveraging tools from the Sequence Stack to mint AI generated loot from lootboxes.
+
+<Callout type="info">
+  You can play a live version of the game [here](https://0xsequence-demos.github.io/demo-lootbox/)
+
+  Where the full code can be found in the respective repositories
+  - [Web3 react dapp](https://github.com/0xsequence-demos/demo-lootbox)
+  - [Maze frontend](https://github.com/moskalyk/maze)
+  - [Diablo loot API](https://github.com/moskalyk/diablo-loot-api)
+  - [Cloudflare worker relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/master)
+</Callout>
+
+The tools will enable you to perform:
+
+- [1. Builder Console signup & project creation](/guides/lootbox-guide#1-builder--console-signup--project-creation): Create a project with the Builder
+- [2. Access key management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
+- [3. Sequence Kit integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
+- [4. Iframe-to-webapp communication](/guides/lootbox-guide#4-iframe-to-webapp-communication): Send iframe messages from a seperately deployed frontend to a react app
+- [5. Deploy a contract & sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
+- [6. Deploy a cloudflare worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
+- [7. Generating AI prompts & images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
+- [8. Uploading media to Sequence metadata service](/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
+- [9. Securing your cloudflare worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
+- [10. (Optional) Naive mint restriction per wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+
+## 1. Builder Console signup & project creation
+
+First start by following [this walk-through](/solutions/builder/project-management) for how to sign up to the [Builder Console](https://sequence.build/) and to learn how to create a project.
+
+In order to use certain features, like `Gas Sponsoring` and the use of the `Sequence Relayer`, you'll need to upgrade your project plan to `Developer` [using this walk-through](/solutions/builder/project-settings#5-billing-settings)
+
+## 2. Access key management
+
+Now that you have a project, you'll need to acquire 2 different Access Keys for your project.
+1. Public Access Key used for the wallet & relayer, which can be done [here](/solutions/builder/getting-started#step-3-optional-for-development-claim-an-api-access-key)
+2. Secret Access Key used for the Metadata Service, which can be done with the following instructions:
+
+First start by accessing settings, and selecting the API Keys
+
+![builder settings access keys](/img/builder/builder_settings_access_keys.png)
+
+Scroll down and select `+ Add Service Account`
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account.png)
+
+Then change the access to `write` and `confirm`
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account_confirm.png)
+
+Finally `copy` the key and store it in a safe location, as you will not have access to this in the future from the Builder Console.
+
+## 3. Sequence Kit integration
+
+We'll start from scratch building up the project with the necessary peices. 
+
+First start by creating a project folder with `mkdir <project>`, then `cd <project>` and create a `vite` project using:
+
+```
+pnpm create vite
+
+# or 
+yarn create vite
+
+# or 
+npm create vite
+```
+
+Next, we'll install the correct packages to use Sequence Kit.
+
+```
+npm install @0xsequence/kit @0xsequence/kit-wallet @0xsequence/kit-connectors wagmi ethers@5.7.2 viem 0xsequence @tanstack/react-query @0xsequence/design-system
+# or
+pnpm install @0xsequence/kit @0xsequence/kit-wallet @0xsequence/kit-connectors wagmi ethers@5.7.2 viem 0xsequence @tanstack/react-query @0xsequence/design-system
+# or
+yarn add @0xsequence/kit @0xsequence/kit-wallet @0xsequence/kit-connectors wagmi ethers@5.7.2 viem 0xsequence @tanstack/react-query @0xsequence/design-system
+```
+
+In the `/src` folder you'll find a `main.tsx`, in there update the code to be the following, that incorporates the Sequence Kit connector and `@0xsequence/design-system` `ThemeProvider`
+
+This code uses `arbitrum-sepolia` as the network, as well as the following options to login: email, google, & apple.
+
+```typescript
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+
+import { KitProvider } from '@0xsequence/kit'
+import { getDefaultConnectors } from '@0xsequence/kit-connectors'
+import { KitWalletProvider } from '@0xsequence/kit-wallet'
+
+import { createConfig, WagmiConfig} from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { arbitrumSepolia} from 'wagmi/chains'
+
+const PROJECT_ACCESS_KEY = import.meta.env.VITE_PROJECT_ACCESS_KEY!
+const WALLET_CONNECT_ID = import.meta.env.VITE_WALLET_CONNECT_ID!
+
+const queryClient = new QueryClient()
+
+function Dapp() {
+	const chains = [arbitrumSepolia] as any
+  
+	const projectAccessKey = PROJECT_ACCESS_KEY
+
+	const connectors = getDefaultConnectors({
+		walletConnectProjectId: WALLET_CONNECT_ID,
+		defaultChainId: 421614,
+		//@ts-ignore
+		appName: 'Dungeon Crawler Lootbox Demo app',
+		projectAccessKey
+	  })
+	
+	  const transports: any = {}
+	
+	  const config = createConfig({
+		// @ts-ignore
+		transports,
+		connectors,
+		chains
+	  })
+  	const kitConfig: any = {
+		projectAccessKey: PROJECT_ACCESS_KEY,
+		position: 'center',
+		defaultTheme: 'dark',
+		displayedAssets: [
+			{
+				contractAddress: '0xaf8a08bf8b2945c2779ae507dade15985ea11fbc', // or include your contract address here
+				chainId: 421614
+			}
+		],
+		signIn: {
+			projectName: 'Demo Dungeon Crawler Lootbox',
+			showEmailInput: true,
+			socialAuthOptions: ['google', 'apple'],
+			walletAuthOptions: ['wallet-connect']
+		}
+	}
+
+  return (
+	<WagmiConfig config={config}>
+		<QueryClientProvider client={queryClient}> 
+			<KitProvider config={kitConfig}>
+				<KitWalletProvider>
+					<App />
+				</KitWalletProvider>
+			</KitProvider>
+	  	</QueryClientProvider>
+    </WagmiConfig>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<React.StrictMode>
+		<Dapp />
+	</React.StrictMode>,
+)
+```
+
+Once your `main.tsx` is ready, lets create a login button
+
+In `App.tsx` use the following code that checks to see if a user is connected, and makes 2 different screens appear given this information.
+
+```typescript
+import {useEffect} from 'react'
+
+import { useOpenConnectModal } from '@0xsequence/kit'
+import { useDisconnect, useAccount } from 'wagmi'
+import { useOpenWalletModal } from '@0xsequence/kit-wallet'
+ 
+function App() {
+
+    const { setOpenConnectModal } = useOpenConnectModal()
+    const { setOpenWalletModal } = useOpenWalletModal()
+    const { isConnected, address } = useAccount() // address can be used to mint
+    const { disconnect } = useDisconnect()
+ 
+	useEffect(() => {
+ 
+  }, [isConnected])
+ 
+  return (
+    <>
+      {
+      isConnected ? 
+        <>
+          <button onClick={() => setOpenWalletModal(true)}>open wallet</button>
+          <button onClick={() => disconnect()}>disconnect</button>
+        </> 
+      : 
+        <>
+          <button onClick={() => setOpenConnectModal(true)}>connect</button>
+        </>
+      }
+    </>
+  )
+}
+
+export default App
+```
+
+Then, include a `.env` file in the root of your project, adding it to `.gitignore`, then updating the file with the following values
+
+```
+VITE_PROJECT_ACCESS_KEY=
+VITE_WALLET_CONNECT_ID=
+VITE_TRUSTED_IFRAME_ORIGIN=https://localhost:8002
+```
+
+<Callout type="warning">
+All environment variables must start with `VITE_` to be included
+</Callout>
+
+Run your code with the following command in the root folder and give it a try 
+
+```
+pnpm run dev
+```
+## 4. iframe-to-webapp communication
+
+The way the application is setup, a react app communicates to another frontend app process, so that integration between software environments can be made possible.
+
+This learning can be useful for building any iframe cross application design.
+
+With iframes, there's a native feature that allows you to pass messages between url and integrated frames.
+
+In order to accomplish this one must setup a `producer` message from the included child app, and a `consumer` recieving handler, with a restricted origin to prevent others from loading malicious iframes into your application.
+
+Begin by cloning down [this repository](https://github.com/moskalyk/maze) and running it with installing the packages `pnpm install` and running with `node server.js` to listen on `http:localhost:8002`
+
+### iframe producer message from child window
+
+With a single line of code contained within a click handler, one can send a message to the parent window, with a describing message that can pass any JSON object to the hoisting scope
+
+```js
+function onMouseClick(event){
+	...
+	// if clicked event intersects a lootbox
+	window.parent.postMessage({portal: 'loot'}, 'http://localhost:5173/demo-lootbox/');
+}
+```
+
+### dapp consumer handler in parent window
+
+Next we create a message event listener where the `window.addEventListener('message', callback)` is a method used in web development to listen for message events. It allows different browsing contexts, such as iframes, pop-up windows, or other tabs within the same browser, to communicate securely.
+
+```typescript
+const iframeToAppChannel = (event: any) => {
+	const trustedOrigin = import.meta.env.VITE_TRUSTED_IFRAME_ORIGIN // You would change this to your production deployment
+	
+	if (event.origin !== trustedOrigin) {
+		// Security check: Ensure that the message is from a trusted source. 
+		return;
+	}
+
+	if(event.data.portal == 'loot' && isConnected){
+		// generate loot for the user
+		generate() 
+	}
+}
+
+window.addEventListener('message', iframeToAppChannel);
+```
+
+Now if you were to trigger the click handler in the included iframe, the parent react app would recieve it for further processing, like with any connected wallet.  
+
+## 5. Deploy a contract & sponsor gas
+
+When deploying your contract, the recommended approach is to use an `ERC1155` over an `ERC721`. The benefits of using an `ERC1155`
+
+- random spaced `tokenID` to allow for parallelized minting
+- option via consent to apply governance to mint additional tokens of the same `tokenID`
+
+However, if you plan to only ever mint a single token of the generated media and you prefer technical security in managing parrallized minting over managing the security of the relayer private key (which can always be rotated by setting a new collectible `role` via the [Builder](https://sequence.build/)) an ERC721 might be better suited.
+
+To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`
+
+And to sponsor gas, follow [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder)
+
+## 6. Deploy a cloudflare worker
+
+### minting a token
+You can follow [this default guide](/guides/mint-collectibles-serverless) on minting a severless gasless minter with your deployed `ERC1155` contract
+
+### add lootbox object composition
+
+Next, ensure that you can mint a token making a request to the API. Then, add the additional object composition design to include the lootbox specific functions, which can be found in a [template lootbox cloudflare relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/template). 
+
+Where in the [completed lootbox code](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/blob/master/proud-darkness-022a/src/index.ts#L505), the `callContract` is basically the same
+
+In this codebase (which has optional design), we use a style of javascript to assemble javascript object in a functional manner which can be seen here
+
+Where in the following sections, we will complete the functions:
+- `ProcessInferencePool`: used to source loot metadata seed values from an external api
+- `Inference`: used to generate AI imagery and to check the status an in-progress inference
+- `Upload`: used to store metadata for future retrieval
+
+```js
+let lootbox = ProcessInferencePool(
+				Inference(
+					Time(
+						Strings(
+							Upload(
+								{
+									env: env
+								}
+							)
+						)
+					)
+				)
+			)
+```
+
+Using this design, we give appreciation to the following wizard and staff meme, to align with ones values and inherently transfer value of knowing who you are into your collection:
+
+<div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+	<img src="/img/guides/lootbox/you_shall_not_pass_meme.png" width="400px" alt="You Shall Not Pass Meme" />
+</div>
+
+## 7. Generating AI prompts & images
+
+In the template, we've included code to call an already deployed API and code to parse the response that is free to call yourself
+
+With this API, we will showcase how to generate images from [Scenario.gg](https://scenario.gg/) by passing in a prompt.
+
+This can be accomplished by completing the `getInferenceWithItem` function and passing in a `prompt` which is basically the generated loot `name` and `type`, as well as some additional parameters
+
+<Callout type='info'>
+For this guide we landed on the `EulerDiscreteScheduler` scheduler type based on quality and time, but if you want to experiment with using additional schedulers, you can use [this custom local cli](https://github.com/moskalyk/scenario-gg-benchmark-cli) and check the results in the [Scenario.gg](https://scenario.gg/) dashboard
+</Callout>
+
+```typescript
+...
+	getInferenceWithItem: async (prompt: any) => {
+		return new Promise( async (res) => {
+			fetch(`https://api.cloud.scenario.com/v1/models/${base.env.SCENARIO_MODEL_ID}/inferences`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Basic ${base.env.SCENARIO_API_KEY}`,
+					'accept': 'application/json',
+					'content-type': 'application/json'
+				},
+				body: JSON.stringify({
+							"parameters": {
+							"numSamples": 1,
+							"qualityBoostScale": 4,
+							"qualityBoost": false,
+							"type": "txt2img",
+							"disableMerging": false,
+							"hideResults": false,
+							"referenceAdain": false,
+							"intermediateImages": false,
+							"scheduler": 'EulerDiscreteScheduler',
+							"referenceAttn": false,
+							"prompt": prompt + ' single object on black background no people' // update this to your choosing
+						}
+					})
+			})
+			.then(response => response.json())
+			.then((data: any) => {
+				res({inferenceId: data.inference.id})
+			})
+			.catch(error => console.error('Error:', error));
+		})
+	}
+...
+```
+
+and calling the method like so to return an `inferenceId`
+
+```js
+	...
+	if(mint){
+		...
+	} else {
+		const loot = await lootbox.generate()
+		const inferenceId = await lootbox.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
+		...
+	}
+	...
+```
+
+Once we have the `inferenceId` we can call poll the inference status
+
+```typescript
+const pollInferenceStatus = async (res: any) => {
+	let status = '';
+	let inferenceData: any = null;
+
+	// checking if the status is succeeded or failed
+	while (!['succeeded', 'failed'].includes(status)) {
+		// Fetch the inference details
+		try {
+			const inferenceResponse = await fetch(`https://api.cloud.scenario.com/v1/models/Fm1gtd_gRwmopwj2gyWtUA/inferences/${inferenceId}`, {
+				method: 'GET',
+				headers
+			});
+			if (inferenceResponse.ok) {
+				console.log(inferenceResponse.statusText)
+				inferenceData = await inferenceResponse.json();
+				
+			}
+		}catch(err){
+			console.log(err)
+		}
+		status = inferenceData.inference.status;
+		console.log(`Inference status: ${status}`);
+
+		// Wait for a certain interval before polling again
+		await new Promise(resolve => setTimeout(resolve, 5000)); // Polling every 5 seconds
+	}
+	// Handle the final status
+	if (status === 'succeeded') {
+		console.log('Inference succeeded!');
+		console.log(inferenceData); // Print inference data
+		res(inferenceData)
+	} else {
+		console.log('Inference failed!');
+		console.log(inferenceData); // Print inference data
+		throw new Error("Scenario API Failed")
+	}
+};
+```
+and call the `getInferenceStatus` with the `inferenceId` passed in, where when you recieve the response, you can obtain the image url with `resObject.inference.images[0].url`
+
+```typescript
+	...
+	if(mint){
+		...
+	} else {
+		const loot = await lootbox.generate()
+		const inferenceId = await lootbox.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
+		const resObject = await lootbox.getInferenceStatus(inferenceId)
+		console.log(resObject.inference.images[0].url) // prints url
+		...
+	}
+	...
+```
+
+## 8. Uploading media to Sequence metadata service
+
+With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`
+
+Which can be accomplished with 3 steps
+- create collection from a cURL request
+- process and store an image URL to Sequence Metadata Service
+- publish collection from a cURL request
+
+### create collection from a cURL request
+
+As a one time requirement to uploading media to the service, a collection has to be first made. By using the Secret API Key from [step 2](/guides/lootbox-guide#2-access-key-management) and `projectID` retrieved from the [Builder](https://sequence.build/)
+
+We call the service to retrieve a `collectionID`
+
+```shell
+curl --location 'https://metadata.sequence.app/rpc/Collections/CreateCollection' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <secrect_API_key>' \
+--data '{
+    "projectId": "<project_id>",
+    "collection": {
+        "metadata": {
+            "name": "<name>",
+            "description": "<description>",
+            "external_link" : "<https://link>"
+        },
+        "image": "",
+        "decimals": <decimals_typically_as_0>,
+        "properties": null,
+        "attributes": null
+    }
+}'
+```
+
+We then set the `collectionID` from the returned response in the `wrangler.toml`
+
+### process and store an image URL to Sequence Metadata Service
+
+In order to process and store the generated media at the URL, we implement a few steps
+
+- create token
+- create asset
+- upload asset
+- update non-private token
+
+#### metadata: create token
+
+```typescript
+// TODO: create token
+const stringBody = JSON.stringify({
+	"projectID": projectID,
+	"collectionID": collectionID,
+	"token": {
+		"tokenId": String(randomTokenIDSpace),
+		"name": name,
+		"description": "A free lootbox mini-game available for use in any game that requires collectible rewards",
+		"decimals": 0,
+		"attributes": attributes
+	}
+});
+
+const requestOptions = {
+	method: "POST",
+	headers: myHeaders,
+	body: stringBody,
+};
+
+const res = await fetch(`${METADATA_URL}/rpc/Collections/CreateToken`, requestOptions)
+```
+
+#### metadata: create asset
+
+```typescript
+// TODO: create asset
+const stringBody2 = JSON.stringify({
+	"projectID": projectID,
+	"asset": {
+		"collectionId": collectionID,
+		"tokenId": String(randomTokenIDSpace),
+		"metadataField": "image"
+	}
+});
+
+const requestOptions2 = {
+	method: "POST",
+	headers: myHeaders,
+	body: stringBody2,
+};
+
+const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestOptions2)
+const json2: any = await res2.json()
+```
+
+#### metadata: upload asset
+
+With the passed in `asset.id` from the previous `json2` object
+
+```typescript
+	...
+	base.uploadAsset = async (projectID: any, collectionID: any, assetID: any, tokenID: any, url: any) => {
+		const response = await fetch(url);
+		if (!response.ok) throw new Error(`Failed to fetch file from ${url}: ${response.statusText}`);
+		const arrayBuffer = await response.arrayBuffer();
+		const blob = new Blob([arrayBuffer]);
+
+		const formData = new FormData();
+		
+		formData.append('file', blob, `image.png`); // You might want to dynamically determine the filename
+		
+		let METADATA_URL;
+
+		if(base.env.DEV){
+			METADATA_URL = 'https://dev-metadata.sequence.app'
+		} else {
+			METADATA_URL = 'https://metadata.sequence.app'
+		}
+
+		// Construct the endpoint URL
+		const endpointURL = `${METADATA_URL}/projects/${projectID}/collections/${collectionID}/tokens/${tokenID}/upload/${assetID}`;
+
+		try {
+			// Use fetch to make the request
+			const fetchResponse = await fetch(endpointURL, {
+			method: 'PUT',
+			body: formData,
+			headers: {
+				'X-Access-Key': base.env.PROJECT_ACCESS_KEY,
+				'Authorization': `Bearer ${base.env.JWT_ACCESS_KEY}`, // Put your token here
+			},
+			});
+		
+			// Assuming the response is JSON
+			const data = await fetchResponse.json();
+
+			return data;
+		}catch(err){
+			console.log(err)
+		}
+	}
+	...
+	//TODO: upload asset
+	const uploadAssetRes = await base.uploadAsset(projectID, collectionID, json2.asset.id, String(randomTokenIDSpace), imageUrl)
+	...
+```
+Where the returned `uploadAssetRes.url` is the media file url living on Sequence servers
+
+#### metadata: update non-private token
+Now, we make the token non-private by setting a `private` boolean to `false`
+
+```typescript
+const stringBody3 = JSON.stringify({
+	"projectID": projectID,
+	"collectionID": collectionID,
+	"private": false,
+	"tokenID": String(randomTokenIDSpace)
+});
+
+const requestOptions3 = {
+	method: "POST",
+	headers: myHeaders,
+	body: stringBody3,
+};
+
+const res3 = await fetch(`${METADATA_URL}/rpc/Collections/UpdateToken`, requestOptions3)
+const json3 = await res3.json()
+```
+
+---
+
+### publish collection from a cURL request
+
+Finally, also as a one time request, we publish the collection based on the `projectID` and `collectionID` by running the following command
+
+```shell
+curl --location 'https://metadata.sequence.app/rpc/Collections/PublishCollection' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <secrect_API_key> \
+--data '{
+    "projectId": <project_id>,
+    "collectionId": <collection_id>
+}'
+```
+
+## 9. Securing your cloudflare worker
+
+In order to secure your cloudflare worker to only process requests from a certain frontend origin, you can simple check the `request.headers` for the `Referrer` value and compare against the `CLIENT_URL` in the `wrangler.toml`
+
+```typescript
+async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
+	const originUrl = new URL(request.url);
+	const referer = request.headers.get('Referer');
+
+	if(referer.toString() == env.CLIENT_URL){
+		...
+	} else {
+		return new Response('Bad Origin', { status: 500 }); // Handle errors
+	}
+}
+```
+
+## 10. (Optional) Naive mint restriction per wallet
+
+As an option to prevent overuse of the lootbox minting from specific wallets, a parameter called `DAILY_MINT_RESTRICTION` can be set in the `wrangler.toml` as a maximum mint allowance per day. And, if you feel it's necessary adding an `ADMIN` to your protocol, to be able to in the future mint to a marketplace, this can be included too.
+
+These features can be implemented in the code with the following steps:
+
+```typescript
+async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
+	... 
+	const payload = await request.json()
+	const { address, tokenID }: any = payload
+
+	// check for admin
+	if(address.toLowerCase() != env.ADMIN.toLowerCase()){
+		// check for daily mint allowance
+		if(!await hasDailyMintAllowance(env, address)){
+			return new Response(JSON.stringify({limitExceeded: true}), { status: 400 })
+		}
+	}
+	...
+}
+```
+
+Where `hasDailyMintAllowance` is broken down into 2 functions:
+- `fullPaginationDay` of transactions of the users `address`
+- `mintCount` that corresponds to the `from` being the `0x` address
+
+### full pagination of the indexer for a day
+<Callout type='info'>
+	As an aside, the Sequence Indexer stack only holds 30 days of transactions for this period, so you can extend the time frame from a day up to this max
+</Callout>
+
+In order to use the Sequence Indexer, we'll need to `pnpm install @0xsequence/indexer`
+
+Then, to implement we use a while loop that gets the first batch of transactions and the `page.after` value from the indexer, and continously checks if the timestamp is less than 24 hours appending to a temporary array for each pass. This ensures we get all of the available transactions.
+
+```typescript
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const isLessThan24Hours = (isoDate: string) => {
+    const dateProvided: any = new Date(isoDate);
+    const currentDate: any = new Date();
+    const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+    // Calculate the difference in milliseconds
+    const difference = currentDate - dateProvided;
+
+    // Check if the difference is less than 24 hours
+    return difference < twentyFourHours && difference > 0;
+}
+
+const fullPaginationDay = async (env: Env, address: string) => {
+    const txs: any = []
+	const indexer = new SequenceIndexer(`https://${env.CHAIN_HANDLE}-indexer.sequence.app`, env.PROJECT_ACCESS_KEY)
+
+    const filter = {
+        accountAddress: address,
+    };
+
+    // query Sequence Indexer for all token transaction history
+	let txHistory: any
+	let firstLoop = true;
+    let finished = true;
+    // if there are more transactions to log, proceed to paginate
+    while(firstLoop || (!finished && txHistory.page.more)){  
+		if(firstLoop){
+			firstLoop = false
+			txHistory = await indexer.getTransactionHistory({
+				filter: filter,
+				page: { pageSize: 50 }
+			})
+
+			for(let i = 0; i < txHistory.transactions.length; i++){
+				if(!isLessThan24Hours(txHistory.transactions[i].timestamp)){
+					finished = true
+				}
+				txs.push(txHistory.transactions[i])
+			}
+		}
+        txHistory = await indexer.getTransactionHistory({
+            filter: filter,
+            page: { 
+                pageSize: 50, 
+                // use the after cursor from the previous indexer call
+                after: txHistory!.page!.after! 
+            }
+        })
+		for(let i = 0; i < txHistory.transactions.length; i++){
+			if(!isLessThan24Hours(txHistory.transactions[i].timestamp)){
+				finished = true
+			}
+			txs.push(txHistory.transactions[i])
+		}
+    }
+
+    return txs
+}
+```
+### mint count for a day
+All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address
+
+```typescript
+const mintCount = (env: Env, txs: any) => {
+	let count = 0
+	for(let i = 0; i < txs.length; i++){
+		if(
+			txs[i].transfers[0].from == '0x0000000000000000000000000000000000000000' 
+			&& txs[i].transfers[0].contractAddress == env.CONTRACT_ADDRESS.toLowerCase()
+		) count++
+	}
+	return count
+}
+```
+
+### has daily mint allowance
+
+```typescript
+const hasDailyMintAllowance = async (env: Env, address: string) => {
+	const txs = await fullPaginationDay(env, address)
+	const count = mintCount(env, txs)
+	return count < env.DAILY_MINT_RESTRICTION
+}
+```
+
+<Callout type="info">
+	This is not a perfect solution, but a simple one. To further the security of the assets, a proof-of-personhood approach via trusted wallet graphs or WorldId scans can further the progress of the example.
+</Callout>

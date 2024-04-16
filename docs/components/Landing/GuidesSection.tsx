@@ -4,12 +4,12 @@ export const GuidesSection = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Guides</h3>
-      <p className="text-md leading-6 font-medium dark:text-white-80 text-black-80">
+      <p className="text-md leading-6 font-medium dark:text-white-80 text-black-80 mr-8">
         Follow our step-by-step guides and open source code templates to
         accelerate your time to market.
       </p>
     </div>
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <GuideCard
         title="Build a web3 game with WebGL"
         body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
@@ -38,19 +38,20 @@ const GuideCard = ({
   title,
   body,
   link,
+  image,
 }: {
   title: string
   body: string
   link: string
+  image?: string
 }) => {
   return (
-    <div className="flex flex-col gap-4 p-4 dark:bg-white-10 bg-white rounded-xl w-[calc(50%-8px)]">
-      <div className="rounded-md overflow-hidden w-full aspect-[2]">
-        <img
-          src="https://unsplash.it/500/300"
-          className="object-cover w-full h-full"
-        />
-      </div>
+    <div className="flex flex-col gap-4 p-4 dark:bg-white-10 bg-white rounded-xl md:w-[calc(50%-8px)]">
+      {image && (
+        <div className="rounded-md overflow-hidden w-full aspect-[2]">
+          <img src={image} className="object-cover w-full h-full" />
+        </div>
+      )}
       <p className="text-xl leading-7 text-themed-primary font-bold">{title}</p>
       <p className="text-themed-secondary text-md font-medium leading-6">
         {body}

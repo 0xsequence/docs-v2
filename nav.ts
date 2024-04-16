@@ -18,9 +18,9 @@ export const topNav = [
     items: [
       { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Serverless Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
-      { text: 'AI Lootboxes', link: '/guides/lootbox', match: '/guides/lootbox' },
-      { text: 'Custom Marketplace', link: '/guides/custom-marketplace-guide', match: '/guides/custom-marketplace-guide' }
+      { text: 'Serverless Collectibles', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
+      { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
+      { text: 'Custom Marketplace', link: '/guides/template-marketplace-api', match: '/guides/template-marketplace-api' }
     ]
   },
   { 
@@ -54,6 +54,7 @@ export const topNav = [
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
+      { text: 'Restricted Regions', link: '/support/restricted-regions' },
       { text: 'Token Directory', link: '/support/token-directory' },
       { text: 'FAQ', link: 'https://support.sequence.xyz' },
       { text: 'Discord', link: 'https://discord.gg/sequence' },
@@ -208,52 +209,65 @@ export const sidebar = {
       collapsed: true,
       items: [
         { text: 'Project setup with webpack', link: '/guides/webgl-guide#1-project-setup-with-webpack' },
-        { text: 'Integrate Sequence Kit', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
-        { text: 'Deploy collectibles contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
-        { text: 'Deploy a remote minter & mint in-game achievement tokens', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
+        { text: 'Integrate SequenceKit with WaaS', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
+        { text: 'Deploy a collectibles contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
+        { text: 'Deploy a remote minter', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
         { text: 'Leverage items in-game', link: '/guides/webgl-guide#5-leverage-items-in-game' },
         { text: 'Burn in-game achievement tokens', link: '/guides/webgl-guide#6-burn-in-game-achievement-tokens' },
-        { text: 'Integrate Embedded Wallet into Sequence Kit', link: '/guides/webgl-guide#7-optional-integrate-in-game-wallet-into-sequence-kit' },
+        { text: '(Optional) Integrate Embedded Wallet into Sequence Kit', link: '/guides/webgl-guide#7-optional-integrate-embedded-wallet-into-sequence-kit' },
       ]
     },
     {
       text: 'Build a Unity game',
       collapsed: true,
       items: [
-        { text: 'Introduction', link: '/guides/unity-guide#intro-to-jelly-forest' },
-        { text: 'Build a Game Loop', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
-        { text: 'Integrate Embedded Wallets', link: '/guides/unity-guide#deploy-a-remote-minter' },
-        { text: 'Deploy Collectibles', link: '/guides/unity-guide#mint-in-game-achievement-tokens' },
-        { text: 'Deploy Remote Minter', link: '/guides/unity-guide#burn-in-game-achievement-tokens' },
-        { text: 'Minting Tokens to Inventory', link: '/guides/unity-guide#mint-in-game-tokens-to-the-players-inventory' },
-        { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#burn-in-game-tokens-in-exchange-for-others' },
-        { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#building-the-shop-pages-and-setting-the-minting-requirements' },
+        { text: 'Integrate SequenceKit with WaaS', link: '/guides/unity-guide#integrate-sequencekit-with-waas' },
+        { text: 'Deploy a collectibles contract', link: '/guides/unity-guide#deploy-a-collectibles-contract' },
+        { text: 'Deploy a remote minter', link: '/guides/unity-guide#deploy-a-remote-minter' },
+        { text: 'Mint in-game achievement tokens', link: '/guides/unity-guide#mint-in-game-achievement-tokens' },
+        { text: 'Burn in-game achievement tokens', link: '/guides/unity-guide#burn-in-game-achievement-tokens' },
+        { text: 'Integrate an embedded marketplace', link: '/guides/unity-guide#integrate-an-embedded-marketplace' },
         { text: 'Leverage purchased items in-game', link: '/guides/unity-guide#leverage-purchased-items-in-game' },
       ]
     },
     {
-      text: 'Build a lootbox with AI minting',
-      link: '/guides/lootbox'
-    },
-    { text: 'Serverless Minting of Collectibles', collapsed: true, 
-    items: [
-      { text: 'Setup Cloudflare Environment', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test' },
-      { text: 'Deploy a collectibles contract', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
-      { text: 'Deploy a remote minter', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
-      { text: 'Mint in-game achievement tokens', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
-    ] 
-  },
-    {
-      text: 'Build a Custom Marketplace',
+      text: 'Build a serverless collectible',
       collapsed: true,
       items: [
-        { text: 'Minting', link: '/guides/custom-marketplace-guide#1-minting' },
-        { text: 'Wallet authentication', link: '/guides/custom-marketplace-guide#2-wallet-authentication' },
-        { text: 'Blockchain queries', link: '/guides/custom-marketplace-guide#3-blockchain-queries' },
-        { text: 'Multi-Wallet types', link: '/guides/custom-marketplace-guide#4-multi-wallet-types' },
-        { text: 'Request creation', link: '/guides/custom-marketplace-guide#5-request-creation' },
-        { text: 'Order accepting', link: '/guides/custom-marketplace-guide#6-order-accepting' },
-        { text: 'Integrate Embedded Wallet into Sequence Kit', link: '/guides/custom-marketplace-guide#7-optional-integrate-in-game-wallet-into-sequence-kit' },
+        { text: 'Setup Cloudflare environment with wrangler cli and deploy a test', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
+        { text: 'Deploy, Sponsor and Update Metadata for an ERC1155 Contract with Builder', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
+        { text: 'Use EthAuthProof to prevent EOA DDoS', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
+        { text: 'Mint a collectible to wallet', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
+      ]
+    },
+    {
+      text: 'Build a lootbox with AI minting',
+      collapsed: true,
+      items: [
+        { text: 'Builder Console signup & project creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
+        { text: 'Access key management', link: '/guides/lootbox-guide#2-access-key-management' },
+        { text: 'Sequence Kit integration', link: '/guides/lootbox-guide#3-sequence-kit-integration' },
+        { text: 'iframe-to-webapp communication', link: '/guides/lootbox-guide#4-iframe-to-webapp-communication' },
+        { text: 'Deploy a contract & sponsor gas', link: '/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas' },
+        { text: 'Deploy a Cloudflare Worker', link: '/guides/lootbox-guide#6-deploy-a-cloudflare-worker' },
+        { text: 'Generating AI prompts & images', link: '/guides/lootbox-guide#7-generating-ai-prompts--images' },
+        { text: 'Uploading media to Sequence metadata service', link: '/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service' },
+        { text: 'Securing your Cloudflare Worker', link: '/guides/lootbox-guide#9-securing-your-cloudflare-worker' },
+        { text: '(Optional) Naive mint restriction per wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
+
+      ]
+    },
+    {
+      text: 'Building a custom marketplace',
+      collapsed: true,
+      items: [
+        { text: 'Minting', link: '/guides/custom-marketplace#1-minting' },
+        { text: 'Wallet Authentication', link: '/guides/custom-marketplace#2-wallet-authentication' },
+        { text: 'Blockchain Queries', link: '/guides/custom-marketplace#3-blockchain-queries' },
+        { text: 'Multi-wallet types', link: '/guides/custom-marketplace#4-multi-wallet-types' },
+        { text: 'Request creation', link: '/guides/custom-marketplace#5-request-creation' },
+        { text: 'Order accepting', link: '/guides/custom-marketplace#6-order-accepting' },
+        { text: '(Optional) Enable Embedded Wallet', link: '/guides/custom-marketplace#7-optional-integrate-embedded-wallet-into-sequence-kit' },
       ]
     },
     // {
@@ -445,6 +459,7 @@ export const sidebar = {
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
+      { text: 'Restricted Regions', link: '/support/restricted-regions' },
       { text: 'FAQ', link: 'https://support.sequence.xyz' },
       { text: 'Token Directory', link: '/support/token-directory' },
       { text: 'Discord', link: 'https://discord.gg/sequence' },

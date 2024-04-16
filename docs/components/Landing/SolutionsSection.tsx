@@ -5,12 +5,12 @@ export const SolutionsSection = () => (
   <section className="flex flex-col gap-5 border-t border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Solutions</h3>
-      <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80">
+      <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80 mr-8">
         Follow our solution guides to boost your game's acquisition,
         monetization and retention with the power of web3.
       </p>
     </div>
-    <div className="flex gap-4">
+    <div className="flex md:flex-row flex-col gap-4">
       <SolutionsGroup
         theme="purple"
         heading="Acquire players"
@@ -140,8 +140,10 @@ const SolutionsGroup = ({
               className="hover-fade p-4 rounded-md z-10 dark:bg-white-10 bg-black-7"
             >
               <div className="flex gap-2">
-                <p className="flex items-center gap-2 text-xl leading-7 font-bold text-themed-primary">
-                  <IconComponent />
+                <p className="flex items-start gap-2 text-xl leading-7 font-bold text-themed-primary">
+                  <span className="mt-1">
+                    <IconComponent />
+                  </span>
                   {item.title}
                 </p>
               </div>

@@ -1,3 +1,5 @@
+import {Callout} from 'vocs/components'
+
 # Mint Collectibles Using a Gasless Serverless Relayer
 
 Time to complete: 20-30 minutes
@@ -8,7 +10,7 @@ The following steps will guide you through how to build your hosted minter API i
 
 1. [Setup Cloudflare environment with wrangler cli and deploy a test](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli--deploy-a-test)
 2. [Deploy, sponsor and update Metadata for an ERC1155 contract with Builder](/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder)
-3. [Use EthAuthProof to prevent EOA DDoS](/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos)
+3. [Use EthAuthProof to prevent EOA DDoS](/guides/mint-collectibles-serverless#use-ethauthproof-to-prevent-eoa-ddos)
 4. [Mint a collectible to wallet](/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet)
 
 The result, a secure API with the following specs:
@@ -16,9 +18,9 @@ The result, a secure API with the following specs:
 - HTTPS GET: returns blockNumber
 - HTTPS POST(proof, address): mints a collectible & returns transaction hash
 
-:::info
+<Callout type='danger'>
 You need basic knowledge of wrangler cli, npm, and Sequence Builder in order to complete this implementation.
-:::
+</Callout>
 
 ## 1. Setup Cloudflare environment with wrangler cli and deploy a test
 
@@ -47,9 +49,10 @@ To complete this step, you should press enter 4 times after `wrangler init` with
 
 This will clone down a starter repository that can be used to deploy code to the cloud.
 
-:::info Local API Testing
+<Callout type='info'>
+Local API Testing <br/>
 At any point in the guide, you can use the `wrangler dev` command in the project folder for local testing
-:::
+</Callout>
 
 #### Deploy Test
 
