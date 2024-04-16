@@ -48,4 +48,41 @@ The WaaS Enclave is the only entity able to use the encrypted wallet data. Its s
 2. The KMS operated by the Trusted Third Party specifies a policy that only allows access to the cryptographic operations if the attestation is valid and the PCR0 hash of the enclave matches the expected value. This means that any - even the smallest - change to the enclave will result in a different attestation and PCR0 hash, effectively invalidating it.
 3. The enclave code is open source and anyone may audit it and verify that the service uses the exact audited version of the source code. [Learn more about verification](/solutions/wallets/embedded-wallet/implementation-details/enclave-verification).
 
+## Simplified Data Flow
+Below we illustrate the data flow of a common use case such as signing a transaction via embedded wallets
 
+![data-flow-architecture](/img/diagrams/waas/auth-overview.drawio.svg)
+
+#### 1. Generation of the Intent
+
+The user interacts with the client to "do something" that requires an action on behalf of the wallet (e.g., send some USDC).
+
+The client asks the `waas sdk` to generate an intent for such an action; this intent is signed with the session keys of the client.
+
+#### 2. Client Forwards Intent to the Backend
+
+The intent and its corresponding signature are sent to the partner's backend. The backend authenticates the user using an unspecified mechanism.
+
+The backend identifies the user without using the intent as the source of truth.
+
+#### 3. Backend Forwards the Intent to the DSS (Dapp Signing Service)
+
+The DSS asks the WaaS API to build a transaction for the given intent and then validates that the transaction does not deviate from the original intent.
+
+Then it uses the partner's hotkey to sign the transaction. It forwards the transaction, intent, and signature to the WaaS API.
+
+#### 4. The WaaS API Collects the Guard Signature
+
+The WaaS API receives a "half-signed" transaction request, alongside an intent that has been signed by the client.
+
+It needs to collect one more signature before being able to relay the transaction, so it calls the guard.
+
+#### 5. The Guard Authenticates the User
+
+The guard receives a signature request for a given wallet; it verifies that the intent exists, corresponds to the transaction, and has been signed by a valid session.
+
+If everything is correct, it signs the transaction.
+
+#### 6. Relay and Transaction Receipt
+
+The WaaS API relays the transaction and waits for the receipt; the resulting `txHash` is piped back to the client/backend.
