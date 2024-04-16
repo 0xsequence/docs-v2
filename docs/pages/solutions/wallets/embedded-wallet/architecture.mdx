@@ -21,7 +21,7 @@ Sequence Guard is a service hosted by Sequence and contains the other key of the
 
 2 - Authenticating the user: the Sequence Guard will authenticate the user **independently of the Sequence Auth**, it performs this action either by using a 3rd party OAuth 2.0 id token (from Meta, Google, X, etc.) or by directly communicating with the user via email/phone number with an OTP code. The direct communication is not always required and, when it does happen, it's seamless and branded with your project details.
 
-## Threat model
+### Threat model
 
 With these safeguards in place wallets are **safe** against the following scenarios:
 
@@ -49,7 +49,7 @@ The WaaS Enclave is the only entity able to use the encrypted wallet data. Its s
 3. The enclave code is open source and anyone may audit it and verify that the service uses the exact audited version of the source code. [Learn more about verification](/solutions/wallets/embedded-wallet/implementation-details/enclave-verification).
 
 ## Simplified Data Flow
-Below we illustrate the data flow of a common use case such as signing a transaction via embedded wallets
+Below we illustrate the data flow of a common use case such as signing a transaction via embedded wallets.
 
 ![data-flow-architecture](/img/diagrams/waas/auth-overview.drawio.svg)
 
