@@ -24,34 +24,35 @@
     <script>
         // Define the list of old paths and target paths
         var paths = [
-        { oldPath: "/waas/intro/", targetPath: "/solutions/wallets/embedded-wallet/overview" },
+        { oldPath: "/waas/intro", targetPath: "/solutions/wallets/embedded-wallet/overview" },
         { oldPath: "/multi-chain-support", targetPath: "/solutions/technical-references/chain-support" },
         { oldPath: "/wallet/connectors/overview", targetPath: "/sdk/typescript/connectors/overview" },
         { oldPath: "/wallet/guides/sign-message", targetPath: "/sdk/typescript/guides/sign-message" },
         { oldPath: "/builder/overview", targetPath: "/solutions/builder/overview" },
         { oldPath: "/unity-waas-sdk", targetPath: "/sdk/unity/overview" },
-        { oldPath: "/unreal-waas-sdk/authentication/", targetPath: "/sdk/unreal/overview" },
+        { oldPath: "/unreal-waas-sdk/authentication", targetPath: "/sdk/unreal/overview" },
+        { oldPath: "/unreal-waas-sdk", targetPath: "/sdk/unreal/overview" },
         { oldPath: "/builder/contracts", targetPath: "/solutions/builder/contracts" },
         { oldPath: "/builder/wallet-sdks", targetPath: "/solutions/builder/wallet-sdks" },
         { oldPath: "/builder/gas-tank", targetPath: "/solutions/builder/gas-tank" },
-        { oldPath: "/waas/intro/quickstart/", targetPath: "/solutions/wallets/embedded-wallet/quickstart" },
+        { oldPath: "/waas/intro/quickstart", targetPath: "/solutions/wallets/embedded-wallet/quickstart" },
         { oldPath: "/builder/node-gateway", targetPath: "/solutions/builder/node-gateway" },
         { oldPath: "/builder/indexer", targetPath: "/solutions/builder/indexer" },
         { oldPath: "/relayer", targetPath: "/api/relayer/overview" },
         { oldPath: "/builder/marketplaces", targetPath: "/solutions/marketplaces/overview" },
         { oldPath: "/builder/settings", targetPath: "/solutions/builder/project-settings" },
-        { oldPath: "/builder/settings#2-collaborator-settings", targetPath: "/solutions/builder/project-settings#2-collaborator-settings" },
-        { oldPath: "/builder/embedded-wallet/", targetPath: "/solutons/builder/embedded-wallet" },
-        { oldPath: "/wallet/guides/connect-wallet#wallet-login-and-connect-options", targetPath: "/sdk/typescript/guides/connect-wallet" },
-        { oldPath: "/relayer/mint-collectibles-serverless/", targetPath: "/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test" } 
+        { oldPath: "/builder/embedded-wallet", targetPath: "/solutons/builder/embedded-wallet" },
+        { oldPath: "/wallet/guides/connect-wallet", targetPath: "/sdk/typescript/guides/connect-wallet" },
+        { oldPath: "/waas/waas-auth/getting-started", targetPath: "/wallets/embedded-wallet/quickstart#getting-started-with-typescript-sdk" }, 
+        { oldPath: "/solutons/builder/embedded-wallet", targetPath: "/solutions/builder/embedded-wallet" }, 
     ];
 
         var currentPath = window.location.pathname;
 
         for (var i = 0; i < paths.length; i++) {
-            if (paths[i].oldPath === currentPath) {
-                window.location.href = paths[i].targetPath;
-                break;
+            if (paths[i].oldPath === currentPath || paths[i].oldPath + '/' === currentPath) {
+            window.location.href = paths[i].targetPath;
+            break;
             }
         }
     </script>
