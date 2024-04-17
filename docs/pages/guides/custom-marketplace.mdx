@@ -404,11 +404,13 @@ Finally, for the path where the transaction does not take place from a sequence 
 </Callout>
 
 ```ts
-
+import { useSendTransaction } from 'wagmi'
 import { useMutex } from 'react-context-mutex';
 
 function App() {
   ...
+  const [requestData, setRequestData] = useState<any>(null)
+  const { data: hash, sendTransaction } = useSendTransaction() 
   const MutexRunner = useMutex();
   const mutexApproveERC1155 = new MutexRunner('sendApproveERC1155');
 
@@ -459,7 +461,7 @@ Lets query the marketplace orderbook to get the `pricePerToken` and `orderId` th
 ```ts
   const getTopOrder = async (tokenID: string) => {
     const res = await fetch(
-      "https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
+      "https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
       {
         method: "POST",
         headers: {
@@ -654,16 +656,19 @@ We begin with the same flow as before, accounting for sending multi-batch transa
 Then in the flow for not being a sequence wallet and requiring approval, we'll include another `useEffect` with the mutex check implemented like before
 
 ```ts
-useEffect(() => {
-  if (acceptData && mutexApproveERC20.isLocked()) {
-    sendTransaction({
-      to: MarketPlaceContract,
-      data: `0x${acceptData.slice(2, acceptData.length)}`,
-      gas: null,
-    });
-    mutexApproveERC20.unlock();
-  }
-}, [hash, acceptData]);
+  ...
+  const { data: hash, sendTransaction } = useSendTransaction() 
+  ...
+  useEffect(() => {
+    if (acceptData && mutexApproveERC20.isLocked()) {
+      sendTransaction({
+        to: MarketPlaceContract,
+        data: `0x${acceptData.slice(2, acceptData.length)}`,
+        gas: null,
+      });
+      mutexApproveERC20.unlock();
+    }
+  }, [hash, acceptData]);
 ```
 
 Great, everything is complete if you add the function click handler attached to a button

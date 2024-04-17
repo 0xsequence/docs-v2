@@ -8,7 +8,7 @@ With the use of the `GetTopOrders` api developers can build bots to retrieve bes
  
 ```shell twoslash [cURL] filename="cURL"
 curl --request POST \
-    --url https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders \
+    --url https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders \
     --header 'Content-Type: application/json' \
     --data '{
         "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
@@ -28,7 +28,7 @@ curl --request POST \
 
 (async () => {
   const res = await fetch(
-    "https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
+    "https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetTopOrders",
     {
       method: "POST",
       headers: {

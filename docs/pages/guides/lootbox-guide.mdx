@@ -285,13 +285,13 @@ And to sponsor gas, follow [this guide](/solutions/builder/gas-tank#watch-the-ga
 ## 6. Deploy a cloudflare worker
 
 ### minting a token
-You can follow [this default guide](/guides/mint-collectibles-serverless) on minting a severless gasless minter with your deployed `ERC1155` contract
+If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this default guide](/guides/mint-collectibles-serverless) on minting a severless gasless minter with your deployed `ERC1155` contract
 
 ### add lootbox object composition
 
-Next, ensure that you can mint a token making a request to the API. Then, add the additional object composition design to include the lootbox specific functions, which can be found in a [template lootbox cloudflare relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/template). 
+Next, ensure that you can mint a token by making a request to the cloudflare API. Then, add the additional object composition design to include the lootbox specific functions, where the prior cloudflare worker can be integrated into this template [template lootbox cloudflare relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/template). 
 
-Where in the [completed lootbox code](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/blob/master/proud-darkness-022a/src/index.ts#L505), the `callContract` is basically the same
+And as seen in the [completed lootbox code](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/blob/master/proud-darkness-022a/src/index.ts#L505), the `callContract` is would need to be integrated into the `template`
 
 In this codebase (which has optional design), we use a style of javascript to assemble javascript object in a functional manner which can be seen here
 
