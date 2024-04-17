@@ -7,11 +7,11 @@ In this guide we will go through the process of creating a custom marketplace fr
 The tools will enable you to perform:
 
 - [1. Minting](/guides/custom-marketplace#minting): Minting of tokens to your wallet from the Sequence Builder
-- [2. Wallet authentication](/guides/custom-marketplace#blockchain-queries): Use of Sequence Kit to authenticate a user
-- [3. Blockchain queries](/guides/custom-marketplace#blockchain-queries): Querying of token balances using the Indexer
-- [4. Multi-Wallet Types](/guides/custom-marketplace#4-multi-wallet-types): Allow users to either use a Sequence Wallet or an EOA
-- [5. Request creation](/guides/custom-marketplace#5-request-creation): Creation of sell listing requests on the Sequence Market Protocol
-- [6. Order accepting](/guides/custom-marketplace#6-order-accepting): Accepting of top orders from the Marketplace
+- [2. Wallet Authentication](/guides/custom-marketplace#blockchain-queries): Use of Sequence Kit to authenticate a user
+- [3. Blockchain Queries](/guides/custom-marketplace#blockchain-queries): Querying of token balances using the Indexer
+- [4. Multi-wallet Types](/guides/custom-marketplace#4-multi-wallet-types): Allow users to either use a Sequence Wallet or an EOA
+- [5. Request Creation](/guides/custom-marketplace#5-request-creation): Creation of sell listing requests on the Sequence Market Protocol
+- [6. Order Accepting](/guides/custom-marketplace#6-order-accepting): Accepting of top orders from the Marketplace
 - [7. (Optional) Enable Embedded Wallet](/guides/custom-marketplace#7-optional-enable-embedded-wallet): Add a more seamless UX experience with no-confirmation transactions
 
 ## 1. Minting
@@ -26,7 +26,7 @@ Your choice from the Sequence stack is to use either an [Embedded Wallet](/solut
 
 For this guide we'll use an `Universal Sequence Wallet` with `Sequence Kit` connector (with an option for an `Embedded Wallet`) which can authenticate users using Google or Apple auth, in addition to user brought wallets like Coinbase or Metamask.
 
-### Install packages
+### Install Packages
 
 Either you can create a vanilla js/html/css project from a [template like this](https://github.com/moskalyk/vanilla-js-sequence-kit-starter) for a templated setup, or we will walk you through how to use react from scratch here.
 
@@ -154,7 +154,7 @@ You can now test it with:
 pnpm run start
 ```
 
-## 3. Blockchain queries
+## 3. Blockchain Queries
 
 Once you have one or a few collectibles minted, you can query the data from the contract address from your deployment, which can be found here:
 
@@ -188,7 +188,6 @@ console.log("collection of items:", nftBalances);
 ```
 
 Where the response of the indexer call, yields the follow data:
-
 
 :::details[Example Response]
 - `contractType` (string) - the type of contract type (i.e. ERC20, ERC721, or ERC1155)
@@ -231,7 +230,7 @@ Where the response of the indexer call, yields the follow data:
 
   :::
 
-## 4. Multi-wallet types
+## 4. Multi-wallet Types
 
 Due to the fact that we're using `Sequence Kit` for this example that allows you to use a Sequence wallet, in addition to your own brought `EOA wallet`, sending transactions to the blockchain will differ due to the fact that with a `Sequence wallet`, you can send batch transactions to optimize gas costs, whereas with `wagmi` using an EOA you can only send 1 transaction at a time.
 
@@ -264,7 +263,7 @@ function App() {
   `order`.
 </Callout>
 
-## 5. Request creation
+## 5. Request Creation
 
 For this example, we'll be using `Arbitrum Sepolia USDC` from the [community faucet](https://faucet.circle.com/)
 
@@ -446,7 +445,7 @@ function App() {
 
 Great you're done creating requests to the Sequence Market protocol, now you can implement a button and try the flow.
 
-## 6. Order accepting
+## 6. Order Accepting
 
 Now that we have an order on the marketplace, we need to do a few things:
 
@@ -494,7 +493,7 @@ Lets query the marketplace orderbook to get the `pricePerToken` and `orderId` th
   }
 ```
 
-#### Currency balance
+#### Currency Balance
 
 We'll use the indexer to query the balance and see if the user has enough token to pay for the order. This can be accomplished with the following code:
 
