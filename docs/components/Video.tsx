@@ -4,6 +4,8 @@ const Video = (props: any) => {
     // Using useRef to get direct references to the DOM elements
     const imageRef = useRef<any>(null);
     const videoRef = useRef<any>(null);
+    const width = props.width ? props.width : '560'
+    const height = props.height ? props.height : '315'
 
     useEffect(() => {
         // Defining the click event handler function
@@ -31,14 +33,16 @@ const Video = (props: any) => {
             <img
                 ref={imageRef} // Assigning the ref to the image
                 className="preview-image"
+                width={width}
+                height={height}
                 src={props.videoPreviewSrc}
                 alt="Preview"
             />
             <video
                 ref={videoRef} // Assigning the ref to the video
                 className="video-frame"
-                width="560"
-                height="315"
+                width={width}
+                height={height}
                 controls
                 muted
                 src={props.videoSrc}

@@ -25,7 +25,7 @@ The tools will enable you to perform:
 - [5. Deploy a Contract & Sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
 - [6. Deploy a Cloudflare Worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
 - [7. Generating AI Prompts & Images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
-- [8. Uploading Media to Sequence Metadata service](/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
+- [8. Store Media to Sequence Metadata service](/guides/lootbox-guide#8-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
 - [9. Securing Your Cloudflare Worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
 - [10. (Optional) Naive Mint Restriction Per Wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
@@ -442,188 +442,18 @@ and call the `getInferenceStatus` with the `inferenceId` passed in, where when y
 	...
 ```
 
-## 8. Uploading Media to Sequence Metadata Service
+## 8. Store Media to Sequence Metadata Service
 
 With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`
 
-Which can be accomplished with 3 steps
-- create collection from a cURL request
-- process and store an image URL to Sequence Metadata Service
-- publish collection from a cURL request
+Complete and integrate [this guide](/guides/metadata-guide) in order to build a Serverless Media Service that uses Cloudflare Workers
 
-### Create Collection From A cURL Request
-
-As a one time requirement to uploading media to the service, a collection has to be first made. By using the Secret API Key from [step 2](/guides/lootbox-guide#2-access-key-management) and `projectID` retrieved from the [Builder](https://sequence.build/)
-
-We call the service to retrieve a `collectionID`
-
-```shell
-curl --location 'https://metadata.sequence.app/rpc/Collections/CreateCollection' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <secrect_API_key>' \
---data '{
-    "projectId": "<project_id>",
-    "collection": {
-        "metadata": {
-            "name": "<name>",
-            "description": "<description>",
-            "external_link" : "<https://link>"
-        },
-        "image": "",
-        "decimals": <decimals_typically_as_0>,
-        "properties": null,
-        "attributes": null
-    }
-}'
-```
-
-We then set the `collectionID` from the returned response in the `wrangler.toml`
-
-### Process And Store An Image URL To Sequence Metadata Service
-
-In order to process and store the generated media at the URL, we implement a few steps
-
-- create token
-- create asset
-- upload asset
-- update non-private token
-
-#### Metadata: Create Token
-
-```typescript
-// TODO: create token
-const stringBody = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"token": {
-		"tokenId": String(randomTokenIDSpace),
-		"name": name,
-		"description": "A free lootbox mini-game available for use in any game that requires collectible rewards",
-		"decimals": 0,
-		"attributes": attributes
-	}
-});
-
-const requestOptions = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody,
-};
-
-const res = await fetch(`${METADATA_URL}/rpc/Collections/CreateToken`, requestOptions)
-```
-
-#### Metadata: Create Asset
-
-```typescript
-// TODO: create asset
-const stringBody2 = JSON.stringify({
-	"projectID": projectID,
-	"asset": {
-		"collectionId": collectionID,
-		"tokenId": String(randomTokenIDSpace),
-		"metadataField": "image"
-	}
-});
-
-const requestOptions2 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody2,
-};
-
-const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestOptions2)
-const json2: any = await res2.json()
-```
-
-#### Metadata: Upload Asset
-
-With the passed in `asset.id` from the previous `json2` object
+Then once complete, pass the stored media url to the frontend
 
 ```typescript
 	...
-	base.uploadAsset = async (projectID: any, collectionID: any, assetID: any, tokenID: any, url: any) => {
-		const response = await fetch(url);
-		if (!response.ok) throw new Error(`Failed to fetch file from ${url}: ${response.statusText}`);
-		const arrayBuffer = await response.arrayBuffer();
-		const blob = new Blob([arrayBuffer]);
-
-		const formData = new FormData();
-		
-		formData.append('file', blob, `image.png`); // You might want to dynamically determine the filename
-		
-		let METADATA_URL;
-
-		if(base.env.DEV){
-			METADATA_URL = 'https://dev-metadata.sequence.app'
-		} else {
-			METADATA_URL = 'https://metadata.sequence.app'
-		}
-
-		// Construct the endpoint URL
-		const endpointURL = `${METADATA_URL}/projects/${projectID}/collections/${collectionID}/tokens/${tokenID}/upload/${assetID}`;
-
-		try {
-			// Use fetch to make the request
-			const fetchResponse = await fetch(endpointURL, {
-			method: 'PUT',
-			body: formData,
-			headers: {
-				'X-Access-Key': base.env.PROJECT_ACCESS_KEY,
-				'Authorization': `Bearer ${base.env.JWT_ACCESS_KEY}`, // Put your token here
-			},
-			});
-		
-			// Assuming the response is JSON
-			const data = await fetchResponse.json();
-
-			return data;
-		}catch(err){
-			console.log(err)
-		}
-	}
-	...
-	//TODO: upload asset
-	const uploadAssetRes = await base.uploadAsset(projectID, collectionID, json2.asset.id, String(randomTokenIDSpace), imageUrl)
-	...
-```
-Where the returned `uploadAssetRes.url` is the media file url living on Sequence servers
-
-#### Metadata: Update Non-private Token
-Now, we make the token non-private by setting a `private` boolean to `false`
-
-```typescript
-const stringBody3 = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"private": false,
-	"tokenID": String(randomTokenIDSpace)
-});
-
-const requestOptions3 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody3,
-};
-
-const res3 = await fetch(`${METADATA_URL}/rpc/Collections/UpdateToken`, requestOptions3)
-const json3 = await res3.json()
-```
-
----
-
-### Publish Collection From A cURL Request
-
-Finally, also as a one time request, we publish the collection based on the `projectID` and `collectionID` by running the following command
-
-```shell
-curl --location 'https://metadata.sequence.app/rpc/Collections/PublishCollection' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <secrect_API_key> \
---data '{
-    "projectId": <project_id>,
-    "collectionId": <collection_id>
-}'
+	const response = await someStoreFunction(...)
+	return new Response(JSON.stringify({... image: response.url, tokenID: response.tokenID}), { status: 200 });
 ```
 
 ## 9. Securing Your Cloudflare Worker

@@ -22,6 +22,7 @@ export const topNav = [
     },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
       { text: 'Serverless Collectibles', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
+      { text: 'Serverless Media', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
     ]
@@ -250,6 +251,16 @@ export const sidebar = {
       ]
     },
     {
+      text: 'Build a Serverless Media Service',
+      collapsed: true,
+      items: [
+        { text: 'Setup Cloudflare Environment', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
+        { text: 'Deploy, Sponsor & Update Metadata For an ERC1155', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
+        { text: 'Use EthAuthProof to Prevent EOA DDoS', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
+        { text: 'Mint a Collectible To Wallet', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
+      ]
+    },
+    {
       text: 'Build a Lootbox with AI Minting',
       collapsed: true,
       items: [
@@ -260,7 +271,7 @@ export const sidebar = {
         { text: 'Deploy a Contract & Sponsor Gas', link: '/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas' },
         { text: 'Deploy a Cloudflare Worker', link: '/guides/lootbox-guide#6-deploy-a-cloudflare-worker' },
         { text: 'Generating AI Prompts & Images', link: '/guides/lootbox-guide#7-generating-ai-prompts--images' },
-        { text: 'Uploading Media To Sequence Metadata Service', link: '/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service' },
+        { text: 'Store Media To Sequence Metadata Service', link: '/guides/lootbox-guide#8-store-media-to-sequence-metadata-service' },
         { text: 'Securing Your Cloudflare Worker', link: '/guides/lootbox-guide#9-securing-your-cloudflare-worker' },
         { text: '(Optional) Naive Mint Restriction Per Wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
 

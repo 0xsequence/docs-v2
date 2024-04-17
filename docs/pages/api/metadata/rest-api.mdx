@@ -25,10 +25,7 @@ First, the Skyweaver 1155 assets contract is located at address `0x631998e91476D
 on the Polygon network. Second, let's build the metadata lookup endpoint to query Skyweaver's contract
 for token ID `20`:
 
-
-**Request:**
-https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20
-
+[Request](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20)
 
 **Response:**
 ```json
@@ -52,8 +49,7 @@ https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc5
 ]
 ```
 
-If you'd like to query a number of tokens at the same time, you can include more token ids comma-separated:
-https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21,22 -- click
+If you'd like to query a number of tokens at the same time, you can include more token ids comma-separated [https://metadata.sequence.app/tokens/polygon/0x.../20,21,22](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21,22) -- click
 to see the JSON response to query token ids `20`, `21`, and `22` in a single batched request.
 
 Feel free to try tweaking the metadata.sequence.app URL above for your own contract, or another popular
@@ -62,7 +58,7 @@ and specify any contract and/or token id.
 
 In addition to easily querying *token-level metadata* like in the above example, you can also query *contract-level metadata*.
 Contract-level metadata provides you more information about a contract address such as a name, contract type, logo, and description.
-Simply change the metadata URL above to just query the contract address: https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+Simply change the metadata URL above to just query the [contract address](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E)
 
 and see result:
 
@@ -111,7 +107,7 @@ Where `<network>` must be one of the `Chain ID` or `Chain Handle` of [the suppor
 GET https://metadata.sequence.app/tokens/<network>/<contractAddress>
 ```
 
-Example: https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E
+[Example](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E)
 
 <br />
 
@@ -123,8 +119,8 @@ GET https://metadata.sequence.app/tokens/<network>/<contractAddress>/<tokenID>[,
 ```
 
 Examples:
-* https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20
-* https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21
+* [token ID 20](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20)
+* [token ID 20 & 21](https://metadata.sequence.app/tokens/polygon/0x631998e91476DA5B870D741192fc5Cbc55F5a52E/20,21)
 
 <br />
 
