@@ -6,23 +6,23 @@ Time to complete: 20 minutes
 
 In this guide, we'll walk you through how to store media of different types to Sequence Metadata storage using Cloudflare Workers
 
-This can be accomplished with 6 steps
-- [1. Create Collection](/guides/metadata-guide#1-create-collection-from-a-curl-request) from a cURL request one time
-- [2. Create Token](/guides/metadata-guide#2-create-token-using-tokenid) create a token using a tokenID
-- [3. Create Asset](/guides/metadata-guide#3-create-asset-using-tokenid) create an assetID
-- [4. Store an Image](/guides/metadata-guide#4-store-image-asset) process and store an image
-- [5. Update to Non-private](/guides/metadata-guide#5-update-non-private-token) Update an asset to be non-private
-- [6. Publish Collection](/guides/metadata-guide#6-publish-collection-from-a-curl-request) from a cURL request one time
+This can be accomplished with 7 steps
+- [1. Obtain a Secret API Key](/guides/metadata-guide#1-obtain-a-secret-api-key) from the [Builder Console](https://sequence.build)
+- [2. Create Collection](/guides/metadata-guide#2-create-collection-from-a-curl-request) from a cURL request one time
+- [3. Create Token](/guides/metadata-guide#3-create-token-using-tokenid) create a token using a tokenID
+- [4. Create Asset](/guides/metadata-guide#4-create-asset-using-tokenid) create an assetID
+- [5. Store an Image](/guides/metadata-guide#5-store-image-asset) process and store an image
+- [6. Update to Non-private](/guides/metadata-guide#6-update-non-private-token) Update an asset to be non-private
+- [7. Publish Collection](/guides/metadata-guide#7-publish-collection-from-a-curl-request) from a cURL request one time
+- [8. (Optional) Render Asset from API](/guides/metadata-guide#8-optional-render-asset-from-api-publicly) from a cURL request one time
 
 First follow [this section of the Severless Collectibles Guide](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test) to create a cloudflare worker
 
 <Callout type="info">
-Full code for this guide can be found [here](https://github.com/0xsequence-demos/template-cloudflare-worker-metadata-store/tree/master)
+    Full template code for this guide can be found [here](https://github.com/0xsequence-demos/template-cloudflare-worker-metadata-store/tree/master)
 </Callout>
 
-### 1. Create Collection From A cURL Request
-
-#### Aquire a Secret API Key
+## 1. Obtain a Secret API Key
 In order to use the backend service, a `Secret API` Key must be obtained
 
 First start by accessing settings, and selecting the API Keys
@@ -39,7 +39,8 @@ Then change the access to `write` and `confirm`
 
 Finally `copy` the key and store it in your `wrangler.toml` as `JWT_ACCESS_KEY`, as you will not have access to this in the future from the Builder Console.
 
-#### Create Collection
+## 2. Create Collection From A cURL Request
+
 As a one time requirement to uploading media to the service, a collection has to be first made. By using the `Secret API Key` and `projectID` retrieved from the [Builder](https://sequence.build/)
 
 We call the service to retrieve a `collectionID`
@@ -66,7 +67,7 @@ curl --location 'https://metadata.sequence.app/rpc/Collections/CreateCollection'
 
 We then set the `collectionID` from the returned response in the `wrangler.toml` as `COLLECTION_ID`
 
-### 2. Create Token using TokenID
+## 3. Create Token using TokenID
 
 ```typescript
 
@@ -95,7 +96,8 @@ const requestOptions = {
 
 const res = await fetch(`${METADATA_URL}/rpc/Collections/CreateToken`, requestOptions)
 ```
-### 3. Create Asset using TokenID
+
+## 4. Create Asset using TokenID
 
 In the request, depending on the asset, set the `metadadaField` (assetType) to one of the following:
 - `image`
@@ -121,12 +123,12 @@ const requestOptions2 = {
 };
 
 const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestOptions2)
-const json2: any = await res2.json()
+const jsonCreateAsset: any = await res2.json()
 ```
 
-### 4. Store Image Asset
+## 5. Store Image Asset
 
-With the passed in `asset.id` from the previous `json2` object
+With the passed in `asset.id` from the previous `jsonCreateAsset` object
 
 ```typescript
 	...
@@ -165,12 +167,12 @@ With the passed in `asset.id` from the previous `json2` object
 		}
 	}
 	...
-	const uploadAssetRes = await uploadAsset(env, projectID, collectionID, json2.asset.id, String(randomTokenIDSpace), imageUrl)
+	const uploadAssetRes = await uploadAsset(env, projectID, collectionID, jsonCreateAsset.asset.id, String(randomTokenIDSpace), imageUrl)
 	...
 ```
 Where the returned `uploadAssetRes.url` is the media file url living on Sequence servers
 
-### 5. Update Non-private Token
+## 6. Update Non-private Token
 Now, we make the token non-private by setting a `private` boolean to `false`
 
 ```typescript
@@ -193,9 +195,9 @@ const json3 = await res3.json()
 
 ---
 
-### 6. Publish Collection From A cURL Request
+## 7. Publish Collection From A cURL Request
 
-Finally, also as a one time request, we publish the collection based on the `projectID` and `collectionID` by running the following command
+Finally, also as a one time request, we publish the collection based on the `projectID` and `collectionID` by running the following command (this would make the collection and the tokens with private flag set as `false` accessible publicly)
 
 ```shell
 curl --location 'https://metadata.sequence.app/rpc/Collections/PublishCollection' \
@@ -205,6 +207,44 @@ curl --location 'https://metadata.sequence.app/rpc/Collections/PublishCollection
     "projectId": <project_id>,
     "collectionId": <collection_id>
 }'
+```
+
+## 8. (Optional) Render Asset from API Publicly
+
+You can test your prior work, by calling this cURL request with the updated variables, which will download the file to your local terminal. 
+
+Or, you can copy and paste into a browser and see the image
+
+Where if you used the same code, the `<file_name>` will be `image.png`
+
+```shell [cURL]
+curl --location 'https://metadata.sequence.app/projects/<project_id>/collections/<collection_id>/tokens/<token_id>/<file_name>' --output stored_file.png
+```
+
+And if you were using the collection for the `baseURI` of an `ERC721` or `ERC1155` you would write to a smart contract `setBaseMetadataURI` the following `URI`
+
+```
+https://metadata.sequence.app/projects/<project_id>/collections/<collection_id>/tokens/
+```
+
+And the smart contract will automatically append the `tokenID` to the end
+
+Give it a try 
+
+```shell [cURL]
+curl https://metadata.sequence.app/projects/1229/collections/40/tokens/457657099779485875855215293997335918990635014431
+```
+
+Or in a [browser](https://metadata.sequence.app/projects/1229/collections/40/tokens/457657099779485875855215293997335918990635014431)
+
+### Render Asset from API Privately
+
+Alternatively, you can decide to keep your assets stored private, but still render the data with a `header` secret api key passed in with the parameters completed, and for this guide the `metadata_field` is set to `image`
+
+```shell [cURL]
+curl --location 'https://metadata.sequence.app/projects/<project_id>/collections/<collection_id>/tokens/<token_id>/asset/<metadada_field>' \
+--header 'Authorization: Bearer <secret_api_key or jwt_access_key>' \
+--output stored_file.png
 ```
 
 <Callout type="info">

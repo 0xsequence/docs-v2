@@ -254,10 +254,14 @@ export const sidebar = {
       text: 'Build a Serverless Media Service',
       collapsed: true,
       items: [
-        { text: 'Setup Cloudflare Environment', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
-        { text: 'Deploy, Sponsor & Update Metadata For an ERC1155', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
-        { text: 'Use EthAuthProof to Prevent EOA DDoS', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
-        { text: 'Mint a Collectible To Wallet', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
+        { text: 'Obtain a Secret API Key', link: '/guides/metadata-guide#1-obtain-a-secret-api-key'},
+        { text: 'Create Collection', link: '/guides/metadata-guide#2-create-collection-from-a-curl-request' },
+        { text: 'Create Token', link: '/guides/metadata-guide#3-create-token-using-tokenid' },
+        { text: 'Create Asset', link: '/guides/metadata-guide#4-create-asset-using-tokenid' },
+        { text: 'Store an Image', link: '/guides/metadata-guide#5-store-image-asset' },
+        { text: 'Update to Non-private', link: '/guides/metadata-guide#6-update-non-private-token' },
+        { text: 'Publish Collection', link: '/guides/metadata-guide#7-publish-collection-from-a-curl-request' },
+        { text: '(Optional) Render Asset from API', link: '/guides/metadata-guide#8-optional-render-asset-from-api-publicly' },
       ]
     },
     {
