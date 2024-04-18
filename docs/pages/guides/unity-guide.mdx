@@ -4,11 +4,11 @@ import Video from "../../components/Video";
 
 Jelly Forest is a blockchain-enabled 2D runner game. The game features social sign in, multi-tiered upgrades (with higher tier requiring lower tier upgrades as inputs to build/mint), and cosmetic upgrades, all of which are stored in an embedded non-custodial smart contract wallet. There are no transaction signing popups or gas fee payment requirements emposed on players.
 
-Learn [why smart contract wallets here](https://docs.sequence.xyz/solutions/technical-references/wallet-contracts/why)
+Learn [why smart contract wallets here](/solutions/technical-references/wallet-contracts/why)
 
-Learn [what an embedded wallet is here](https://docs.sequence.xyz/solutions/wallets/overview#what-are-the-differences-between-these-options)
+Learn [what an embedded wallet is here](/solutions/wallets/overview#what-are-the-differences-between-these-options)
 
-This guide will walk you through how we built Jelly Forest and how you too can build your own web3 game using [Sequence's Unity SDK](https://docs.sequence.xyz/sdk/unity/overview/)!
+This guide will walk you through how we built Jelly Forest and how you too can build your own web3 game using [Sequence's Unity SDK](/sdk/unity/overview/)!
 
 ## Build a game loop
 
@@ -20,13 +20,13 @@ For our game loop, we purchased the [Infinite Runner Engine](https://assetstore.
 
 ### Configuration
 
-1. [Install Sequence's Unity SDK using package manager](https://docs.sequence.xyz/sdk/unity/installation#package-manager---recommended)
-2. [Sign in to the Sequence Builder Console](https://docs.sequence.xyz/solutions/builder/getting-started)
-3. [Create a project for your game in the Builder Console](https://docs.sequence.xyz/solutions/builder/project-management)
-4. Setup an [Embedded Wallet in the Builder Console](https://docs.sequence.xyz/solutions/builder/embedded-wallet)
-5. In your `SequenceConfig` [scriptable object](https://docs.unity3d.com/Manual/class-ScriptableObject.html) which you imported via the Samples menu in Package Manager during the [installation stage](https://docs.sequence.xyz/sdk/unity/installation#package-manager---recommended), add your Google and Apple client ids which you added to the Builder as well as your Configuration Key under `WaaSConfigKey`
+1. [Install Sequence's Unity SDK Using Package Manager](/sdk/unity/installation#package-manager---recommended)
+2. [Sign in to the Sequence Builder Console](/solutions/builder/getting-started)
+3. [Create a Project For Your Game in the Builder Console](/solutions/builder/project-management)
+4. Setup an [Embedded Wallet in the Builder Console](/solutions/builder/embedded-wallet#embedded-wallet-in-builder)
+5. In your `SequenceConfig` [scriptable object](https://docs.unity3d.com/Manual/class-ScriptableObject.html) which you imported via the Samples menu in Package Manager during the [installation stage](/sdk/unity/installation#package-manager---recommended), add your Google and Apple client ids which you added to the Builder as well as your Configuration Key under `WaaSConfigKey`
    - Don't forget to put your Android and iOS client ids under their respective platforms!
-6. Add your [Builder API Key from the Builder Console](https://docs.sequence.xyz/solutions/builder/getting-started#step-3-optional-for-development-claim-an-api-access-key) under `Settings > API Access Keys` - you want the `prod` key
+6. Add your [Builder API Key from the Builder Console](/solutions/builder/getting-started#step-3-optional-for-development-claim-an-api-access-key) under `Settings > API Access Keys` - you want the `prod` key
 
 ### Social Sign In
 
@@ -57,13 +57,13 @@ private void Start()
 The LoginPanel will handle all of the social sign in logic for you. If you're curious how it's implemented, you can checkout the [LoginPage](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceExamples/Scripts/UI/LoginPage.cs) and [OpenIdAuthenticator](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Authentication/OpenIdAuthenticator.cs) implementations.
 The authentication works via the [Open ID Connect Implicit Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow).
 
-### Registering a session with the Sequence API
+### Registering a Session with the Sequence API
 
 Once social sign in is complete, you will automatically make a register session request with the Sequence WaaS (Wallet as a Service) APIs. Here's how it works:
 
 When social sign in is complete, the [OpenIdAuthenticator.SignedIn](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Authentication/OpenIdAuthenticator.cs#L15) event is fired. This initiates the authorization process in [WaaSLogin.ConnectToWaaS](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/WaaS/WaaSLogin.cs#L217).
 
-### Retrieving the user's wallet
+### Retrieving the User's Wallet
 
 In order to retrieve the wallet, you'll need to subscribe to the `WaaSWallet.OnWaaSWalletCreated` event.
 
@@ -90,9 +90,9 @@ private void OnWaaSWalletCreated(WaaSWallet wallet)
 }
 ```
 
-For more information on how auth in Sequence's Embedded Wallet solution works, please see our [docs](https://docs.sequence.xyz/solutions/wallets/embedded-wallet/overview/) and [blog post](https://sequence.xyz/blog/sequence-embedded-wallets).
+For more information on how auth in Sequence's Embedded Wallet solution works, please see our [docs](/solutions/wallets/embedded-wallet/overview/) and [blog post](https://sequence.xyz/blog/sequence-embedded-wallets).
 
-## Deploy a collectibles contract
+## Deploy a Collectibles Contract
 
 Now that our players can sign in and get a wallet, let's add some collectibles!
 
@@ -105,15 +105,15 @@ We highly recommend using an [ERC1155](https://eips.ethereum.org/EIPS/eip-1155) 
 
 This is what we did for Jelly Forest.
 
-Once you've deployed your smart contract, don't forget to [add your contract address as a Sponsored Address on the "Gas Sponsoring"](https://docs.sequence.xyz/solutions/builder/gas-tank#gas-tank-in-builder) page on the Builder Console! This will make it so that your users have their gas fees automatically sponsored using your compute credits when interacting with your game's smart contracts.
+Once you've deployed your smart contract, don't forget to [add your contract address as a Sponsored Address on the "Gas Sponsoring"](/solutions/builder/gas-tank#gas-tank-in-builder) page on the Builder Console! This will make it so that your users have their gas fees automatically sponsored using your compute credits when interacting with your game's smart contracts.
 
-## Deploy a remote minter
+## Deploy a Remote Minter
 
 By default, ERC1155 contracts deployed via the Builder Console require callers to have the appropriate permissions in order to mint a token. While this may seem like a nuisance at first glance, this is a good thing! Without this, anyone could call the mint method on your contract and give themselves infinite in-game items!
 
 You'll want to deploy a server with a Sequence wallet (or other) and give it minting permissions in the builder.
 
-### How we did it in Jelly Forest
+### How We Did It in Jelly Forest
 
 In Jelly Forest, all the coins you collect during gameplay are minted as ERC1155 tokens. Here's how we did it:
 
@@ -155,7 +155,7 @@ wrangler login
 
 Great! Now, when we send a POST request to our server with a body [defined in C#](https://github.com/0xsequence/sequence-unity/blob/Feature/transactionQueuer/Assets/SequenceSDK/Relayer/PermissionedMinter.cs#L93), where the `proof` is generated by the client sending the minting request. In the Unity SDK this is implemented by the [MintingRequestProver](https://github.com/0xsequence/sequence-unity/blob/Feature/transactionQueuer/Assets/SequenceSDK/Relayer/MintingRequestProver.cs#L29).
 
-## Mint in-game tokens to the player's inventory
+## Mint In-game Tokens to the Player's Inventory
 
 Now that we have our permissioned minter server setup, we need to get the client side (the Made With Unity app) hooked up so that we can start giving our players tokens through gameplay. We can send a request to the permissioned minter using the Unity SDK by calling the [PermissionedMinter.MintToken](https://github.com/0xsequence/sequence-unity/blob/Feature/transactionQueuer/Assets/SequenceSDK/Relayer/PermissionedMinter.cs#L44) method.
 
@@ -167,9 +167,9 @@ In Jelly Forest, as the player runs through the level they collect a lot of coin
 
 Let's see how we solved for all of these problems in Jelly Forest using the Unity SDK!
 
-### 1. Reading the chain
+### 1. Reading the Chain
 
-Reading the tokens in a given user's wallet is a complicated process that is made much easier using [Sequence's Indexer](https://docs.sequence.xyz/api/indexer/overview) which the [Unity SDK implements](https://docs.sequence.xyz/sdk/unity/read-from-blockchain).
+Reading the tokens in a given user's wallet is a complicated process that is made much easier using [Sequence's Indexer](/api/indexer/overview) which the [Unity SDK implements](/sdk/unity/read-from-blockchain).
 
 Here's a code snippet from Jelly Forest where we use the Indexer to read all the tokens in a player's wallet from our game's ERC1155 contract.
 
@@ -194,7 +194,7 @@ private async Task GetTokenBalances(Page page = null)
 }
 ```
 
-### 2. Building a cache
+### 2. Building a Cache
 
 Since blockchain transactions are not instant but we want to provide our user with instant feedback, we'll make use of a simple in-memory cache.
 
@@ -223,7 +223,7 @@ The `Inventory` is used as a simple cache in our game. When first created, and w
 
 Read the full `Inventory` [implementation here](https://github.com/0xsequence/sequence-unity-demo/blob/JellyForest/Scripts/Inventory.cs)
 
-### 3. Using a transaction queue
+### 3. Using a Transaction Queue
 
 Sequence's Unity SDK provides a very flexible [transaction queueing system](https://github.com/0xsequence/sequence-unity/blob/Feature/transactionQueuer/Assets/SequenceSDK/Relayer/TransactionQueuer.cs).
 
@@ -253,7 +253,7 @@ This will update our `Inventory` and add a mint transaction to the `Permissioned
 
 In Jelly Forest, we've configured our transaction queuer to submit transactions every time the player has a game over, but no sooner than every 30 seconds.
 
-#### How do you determine how often to submit your transactions?
+#### How Do You Determine How Often to Submit Your Transactions?
 
 With our Unity SDK, this becomes more of a game design question than anything else.
 
@@ -305,7 +305,7 @@ public async Task Buy()
 }
 ```
 
-## Burn in-game tokens in exchange for others
+## Burn In-game Tokens in Exchange for Others
 
 In Jelly Forest, you can purchase powerups and cosmetics by burning coins and (sometimes) lower tier powerups.
 
@@ -329,7 +329,7 @@ When a user purchases an upgrade or cosmetic from the shop, we send a transactio
 SequenceConnector.Instance.AddToTransactionQueue(new PurchaseShopItemQueueableTransaction(this));
 ```
 
-## Building the Shop Pages and setting the minting requirements
+## Building the Shop Pages and Setting the Minting Requirements
 
 When building the Shop Pages and setting the prices/minting requirements for the different upgrades and hats in Jelly Forest, we opted to define [ShopItems](https://github.com/0xsequence/sequence-unity-demo/blob/JellyForest/Scripts/Items/ShopItem.cs) using [Scriptable Objects](https://docs.unity3d.com/Manual/class-ScriptableObject.html) because they are easy to tweak and visualize since they can be serialized in the Inspector. These scriptable objects are also how we define what each [Item](https://github.com/0xsequence/sequence-unity-demo/blob/JellyForest/Scripts/Items/Item.cs) is and associate them with a token id.
 
@@ -339,7 +339,10 @@ We created an [editor extension](https://learn.unity.com/tutorial/editor-scripti
 
 In fact, our Shop Pages actually query the smart contract every 60 seconds (and every time they open) for changes in minting requirements, updating their UI accordingly. This allows us to make live patches to our game's economy without requiring an update!
 
+Click on the video below
 <Video
+  width={'500'}
+  height={'315'}
   videoPreviewSrc={
     "/img/guides/making-of-jelly-forest/ShopItemExtensionScreenshot.png"
   }
@@ -348,7 +351,7 @@ In fact, our Shop Pages actually query the smart contract every 60 seconds (and 
 
 See the [ShopItemEditorExtension implementation here](https://github.com/0xsequence/sequence-unity-demo/blob/JellyForest/Scripts/Editor/ShopItemEditorExtension.cs).
 
-## Leverage purchased items in-game
+## Leverage Purchased Items In-game
 
 Ok great, our players can log in, get a wallet, earn tokens, and buy things with their tokens, all that's left is to give your players a reason to want to buy stuff in the first place. In other words, it's time to go work your game developer magic and build some awesome powerups and cosmetics!
 

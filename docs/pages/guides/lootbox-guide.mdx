@@ -18,24 +18,24 @@ In this guide we will go through the process of integrating a static html/js maz
 
 The tools will enable you to perform:
 
-- [1. Builder Console signup & project creation](/guides/lootbox-guide#1-builder--console-signup--project-creation): Create a project with the Builder
-- [2. Access key management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
-- [3. Sequence Kit integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
-- [4. Iframe-to-webapp communication](/guides/lootbox-guide#4-iframe-to-webapp-communication): Send iframe messages from a seperately deployed frontend to a react app
-- [5. Deploy a contract & sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
-- [6. Deploy a cloudflare worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
-- [7. Generating AI prompts & images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
-- [8. Uploading media to Sequence metadata service](/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
-- [9. Securing your cloudflare worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
-- [10. (Optional) Naive mint restriction per wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+- [1. Builder Console Signup & Project Creation](/guides/lootbox-guide#1-builder--console-signup--project-creation): Create a project with the Builder
+- [2. Access Key Management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
+- [3. Sequence Kit Integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
+- [4. iframe-to-Dapp Communication](/guides/lootbox-guide#4-iframe-to-dapp-communication): Send iframe messages from a seperately deployed frontend to a react app
+- [5. Deploy a Contract & Sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
+- [6. Deploy a Cloudflare Worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
+- [7. Generating AI Prompts & Images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
+- [8. Store Media to Sequence Metadata service](/guides/lootbox-guide#8-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
+- [9. Securing Your Cloudflare Worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
+- [10. (Optional) Naive Mint Restriction Per Wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
-## 1. Builder Console signup & project creation
+## 1. Builder Console Signup & Project Creation
 
 First start by following [this walk-through](/solutions/builder/project-management) for how to sign up to the [Builder Console](https://sequence.build/) and to learn how to create a project.
 
 In order to use certain features, like `Gas Sponsoring` and the use of the `Sequence Relayer`, you'll need to upgrade your project plan to `Developer` [using this walk-through](/solutions/builder/project-settings#5-billing-settings)
 
-## 2. Access key management
+## 2. Access Key Management
 
 Now that you have a project, you'll need to acquire 2 different Access Keys for your project.
 1. Public Access Key used for the wallet & relayer, which can be done [here](/solutions/builder/getting-started#step-3-optional-for-development-claim-an-api-access-key)
@@ -55,7 +55,7 @@ Then change the access to `write` and `confirm`
 
 Finally `copy` the key and store it in a safe location, as you will not have access to this in the future from the Builder Console.
 
-## 3. Sequence Kit integration
+## 3. Sequence Kit Integration
 
 We'll start from scratch building up the project with the necessary peices. 
 
@@ -221,7 +221,7 @@ Run your code with the following command in the root folder and give it a try
 ```
 pnpm run dev
 ```
-## 4. iframe-to-webapp communication
+## 4. iframe-to-Dapp Communication
 
 The way the application is setup, a react app communicates to another frontend app process, so that integration between software environments can be made possible.
 
@@ -233,7 +233,7 @@ In order to accomplish this one must setup a `producer` message from the include
 
 Begin by cloning down [this repository](https://github.com/moskalyk/maze) and running it with installing the packages `pnpm install` and running with `node server.js` to listen on `http:localhost:8002`
 
-### iframe producer message from child window
+### iframe Producer Message From Child Window
 
 With a single line of code contained within a click handler, one can send a message to the parent window, with a describing message that can pass any JSON object to the hoisting scope
 
@@ -245,7 +245,7 @@ function onMouseClick(event){
 }
 ```
 
-### dapp consumer handler in parent window
+### Dapp Consumer Handler In Parent Window
 
 Next we create a message event listener where the `window.addEventListener('message', callback)` is a method used in web development to listen for message events. It allows different browsing contexts, such as iframes, pop-up windows, or other tabs within the same browser, to communicate securely.
 
@@ -269,7 +269,7 @@ window.addEventListener('message', iframeToAppChannel);
 
 Now if you were to trigger the click handler in the included iframe, the parent react app would recieve it for further processing, like with any connected wallet.  
 
-## 5. Deploy a contract & sponsor gas
+## 5. Deploy A Contract & Sponsor Gas
 
 When deploying your contract, the recommended approach is to use an `ERC1155` over an `ERC721`. The benefits of using an `ERC1155`
 
@@ -282,12 +282,12 @@ To deploy a contract, you can follow [this guide](/solutions/collectibles/contra
 
 And to sponsor gas, follow [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder)
 
-## 6. Deploy a cloudflare worker
+## 6. Deploy A Cloudflare Worker
 
-### minting a token
-If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this default guide](/guides/mint-collectibles-serverless) on minting a severless gasless minter with your deployed `ERC1155` contract
+### Minting A Token
+If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this default guide](/guides/mint-collectibles-serverless) on minting a serverless gasless minter with your deployed `ERC1155` contract
 
-### add lootbox object composition
+### Add Lootbox Object Composition
 
 Next, ensure that you can mint a token by making a request to the cloudflare API. Then, add the additional object composition design to include the lootbox specific functions, where the prior cloudflare worker can be integrated into this template [template lootbox cloudflare relayer](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/template). 
 
@@ -322,7 +322,7 @@ Using this design, we give appreciation to the following wizard and staff meme, 
 	<img src="/img/guides/lootbox/you_shall_not_pass_meme.png" width="400px" alt="You Shall Not Pass Meme" />
 </div>
 
-## 7. Generating AI prompts & images
+## 7. Generating AI Prompts & Images
 
 In the template, we've included code to call an already deployed API and code to parse the response that is free to call yourself
 
@@ -426,7 +426,7 @@ const pollInferenceStatus = async (res: any) => {
 	}
 };
 ```
-and call the `getInferenceStatus` with the `inferenceId` passed in, where when you recieve the response, you can obtain the image url with `resObject.inference.images[0].url`
+and call the `getInferenceStatus` with the `inferenceId` passed in, where when you receive the response, you can obtain the image url with `resObject.inference.images[0].url`
 
 ```typescript
 	...
@@ -442,191 +442,21 @@ and call the `getInferenceStatus` with the `inferenceId` passed in, where when y
 	...
 ```
 
-## 8. Uploading media to Sequence metadata service
+## 8. Store Media to Sequence Metadata Service
 
 With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`
 
-Which can be accomplished with 3 steps
-- create collection from a cURL request
-- process and store an image URL to Sequence Metadata Service
-- publish collection from a cURL request
+Complete and integrate [this guide](/guides/metadata-guide) in order to build a Serverless Media Service that uses Cloudflare Workers
 
-### create collection from a cURL request
-
-As a one time requirement to uploading media to the service, a collection has to be first made. By using the Secret API Key from [step 2](/guides/lootbox-guide#2-access-key-management) and `projectID` retrieved from the [Builder](https://sequence.build/)
-
-We call the service to retrieve a `collectionID`
-
-```shell
-curl --location 'https://metadata.sequence.app/rpc/Collections/CreateCollection' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <secrect_API_key>' \
---data '{
-    "projectId": "<project_id>",
-    "collection": {
-        "metadata": {
-            "name": "<name>",
-            "description": "<description>",
-            "external_link" : "<https://link>"
-        },
-        "image": "",
-        "decimals": <decimals_typically_as_0>,
-        "properties": null,
-        "attributes": null
-    }
-}'
-```
-
-We then set the `collectionID` from the returned response in the `wrangler.toml`
-
-### process and store an image URL to Sequence Metadata Service
-
-In order to process and store the generated media at the URL, we implement a few steps
-
-- create token
-- create asset
-- upload asset
-- update non-private token
-
-#### metadata: create token
-
-```typescript
-// TODO: create token
-const stringBody = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"token": {
-		"tokenId": String(randomTokenIDSpace),
-		"name": name,
-		"description": "A free lootbox mini-game available for use in any game that requires collectible rewards",
-		"decimals": 0,
-		"attributes": attributes
-	}
-});
-
-const requestOptions = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody,
-};
-
-const res = await fetch(`${METADATA_URL}/rpc/Collections/CreateToken`, requestOptions)
-```
-
-#### metadata: create asset
-
-```typescript
-// TODO: create asset
-const stringBody2 = JSON.stringify({
-	"projectID": projectID,
-	"asset": {
-		"collectionId": collectionID,
-		"tokenId": String(randomTokenIDSpace),
-		"metadataField": "image"
-	}
-});
-
-const requestOptions2 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody2,
-};
-
-const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestOptions2)
-const json2: any = await res2.json()
-```
-
-#### metadata: upload asset
-
-With the passed in `asset.id` from the previous `json2` object
+Then once complete, pass the stored media url to the frontend
 
 ```typescript
 	...
-	base.uploadAsset = async (projectID: any, collectionID: any, assetID: any, tokenID: any, url: any) => {
-		const response = await fetch(url);
-		if (!response.ok) throw new Error(`Failed to fetch file from ${url}: ${response.statusText}`);
-		const arrayBuffer = await response.arrayBuffer();
-		const blob = new Blob([arrayBuffer]);
-
-		const formData = new FormData();
-		
-		formData.append('file', blob, `image.png`); // You might want to dynamically determine the filename
-		
-		let METADATA_URL;
-
-		if(base.env.DEV){
-			METADATA_URL = 'https://dev-metadata.sequence.app'
-		} else {
-			METADATA_URL = 'https://metadata.sequence.app'
-		}
-
-		// Construct the endpoint URL
-		const endpointURL = `${METADATA_URL}/projects/${projectID}/collections/${collectionID}/tokens/${tokenID}/upload/${assetID}`;
-
-		try {
-			// Use fetch to make the request
-			const fetchResponse = await fetch(endpointURL, {
-			method: 'PUT',
-			body: formData,
-			headers: {
-				'X-Access-Key': base.env.PROJECT_ACCESS_KEY,
-				'Authorization': `Bearer ${base.env.JWT_ACCESS_KEY}`, // Put your token here
-			},
-			});
-		
-			// Assuming the response is JSON
-			const data = await fetchResponse.json();
-
-			return data;
-		}catch(err){
-			console.log(err)
-		}
-	}
-	...
-	//TODO: upload asset
-	const uploadAssetRes = await base.uploadAsset(projectID, collectionID, json2.asset.id, String(randomTokenIDSpace), imageUrl)
-	...
-```
-Where the returned `uploadAssetRes.url` is the media file url living on Sequence servers
-
-#### metadata: update non-private token
-Now, we make the token non-private by setting a `private` boolean to `false`
-
-```typescript
-const stringBody3 = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"private": false,
-	"tokenID": String(randomTokenIDSpace)
-});
-
-const requestOptions3 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody3,
-};
-
-const res3 = await fetch(`${METADATA_URL}/rpc/Collections/UpdateToken`, requestOptions3)
-const json3 = await res3.json()
+	const response = await someStoreFunction(...)
+	return new Response(JSON.stringify({... image: response.url, tokenID: response.tokenID}), { status: 200 });
 ```
 
----
-
-### publish collection from a cURL request
-
-Finally, also as a one time request, we publish the collection based on the `projectID` and `collectionID` by running the following command
-
-```shell
-curl --location 'https://metadata.sequence.app/rpc/Collections/PublishCollection' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer <secrect_API_key> \
---data '{
-    "projectId": <project_id>,
-    "collectionId": <collection_id>
-}'
-```
-
-## 9. Securing your cloudflare worker
+## 9. Securing Your Cloudflare Worker
 
 In order to secure your cloudflare worker to only process requests from a certain frontend origin, you can simple check the `request.headers` for the `Referrer` value and compare against the `CLIENT_URL` in the `wrangler.toml`
 
@@ -670,7 +500,7 @@ Where `hasDailyMintAllowance` is broken down into 2 functions:
 - `fullPaginationDay` of transactions of the users `address`
 - `mintCount` that corresponds to the `from` being the `0x` address
 
-### full pagination of the indexer for a day
+### Full Pagination Of Indexer For A Day
 <Callout type='info'>
 	As an aside, the Sequence Indexer stack only holds 30 days of transactions for this period, so you can extend the time frame from a day up to this max
 </Callout>
@@ -741,7 +571,7 @@ const fullPaginationDay = async (env: Env, address: string) => {
     return txs
 }
 ```
-### mint count for a day
+### Mint Count For A Day
 All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address
 
 ```typescript
@@ -757,7 +587,7 @@ const mintCount = (env: Env, txs: any) => {
 }
 ```
 
-### has daily mint allowance
+### Has Daily Mint Allowance
 
 ```typescript
 const hasDailyMintAllowance = async (env: Env, address: string) => {

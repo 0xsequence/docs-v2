@@ -8,10 +8,10 @@ The Sequence Relayer can be implemented on a serverless [Cloudflare](https://clo
 
 The following steps will guide you through how to build your hosted minter API in 4 steps:
 
-1. [Setup Cloudflare environment with wrangler cli and deploy a test](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli--deploy-a-test)
-2. [Deploy, sponsor and update Metadata for an ERC1155 contract with Builder](/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder)
-3. [Use EthAuthProof to prevent EOA DDoS](/guides/mint-collectibles-serverless#use-ethauthproof-to-prevent-eoa-ddos)
-4. [Mint a collectible to wallet](/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet)
+1. [Setup Cloudflare Environment with Wrangler Cli and Deploy a Test](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test)
+2. [Deploy, Sponsor & Update Metadata for an ERC1155 Contract with Builder](/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder)
+3. [Use EthAuthProof to Prevent EOA DDoS](/guides/mint-collectibles-serverless#use-ethauthproof-to-prevent-eoa-ddos)
+4. [Mint a Collectible to Wallet](/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet)
 
 The result, a secure API with the following specs:
 
@@ -22,7 +22,7 @@ The result, a secure API with the following specs:
 You need basic knowledge of wrangler cli, npm, and Sequence Builder in order to complete this implementation.
 </Callout>
 
-## 1. Setup Cloudflare environment with wrangler cli and deploy a test
+## 1. Setup Cloudflare Environment With Wrangler Cli and Deploy a Test
 
 In order to create the project from scratch, first create a project with `mkdir`, `cd` into the project, and run `pnpm init` to create a `package.json`.
 
@@ -119,11 +119,11 @@ This makes it so that only your specific address can mint from the contract, it 
 
 Complete the role update by clicking `write` and sign the sponsored transaction.
 
-#### Update metadata
+#### Update Metadata
 
 Next, you'll need to update the metadata with your media or assets for your contract, which can be done by [following this guide](/solutions/collectibles/metadata/manage-metadata-builder).
 
-#### Contract sponsoring
+#### Contract Sponsoring
 
 Finally, in order to sponsor the contract follow [this guide](/solutions/builder/gas-tank) to sponsor a contract.
 
@@ -170,6 +170,28 @@ async function handleRequest(
   env: Env,
   ctx: ExecutionContext
 ): Promise<Response> {
+
+  if (request.method === "OPTIONS") {
+		return new Response(null, {
+			headers: {
+				// Allow requests from any origin - adjust this as necessary
+				"Access-Control-Allow-Origin": "*",
+				
+				// Allows the headers Content-Type, your-custom-header
+				"Access-Control-Allow-Headers": "Content-Type, your-custom-header",
+				
+				// Allow POST method - add any other methods you need to support
+				"Access-Control-Allow-Methods": "POST",
+				
+				// Optional: allow credentials
+				"Access-Control-Allow-Credentials": "true",
+				
+				// Preflight cache period
+				"Access-Control-Max-Age": "86400", // 24 hours
+			}
+		});
+	}
+
   if (env.PKEY === undefined || env.PKEY === "") {
     return new Response("Make sure PKEY is configured in your environment", {
       status: 400,
@@ -281,7 +303,7 @@ export default {
 };
 ```
 
-#### Add cloudflare environment variables
+#### Add Cloudflare Environment Variables
 
 Then, pass in the environment variables for your build by updating the `[vars]` section in your `wrangler.toml`.
 
@@ -293,7 +315,7 @@ PROJECT_ACCESS_KEY = "" # From sequence.build
 CHAIN_HANDLE = "" # // Standardized chain name – See https://docs.sequence.xyz/multi-chain-support
 ```
 
-#### Implement window object in wrangler template
+#### Implement Window Object in Wrangler Template
 
 It should be noted, if you try to deploy this you'll get a missing `window` object required by the web3 modules.
 
@@ -305,7 +327,7 @@ node_compat = true # add this line
 ...
 ```
 
-#### Testing the deploy
+#### Testing the Deploy
 
 You can now redeploy using `wrangler deploy`
 
@@ -346,7 +368,7 @@ curl -X POST https://your-worker.your-subdomain.workers.dev \
 -d '{"proof": "<some_proof>", "address": "<some_address>", "tokenId": 0 }'
 ```
 
-## 4. Mint a collectible to wallet
+## 4. Mint a Collectible to Wallet
 
 Finally, to deploy and mint a collectible from the sponsored contract address, we install the following packages
 
