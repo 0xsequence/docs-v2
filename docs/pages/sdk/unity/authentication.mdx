@@ -21,12 +21,15 @@ In order to enable deep linking, we must register a custom URL scheme for our ap
 
 ### iOS
 
-1. Open the iOS Player Settings window (menu: Edit > Project Settings > Player Settings, then select iOS).
-2. Select `Other Settings`, then scroll down to `Configuration`.
-3. Expand the `Supported URL schemes` section, and add 1 to the size.
-4. In the new `Element N` field, enter the URL scheme you've configured in `SequenceConfig`.
+#### Sign in with Apple
 
-![iOS URL Scheme](/img/unity/unity-url-scheme-ios.png)
+This SDK supports native Sign in with Apple via the popular [`apple-signin-unity` package](https://github.com/lupidan/apple-signin-unity). This [requires the `Sign in with Apple` capability in XCode](https://developer.apple.com/documentation/xcode/configuring-sign-in-with-apple#Add-the-Sign-in-with-Apple-capability-to-your-app) in order to function. Provided you have [imported the `Setup` scripts via Package Manager > Samples](https://docs.sequence.xyz/sdk/unity/installation#package-manager---recommended) and/or have `SignInWithApplePostprocessor.cs` under an `Editor` subfolder, this capability will be added to your XCode builds automatically.
+
+Please be aware that this capability is not supported by `Personal Teams`.
+
+#### Other Social Platforms
+
+All other social platforms are supported by default, just be sure to add your client IDs in `SequenceConfig`.
 
 ### MacOS
 
