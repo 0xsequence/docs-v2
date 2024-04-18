@@ -124,7 +124,7 @@ const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestO
 const json2: any = await res2.json()
 ```
 
-#### 4. Store Image Asset
+### 4. Store Image Asset
 
 With the passed in `asset.id` from the previous `json2` object
 
@@ -170,7 +170,7 @@ With the passed in `asset.id` from the previous `json2` object
 ```
 Where the returned `uploadAssetRes.url` is the media file url living on Sequence servers
 
-#### 5. Update Non-private Token
+### 5. Update Non-private Token
 Now, we make the token non-private by setting a `private` boolean to `false`
 
 ```typescript
