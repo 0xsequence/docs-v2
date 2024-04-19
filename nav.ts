@@ -21,8 +21,8 @@ export const topNav = [
       ] 
     },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Serverless Collectibles', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
-      { text: 'Serverless Media', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
+      { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
+      { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
     ]
@@ -241,7 +241,7 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Build a Serverless Collectible',
+      text: 'Build a Collectible Minting Service',
       collapsed: true,
       items: [
         { text: 'Setup Cloudflare Environment', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
@@ -251,7 +251,7 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Build a Serverless Media Service',
+      text: 'Manage Collection Metadata',
       collapsed: true,
       items: [
         { text: 'Obtain a Secret API Key', link: '/guides/metadata-guide#1-obtain-a-secret-api-key'},
