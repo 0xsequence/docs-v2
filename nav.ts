@@ -217,7 +217,7 @@ export const sidebar = {
       collapsed: true,
       items: [
         { text: 'Project Setup With Webpack', link: '/guides/webgl-guide#1-project-setup-with-webpack' },
-        { text: 'Integrate SequenceKit With WaaS', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
+        { text: 'Integrate Sequence Kit With WaaS', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
         { text: 'Deploy a Collectibles Contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
         { text: 'Deploy a Remote Minter', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
         { text: 'Leverage Items In-game', link: '/guides/webgl-guide#5-leverage-items-in-game' },
@@ -268,7 +268,7 @@ export const sidebar = {
       text: 'Build a Lootbox with AI Minting',
       collapsed: true,
       items: [
-        { text: 'Builder Console Signup & Project Creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
+        { text: 'Sequence Builder Console Signup & Project Creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
         { text: 'Access Key Management', link: '/guides/lootbox-guide#2-access-key-management' },
         { text: 'Sequence Kit integration', link: '/guides/lootbox-guide#3-sequence-kit-integration' },
         { text: 'iframe-to-Dapp Communication', link: '/guides/lootbox-guide#4-iframe-to-dapp-communication' },
@@ -360,7 +360,7 @@ export const sidebar = {
     {
       text: 'Web3',
       items: [
-        { text: 'SequenceKit', collapsed: true, items: [
+        { text: 'Sequence Kit', collapsed: true, items: [
           { text: 'Overview', link: '/sdk/sequence-kit/overview' },
           { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
           { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
@@ -382,7 +382,7 @@ export const sidebar = {
           {text: 'Building Backends with Sequence', link: '/sdk/typescript/guides/building-backends'},
           {text: 'Wallet Connectors', collapsed: true, items: [
             {text: 'Overview', link: '/sdk/typescript/connectors/overview'},
-            {text: 'SequenceKit', link: '/sdk/sequence-kit/overview'},
+            {text: 'Sequence Kit', link: '/sdk/sequence-kit/overview'},
             {text: 'Wagmi', link: '/sdk/typescript/connectors/wagmi'},
             {text: 'RainbowKit', link: '/sdk/typescript/connectors/rainbow-kit'},
             {text: 'Web3 Onboard', link: '/sdk/typescript/connectors/web3-onboard'},
