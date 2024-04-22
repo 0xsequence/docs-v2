@@ -1,18 +1,14 @@
 # Action payloads
+Each write operation in Sequence Embedded Wallet uses a payload. Payloads are JSON objects. They hold all data about the intent of the action and the user's signature.
 
-Every Sequence Embedded Wallet action that involves a write operation makes use of a payload. Payloads are JSON objects that contain all information about the intent of the action, alongside with the signature of the user that is performing the action.
+The Embedded Wallet SDK generates Payloads. To complete the action, send them to the Embedded Wallet API.
 
-Payloads are generated with the Embedded Wallet SDK and should be sent to the Embedded Wallet API in order to complete the action.
-
-:::tip
-Calls to the Embedded Wallet API are authenticated with the Embedded Wallet API key, including calls to the `/sendPayload` endpoint.
-
-The Embedded Wallet API key is a secret key that should be kept safe and should never be shared with anyone, nor stored in a client-side application.
+The Embedded Wallet API key authenticates all calls to the Embedded Wallet API. This includes calls to the `/sendPayload` endpoint. The Embedded Wallet API key is a secret. Keep it safe and never share it or store it in a client-side application.
 :::
 
 ## Payload structure
 
-It's important to notice that integrating Embedded Wallet **does not** require you to manually manipulate the contents of the payload; yet they are strictly defined, and you can use them if you need to.
+You don't need to manually change the payload contents to integrate Embedded Wallet. But they have strict definitions. Use them if you need to.
 
 The payload structure is as follows:
 
@@ -57,8 +53,11 @@ The payload structure is as follows:
 ```
 
 ### Open session payload
+Opening a new client-side session on the Embedded Wallet SDK generates this payload. It holds the "proof" that authenticates the user and the session data to link to it.
 
-This payload is generated when openning a new client-side session on the Embedded Wallet SDK. It contains the "proof" that will be used to authenticate the user, and the session data to associate to it.
+Either `idToken`, `email` or a valid signature *MUST* be present. If `email` is given, the Embedded Wallet will email the user on their first transaction with this session. The email asks them to confirm it.
+
+The `wallet` parameter is optional *ONLY* for this payload. If given, it ensures that the opened session matches the requested wallet.
 
 | Name           | Type   | Description                                        | Optional |
 | ---            | ---    | ---                                                | ---      |
@@ -70,9 +69,6 @@ This payload is generated when openning a new client-side session on the Embedde
 
 Notice that either `idToken`, `email` or a valid signature *MUST* be present. If `email` is provided, the Embedded Wallet will send an email on the user's first transaction with this session, asking them to confirm it. 
 
-:::info
-The `wallet` parameter is optional *ONLY* for this payload. If passed it will enforce that the opened session matches the requested wallet.
-:::
 
 ```json
 {
