@@ -7,7 +7,7 @@ Time to complete: 20 minutes
 In this guide we'll walk you through how to store media to Sequence Metadata storage using Cloudflare Workers
 
 This can be accomplished with 7 steps
-- [1. Obtain a Secret API Key](/guides/metadata-guide#1-obtain-a-secret-api-key) from the [Builder Console](https://sequence.build)
+- [1. Obtain a Secret API Key](/guides/metadata-guide#1-obtain-a-secret-api-key) from the [Sequence Builder Console](https://sequence.build)
 - [2. Create Collection](/guides/metadata-guide#2-create-collection-from-a-curl-request) from a cURL request one time
 - [3. Create Token](/guides/metadata-guide#3-create-token-using-tokenid) create a token using a tokenID
 - [4. Create Asset](/guides/metadata-guide#4-create-asset-using-tokenid) create an assetID
@@ -25,7 +25,7 @@ First follow [this section of the Collectible Minting Service](/guides/mint-coll
 ## 1. Obtain a Secret API Key
 In order to use the backend service, a `Secret API` Key must be obtained
 
-First start by accessing settings, and selecting the API Keys
+First start by accessing settings, and selecting the API Keys from the [Sequence Builder Console](https://sequence.build/)
 
 ![builder settings access keys](/img/builder/builder_settings_access_keys.png)
 
@@ -41,7 +41,7 @@ Finally `copy` the key and store it in your `wrangler.toml` as `JWT_ACCESS_KEY`,
 
 ## 2. Create Collection From A cURL Request
 
-As a one time requirement to uploading media to the service, a collection has to be first made. By using the `Secret API Key` and `projectID` retrieved from the [Builder](https://sequence.build/)
+As a one time requirement to uploading media to the service, a collection has to be first made. By using the `Secret API Key` and `projectID` retrieved from the [Builder Console](https://sequence.build/)
 
 We call the service to retrieve a `collectionID`
 
@@ -72,7 +72,12 @@ We then set the `collectionID` from the returned response in the `wrangler.toml`
 ```typescript
 
 import { ethers } from 'ethers'
-
+...
+const METADATA_URL = 'https://metadata.sequence.app'
+const myHeaders: any = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", `Bearer ${process.env.JWT_ACCESS_KEY}`);
+    
 const randomTokenIDSpace = ethers.BigNumber.from(ethers.utils.hexlify(ethers.utils.randomBytes(20)))
 
 // TODO: create token

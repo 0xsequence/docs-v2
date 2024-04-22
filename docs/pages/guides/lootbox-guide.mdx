@@ -18,7 +18,7 @@ In this guide we will go through the process of integrating a static html/js maz
 
 The tools will enable you to perform:
 
-- [1. Builder Console Signup & Project Creation](/guides/lootbox-guide#1-builder--console-signup--project-creation): Create a project with the Builder
+- [1. Sequence Builder Console Signup & Project Creation](/guides/lootbox-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Builder
 - [2. Access Key Management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
 - [3. Sequence Kit Integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
 - [4. iframe-to-Dapp Communication](/guides/lootbox-guide#4-iframe-to-dapp-communication): Send iframe messages from a seperately deployed frontend to a react app
@@ -29,9 +29,9 @@ The tools will enable you to perform:
 - [9. Securing Your Cloudflare Worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
 - [10. (Optional) Naive Mint Restriction Per Wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
-## 1. Builder Console Signup & Project Creation
+## 1. Sequence Builder Console Signup & Project Creation
 
-First start by following [this walk-through](/solutions/builder/project-management) for how to sign up to the [Builder Console](https://sequence.build/) and to learn how to create a project.
+First start by following [this walk-through](/solutions/builder/project-management) for how to sign up to the [Sequence Builder Console](https://sequence.build/) and to learn how to create a project.
 
 In order to use certain features, like `Gas Sponsoring` and the use of the `Sequence Relayer`, you'll need to upgrade your project plan to `Developer` [using this walk-through](/solutions/builder/project-settings#5-billing-settings)
 
@@ -276,7 +276,7 @@ When deploying your contract, the recommended approach is to use an `ERC1155` ov
 - random spaced `tokenID` to allow for parallelized minting
 - option via consent to apply governance to mint additional tokens of the same `tokenID`
 
-However, if you plan to only ever mint a single token of the generated media and you prefer technical security in managing parrallized minting over managing the security of the relayer private key (which can always be rotated by setting a new collectible `role` via the [Builder](https://sequence.build/)) an ERC721 might be better suited.
+However, if you plan to only ever mint a single token of the generated media and you prefer technical security in managing parrallized minting over managing the security of the relayer private key (which can always be rotated by setting a new collectible `role` via the [Sequence Builder](https://sequence.build/)) an ERC721 might be better suited.
 
 To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`
 
