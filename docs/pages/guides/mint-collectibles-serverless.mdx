@@ -1,10 +1,10 @@
 import {Callout} from 'vocs/components'
 
-# Mint Collectibles Using a Gasless Serverless Relayer
+# Mint Collectibles Using a Gasless Serverless Transactions API
 
 Time to complete: 20-30 minutes
 
-The Sequence Relayer can be implemented on a serverless [Cloudflare](https://cloudflare.com/) worker so a game or app user interaction is seamless without a confirmation signature or gas payment. You'll also benefit from not having to be worried about transaction speed, throughput and re-orgs by the relayer, and experience automatic scaling with Cloudflare.
+The Sequence Transactions API can be implemented on a serverless [Cloudflare](https://cloudflare.com/) worker so a game or app user interaction is seamless without a confirmation signature or gas payment. You'll also benefit from not having to be worried about transaction speed, throughput and re-orgs by the relayer, and experience automatic scaling with Cloudflare.
 
 The following steps will guide you through how to build your hosted minter API in 4 steps:
 
@@ -66,9 +66,9 @@ First, follow [this guide](/solutions/collectibles/contracts/deploy-an-item-coll
 
 Then, one must update the role access of the contract in the Builder to only receive requests from the minter wallet address, which can be done in 2 steps.
 
-You can do this in Sequence Builder by providing `minter permission` to your `Sequence Wallet Relayer Address`.
+You can do this in Sequence Builder by providing `minter permission` to your `Sequence Wallet Transactions API Address`.
 
-In order to know what the relayer address you are working with is, one must first either:
+In order to know what the transactions API address you are working with is, one must first either:
 
 1. Have one generated for you using this [dapp](https://73eql-hyaaa-aaaad-qf5bq-cai.ic.fleek.co/) by selecting your network, and generating a wallet keypair with the `generate local wallet` button
 2. Or, you can print locally the account address produced from an EOA wallet private key using the following code snippet:
@@ -99,7 +99,7 @@ import { ethers } from "ethers";
   });
 
   const signer = session.account.getSigner(1);
-  console.log(`Your relayer wallet address: ${signer.account.address}`);
+  console.log(`Your transactions API wallet address: ${signer.account.address}`);
 })();
 ```
 
@@ -109,7 +109,7 @@ Complete with the following details:
 
 `bytes32 role`: `0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6`
 
-`address account`: `<Generated Sequence Relayer Wallet Address>`
+`address account`: `<Generated Sequence Trnasactions API Wallet Address>`
 
 <img src="/img/relayer/grant_role.png" />
 
@@ -448,4 +448,4 @@ const callContract = async (request: Request, env: Env, address: string, tokenId
 
 Once these steps are complete, you can redeploy and test with the steps outlined in this [prior step](/guides/mint-collectibles-serverless#testing), and this time the POST request should return a transaction hash for the completed mint and the GET request would return a block number.
 
-If you want to browse the full code, see [an example implementation here](https://github.com/0xsequence-demos/cloudflare-worker-sequence-relayer)
+If you want to browse the full code, see [an example implementation here](https://github.com/0xsequence-demos/cloudflare-worker-sequence-transactions-api)

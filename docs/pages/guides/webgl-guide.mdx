@@ -234,11 +234,11 @@ We should create 2 collections: 1 for achievement tokens and the other for the p
 
 ## 4. Deploy a Remote Minter & Mint In-game Achievement Tokens
 
-Then, in order to send transactions to the blockchain in a seamless fashion that are gasless, implement a [Cloudflare Relayer](/guides/templates/building-relaying-server) to mint items from a contract deployed in the previous step, ensuring that the relayer contract address is inputed as a `Minter Role`
+Then, in order to send transactions to the blockchain in a seamless fashion that are gasless, implement a [Cloudflare Worker](/guides/templates/building-relaying-server) to mint items from a contract deployed in the previous step, ensuring that the transactions API contract address is inputed as a `Minter Role`
 
 We will allow there to be multiple paths to mint collectibles: a plane collectible and an achievement collectible. 
 
-This is accomplished in the code by adding a key/value of `isPlane` to the normal cloudflare request body, and creating an additional `if/else` in the cloudflare relayer.
+This is accomplished in the code by adding a key/value of `isPlane` to the normal cloudflare request body, and creating an additional `if/else` in the cloudflare worker.
 
 You can view the code for this in this [github repository](https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter/blob/master/cloudflare/noisy-silence-ee19/src/index.ts#L80)
 
@@ -398,7 +398,7 @@ This makes it so that only if there's a balance returned from the indexer, does 
 
 ## 6. Burn In-Game Achievement Tokens
 
-Finally, to burn the achievement token, we can no longer use a cloduflare relayer for actions sent to the blockchain, because when the minting was performed 'on behalf of' the address using the relayer (making the `msg.sender` in the contract one of the `relayer` addresses) for this, we want to make sure the `msg.sender` in the contract proves ownership of the token, and is sent directly from the `user`. We'll use `wagmi` frontend functions as well as some class composition to accomplish this.
+Finally, to burn the achievement token, we can no longer use a cloduflare worker for actions sent to the blockchain, because when the minting was performed 'on behalf of' the address using the transactions API (making the `msg.sender` in the contract one of the `relayer` addresses) for this, we want to make sure the `msg.sender` in the contract proves ownership of the token, and is sent directly from the `user`. We'll use `wagmi` frontend functions as well as some class composition to accomplish this.
 
 ```js
 // index.js
@@ -538,7 +538,7 @@ And you're done, you can view a full example of the code [here](https://github.c
 
 If you'd like to smooth the user journey to allow no user transaction signing across the board, you can enable an Embedded Wallet by updating your configuration of your Sequence Kit react component.
 
-By accomplishing this, we reduce a pop-up when burning tokens with `wagmi`, since rewarding achievement tokens and minting collectibles are completed using a cloudflare relayer for gasless transactions.
+By accomplishing this, we reduce a pop-up when burning tokens with `wagmi`, since rewarding achievement tokens and minting collectibles are completed using a cloudflare worker for gasless transactions.
 
 This can be accomplished by adding a few environment variables, and switching the type of connector we use.
 

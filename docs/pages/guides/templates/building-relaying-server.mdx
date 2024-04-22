@@ -15,7 +15,7 @@ Your server will need an EOA wallet that will be able to sign messages. It will 
 wallet which will be used to dispatch transactions.
 
 This Sequence wallet should have the correct ownership at your contract level, not the EOA.
-Also, the Sequence wallet should be sufficiently funded in order to pay fees needed by the relayer to dispatch your transactions.
+Also, the Sequence wallet should be sufficiently funded in order to pay fees needed by the transactions API to dispatch your transactions.
 
 Using this approach - versus the next section (with sponsoring) - includes the ability to pay for gas in any available currency by our relayer (e.g. 'MATIC', 'DAI', 'USDC', 'WETH').
 
@@ -219,7 +219,7 @@ if (txnReceipt.status != 1) {
 ## Parallel Transactions
 
 If you want to send multiple independent transactions without needing to batch them, you can also send them in distinct nonce spaces.
-Using distinct nonce spaces for your transactions signals to the relayer that there's no dependency between them and that
+Using distinct nonce spaces for your transactions signals to the transactions API that there's no dependency between them and that
 they can be executed on-chain in any order.
 
 This allows the transactions to be dispatched immediately in an unbuffered way without having to wait for a full batch.

@@ -45,7 +45,7 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Relayer API', link: '/api/relayer/overview' },
+      { text: 'Transactions API', link: '/api/transactions/overview' },
       { text: 'Indexer API', link: '/api/indexer/overview' },
       { text: 'Metadata API', link: '/api/metadata/overview' },
       { text: 'Marketplace API', link: '/api/marketplace/overview' },
@@ -412,15 +412,15 @@ export const sidebar = {
   // apis
   '/api': [
     {
-      text: 'Relayer',
+      text: 'Transactions',
       collapsed: false,
       items: [
-        { text: 'Overview', link: '/api/relayer/overview' },
-        { text: 'Installation', link: '/api/relayer/installation' },
+        { text: 'Overview', link: '/api/transactions/overview' },
+        { text: 'Installation', link: '/api/transactions/installation' },
         {text: 'Examples', collapsed: false, items: [
-          { text: 'Fetch Fee Options', link: '/api/relayer/examples/fetch-fee-options' },
-          { text: 'Send Transactions', link: '/api/relayer/examples/send-transactions' },
-          { text: 'Fetch Transaction Receipts', link: '/api/relayer/examples/fetch-transaction-receipts' },
+          { text: 'Fetch Fee Options', link: '/api/transactions/examples/fetch-fee-options' },
+          { text: 'Send Transactions', link: '/api/transactions/examples/send-transactions' },
+          { text: 'Fetch Transaction Receipts', link: '/api/transactions/examples/fetch-transaction-receipts' },
           ]
         }
       ]

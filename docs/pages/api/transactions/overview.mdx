@@ -1,7 +1,7 @@
-# Relayer API
+# Transactions API
 
 :::note
-[Relayer API documentation and endpoints](https://0xsequence.redoc.ly/tag/relayer)
+[Transactions API documentation and endpoints](https://0xsequence.redoc.ly/tag/relayer)
 :::
 
 The Sequence Relayer service offers a simple interface for dispatching meta-transactions on Ethereum-compatible networks.
@@ -12,12 +12,12 @@ Meta-transactions are the idea of a transaction inside of a transaction. The ben
 - Sponsored gas -- projects may sponsor the gas of specific contracts to allow free gas for their users
 - Batched transactions -- group a bunch of independent transactions and allow them to be mined as a single transaction
 - Parallel transactions -- parallelize the dispatch of transactions in some cases
-- Fire + forget model -- easily send transactions to the relayer which will automatically manage nonces, bump gas, and other features which will ensure fast delivery
+- Fire + forget model -- easily send transactions to the transactions api which will automatically manage nonces, bump gas, and other features which will ensure fast delivery
 - Optimal gas pricing for transactions
 
-The best part: transactions with Sequence Relayer are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
+The best part: transactions with Sequence Transactions API are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
 
-The Sequence Relayer is usable by frontend dapps, or even in your backends. Be sure to install the corresponding SDK for your preferred language such as [Typescript](/sdk/typescript/guides/overview) or [Go](/sdk/go/overview).
+The Sequence Transactions API is usable by frontend dapps, or even in your backends. Be sure to install the corresponding SDK for your preferred language such as [Typescript](/sdk/typescript/guides/overview) or [Go](/sdk/go/overview).
 
 ## Anatomy of a Sequence transaction bundle
 
@@ -40,9 +40,9 @@ ssssssssssssssssssssssssssssssssssssssssnnnnnnnnnnnnnnnnnnnnnnnn
 
 ## Gas sponsorship and fees
 
-The relayer only dispatches transactions that either:
+The transactions api only dispatches transactions that either:
 1. Are sponsored in a project via the Sequence Builder, or
-2. Include a fee payment transaction to the relayer.
+2. Include a fee payment transaction to the transactions api.
 
 You can sponsor:
 1. Sequence wallets, so that they can send transactions without needing to pay fees,
@@ -52,7 +52,7 @@ You can sponsor:
 
 To start sponsoring transactions, sign into https://sequence.build, and create a new project for the network you want to transact on.
 
-You can also pay the relayer directly to dispatch your transactions by adding an additional fee payment transaction to the relayer in your bundle.
+You can also pay the transactions API directly to dispatch your transactions by adding an additional fee payment transaction to the relayer in your bundle.
 The list of accepted fee tokens can be retrieved by calling the `/FeeTokens` endpoint for the network you are interested in:
 
 ```sh [cURL]

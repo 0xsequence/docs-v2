@@ -10,7 +10,7 @@ const transactions = [
   }
 ]
 
-// This sends the transaction to the relayer, and returns immediately once the relayer responds.
+// This sends the transaction to the transactions API, and returns immediately once the transactions API responds.
 const response = await account.sendTransaction(transactions)
 
 // This waits for the transaction to be confirmed on-chain.
@@ -30,7 +30,7 @@ for _, option := range options {
   }
 }
 
-// Pay the relayer.
+// Pay the transaction api.
 // Not required if using Sequence Builder's gas sponsorship capabilities!
 data, _ := contracts.IERC20.Encode("transfer", selectedOption.To, selectedOption.Value)
 transactions.Append(sequence.Transactions{&sequence.Transaction{
@@ -41,7 +41,7 @@ transactions.Append(sequence.Transactions{&sequence.Transaction{
 
 signed, _ := wallet.SignTransactions(ctx, transactions)
 
-// Send the transaction to the relayer.
+// Send the transaction to the transactions api.
 metaTxnID, _, wait, _ := wallet.SendTransaction(ctx, signed, quote)
 
 fmt.Println("meta-transaction ID", metaTxnID)

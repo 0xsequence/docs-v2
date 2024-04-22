@@ -33,7 +33,7 @@ export const APIsSection = () => (
         title="Transactions API"
         icon="SequenceIcon"
         body="Send and optimize transactions on any chain through our performant Sequence Relayer."
-        link="/api/relayer/overview"
+        link="/api/transactions/overview"
       />
       <Card
         title="Node Gateway"
