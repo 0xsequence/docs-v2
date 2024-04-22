@@ -1,22 +1,27 @@
 # Sequence Wallets Overview
 
-Sequence offers multiple wallet options to integrate into your products. We have two main choices: the Embedded Wallet and the Universal Wallet. Both are completely non-custodial.
+Sequence provides tools for developers to build games and blockchain apps that users love. We focus on smooth gaming, advanced web3 functions, and compatibility with all blockchain accounts. We offer three main tools: The Embedded Wallet, the Universal Wallet, and SequenceKit. These integrate with popular game engines like Unreal and Unity; with established blockchain wallets like MetaMask; and all use Typescript for easy error handling and speed.
 
-The Embedded Wallet is designed for a traditional gaming experience. It operates without intrusive pop-ups, modals, or transaction signing that might distract players. Users can easily log in using common social logins or other authentication methods and dive straight into the game. We support popular game engines like Unreal and Unity, as well as Typescript for seamless integration into your preferred framework.
-
-On the other hand, the Universal Wallet targets native blockchain users, particularly those involved in gaming and gaming assets. It provides a familiar environment for existing blockchain users and enables developers to create compelling web3 experiences. The [Typescript SDK](/sdk/typescript/guides/overview) makes integration straightforward.
+- Game developers use the Embedded Wallet to give players immediate game access with accounts on demand, and logins via social platforms, phone, or email.  Your users can enjoy games without worrying about the blockchain.
+- Blockchain application developers use the Universal Wallet for more advanced controls and out of game experiences for their users across the Ethereum ecosystem.
+- SequenceKit [SequenceKit](/sdk/sequence-kit/overview) combines the features of both the Embedded and Universal Wallets into a customizable UI. You can attract a broader user base by accommodating users with pre-existing wallets and those who prefer the convenience of social logins. The [Typescript SDK](/sdk/typescript/guides/overview) makes integration straightforward.
 
 ![Wallets](/img/wallets.png)
 
-As for the benefits, both wallets offer non-custodial smart contract wallets with advantages like gasless transactions. If you prioritize a smooth, web2/2.5-like experience, the Embedded Wallet is the way to go. For a focus on web2.5/web3 native users, the Universal Wallet is recommended.
+# **Understand Account Types**
+**Accounts (Offchain):**
+In the current web model, users create online accounts to access services by providing personal data. They secure these accounts with keys and passwords. The accounts store user data and follow specific rules. The security of the data depends on the offchain account provider.
 
-Furthermore, our [SequenceKit](/sdk/sequence-kit/overview) wallet connector merges both options into a customizable UI written in Typescript. This allows you to cater to users with existing wallets like Metamask, as well as millions of potential new users who prefer the convenience of social login.
+**Onchain Accounts - Externally-Owned Accounts (EOA):**
+EOAs on the Ethereum blockchain are controlled by private keys held by the user. These accounts facilitate transactions and interact with applications without needing on-chain deployment. They require ETH for transaction fees, and the security depends solely on private key management.
+
+**Onchain Accounts - Smart Accounts:**
+Smart accounts are based on smart contract code that needs deployment to the blockchain. These accounts offer advanced features like transaction batching and multi-signature management and can use various tokens for gas fees.
+
+**Onchain Accounts - Embedded Smart Accounts:**
+Embedded in specific dApps, these smart contract accounts streamline the setup process, allowing direct wallet actions within the dApp.  Access is confined to the dApp, simplifying use for newcomers to blockchain.
 
 ### Getting Started
 Please check out [Sequence Builder](https://sequence.build) to create a project and select Wallets to get started. This will provide the corresponding code snippets with our convenient SDKs to get started.
 
-Alternatively, our quickstart page for [Embedded Wallets](/solutions/wallets/embedded-wallet/quickstart) and [Universal Wallets](/solutions/wallets/universal-wallet/quickstart) has all the templates, demos, and common integration patterns needed to accelerate your development.
-
-
-
-
+Explore more options: our quickstart page for [Embedded Wallets](/solutions/wallets/embedded-wallet/quickstart) and [Universal Wallets](/solutions/wallets/universal-wallet/quickstart). These guides have templates, demos, and integration patterns to help you develop faster.
