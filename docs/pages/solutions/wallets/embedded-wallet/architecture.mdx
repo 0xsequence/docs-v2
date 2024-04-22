@@ -8,48 +8,40 @@ Unlike the more traditional MPC architecture where the keys are first created to
 
 On top of this core security layer, Sequence WaaS architecture offers additional protections:
 
-- **Sequence Auth:** Running in an encrypted AWS Nitro Enclave, Sequence Auth acts as the first signer and it's locked into the latest publicly audited version by Quantstamp. Sequence doesn't have the ability to access the enclave or push updates to it without Quantstamp's approval.
-- **Sequence Guard:** Running independently from Sequence Auth, Guard is capable of reviewing both the user's identity and intent before signing transactions.
+- **Signer 1: Sequence Auth:** Running in an encrypted AWS Nitro Enclave, Sequence Auth acts as the first signer and it's locked into the latest publicly audited version by Quantstamp. Sequence doesn't have the ability to access the enclave or push updates to it without Quantstamp's approval.
+- **Signer 2: Sequence Guard:** Running independently from Sequence Auth, Guard is capable of reviewing both the user's identity and intent before signing transactions.
 - **OpenID Connect Compatibility:** Sequence WaaS leverages established OpenID Connect providers such as Google, Apple and any other provider that follows the same protocol. Unlike any other solution on the market, WaaS also allows developers to leverage their own OIDC identifiers with these services. So you have full access to the user profiles created.
 
 ## Sequence Auth
+**Add Authentication Features:** Implement Sequence Auth to manage account creation, login, session management, and wallet integration. Sequence Auth is an API service that runs on the [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) platform. 
 
-Sequence Auth is an API service that runs on the [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) platform and allows for secure wallet management. Sequence Auth provides a simple way to add account creation, login, session management, and wallet support to your app, enabling applications to provide traditional web experiences (i.e. social login, email login, etc.) while providing access to crypto wallets to interact with smart contracts.
+**Encrypt Data:** Wallet private keys are stored encrypted using a split responsibility strategy between Sequence and Quantstamp: Sequence is able to access only the encrypted blobs stored in the database with no means of decryption. Quantstamp owns and operates the [KMS](https://aws.amazon.com/kms/) (AWS hardware security module) used to encrypt the wallet key data. They have no way to export the key material and no access to the encrypted data itself.
 
-Wallet private keys are stored encrypted using a split responsibility strategy between Sequence and Quantstamp:
+**Verify Integrity:** The WaaS Enclave is the only entity able to use the encrypted wallet data. Both the hosting on a cryptographically attested secure enclave on Amazon Nitro and the availability of the audited code help developers verify without trusting Sequence. 
 
-1. Sequence is able to access only the encrypted blobs stored in the database with no means of decryption.
-2. Quantstamp owns and operates the [KMS](https://aws.amazon.com/kms/) (AWS hardware security module) used to encrypt the wallet key data. They have no way to export the key material and no access to the encrypted data itself.
-
-The WaaS Enclave is the only entity able to use the encrypted wallet data. Its security is guaranteed by:
-
-1. The AWS Nitro hypervisor generates and signs a cryptographic attestation based on the actually running enclave code. The document includes a PCR0 (a hash of the enclave code) signed by the Amazon Public Key Infrastructure.
-2. The KMS operated by the Trusted Third Party specifies a policy that only allows access to the cryptographic operations if the attestation is valid and the PCR0 hash of the enclave matches the expected value. This means that any - even the smallest - change to the enclave will result in a different attestation and PCR0 hash, effectively invalidating it.
-3. The enclave code is open source and anyone may audit it and verify that the service uses the exact audited version of the source code. [Learn more about verification](/solutions/wallets/embedded-wallet/implementation-details/enclave-verification).
-
-Sequence Auth source code is [publicly available and independently audited](https://github.com/0xsequence/waas-authenticator), and the safeguards described above ensure it cannot be tampered with by any party.
-
-## Sequence Guard
+## Signer 2: Sequence Guard
 
 Sequence Guard is a service hosted by Sequence and contains the other key of the wallets. It's meant to be another line of defense, verifying not only user's _identity_ but also their _intent_. It achieves this in two different ways:
 
-1 - Limits and allowlists: you can (from the development dashboard) configure what kind of actions are allowed, this means that the guard will only sign transactions within these constraints. For example, you can define that only NFT contract X can be called, and the guard will enforce that no other transactions can take place.
-
-2 - Authenticating the user: the Sequence Guard will authenticate the user **independently of Sequence Auth**, it performs this action either by using a 3rd party OAuth 2.0 id token (from Meta, Google, X, etc.) or by directly communicating with the user via email/phone number with an OTP code. The direct communication is not always required and, when it does happen, it's seamless and branded with your project details.
+- **Add Scope with Limits and Allowlists:** Set up Sequence Guard to manage transaction permissions through limits and allowlists in the development dashboard. Specify allowable actions, such as engaging with certain contracts, to ensure that Guard only authorizes these specified transactions.
+- **Independently Authenticate Users:** Enable Sequence Guard to verify user identity and intent separately from Sequence Auth, using either third-party OAuth 2.0 id tokens or direct communication for OTP verification. Tailor these interactions to fit your project’s branding and security needs.
 
 ### Threat model
+The threat model for Sequence Wallets offers:
+- **Full Protection Scenarios:**
+    - **Backend Compromise or Guard Key Leak:** Sequence Auth still verifies user identities, ensuring wallet security.
+    - **Sequence Auth Compromise:** Sequence Guard independently authenticates users, blocking unauthorized access.
+- **Partial Protection Scenario:**
+    - **Partner Frontend Compromise or MITM on Partner Side:** Attackers may access wallets at login but cannot reach wallets of inactive users, allowing for potential recovery with limited damage.
 
-With these safeguards in place wallets are **safe** against the following scenarios:
+## WaaS API Service
 
-1. Sequence.app backend is compromised, or guard keys are leaked: in this scenario, the user's identity must still be verified by Sequence Auth.
+- **Deploy WaaS API:** Sequence WaaS (Wallet as a Service) is an API service that runs on the [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) platform and allows for secure wallet management. It is the technology that powers the [Embedded Wallet](https://docs.sequence.xyz/solutions/wallets/embedded-wallet/overview).
+- **Encrypt and Store Private Keys:** A split responsibility strategy for encryption. Sequence accesses encrypted blobs stored in the database, and a Trusted Third Party operates the Key Management System (KMS). They have no way to export the key material and no access to the encrypted data itself.
+- **Ensure Data Security:** The WaaS Enclave is the only entity able to use the encrypted wallet data, and is bolstered by AWS Nitro hypervisor's cryptographic attestations. This includes a PCR0 hash that must match expected values for operation, ensuring that even minor changes to the enclave invalidate its operation.
+- **Audit and Verify:** Review the open-source enclave code to confirm the service adheres to the verified, audited version, enhancing trust and security verification.
 
-2. Sequence Auth is compromised: in this scenario the Sequence Guard protects the wallets, because it independently authenticates the user, an attacker in this scenario wouldn't be able to access any wallets.
-
-The model also provides partial protection against the scenario:
-
-3. Partner frontend is compromised, or MITM on the partner side: If an attacker were to be able to vulnerate the frontend of the partner, it could gain access to wallets at the time of login, but it cannot gain access to wallets of users who are currently inactive. This means that recovery from such a scenario is possible, with limited damage.
-
-## Simplified Data Flow
+## Data Flow for a Transaction on the WaaS System
 Below we illustrate the data flow of a common use case such as signing a transaction via embedded wallets.
 
 ![data-flow-architecture](/img/diagrams/waas/waas-flow.png)
@@ -61,25 +53,25 @@ Yellow: Software provided and run by Sequence in a secure AWS Nitro Enclave
 Green: Software provided and run by Sequence
 :::
 
-#### 1. Generation of the Intent
+#### Step 1. Generation of the Intent
 
-The user interacts with the client to "do something" that requires an action on behalf of the wallet (i.e. send some USDC or call a contract method).
+The user interacts with the client to "do something" that requires an action on behalf of the wallet (i.e. send some USDC or call a contract method). The client uses waas sdk to generate an intent. The client signs this intent with its session keys.
 
-The client asks the `WaaS SDK` to generate an intent for such an action; this intent is signed with the session keys of the client.
+#### S### Step 2: Client Sends Intent and Backend Authenticates User
 
-#### 2. SDK Forwards Intent to Sequence Auth
+The client sends the intent and its signature to the partner's backend. The backend authenticates the user.
 
-The intent and its corresponding signature are sent to the Sequence Auth service running on an AWS Nitro Enclave. 
-Sequence Auth asks WaaS API to build a transaction for the given intent and then validates that the transaction does not deviate from the original intent. On successful validation, Sequence Auth signs the transaction and forwards the transaction, intent, and signature to the WaaS API.
+### Step 3: Backend Forwards Intent and PSS Validates Transaction
+
+The partner's backend forwards the intent to the Partner Signing Service (PSS) in the Nitro Enclave. PSS asks the WaaS API to build a transaction. PSS checks the transaction matches the intent. PSS signs the transaction with the partner's hotkey. PSS sends the transaction, intent, and signature to the WaaS API.
 
 #### 4. WaaS API Collects Signature from Sequence Guard
 
-WaaS API receives a "half-signed" transaction request, alongside an intent that has been signed by the client. It needs to collect one more signature before being able to relay the transaction, so it calls Sequence Guard.
+The WaaS API receives the half-signed transaction and the client-signed intent. The WaaS API calls the guard to collect one more signature before being able to relay the transaction, so it calls Sequence Guard.
 
 #### 5. Sequence Guard Authenticates the User
 
-Sequence Guard receives a signature request for a given wallet. It verifies that the intent exists, corresponds to the transaction, and has been signed by a valid session. If everything is correct, it signs the transaction.
+The guard gets a signature request. The guard verifies the intent matches the transaction and a valid session signed it. If correct, the guard signs the transaction.
 
 #### 6. Relay and Transaction Receipt
-
-WaaS API relays the transaction and waits for the receipt. The resulting `txHash` is piped back to the client.
+The WaaS API relays the transaction. The WaaS API waits for a receipt. The WaaS API sends the resulting txHash back to the client/backend.
