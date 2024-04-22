@@ -1,10 +1,7 @@
 # Transaction receipts
+**Transaction Receipts:** Transactions return receipts indicating success or failure. Failed receipts are generated without transaction execution.
 
-Any methods that involve sending transactions will return either _successful_ or _failed_ transaction receipts. Failed transaction receipts are generated without executing the transaction.
-
-## Successful transaction response
-
-Any transaction that is successfully included in a block will return a `SentTransactionResponse` object. This must be checked for before accessing the transaction hash, using the `isSentTransactionResponse` type guard.
+**Successful Transaction Response:** A successful transaction provides a SentTransactionResponse. Always verify this response with the **`isSentTransactionResponse`** type guard before accessing the transaction hash.
 
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
@@ -34,12 +31,14 @@ if (isSentTransactionResponse(tx)) {
 }
 ```
 
-The relevant fields are:
+**Understanding Transaction Details**
 
-- `txHash`: The transaction hash of the transaction that was sent to the network.
-- `receipt.logs`: Logs emitted by the transaction.
-- `receipt.status`: The status of the transaction. `SUCCEEDED` or `FAILED`.
-- `receipt.revertReason`: If the transaction was executed but reverted, it includes the reason.
+**Fields in Transaction Responses:**
+
+- **txHash**: The hash of the transaction sent to the network.
+- **receipt.logs**: Logs emitted during the transaction.
+- **receipt.status**: Indicates if the transaction SUCCEEDED or FAILED.
+- **receipt.revertReason**: Explains why a transaction was reverted, if applicable.
 
 To view the full response object, see the [Response payloads](/solutions/wallets/embedded-wallet/implementation-details/response-payloads) section.
 
@@ -82,7 +81,7 @@ To view the full response object, see the [Response payloads](/solutions/wallets
 
 ## Failed transaction response
 
-An In-Game Wallet will try to catch any failing transactions before they are sent to the network. This is done by simulating the transaction on the network before sending it. If the simulation fails, the transaction will not be sent to the network and a `FailedTransactionResponse` will be returned.
+An In-Game Wallet pre-empts failing transactions by simulating them on the network before actual submission. If the simulation fails, the transaction is not sent, and a FailedTransactionResponse is returned.
 
 To view the full response object, see the wallet [Response payloads](/solutions/wallets/embedded-wallet/implementation-details/response-payloads) section.
 
