@@ -65,7 +65,7 @@ Green: Software provided and run by Sequence
 
 The user interacts with the client to "do something" that requires an action on behalf of the wallet (i.e. send some USDC or call a contract method).
 
-The client asks the `WaaS SDK` to generate an intent for such an action; this intent is signed with the session keys of the client.
+The client asks the `WaaS SDK` to generate an intent for such an action; this intent is signed with the session keys of the client. This session key is a generated key that is only valid while that OAuth session is valid. Every intent sent to the WaaS backend is first signed by this session key to validate that there is an active, authenticated session on the user side.
 
 #### 2. SDK Forwards Intent to Sequence Auth
 
