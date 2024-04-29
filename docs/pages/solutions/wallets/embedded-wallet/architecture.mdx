@@ -16,10 +16,17 @@ On top of this core security layer, Sequence WaaS architecture offers additional
 
 Sequence Auth is an API service that runs on the [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) platform and allows for secure wallet management. Sequence Auth provides a simple way to add account creation, login, session management, and wallet support to your app, enabling applications to provide traditional web experiences (i.e. social login, email login, etc.) while providing access to crypto wallets to interact with smart contracts.
 
+### WaaS Configuration Key
+For every new instance, a WaaS Configuration Key is used to authenticate a Game Client. This provides access to the blockchain through the WaaS SDK via the generated intents sent to Sequence Auth. Within a configuration key multiple Login Provider client ID's can be registered, which each individually determine the wallet addresses generated per Provider. This means, if a client ID for a Login Provider (e.g. Google or Apple) is shared across instances, users using the same Login Provider with authentication credentials will yield the same address. 
+
+### Wallet Private Keys
+
 Wallet private keys are stored encrypted using a split responsibility strategy between Sequence and Quantstamp:
 
 1. Sequence is able to access only the encrypted blobs stored in the database with no means of decryption.
 2. Quantstamp owns and operates the [KMS](https://aws.amazon.com/kms/) (AWS hardware security module) used to encrypt the wallet key data. They have no way to export the key material and no access to the encrypted data itself.
+
+### Waas Enclave 
 
 The WaaS Enclave is the only entity able to use the encrypted wallet data. Its security is guaranteed by:
 

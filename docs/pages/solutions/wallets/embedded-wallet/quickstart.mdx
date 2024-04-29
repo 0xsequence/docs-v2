@@ -1,3 +1,5 @@
+import { Callout } from 'vocs/components'
+
 # Quickstart
 
 You can quickly try out a Sequence Embedded Wallet integration before doing a complete configuration specific to your application. There are several ways to test out the features:
@@ -22,6 +24,10 @@ You can also view SDK-specific guides here:
 - [Unreal SDK](/sdk/unreal/overview)
 
 When you are ready to configure your own Embedded Wallet, you can [follow the Sequence Builder guide here](/solutions/builder/embedded-wallet).
+
+<Callout type="info">
+You will notice when you configure your Embedded Wallet, for every new Login Provider included via a unique `client id` (i.e. for Google or Apple Auth), a new accessible index of wallets will be created for that Provider. Therefore, wallets across experiences will share the same wallet address if the client id of the Login Provider remains the same. 
+</Callout>
 
 ## Getting Started with TypeScript SDK
 
