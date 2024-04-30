@@ -22,7 +22,7 @@ export const topNav = [
     },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
       { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
-      { text: 'Collection Management', link: '/guides/collection-metadata-guide', match: '/guides/collection-metadata-guide' },
+      { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
     ]
@@ -254,14 +254,14 @@ export const sidebar = {
       text: 'Manage Collection Metadata',
       collapsed: true,
       items: [
-        { text: 'Obtain a Secret API Key', link: '/guides/collection-metadata-guide#1-obtain-a-secret-api-key'},
-        { text: 'Create Collection', link: '/guides/collection-metadata-guide#2-create-collection-from-a-curl-request' },
-        { text: 'Create Token', link: '/guides/collection-metadata-guide#3-create-token-using-tokenid' },
-        { text: 'Create Asset', link: '/guides/collection-metadata-guide#4-create-asset-using-tokenid' },
-        { text: 'Store an Image', link: '/guides/collection-metadata-guide#5-store-image-asset' },
-        { text: 'Update to Non-private', link: '/guides/collection-metadata-guide#6-update-non-private-token' },
-        { text: 'Publish Collection', link: '/guides/collection-metadata-guide#7-publish-collection-from-a-curl-request' },
-        { text: '(Optional) Render Asset from API', link: '/guides/collection-metadata-guide#8-optional-render-asset-from-api-publicly' },
+        { text: 'Obtain a Secret API Key', link: '/guides/metadata-guide#1-obtain-a-secret-api-key'},
+        { text: 'Create Collection', link: '/guides/metadata-guide#2-create-collection-from-a-curl-request' },
+        { text: 'Create Token', link: '/guides/metadata-guide#3-create-token-using-tokenid' },
+        { text: 'Create Asset', link: '/guides/metadata-guide#4-create-asset-using-tokenid' },
+        { text: 'Store an Image', link: '/guides/metadata-guide#5-store-image-asset' },
+        { text: 'Update to Non-private', link: '/guides/metadata-guide#6-update-non-private-token' },
+        { text: 'Publish Collection', link: '/guides/metadata-guide#7-publish-collection-from-a-curl-request' },
+        { text: 'Render Asset from API', link: '/guides/metadata-guide#8-render-asset-from-api-publicly' },
       ]
     },
     {
