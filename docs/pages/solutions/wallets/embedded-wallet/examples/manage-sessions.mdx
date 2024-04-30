@@ -145,6 +145,8 @@ export function useSessionHash() {
 
 To handle the Google login, you can use the `GoogleLogin` component from the `@react-oauth/google` package. The `handleGoogleLogin` function is called when the user successfully logs in.
 
+Make sure to re-render the component whenever `sessionHash` changes to avoid hard-to-track discrepancy errors. For example, you can use the `key` attribute to force the re-render.
+
 ```ts
 import { router, sequence } from './main'
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
@@ -173,7 +175,7 @@ function Login() {
 
   return (
     {!!sessionHash && (<>
-      <GoogleLogin onSuccess={handleGoogleLogin} shape="circle" width={230} nonce={sessionHash} />
+      <GoogleLogin key={sessionHash} onSuccess={handleGoogleLogin} shape="circle" width={230} nonce={sessionHash} />
     </>)}
  )
 }
