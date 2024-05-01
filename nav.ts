@@ -169,6 +169,7 @@ export const sidebar = {
         {text: 'Overview', link: '/solutions/builder/overview'},
         {text: 'Get Started', link: '/solutions/builder/getting-started'},
         {text: 'Project Management', link: '/solutions/builder/project-management'},
+        {text: 'Collections', link: '/solutions/builder/collections'},
         {text: 'Contracts', link: '/solutions/builder/contracts'},
         {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
         {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
