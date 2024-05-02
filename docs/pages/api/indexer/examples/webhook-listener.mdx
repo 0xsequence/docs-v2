@@ -1,46 +1,75 @@
-# Webhook
+import { Callout } from 'vocs/components'
 
-## Listen to Blockchain Events with Webhooks
+# Webhooks
 
-You can listen to transactions via webhooks using the Sequence Indexer. Our filters allow you to listen to events with a particular contract address and/or account address and specific token ids.
+Webhooks are a feature that allows systems to be called upon across the internet based on the emission of a blockchain event that meets some criteria. 
 
-### Registering a Webhook
+You can listen to transactions via webhooks using the Sequence Indexer by registering an endpoint or removing it after it's no longer required.
+
+To begin, direct yourself to the [Sequence Builder](https://sequence.build) and follow [this walkthrough for Public API Access Key](/solutions/builder/getting-started#3-optional-for-development-claim-an-api-access-key) and [this walkthrough for a Secret API Access Key](/solutions/builder/getting-started#4-optional-for-development-create-a-service-account), both required for using the Sequence Indexer Webhooks. 
+
+Function
+1. [Register a Webhook Listener](/api/indexer/examples/webhook-listener#1-register-a-webhook-listener)
+2. [Remove a Webhook Listener](/api/indexer/examples/webhook-listener#2-remove-a-webhook-listener)
+
+Examples
+1. [Listen to All Mints of a Contract](/api/indexer/examples/webhook-listener#1-listen-to-all-mints-of-a-contract)
+2. [Listen to Mints of a Specific Token ID](/api/indexer/examples/webhook-listener#2-listen-to-a-specific-token-id)
+3. [Listen to Topic Hashes for a Burn Token](/api/indexer/examples/webhook-listener#3-listen-to-topic-hashes-for-burn)
+4. [Listen to Marketplace Request Creation](/api/indexer/examples/webhook-listener#4-listen-to-marketplace-request-creation)
+
+<Callout type="info">
+	If you require a server for development, you can use one of the following:
+
+	[Template Nodejs Webhook Server](https://github.com/0xsequence-demos/template-nodejs-webhook-server/blob/master/README.md) combined with [ngrok](https://ngrok.com) a secure tunnel to your computer running the local server
+
+	[Template Cloudflare Webhook Worker](https://github.com/0xsequence-demos/template-cloudflare-worker-webhook)
+</Callout>
+
+## 1. Register a Webhook Listener
+
+Our filters allow you to listen to events with a particular contract address and/or account address, specific token ids, events, or topic hashes.
+
+<Callout type="info">
+	If you require a webhook endpoint to call you can use [webhook.site](https://webhook.site/) for testing purposes to specify in the `url`
+</Callout>
+
 *Sequence Indexer `AddWebhookListener` Method:*
 
 * Request: POST /rpc/Indexer/AddWebhookListener
 * Content-Type: application/json
 * Body (in JSON):
-    * `Url` (string) -- the URL to send the webhook to
-    * `Filters` ([]object) -- an array of filters
+    * `url` (string) -- the URL to send the webhook to
+    * `filters` (object) -- an array of filters
         * `contractAddresses` ([]string) -- a ERC20 / ERC721 / ERC1155 contract address
         * `accounts` ([]string) -- wallet addresses
+        * `events` ([]string) -- the string of the event (e.g. "Transfer(address,address,uint256)")
+        * `topicHashes` ([]string) -- a hash of the of the event (e.g. ethers.utils.id("Transfer(address,address,uint256)"))
         * `tokenIDs` ([]int) *optional* -- an array of token ids
 
 <br />
 
-One of `contractAddresses`, `accounts` must be provided in the filter.
+One of `contractAddresses` or `accounts` must be provided in the filter.
 
 **Example: `AddWebhookListener`**
 
 :::code-group
 
 ```bash [cURL]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/AddWebhookListener -d '{ "url": "https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf", "filters": [{"accounts": ["0x631998e91476DA5B870D741192fc5Cbc55F5a52E"]}]'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: <project_access_key>" -H "Authorization: BEARER <secret_API_key>", "filters": {"contractAddresses":["0x631998e91476DA5B870D741192fc5Cbc55F5a52E"]}}'
 ```
 
 ```typescript [TypeScript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', '<project_access_key>', '<secret_API_key>')
 
 const req = {
     url: 'https://webhook.site/27c266b7-ee69-4046-8319-75ce91ec2bcf',
-    filters: [
-        {
-            accounts: ['0x631998e91476DA5B870D741192fc5Cbc55F5a52E']
-        }
-    ]
+    filters: {
+		accounts: ['0x631998e91476DA5B870D741192fc5Cbc55F5a52E']
+	}
 }
 
 
@@ -63,7 +92,7 @@ import (
 )
 
 func GetTransactionHistory(accountAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", '<project_access_key>', '<secret_API_key>')
 
 	ok, err := seqIndexer.AddWebhookListener(context.Background(),
 		&proto.WebhookListener{
@@ -78,7 +107,114 @@ func GetTransactionHistory(accountAddress string) {
 	fmt.Println(ok, err)
 }
 ```
+:::
+Now you can listen to events on the blockchain with your webhook.
 
+## 2. Remove a Webhook Listener
+If you need to clean up your webhook listeners, you can submit requests to remove the listener based on listener `id` and `projectId` 
+
+*Sequence Indexer `RemoveWebhookListener` Method:*
+
+* Request: POST /rpc/Indexer/RemoveWebhookListener
+* Content-Type: application/json
+* Body (in JSON):
+    * `id` (string) -- the id of the listener returned when registering the `response.listener.id`
+    * `projectId` (string) -- the project id the JWT token was obtained from
+
+<br />
+
+**Example: `RemoveWebhookListener`**
+
+In the following examples you'll need to update the `id` of the webhook listener, returned in the [`AddWebhookListener`](/api/indexer/examples/webhook-listener#1-register-a-webhook-listener)
+
+:::code-group
+
+```bash [cURL]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: <project_access_key>" -H "Authorization: BEARER <secret_API_key>" https://polygon-indexer.sequence.app/rpc/Indexer/RemoveWebhookListener -d '{ "id": <listener_id>, "projectId": 25906}'
+```
+
+```typescript [TypeScript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', '<project_access_key>', '<secret_API_key>')
+
+const ok = await indexer.removeWebhookListener({
+	id: <listener_id>,
+    projectId: <project_id>
+})
+	
+console.log('ok', ok)
+```
+
+```go [Go]
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/0xsequence/go-sequence/indexer"
+)
+
+func RemoveWebhook(accountAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", '<project_access_key>', <secret_API_key>)
+
+	ok, err := seqIndexer.RemoveWebhookListener(context.Background(),
+		&proto.WebhookListener{
+			id: <listener_id>,
+			projectId: <project_id>,
+		},
+	)
+	fmt.Println(ok, err)
+}
+```
 :::
 
-Now you can listen to events on the blockchain with your webhook.
+## Examples
+
+Provided are a few additional TypeScript examples:
+
+### 1. Listen to All Mints of a Collectible Contract
+
+If you want to get all mints and transfers of a contract
+
+:::code-group
+
+```bash [cURL]
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: <project_access_key>" -H "Authorization: BEARER <secret_API_key>" https://polygon-indexer.sequence.app/rpc/Indexer/RemoveWebhookListener -d '{ "id": <listener_id>, "projectId": <project_id> }'
+```
+
+```typescript [TypeScript]
+// Works in both a Webapp (browser) or Node.js:
+import { SequenceIndexer } from '@0xsequence/indexer'
+
+const indexer = new SequenceIndexer(
+    'https://arbitrum-sepolia-indexer.sequence.app', 
+    '<project_access_key>',
+    '<secret_API_key'
+);
+
+const req = {
+	url: 'https://webhook-testing.ngrok.dev/webhook/5f5fe8ea-aa7e-4cf5-9d70-8f46c39a6117',
+	filters:{   
+		contractAddresses: ['0x9bec34c1f7098e278afd48fedcf13355b854364a'],
+		events: ['TransferSingle(address,address,address,uint256,uint256)'],
+		accounts: ['0x0000000000000000000000000000']
+	}
+}
+
+const ok = await indexer.addWebhookListener({
+	url: req.url,
+    filters: req.filters
+})
+	
+console.log('ok', ok)
+```
+:::
+
+### 2. Listen to a Specific Token ID
+
+### 3. Listen to Topic Hashes for a Burn Token
+
+### 4. Listen to Marketplace Request Creation

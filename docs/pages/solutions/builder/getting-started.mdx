@@ -1,4 +1,5 @@
 import { Card, CardGrid } from "../../../components/CardGrid";
+import { Callout } from 'vocs/components'
 
 # Get Started
 
@@ -8,13 +9,13 @@ Let's get started!
 
 ## Sign up for Sequence Builder
 
-### Step 1: Go to sequence.build
+### 1: Go to sequence.build
 
 Go to [Sequence.Build](https://sequence.build/) and click on the `Start Building` or `Sign in` button to get started.
 
 ![Sequence builder landing page](/img/builder/builder_landing_page_signup_project.png)
 
-### Step 2: Choose a sign in method
+### 2: Choose a sign in method
 
 When you first sign in to Builder, a wallet is created for you.
 
@@ -24,7 +25,7 @@ Without a wallet, you will be given a few options to sign in. You can use any of
 
 ![Sequence builder choose signin](/img/builder/builder_choose_signin_signup_project.png)
 
-### Step 3: Sign in to sequence.build
+### 3: Sign in to sequence.build
 
 After choosing how you would like to sign in, you will be presented with the terms of use. To read the `Terms of Use`, `Privacy Policy`, and `Master Services Agreement`, click on the respective links for each.
 
@@ -42,7 +43,7 @@ The easiest way to start a project is to simply click `+ Create Project`.
 
 ![Sequence builder dashboard](/img/builder/builder_dashboard_signup_project.png)
 
-### Step 1: Enter the project details
+### 1: Enter the project details
 
 A modal will pop up, allowing you to enter details about your project. Provide a project name and, if you like, add an avatar for the project.
 
@@ -50,7 +51,7 @@ Then, select the network(s) on which you would like to start deploying. This can
 
 ![Sequence builder enter details](/img/builder/builder_enter_details_signup_project.png)
 
-### Step 2: Create the project!
+### 2: Create the project!
 
 Now hit the `Create new Project` button!
 
@@ -58,7 +59,7 @@ Now hit the `Create new Project` button!
 
 Once you finish, you should now be viewing your project dashboard.
 
-### Step 3: (Optional for Development) Claim an API Access Key
+### 3: (Optional for Development) Claim an API Access Key
 
 Finally, to start building you'll need to claim an access key from the Builder, which can be accomplished by navigating to your `project` in the top left corner, selecting `Settings` in the side nav, and selecting the `API Access Keys` card
 
@@ -88,6 +89,32 @@ const wallet = sequence.initWallet("<access_key>", {
 const connectDetails = await wallet.connect({ app: "Your app name" });
 console.log("=> connected?", connectDetails.connected);
 ```
+
+### 4. (Optional for Development) Create a Service Account
+
+In order to integrate some services from the Sequence stack, a Service Account has to be created to make updates or read from state - including [Collections API](/guides/metadata-guide) or [Webhooks](/api/indexer/examples/webhook-listener) - a `Secret API Key` is required.
+
+One can navigate to the API Access Keys section by selecting the project, accessing the sidebar nav page of `Settings`, and selecting the `API Access Keys` card
+
+![open project settings](/img/builder/builder_open_access_key_settings.png)
+
+And scroll to the bottom, where you will find the `Secret API Access Key(s)` section 
+
+Where you would select `+ Add Service Account`
+
+![secret API keys](/img/builder/builder_service_accounts_create_secret_api_key.png)
+
+And either create a `Read` key, or, a `Write` secret API access key. 
+
+For making updates to the Sequence system, select `Write` and `+ Add Service Account` to include in your integration.
+
+![create a write key](/img/builder/builder_service_accounts_create_write_key.png)
+
+Copy the JWT token and save it somewhere safe, or, in your project 
+
+<Callout type="warning">
+  Warning: You won't have access to the generated `Secret API Access Key` in the future from the Builder interface, make sure to save it somewhere safe.
+</Callout>
 
 ## Build things!
 
