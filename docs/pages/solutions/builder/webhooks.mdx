@@ -1,0 +1,83 @@
+import Video from "../../../components/Video";
+import {Callout} from 'vocs/components'
+
+# Webhooks in Sequence Builder
+
+Sequence Builder equips game builders with an indexer that listens to events across the many blockchains that we offer by providing an https callback
+
+<Callout type='warning'>
+	If you prefer a programmatic way to add webhooks that uses cURL, TypeScript or Go, check out [this walkthrough](/api/indexer/examples/webhook-listener)
+</Callout>
+
+#### What data can I listen to for my game?
+- Mints from a contract
+- TokenID transfers
+- Transactions by an account address
+- Event topics emitted by a contract
+- Event topic hashes emitted by a contract
+
+## Creating Webhooks
+
+The following steps guide you through creating your webhook
+
+1. [Select Project and go to Webhooks Section](/solutions/builder/webhooks#select-project-and-go-to-webhooks-section)
+2. [Select Network and Add New Webhook](/solutions/builder/webhooks#select-network-and-add-new-webhook)
+2. [Complete Webhook Details](/solutions/builder/webhooks#complete-webhook-details)
+
+::::steps
+### Select Project and go to Webhooks Section
+
+Select your project in the top left hand corner, select the `Indexer` section in the sidebar, and select the `Webhooks` tab.
+
+![indexer webhooks select](/img/builder/builder_indexer_webhooks_select.png)
+
+ 
+### Select Network and Add New Webhook
+
+In the dropdown beneath the webhooks tab, select the network you're looking to create a webhook for based on the ones in your project. If you don't see the network you're looking for, you can always [add a network](/solutions/builder/project-settings#3-network-settings), then `+ Add New Webhook`
+![indexer webhooks add new webhook](/img/builder/builder_indexer_webhooks_add_new_webhook.png)
+ 
+### Complete Webhook Details
+Complete the required details like webhook `URL` and `Contract Address(es)` and select `Add Webhook`
+
+<Callout type="info">
+    If you require a webhook endpoint you can use [webhook.site](https://webhook.site/)
+    
+    Or, you can use template code with one of the following:
+
+    [Nodejs TypeScript Webhook](https://github.com/0xsequence-demos/template-nodejs-webhook-server) (combined with [ngrok](https://ngrok.com/))
+    [Cloud Worker Webhook](https://github.com/0xsequence-demos/template-cloudflare-worker-webhook)
+</Callout>
+
+![add a webhook with details](/img/builder/builder_indexer_webhooks_add_webhook.png)
+
+And you're done!
+::::
+
+## Removing or Updating Webhooks
+
+The following steps guide you through creating your updating or removing your webhook
+
+1. [Select Project and go to Webhooks Section](/solutions/builder/webhooks#select-project-and-go-to-webhooks-section)
+2. [Select the Gear to Update or Remove your Webhook](/solutions/builder/webhooks#select-the-gear-to-update-or-remove-your-webhook)
+2. [Update or Remove Webhook](/solutions/builder/webhooks#update-or-remove-webhook)
+
+::::steps
+
+### Select Project and go to Webhooks Section
+
+Select your project in the top left hand corner, select the `Indexer` section in the sidebar, and select the `Webhooks` tab.
+
+![indexer webhooks select](/img/builder/builder_indexer_webhooks_select.png)
+
+### Select the Gear to Update or Remove your Webhook
+In the webhooks screen, select the gear `⚙` for the webhook you want to remove or update
+
+![click update webhook](/img/builder/builder_indexer_webhook_select.png)
+
+### Update or Remove Webhook
+
+Then you can either `Update Webhook` or `Remove` your webhook by selecting either option
+
+![update or remove](/img/builder/builder_indexer_webhooks_update_or_remove.png)
+::::
