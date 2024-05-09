@@ -318,15 +318,6 @@ export const sidebar = {
       text: 'Game Engine',
       // collapsed: true,
       items: [
-        { text: 'Unreal', collapsed: true, items: [
-          { text: 'Overview', link: '/sdk/unreal/overview' },
-          { text: 'Installation', link: '/sdk/unreal/installation' },
-          { text: 'Setup', link: '/sdk/unreal/setup' },
-          { text: 'Authentication', link: '/sdk/unreal/authentication' },
-          { text: 'API Integration', link: '/sdk/unreal/api-integration' },
-          { text: 'Packaging', link: '/sdk/unreal/packaging' }
-          ] 
-        },
         { text: 'Unity', collapsed: true, items: [
           { text: 'Overview', link: '/sdk/unity/overview' },
           { text: 'Installation', link: '/sdk/unity/installation' },
@@ -347,6 +338,15 @@ export const sidebar = {
              ]
            },
           ]
+        },
+        { text: 'Unreal', collapsed: true, items: [
+          { text: 'Overview', link: '/sdk/unreal/overview' },
+          { text: 'Installation', link: '/sdk/unreal/installation' },
+          { text: 'Setup', link: '/sdk/unreal/setup' },
+          { text: 'Authentication', link: '/sdk/unreal/authentication' },
+          { text: 'API Integration', link: '/sdk/unreal/api-integration' },
+          { text: 'Packaging', link: '/sdk/unreal/packaging' }
+          ] 
         }
       ]
     },
