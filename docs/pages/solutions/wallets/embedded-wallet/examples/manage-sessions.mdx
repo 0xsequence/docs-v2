@@ -183,6 +183,18 @@ function Login() {
 export default Login
 ```
 
+## Check if a User is Signed-In
+
+A user session can be checked to see if they are logged in with the following function call:
+
+```ts
+if (await sequence.isSignedIn()){
+  ... // logged in
+} else {
+  ... // not logged in
+}
+```
+
 ## List Sessions
 
 This function returns a list of sessions for the current user and only includes sessions that are still valid.
