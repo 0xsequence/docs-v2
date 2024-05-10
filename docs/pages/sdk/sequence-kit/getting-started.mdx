@@ -29,7 +29,7 @@ import MyPage from './components/MyPage'
 import { KitProvider } from '@0xsequence/kit'
 import { getDefaultConnectors } from '@0xsequence/kit-connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createConfig, http, WagmiProvider } from 'wagmi'
+import { createConfig, http, WagmiProvider, WagmiConfig } from 'wagmi'
 import { mainnet, polygon, Chain } from 'wagmi/chains'
 
 const queryClient = new QueryClient() 
@@ -46,12 +46,13 @@ function App() {
     projectAccessKey
   })
 
-  const transports = {}
+  const transports: any = {}
 
   chains.forEach(chain => {
     transports[chain.id] = http()
   })
   
+  //@ts-ignore
   const config = createConfig({
     transports,
     connectors,
@@ -104,7 +105,7 @@ import { KitProvider } from '@0xsequence/kit'
 import { getDefaultConnectors } from '@0xsequence/kit-connectors'
 import { KitWalletProvider } from '@0xsequence/kit-wallet'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createConfig, http, WagmiProvider } from 'wagmi'
+import { createConfig, http, WagmiProvider, WagmiConfig } from 'wagmi'
 import { mainnet, polygon, Chain } from 'wagmi/chains'
 
 const queryClient = new QueryClient() 
@@ -121,12 +122,13 @@ function App() {
     projectAccessKey
   })
 
-  const transports = {}
+  const transports: any = {}
 
   chains.forEach(chain => {
     transports[chain.id] = http()
   })
   
+  //@ts-ignore
   const config = createConfig({
     transports,
     connectors,

@@ -21,7 +21,8 @@ export const topNav = [
       ] 
     },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Serverless Collectibles', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
+      { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
+      { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
     ]
@@ -35,7 +36,7 @@ export const topNav = [
       { text: 'Sequence Kit', link: '/sdk/sequence-kit/overview', match: '/sdk/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
-      // { text: 'React Native', link: '/sdk/reactnative', match: '/sdk/reactnative' },
+      { text: 'React Native', link: '/sdk/reactnative', match: '/sdk/reactnative' },
       // { text: 'iOS', link: '/sdk/iOS', match: '/sdk/iOS' }
     ]
   },
@@ -44,7 +45,7 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Relayer API', link: '/api/relayer/overview' },
+      { text: 'Transactions API', link: '/api/transactions/overview' },
       { text: 'Indexer API', link: '/api/indexer/overview' },
       { text: 'Metadata API', link: '/api/metadata/overview' },
       { text: 'Marketplace API', link: '/api/marketplace/overview' },
@@ -168,6 +169,7 @@ export const sidebar = {
         {text: 'Overview', link: '/solutions/builder/overview'},
         {text: 'Get Started', link: '/solutions/builder/getting-started'},
         {text: 'Project Management', link: '/solutions/builder/project-management'},
+        {text: 'Collections', link: '/solutions/builder/collections'},
         {text: 'Contracts', link: '/solutions/builder/contracts'},
         {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
         {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
@@ -212,20 +214,20 @@ export const sidebar = {
       collapsed: false,
       items: [
     {
-      text: 'Build a game with WebGL',
+      text: 'Build a Game with WebGL',
       collapsed: true,
       items: [
-        { text: 'Project setup with webpack', link: '/guides/webgl-guide#1-project-setup-with-webpack' },
-        { text: 'Integrate SequenceKit with WaaS', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
-        { text: 'Deploy a collectibles contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
-        { text: 'Deploy a remote minter', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
-        { text: 'Leverage items in-game', link: '/guides/webgl-guide#5-leverage-items-in-game' },
-        { text: 'Burn in-game achievement tokens', link: '/guides/webgl-guide#6-burn-in-game-achievement-tokens' },
-        { text: '(Optional) Integrate Embedded Wallet into Sequence Kit', link: '/guides/webgl-guide#7-optional-integrate-embedded-wallet-into-sequence-kit' },
+        { text: 'Project Setup With Webpack', link: '/guides/webgl-guide#1-project-setup-with-webpack' },
+        { text: 'Integrate Sequence Kit With WaaS', link: '/guides/webgl-guide#2-integrate-sequence-kit' },
+        { text: 'Deploy a Collectibles Contract', link: '/guides/webgl-guide#3-deploy-a-collectibles-contract' },
+        { text: 'Deploy a Remote Minter', link: '/guides/webgl-guide#4-deploy-a-remote-minter--mint-in-game-achievement-tokens' },
+        { text: 'Leverage Items In-game', link: '/guides/webgl-guide#5-leverage-items-in-game' },
+        { text: 'Burn In-game Achievement Tokens', link: '/guides/webgl-guide#6-burn-in-game-achievement-tokens' },
+        { text: '(Optional) Integrate Embedded Wallet Into Sequence Kit', link: '/guides/webgl-guide#7-optional-integrate-embedded-wallet-into-sequence-kit' },
       ]
     },
     {
-      text: 'Build a Unity game',
+      text: 'Build a Unity Game',
       collapsed: true,
       items: [
         { text: 'Introduction', link: '/guides/unity-guide#intro-to-jelly-forest' },
@@ -235,34 +237,48 @@ export const sidebar = {
         { text: 'Deploy Remote Minter', link: '/guides/unity-guide#deploy-a-remote-minter'},
         { text: 'Minting Tokens to Inventory', link: '/guides/unity-guide#mint-in-game-tokens-to-the-players-inventory' },
         { text: 'Purchase Collectibles with ERC20 Tokens', link: '/guides/unity-guide#burn-in-game-tokens-in-exchange-for-others' },
-        { text: 'Building an in-game shop', link: '/guides/unity-guide#building-the-shop-pages-and-setting-the-minting-requirements' },
-        { text: 'Leverage purchased items in-game', link: '/guides/unity-guide#leverage-purchased-items-in-game' },
+        { text: 'Building an In-game Shop', link: '/guides/unity-guide#building-the-shop-pages-and-setting-the-minting-requirements' },
+        { text: 'Leverage Purchased Items In-game', link: '/guides/unity-guide#leverage-purchased-items-in-game' },
       ]
     },
     {
-      text: 'Build a serverless collectible',
+      text: 'Build a Collectible Minting Service',
       collapsed: true,
       items: [
-        { text: 'Setup Cloudflare environment with wrangler cli and deploy a test', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
-        { text: 'Deploy, Sponsor and Update Metadata for an ERC1155 Contract with Builder', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
-        { text: 'Use EthAuthProof to prevent EOA DDoS', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
-        { text: 'Mint a collectible to wallet', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
+        { text: 'Setup Cloudflare Environment', link: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test', match: '/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test'},
+        { text: 'Deploy, Sponsor & Update Metadata For an ERC1155', link: '/guides/mint-collectibles-serverless#2-deploy-sponsor-and-update-metadata-for-an-erc1155-contract-with-builder' },
+        { text: 'Use EthAuthProof to Prevent EOA DDoS', link: '/guides/mint-collectibles-serverless#3-use-ethauthproof-to-prevent-eoa-ddos' },
+        { text: 'Mint a Collectible To Wallet', link: '/guides/mint-collectibles-serverless#4-mint-a-collectible-to-wallet' },
       ]
     },
     {
-      text: 'Build a lootbox with AI minting',
+      text: 'Manage Collection Metadata',
       collapsed: true,
       items: [
-        { text: 'Builder Console signup & project creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
-        { text: 'Access key management', link: '/guides/lootbox-guide#2-access-key-management' },
+        { text: 'Obtain a Secret API Key', link: '/guides/metadata-guide#1-obtain-a-secret-api-key'},
+        { text: 'Create Collection', link: '/guides/metadata-guide#2-create-collection-from-a-curl-request' },
+        { text: 'Create Token', link: '/guides/metadata-guide#3-create-token-using-tokenid' },
+        { text: 'Create Asset', link: '/guides/metadata-guide#4-create-asset-using-tokenid' },
+        { text: 'Store an Image', link: '/guides/metadata-guide#5-store-image-asset' },
+        { text: 'Update to Non-private', link: '/guides/metadata-guide#6-update-non-private-token' },
+        { text: 'Publish Collection', link: '/guides/metadata-guide#7-publish-collection-from-a-curl-request' },
+        { text: 'Render Asset from API', link: '/guides/metadata-guide#8-render-asset-from-api-publicly' },
+      ]
+    },
+    {
+      text: 'Build a Lootbox with AI Minting',
+      collapsed: true,
+      items: [
+        { text: 'Sequence Builder Console Signup & Project Creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
+        { text: 'Access Key Management', link: '/guides/lootbox-guide#2-access-key-management' },
         { text: 'Sequence Kit integration', link: '/guides/lootbox-guide#3-sequence-kit-integration' },
-        { text: 'iframe-to-webapp communication', link: '/guides/lootbox-guide#4-iframe-to-webapp-communication' },
-        { text: 'Deploy a contract & sponsor gas', link: '/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas' },
+        { text: 'iframe-to-Dapp Communication', link: '/guides/lootbox-guide#4-iframe-to-dapp-communication' },
+        { text: 'Deploy a Contract & Sponsor Gas', link: '/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas' },
         { text: 'Deploy a Cloudflare Worker', link: '/guides/lootbox-guide#6-deploy-a-cloudflare-worker' },
-        { text: 'Generating AI prompts & images', link: '/guides/lootbox-guide#7-generating-ai-prompts--images' },
-        { text: 'Uploading media to Sequence metadata service', link: '/guides/lootbox-guide#8-uploading-media-to-sequence-metadata-service' },
-        { text: 'Securing your Cloudflare Worker', link: '/guides/lootbox-guide#9-securing-your-cloudflare-worker' },
-        { text: '(Optional) Naive mint restriction per wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
+        { text: 'Generating AI Prompts & Images', link: '/guides/lootbox-guide#7-generating-ai-prompts--images' },
+        { text: 'Store Media To Sequence Metadata Service', link: '/guides/lootbox-guide#8-store-media-to-sequence-metadata-service' },
+        { text: 'Securing Your Cloudflare Worker', link: '/guides/lootbox-guide#9-securing-your-cloudflare-worker' },
+        { text: '(Optional) Naive Mint Restriction Per Wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
 
       ]
     },
@@ -274,8 +290,8 @@ export const sidebar = {
         { text: 'Wallet Authentication', link: '/guides/custom-marketplace#2-wallet-authentication' },
         { text: 'Blockchain Queries', link: '/guides/custom-marketplace#3-blockchain-queries' },
         { text: 'Multi-wallet types', link: '/guides/custom-marketplace#4-multi-wallet-types' },
-        { text: 'Request creation', link: '/guides/custom-marketplace#5-request-creation' },
-        { text: 'Order accepting', link: '/guides/custom-marketplace#6-order-accepting' },
+        { text: 'Request Creation', link: '/guides/custom-marketplace#5-request-creation' },
+        { text: 'Order Accepting', link: '/guides/custom-marketplace#6-order-accepting' },
         { text: '(Optional) Enable Embedded Wallet', link: '/guides/custom-marketplace#7-optional-integrate-embedded-wallet-into-sequence-kit' },
       ]
     } 
@@ -301,15 +317,6 @@ export const sidebar = {
       text: 'Game Engine',
       // collapsed: true,
       items: [
-        { text: 'Unreal', collapsed: true, items: [
-          { text: 'Overview', link: '/sdk/unreal/overview' },
-          { text: 'Installation', link: '/sdk/unreal/installation' },
-          { text: 'Setup', link: '/sdk/unreal/setup' },
-          { text: 'Authentication', link: '/sdk/unreal/authentication' },
-          { text: 'API Integration', link: '/sdk/unreal/api-integration' },
-          { text: 'Packaging', link: '/sdk/unreal/packaging' }
-          ] 
-        },
         { text: 'Unity', collapsed: true, items: [
           { text: 'Overview', link: '/sdk/unity/overview' },
           { text: 'Installation', link: '/sdk/unity/installation' },
@@ -330,6 +337,15 @@ export const sidebar = {
              ]
            },
           ]
+        },
+        { text: 'Unreal', collapsed: true, items: [
+          { text: 'Overview', link: '/sdk/unreal/overview' },
+          { text: 'Installation', link: '/sdk/unreal/installation' },
+          { text: 'Setup', link: '/sdk/unreal/setup' },
+          { text: 'Authentication', link: '/sdk/unreal/authentication' },
+          { text: 'API Integration', link: '/sdk/unreal/api-integration' },
+          { text: 'Packaging', link: '/sdk/unreal/packaging' }
+          ] 
         }
       ]
     },
@@ -345,7 +361,7 @@ export const sidebar = {
     {
       text: 'Web3',
       items: [
-        { text: 'SequenceKit', collapsed: true, items: [
+        { text: 'Sequence Kit', collapsed: true, items: [
           { text: 'Overview', link: '/sdk/sequence-kit/overview' },
           { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
           { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
@@ -367,7 +383,7 @@ export const sidebar = {
           {text: 'Building Backends with Sequence', link: '/sdk/typescript/guides/building-backends'},
           {text: 'Wallet Connectors', collapsed: true, items: [
             {text: 'Overview', link: '/sdk/typescript/connectors/overview'},
-            {text: 'SequenceKit', link: '/sdk/sequence-kit/overview'},
+            {text: 'Sequence Kit', link: '/sdk/sequence-kit/overview'},
             {text: 'Wagmi', link: '/sdk/typescript/connectors/wagmi'},
             {text: 'RainbowKit', link: '/sdk/typescript/connectors/rainbow-kit'},
             {text: 'Web3 Onboard', link: '/sdk/typescript/connectors/web3-onboard'},
@@ -397,15 +413,15 @@ export const sidebar = {
   // apis
   '/api': [
     {
-      text: 'Relayer',
+      text: 'Transactions',
       collapsed: false,
       items: [
-        { text: 'Overview', link: '/api/relayer/overview' },
-        { text: 'Installation', link: '/api/relayer/installation' },
+        { text: 'Overview', link: '/api/transactions/overview' },
+        { text: 'Installation', link: '/api/transactions/installation' },
         {text: 'Examples', collapsed: false, items: [
-          { text: 'Fetch Fee Options', link: '/api/relayer/examples/fetch-fee-options' },
-          { text: 'Send Transactions', link: '/api/relayer/examples/send-transactions' },
-          { text: 'Fetch Transaction Receipts', link: '/api/relayer/examples/fetch-transaction-receipts' },
+          { text: 'Fetch Fee Options', link: '/api/transactions/examples/fetch-fee-options' },
+          { text: 'Send Transactions', link: '/api/transactions/examples/send-transactions' },
+          { text: 'Fetch Transaction Receipts', link: '/api/transactions/examples/fetch-transaction-receipts' },
           ]
         }
       ]

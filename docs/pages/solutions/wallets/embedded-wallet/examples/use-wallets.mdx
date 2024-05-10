@@ -1,12 +1,13 @@
 import { Callout } from "vocs/components";
 
 # Wallets and transactions
-
-Once the SDK is initialized and the user has been authenticated, you can access the wallet corresponding to that user's account. The wallet is the entry point to all the operations that can be performed on the user's account.
+**Access Wallets and Manage Transactions:**
+- **Initialize SDK**: Ensure the SDK is initialized and the user is authenticated to begin operations.
+- **Wallet Access**: Access the wallet linked to the user's authenticated account. This wallet serves as the gateway to all account operations.
 
 ## Wallet address
 
-The wallet address is unique to each user, can't be changed, and is used to identify the user's account. It is a string of 42 characters starting with `0x`.
+Each user's wallet address is unique, cannot be changed, and is 42 characters long, starting with `0x`.
 
 ```ts
 import { SequenceWaaS } from "@0xsequence/waas";
@@ -30,7 +31,7 @@ const address = await waas.getAddress();
 
 ## Sign messages
 
-The wallet can be used to sign messages. The signatures can later be validated onchain or offchain.
+Wallets can sign messages, which can be validated both onchain and offchain.
 
 ```ts
 import { SequenceWaaS } from "@0xsequence/waas";
@@ -69,16 +70,12 @@ All wallets can send transactions right after creation. No extra steps are requi
 
 ### Raw transaction
 
-Raw transactions specify all the parameters of the transaction, including the `to` address, the `value` to send, and the `data` to include.
-
-Gas limits, prices, and nonce are always handled automatically by the Embedded Wallet.
-
-A network must be specified when sending a transaction. The network must be specified as the `chainId` of the network, for example `1` for Ethereum mainnet, `42161` for Arbitrum, etc.
+- **Immediate Transactions:** Wallets are ready to send transactions immediately upon creation.
+- **Raw Transactions:** Specify transaction parameters such as recipient, value, and data. Gas limits and nonce are managed automatically.
+- **Network Requirements:** Transactions require specifying a **`chainId`** for the intended network., for example `1` for Ethereum mainnet, `42161` for Arbitrum, etc.
 
 :::info
-Notice that all **send transaction** responses need to be checked using `isSentTransactionResponse`. This is required since WaaS will validate that a given transaction does not fail _before_ executing the transaction, and in case of failure, the response will be an error receipt instead of a transaction receipt.
-
-See more in [transaction receipts](#transaction-receipts).
+Error Handling: Use `isSentTransactionResponse` to verify transactions before execution to prevent failures. WaaS checks that a transaction won't fail before it runs. If it does fail, you'll get an error message instead of a transaction receipt. See more in [transaction receipts](#transaction-receipts).
 :::
 
 ```ts
@@ -169,9 +166,7 @@ if (isSentTransactionResponse(tx)) {
 ```
 
 ### Send ERC721 tokens
-
-Sending ERC721 tokens also has a helper method. This automatically handles the `data` field of the transaction.
-
+Sending ERC721 tokens  has a helper method. This automatically handles the `data` field of the transaction.
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
 
@@ -246,9 +241,9 @@ const tx = await waas.sendERC1155({
 
 ### Call any contract
 
-The `callContract` method can be used to call any contract method. This is useful for calling methods that are not supported by the helper methods. To call a contract an ABI or function signature must be provided.
+Use **`callContract`** to interact with any contract method, either through a function signature or ABI, supporting both named and positional arguments.
 
-#### Function signature
+### Function signature
 
 Providing a function signature is the easiest way to call a contract method, as it doesn't require an ABI. The function signature can be provided with named parameters or positional parameters.
 
@@ -301,10 +296,10 @@ const tx = await sequence.callContract({
 ```
 
 <Callout type='warning'>
-Email accounts can only send transactions after the current session has been confirmed by the Sequence guard. This is done by clicking an email link sent to the user's email address or phone number.
+**Transaction Permissions:**
 
-Social login accounts (like Google and Facebook) can send transactions immediately after signing in.
-
-For more details, see [validation](/solutions/wallets/embedded-wallet/examples/validation).
+- **Email Accounts:** Transactions are enabled after the current session is confirmed via a link sent to the email or phone.
+- **Social Login Accounts:** Accounts like Google and Facebook can transact immediately after sign-in.
+- For more details, see [validation](/solutions/wallets/embedded-wallet/examples/validation).
 
 </Callout>

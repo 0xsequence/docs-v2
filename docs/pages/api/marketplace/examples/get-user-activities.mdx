@@ -10,7 +10,7 @@ Enables you to retrieve activity data for a specific user, including orders and 
 
 :::code-group 
 ```shell twoslash [cURL] filename="cURL"
-curl -X POST -H "Content-Type: application/json" https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities -d '{
+curl -X POST -H "Content-Type: application/json" https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities -d '{
     "orderbookContractAddress": "0xB537a160472183f2150d42EB1c3DD6684A55f74c",
     "collectionAddress": "0x1693ffc74edbb50d6138517fe5cd64fd1c917709",
     "currencyAddresses": [
@@ -27,7 +27,7 @@ import fetch from "cross-fetch";
 
 (async () => {
   const res = await fetch(
-    "https://dev-marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities",
+    "https://marketplace-api.sequence.app/arbitrum-sepolia/rpc/Marketplace/GetUserActivities",
     {
       method: "POST",
       headers: {
