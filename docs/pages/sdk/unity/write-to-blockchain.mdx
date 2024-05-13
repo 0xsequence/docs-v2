@@ -221,3 +221,52 @@ _wallet.SendTransaction(
     });
 ```
 Since these transactions are all batched into a single transaction by the Sequence Smart Contract Wallet before being submitted to the network, you will receive only one transaction receipt.
+
+## FeeOptions
+
+By default, the SDK will automatically sponsor all Embedded Wallet/WaaS Wallet transactions using your Builder API credits. However, in some niche use cases, you may find that you would prefer not to sponsor your users' transactions. This requires that your users are more experienced Web3 users and have tokens/gas currency in their wallet that can be used to pay gas fees. In addition to the gas currency for the selected network, gas fees can also be paid using select ERC20 and ERC1155 tokens.
+
+First, you'll need to assemble the transaction(s) you wish to submit in a batch. Then, you need to request the FeeOptions.
+
+```
+Transaction[] transactions = new Transaction[]
+{
+    // Create your transactions here
+};
+FeeOptionsResponse response = await _wallet.GetFeeOptions(chain, transactions);
+```
+
+The `FeeOptionsResponse` contains a FeeQuote (string) that locks in the price for each `FeeOptionReturn` in the FeeOptions array that is returned for a limited time; you'll need this in a moment when submitting your transactions. For your convenience, the SDK will automatically query the user's wallet to see which of the FeeOptions the user can afford using the [Indexer](https://docs.sequence.xyz/sdk/unity/read-from-blockchain).
+
+From here, you can display a UI to the user to allow them to select how they would like to pay the fee for their transactions.
+
+Once the user has selected how they'd like to pay their fee, you may submit the transactions, including the selected FeeOption and the FeeQuote string.
+
+```
+_wallet.SendTransactionWithFeeOptions(chain, transactions, response.FeeOptions[selectionIndex].FeeOption, response.FeeQuote);
+```
+
+In the `Demo Scene` that can be imported via `Package Manager > Samples`, you can see a barebones example usage of FeeOptions. Here, we do not provide a UI and instead opt to use the first available FeeOption in the user's wallet. We do not recommend using this approach in a real game, but it serves as a useful example for your own integration. See our sample code below:
+
+```
+private async Task WaitForFeeOptionsAndSubmitFirstAvailable(Address toAddress, string amount)
+{
+    Transaction[] transactions = new Transaction[]
+    {
+        new RawTransaction(toAddress, amount)
+    };
+    FeeOptionsResponse response = await _wallet.GetFeeOptions(_chain, transactions)
+    int options = response.FeeOptions.Length;
+    for (int i = 0; i < options; i++)
+    {
+        if (response.FeeOptions[i].InWallet)
+        {
+            await _wallet.SendTransactionWithFeeOptions(_chain, transactions, response.FeeOptions[i].FeeOption,
+                response.FeeQuote);
+            return;
+        }
+    }
+    
+    Debug.LogError("The user does not have enough of the valid FeeOptions in their wallet");
+}
+```
