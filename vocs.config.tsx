@@ -1,5 +1,7 @@
 import { defineConfig } from 'vocs'
 import { sidebar, topNav } from './nav'
+import remarkCallout from '@r4ai/remark-callout'
+import rehypeMermaid from 'rehype-mermaid'
 
 export default defineConfig({
   title: 'Sequence',
@@ -12,16 +14,14 @@ export default defineConfig({
   //     'https://vocs.dev/api/og?logo=%logo&title=%title&description=%description',
   // },
   iconUrl: { light: '/img/favicon.ico', dark: '/img/favicon.ico' },
-  logoUrl: {
-    light: '/img/sequence-composite-light.svg',
-    dark: '/img/sequence-composite-dark.svg',
-  },
+  logoUrl: { light: '/img/sequence-composite-light.svg', dark: '/img/sequence-composite-dark.svg' },
 
   // rootDir: '.',
   basePath: '/',
 
   topNav,
   sidebar,
+
 
   // NOTE: taking up valuable space, will move those
   // to footer and other sections
@@ -49,12 +49,12 @@ export default defineConfig({
       fontFamily: {
         default: 'Inter',
         // mono: 'Roboto Mono'
-      },
-      color: {
-        background: {
-          light: '#f0f0f0',
-          dark: '#111111',
-        },
+      }
+      // color: {
+      //   background: {
+      //     light: '#eeeeee',
+      //     dark: '#111111',
+      //   },
         // background5: {
         //   light: '#dddddd',
         //   dark: '#111111',
@@ -64,7 +64,18 @@ export default defineConfig({
         //   light: '#dddddd',
         //   dark: '#151515'
         // }
-      },
+
+      }
     },
-  },
+
+    markdown: {
+      rehypePlugins: [ 
+        rehypeMermaid 
+      ],
+      remarkPlugins: [
+        // ...
+        remarkCallout
+      ],
+    }
+
 })

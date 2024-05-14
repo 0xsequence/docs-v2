@@ -342,3 +342,30 @@ td {
 .network-logo {
   border-radius: 15px;
 }
+
+div[data-callout="true"] {
+  font-size: 2em;
+  background-color: var(--vocs-color_infoBackground);
+  border: 1px solid var(--vocs-color_infoBorder);
+  color: var(--vocs-color_infoText);
+  border-radius: var(--vocs-borderRadius_4);
+  font-size: var(--vocs-fontSize_14);
+  padding: 0px var(--vocs-space_20);
+  line-height: 20px;
+  margin-bottom: var(--vocs-space_16);
+}
+
+div[data-callout="true"] p {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+div[data-callout-title="true"] {
+  margin-top: 14px;
+}
+
+div[data-callout-title="true"]:before {
+  content: "ⓘ Note";
+  font-weight: bold;
+}
+
