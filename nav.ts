@@ -115,7 +115,7 @@ export const sidebar = {
             {text: 'Building Backends with Sequence', link: '/solutions/wallets/universal-wallet/examples/building-backends'},
           ]
         },
-          {text: 'Sequence Kit', link: '/solutions/wallets/universal-wallet/sequence-kit'},
+        //  {text: 'Sequence Kit', link: '/solutions/wallets/universal-wallet/sequence-kit'},
           {text: 'Supported Platforms', link: '/solutions/wallets/universal-wallet/platforms'},
           {text: 'Fiat On-Ramps', link: '/solutions/wallets/universal-wallet/fiat-on-ramps'},
           {text: 'Key Management', link: '/solutions/wallets/universal-wallet/key-management'}
@@ -383,7 +383,6 @@ export const sidebar = {
           {text: 'Building Backends with Sequence', link: '/sdk/typescript/guides/building-backends'},
           {text: 'Wallet Connectors', collapsed: true, items: [
             {text: 'Overview', link: '/sdk/typescript/connectors/overview'},
-            {text: 'Sequence Kit', link: '/sdk/sequence-kit/overview'},
             {text: 'Wagmi', link: '/sdk/typescript/connectors/wagmi'},
             {text: 'RainbowKit', link: '/sdk/typescript/connectors/rainbow-kit'},
             {text: 'Web3 Onboard', link: '/sdk/typescript/connectors/web3-onboard'},

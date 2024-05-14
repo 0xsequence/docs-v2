@@ -4,11 +4,11 @@ sidebar_label: Getting Started
 
 # Getting Started with Sequence Kit
 
-In this guide, we will walk you through installing Sequence Kit, triggering the connection modal, and displaying the embedded wallet in your application.
+In this guide, we will walk you through installing Sequence Kit, triggering the connection modal, and displaying the Inventory in your application.
 
 ## Installing Sequence Kit Packages
 
-Sequence Kit is modular, allowing you to install only the necessary packages. To get started, install the `kit` core package, the `connectors` package for interfacing with various wallet providers, and the `wallet` for the embedded wallet. Additionally, install other dependencies such as wagmi, viem, and 0xsequence.
+Sequence Kit is modular, allowing you to install only the necessary packages. To get started, install the `kit` core package, the `connectors` package for interfacing with various wallet providers. Additionally, install other dependencies such as wagmi, viem, and 0xsequence.
 
 ```bash
 npm install @0xsequence/kit @0xsequence/kit-connectors wagmi ethers@5.7.2 viem 0xsequence @tanstack/react-query
@@ -74,8 +74,87 @@ function App() {
 2. Wrap your app with the `KitProvider` within the `WagmiConfig` wrapper.
 
 
-# Setting Up the Embedded Wallet Wrapper
-To install the optional in-game wallet, add the `KitWalletProvider` below the `KitProvider` wrapper.
+# Integrating Embedded Wallet
+
+Sequence Kit also natively supports our seamless embedded wallet for a web2-like experience with social login and optional popups / modals. We simply need to pass in a few additional parameters such as your [social login client ID](/solutions/builder/embedded-wallet#login-providers).
+
+```jsx
+import { sequence } from '0xsequence'
+import { KitConfig, KitProvider } from '@0xsequence/kit'
+import { getDefaultWaasConnectors } from '@0xsequence/kit-connectors' // Adding Embedded Wallet Config
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { WagmiProvider, createConfig, http } from 'wagmi'
+import { Chain, arbitrumNova, arbitrumSepolia, mainnet, polygon } from 'wagmi/chains'
+import MyPage from './components/MyPage'
+
+const queryClient = new QueryClient()
+
+const chains: readonly [Chain, ...Chain[]] = [arbitrumNova as Chain, arbitrumSepolia as Chain, mainnet as Chain, polygon as Chain]
+
+// replace with your keys, and better to use env vars
+const projectAccessKey = 'AQAAAAAAAEGvyZiWA9FMslYeG_yayXaHnSI' // Demo access key - switch to yours
+const waasConfigKey = 'eyJwcm9qZWN0SWQiOjE2ODE1LCJycGNTZXJ2ZXIiOiJodHRwczovL3dhYXMuc2VxdWVuY2UuYXBwIn0=' // Pass in your waasConfigKey
+const googleClientId = 'googleClientID' // Pass in your Google Client ID
+
+// Optional other providers like Apple
+// const appleClientId =
+// const appleRedirectURI = 'https://' + window.location.host
+
+const connectors = [
+  ...getDefaultWaasConnectors({
+    walletConnectProjectId: 'wallet-connect-id',
+    enableConfirmationModal: false, // Optional confirmation modal - can update this dynamically on your application using local storage or set a default property 
+    defaultChainId: 421614,
+    waasConfigKey,
+    googleClientId,
+    // appleClientId,
+    // appleRedirectURI,
+    appName: 'Kit Demo',
+    projectAccessKey
+  })
+]
+
+/* @ts-expect-error-next-line */
+const transports: Record<number, HttpTransport> = {}
+
+chains.forEach(chain => {
+  const network = sequence.network.findNetworkConfig(sequence.network.allNetworks, chain.id)
+  if (!network) return
+
+  transports[chain.id] = http(network.rpcUrl)
+})
+
+const config = createConfig({
+  transports,
+  chains,
+  connectors
+})
+
+const kitConfig: KitConfig = {
+  projectAccessKey,
+  defaultTheme: 'dark',
+  signIn: {
+    projectName: 'Kit Demo'
+  }
+}
+
+  return (
+    <WagmiConfig config={config}>
+      <QueryClientProvider client={queryClient}> 
+        <KitProvider config={kitConfig}>
+          <MyPage />
+        </KitProvider>
+      </QueryClientProvider>
+    </WagmiConfig>
+  );
+
+```
+For web3 interactions, wagmi exposes a set of React hooks that make it convenient for common functions like sending transactions. Please check out our [embedded wallet template with Sequence Kit](https://github.com/0xsequence/kit/blob/master/examples/react-waas/src/App.tsx) for more examples of interactions.
+
+# Setting Up Inventory
+To install the optional Inventory feature, add the `KitWalletProvider` below the `KitProvider` wrapper.
 
 ```jsx
 import { KitWalletProvider } from '@0xsequence/kit-wallet'
@@ -138,7 +217,7 @@ function App() {
   return (
     <WagmiConfig config={config}>
       <QueryClientProvider client={queryClient}> 
-        <KitProvider>
+        <KitProvider config={kitConfig}>
           <KitWalletProvider>
             <MyPage />
           </KitWalletProvider>
@@ -185,13 +264,13 @@ const MyReactComponent = () => {
 
 The modal will automatically close once the user signs in. You can utilize the `useAccount` hook from wagmi to detect the user's connection status.
 
-# Invoking the embedded wallet modal
+# Invoking the Inventory modal
 
 <div class="text--center">
   <img src="/img/kit/embedded-wallet.png" />
 </div>
 
-Open the embedded wallet using the `useOpenWalletModal` react hook.
+Open the Inventory using the `useOpenWalletModal` react hook.
 
 ```jsx
 import { useOpenWalletModal } from '@0xsequence/kit-wallet'
@@ -204,7 +283,7 @@ const MyComponent = () => {
   }
 
   return (
-    <button onClick={onClick}>open wallet</button>
+    <button onClick={onClick}>open inventory</button>
   )
 }
 ```
