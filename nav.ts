@@ -91,6 +91,7 @@ export const sidebar = {
             text: 'Implementation Details', collapsed: true, items: [
             {text: 'Action payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/action-payloads'},
             {text: 'Response payloads', link: '/solutions/wallets/embedded-wallet/implementation-details/response-payloads'},
+            {text: 'Parent Wallet', link: '/solutions/wallets/embedded-wallet/implementation-details/parent-wallet'},
             {text: 'Trust Contract Recovery Flow', link: '/solutions/wallets/embedded-wallet/implementation-details/trust-contract-recovery-flow'},
             {text: 'Enclave-Verification', link: '/solutions/wallets/embedded-wallet/implementation-details/enclave-verification'},
             {text: 'Intents', link: '/solutions/wallets/embedded-wallet/implementation-details/intents'},
