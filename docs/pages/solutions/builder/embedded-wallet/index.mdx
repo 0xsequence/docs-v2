@@ -5,12 +5,10 @@ You can configure a [Sequence Embedded Wallet](/solutions/wallets/embedded-walle
 Sequence Embedded Wallet supports the following login providers:
 
 ### Google Auth
-If you would like to support Google Auth, you need to make sure that a project is configured at your [Google Cloud Console](https://console.cloud.google.com/) along with the proper OAuth 2.0 client ID. You can find the relevant section under APIs & Services > [Credentials](https://console.cloud.google.com/apis/credentials). After setting up the proper origins and redirect URIs for your project, copy the Client ID and paste it into the Google Client ID field after adding a Google login provider.
-
-You can find a detailed tutorial on [how to configure Google Auth here](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid).
+If you would like to support Google Auth, you need to make sure that a project is configured at your [Google Cloud Console](https://console.cloud.google.com/) along with the proper OAuth 2.0 client ID. You can follow [our guide](/solutions/builder/embedded-wallet/google-configuration) on how to set it up. After configuring the proper origins and redirect URIs for your project, copy the Client ID and paste it into the Google Client ID field after adding a Google login provider.
 
 ### Apple Auth
-If you would like to offer Apple Auth, you need to make sure that an application is configured at your [Apple Developer Console](https://developer.apple.com/account) account. More information on how to configure Sign in with Apple [can be found here](https://developer.apple.com/help/account/configure-app-capabilities/configure-sign-in-with-apple-for-the-web/). Once you have all requirements completed, share the unique identifier for the Services ID you created as part of your onboarding package after adding an Apple login provider.
+If you would like to offer Apple Auth, you need to make sure that an application is configured at your [Apple Developer Console](https://developer.apple.com/account) account. More information on how to configure Sign in with Apple [can be found here](/solutions/builder/embedded-wallet/apple-configuration). Once you have all requirements completed, share the unique identifier for the Services ID you created as part of your onboarding package after adding an Apple login provider.
 
 ## Allowed Origins
 This additional security measure will prevent unauthorized usage of your WaaS configuration outside of domains you whitelisted. Add any development and production URLs under Allowed Origins. By default all subpaths under theses hosts will be allowed.
