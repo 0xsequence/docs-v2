@@ -174,7 +174,11 @@ export const sidebar = {
         {text: 'Contracts', link: '/solutions/builder/contracts'},
         {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
         {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
-        {text: 'Embedded Wallet', link: '/solutions/builder/embedded-wallet'},
+        {text: 'Embedded Wallet', link: '/solutions/builder/embedded-wallet', collapsed: true, items: [
+          {text: 'Overview', link: '/solutions/builder/embedded-wallet'},
+          {text: 'Google Configuration', link: '/solutions/builder/embedded-wallet/google-configuration'},
+          {text: 'Apple Configuration', link: '/solutions/builder/embedded-wallet/apple-configuration'},
+        ]},
         {text: 'Node Gateway', link: '/solutions/builder/node-gateway'},
         {text: 'Marketplaces', link: '/solutions/builder/marketplaces'},
         {text: 'Indexer', link: '/solutions/builder/indexer'},
@@ -350,14 +354,14 @@ export const sidebar = {
         }
       ]
     },
-    // {
-    //   text: 'Mobile',
-    //   items: [
-    //     { text: 'Android', link: '/sdk/android' },
-    //     { text: 'iOS', link: '/sdk/iOS' },
-    //     { text: 'React Native', link: '/sdk/react-native' }
-    //   ]
-    // },
+    {
+      text: 'Mobile',
+      items: [
+        // { text: 'Android', link: '/sdk/android' },
+        // { text: 'iOS', link: '/sdk/iOS' },
+        { text: 'React Native', link: '/sdk/reactnative' }
+      ]
+    },
 
     {
       text: 'Web3',
