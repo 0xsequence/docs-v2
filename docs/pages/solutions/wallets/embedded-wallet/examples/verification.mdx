@@ -1,0 +1,49 @@
+# Verification
+
+In the event that you need to verify the ownership of an Embedded Wallet address, the following example can be used to prove ownership, with the help of an off-chain store of wallet nonces.
+ 
+## Example: Server Address Ownership Verification
+
+::::steps
+
+### Generate & Store Random Nonce
+
+On the server or decentralized compute, generate a random nonce, store it in a database, and return the nonce to the client when needed.
+
+Example code in Typescript using `ethers@5.7.2`
+
+```typescript
+import { ethers } from 'ethers'
+...
+const randomNonce = ethers.BigNumber.from(
+  ethers.utils.hexlify(ethers.utils.randomBytes(20))
+)
+
+// store randomNonce in a database
+```
+
+### Client calls `sessionAuthProof`
+
+The client requests the `nonce` and runs
+
+```typescript
+import { SequenceWaaS } from '@0xsequence/waas'
+ 
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+  network: 'arbitrum-nova'
+})
+
+... obtain nonce from database
+const authProof = sequence.sessionAuthProof({ nonce }) 
+```
+
+### Transmittance of Signature to Server
+
+Next, send the `authProof` to the server
+
+### Server Verification
+
+:::::
+
