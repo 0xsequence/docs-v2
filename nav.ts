@@ -1,7 +1,7 @@
 import type { Sidebar, TopNav } from 'vocs'
 
 export const topNav = [
-  { text: 'Solutions',
+  { text: 'Solutions', 
   items: [
     { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
     { text: 'Marketplace', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
@@ -10,7 +10,8 @@ export const topNav = [
     { text: 'Builder Console', link: '/solutions/builder/overview', match: '/solutions/builder/overview', items: [
       { text: 'Overview', link: '/solutions/builder/overview', match: '/solutions/builder/overview' }, 
     ]
-  }
+  },
+  { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
 ]
 },
   {
@@ -24,7 +25,9 @@ export const topNav = [
       { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
-      { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' }
+      { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' },
+      { text: 'Embedded Wallet', link: '/guides/templates/template-in-game-wallet', match: '/guides/templates/template-in-game-wallet' },
+      { text: 'Transaction Engine', link: '/guides/templates/building-relaying-server', match: '/guides/templates/building-relaying-server' },
     ]
   },
   { 
