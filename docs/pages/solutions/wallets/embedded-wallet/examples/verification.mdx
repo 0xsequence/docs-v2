@@ -19,7 +19,8 @@ const randomNonce = ethers.BigNumber.from(
   ethers.utils.hexlify(ethers.utils.randomBytes(20))
 )
 
-// store randomNonce in a database
+... store randomNonce in a database
+... send nonce to front end
 ```
 
 ### Client calls `sessionAuthProof`
@@ -39,11 +40,47 @@ const sequence = new SequenceWaaS({
 const authProof = sequence.sessionAuthProof({ nonce }) 
 ```
 
-### Transmittance of Signature to Server
+### Transmittance of Signature & Session ID to Server
 
-Next, send the `authProof` to the server
+Next, retrieve the SessionID from the logged in user
+
+```typescript
+const waas = new SequenceWaaS({
+  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+  network: 'arbitrum-nova'
+})
+ 
+await waas.signIn({ idToken }, "Computer")
+ 
+const sessions = await waas.listSessions()
+
+console.log(sessions[0])
+
+... return sessions[0] to server
+```
+
+And send the `authProof` with `SessionID` to the server
 
 ### Server Verification
 
+Finally, verify the signature and message came from the user owned wallet
+
+```typescript
+import { sequence } from "0xsequence";
+
+...
+const api = new sequence.api.SequenceAPIClient("https://api.sequence.app");
+const message = `SessionAuthProof ${sessionId} ${walletAddress} ${nonce}`
+
+const isValid = await api.isValidMessageSignature(
+    walletAddress,
+    message,
+    signature,
+    chainId // e.g. 1 for mainnet, 42161 for arbitrum one, etc.
+);
+ 
+console.log(isValid);
+```
 :::::
 
