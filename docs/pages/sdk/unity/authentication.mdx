@@ -22,7 +22,47 @@ In order to enable deep linking, we must register a custom URL scheme for our ap
 
 ### Editor
 
-No additional steps required.
+For social sign in to work in the editor, you will need to deploy a simple server on your local machine. We provide a sample implementation [here](https://gist.github.com/BellringerQuinn/d012cd29eb9e756fe3555d4d03b001b2).
+
+To deploy this sample server, please perform the following.
+
+1. Download and install Go: https://go.dev/dl/
+2. Open a terminal/command prompt and verify your installation by typing
+
+```
+go version
+```
+
+3. Create a directory for your go project and a main.go file
+
+```
+mkdir myUnityServer
+cd myUnityServer
+touch main.go
+```
+
+4. Copy + paste the [gist](https://gist.github.com/BellringerQuinn/d012cd29eb9e756fe3555d4d03b001b2) into the main.go
+5. Initialize the project by creating a go module
+
+```
+go mod init myUnityServer
+```
+
+6. Run the server
+
+```
+go run main.go
+```
+
+7. You should see `Server listening on port 8080` printed to your terminal/command prompt
+
+If you choose to deploy the server to somewhere else (a different port, a public server, etc.), you'll want to change the `OpenIdAuthenticator.RedirectUrl` in your code before initiating the sign in process
+
+```
+OpenIdAuthenticator.InjectRedirectUrl("the url for your deployed server");
+```
+
+Note: you'll want to use a web client for your social sign in provider with `http://localhost:8080/` (or your server url) whitelisted as a redirect url under `Standalone Platforms` in `SequenceConfig`
 
 ### iOS
 
