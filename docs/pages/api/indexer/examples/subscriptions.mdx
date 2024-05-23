@@ -11,7 +11,7 @@ addresses, account addresses, and/or token IDs.
 
 * Request: `POST /rpc/Indexer/SubscribeEvents`
 * Content-Type: `application/json`
-* Body (in JSON): 
+* Body (in JSON):
   * `Filters` ([]object) -- an array of filters
     * `contractAddresses` ([]string) -- a ERC20 / ERC721 / ERC1155 contract address
     * `accounts` ([]string) -- wallet addresses
@@ -35,7 +35,7 @@ Example `SubscribeEvents`
 
 ```bash [cURL]
 curl -X POST \
-  -H 'Content-type: application/json' \ 
+  -H 'Content-type: application/json' \
   -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" \
   https://polygon-indexer.sequence.app/rpc/Indexer/SubscribeBalanceUpdates \
   -d '{"contractAddress":"0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359"}'
@@ -80,25 +80,22 @@ import { SequenceIndexer, WebrpcError } from '@0xsequence/indexer'
 
 const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
 
-const main = async () => {
-
-  const req = {
-      filter: {
-        contractAddresses: ['0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'],
-      },
-  }
-
-  const options = {
-    onMessage: (msg: any) => {
-      console.log('msg', msg)
+const req = {
+    filter: {
+      contractAddresses: ['0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'],
     },
-    onError: (err: WebrpcError) => {
-      console.error('err', err)
-    }
-  }
-
-  await indexer.subscribeEvents(req, options)
 }
+
+const options = {
+  onMessage: (msg: any) => {
+    console.log('msg', msg)
+  },
+  onError: (err: WebrpcError) => {
+    console.error('err', err)
+  }
+}
+
+await indexer.subscribeEvents(req, options)
 ```
 
 :::
