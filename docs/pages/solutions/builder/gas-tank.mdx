@@ -1,5 +1,3 @@
-import Video from "../../../components/Video";
-
 # Gas Tank in Sequence Builder
 
 Sequence wallets are controlled by smart contracts, enabling transaction fees to be abstracted away from users, a concept known in web3 as _gas_. With Sequence Builder's Gas Tank, you have a streamlined process for sponsoring gas for your users.
@@ -14,11 +12,34 @@ Gas sponsoring in a web3 game provides seamless onboarding by removing gas fees,
 
 Sponsoring gas on contracts is easy, and can be done either by searching and adding a contract or selecting a contract that you have already deployed on a project. Project owners also have control over the contracts they sponsor, allowing them to temporarily disable a sponsor for a specific contract by toggling it off and updating the sponsor settings.
 
-There are a few options to fund sponsored gas, including a credit card checkout that makes paying for gas simple.
+#### How to Sponsor a Contract
 
-## Watch the Gas Tank in action in Builder
+::::steps
 
-<Video
-  videoPreviewSrc={"/img/builder/builder_sponsor_gas.png"}
-  videoSrc={"/video/builder/05_Gas_Tank.mp4"}
-/>
+## Create or Select Project
+
+To create a project, follow [this video walk through](/solutions/builder/project-management#watch-a-project-be-created-in-the-builder)
+
+If you have a project already, sign in and select from the listed projects
+
+## Upgrade Billing
+
+To upgrade Billing follow [this walk through](/solutions/builder/project-settings#update-your-project-subscription-plan)
+
+## Select Relayer Network
+
+After selecting a project, go to the `Gas Sponsoring` page, and select from the relayer dropdown the network
+
+![select relayer network](/img/builder/builder_select_network_relayer.png)
+
+## Sponsor Contract Address
+
+Then, either `+ Add Address` from a contract not already linked to your project
+
+![select relayer network](/img/builder/builder_gas_sponsoring_add_address.png)
+
+Or, `Add Contract` from an already `Linked` contracts
+
+![select relayer network](/img/builder/builder_gas_sponsoring_add_contract.png)
+
+::::

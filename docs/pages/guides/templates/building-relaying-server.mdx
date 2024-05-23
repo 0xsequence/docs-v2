@@ -3,10 +3,12 @@ import { Callout } from 'vocs/components'
 # Building a Relaying Server
 
 With Sequence, you can create a smart contract wallet your server can use to dispatch transactions for your users
-without you having to be worried about transaction speed, throughput and re-orgs.
+without you having to be worried about transaction speed, throughput and re-orgs. 
+
+The only difference from using a typical Sequence wallet when sending transactions to the blockchain, is at the smart contract level the `msg.sender` is one of the Sequence Relayers wallet addresses.
 
 <Callout type='info'>
-By default, Sequence transactions will be executed sequentially.
+  By default, Sequence transactions will be executed sequentially.
 </Callout>
 
 ## Nodejs Server
@@ -15,12 +17,34 @@ Your server will need an EOA wallet that will be able to sign messages. It will 
 wallet which will be used to dispatch transactions.
 
 This Sequence wallet should have the correct ownership at your contract level, not the EOA.
-Also, the Sequence wallet should be sufficiently funded in order to pay fees needed by the transactions API to dispatch your transactions.
+Also, the Sequence wallet contract should be sponsored, which requires an upgrade of the Billing tier, to at least `Developer`
 
 Using this approach - versus the next section (with sponsoring) - includes the ability to pay for gas in any available currency by our relayer (e.g. 'MATIC', 'DAI', 'USDC', 'WETH').
 
+<Callout type='danger'>
+  If you require a server private key, you can use [this application](https://sequence-ethauthproof-viewer.vercel.app/) to generate a local wallet, and copy the private key into your code
+</Callout>
+
+To use the Transactions API you'll need to guide yourself through the following steps to upgrade your Builder Project
+
+::::steps
+### Create Project
+
+Follow [this video walkthrough](/solutions/builder/project-management) to create a project
+
+### Upgrade Billing to Developer, from Community
+
+Follow [this walkthrough](/solutions/builder/project-settings#update-your-project-subscription-plan) to upgrade your billing to at least `Developer` tier
+::::
+
+Then implement with code
+
 ```ts
 import { Session } from "@0xsequence/auth";
+import { ethers } from 'ethers'
+
+// where the <chain_handle> corresponds to https://docs.sequence.xyz/solutions/technical-references/chain-support/
+const provider = new ethers.providers.JsonRpcProvider('https://nodes.sequence.app/<chain_handle>');
 
 // Create your server EOA
 const walletEOA = new ethers.Wallet(serverPrivateKey, provider);
@@ -40,7 +64,8 @@ console.log(session.account.address);
 // - 137:   Polygon Mainnet
 // - 42161: Arbitrum One
 // See https://chainid.network/ for more
-const signer = session.account.getSigner(137);
+const chainID = <chain_id_number> 
+const signer = session.account.getSigner(chainID);
 
 // Craft your transaction
 const erc721Interface = new ethers.utils.Interface([
@@ -67,10 +92,14 @@ if (txnReceipt.status != 1) {
 }
 ```
 
-You can also enforce a specific way to pay for gas fees, or the openning of a specific Sequence wallet.
+You can also enforce a specific way to pay for gas fees
 
 ```ts
 import { Session } from '@0xsequence/auth'
+import { ethers } from 'ethers'
+
+// where the <chain_handle> corresponds to https://docs.sequence.xyz/solutions/technical-references/chain-support/
+const provider = new ethers.providers.JsonRpcProvider('https://nodes.sequence.app/<chain_handle>');
 
 // Create your server EOA
 const walletEOA = new ethers.Wallet(serverPrivateKey, provider)
@@ -131,39 +160,30 @@ To catch any unwanted migration, you can use the `onMigration` callback.
 
 ## Nodejs Server with Gas Sponsoring using Sequence Builder
 
-If you want to have your transactions sponsored & paid for with a credit card, you can follow the below steps before beginning your code, at the following link: https://sequence.build/
+If you want to have your transactions sponsored & paid for with a [Sequence Builder](https://sequence.build/) credits, you can follow the below steps before beginning your code
 
-By sponsoring your transaction, you can now just send the transaction without a fee object and not have to fund the smart contract wallet before relaying any transactions.
+::::steps
+### Create Project
 
-<Callout type='info'>
-Already Deployed Contract
-For this example, we assume you have a smart contract deployed with a contract address to include in the last step.
-</Callout>
+Follow [this video walkthrough](/solutions/builder/project-management) to create a project
 
-### A. Create Dapp
+### Upgrade Billing to Developer, from Community
 
-![Sequence builder create app](/img/builder/builder_create_dapp.png)
+Follow [this walkthrough](/solutions/builder/project-settings#update-your-project-subscription-plan) to upgrade your billing to at least `Developer` tier
 
-### B. New Dapp
+### Sponsor Contract
 
-![Sequence builder new dapp](/img/builder/builder_new_dapp.png)
-
-### C.1 Gas Tank
-
-![Sequence builder gas tank](/img/builder/builder_gas_tank.png)
-
-### C.2 Add Gas
-
-![Sequence builder add gas](/img/builder/builder_add_gas.png)
-
-### C.3 Add Sponsored Address
-
-![Sequence builder add sponsored address](/img/builder/builder_add_sponsored_address.png)
+Follow [this walkthrough](/solutions/builder/gas-tank) to sponsor your contract
+::::
 
 The following is example code that implements a relayed transaction, same as the above example (i.e. Nodejs Server) but without fees, taken care of by the Sequence Builder.
 
 ```ts
 import { Session } from "@0xsequence/auth";
+import { ethers } from 'ethers'
+
+// where the <chain_handle> corresponds to https://docs.sequence.xyz/solutions/technical-references/chain-support/
+const provider = new ethers.providers.JsonRpcProvider('https://nodes.sequence.app/<chain_handle>');
 
 // Create your server EOA
 const walletEOA = new ethers.Wallet(serverPrivateKey, provider);
