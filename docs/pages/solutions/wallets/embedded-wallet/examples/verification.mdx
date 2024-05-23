@@ -8,12 +8,21 @@ In the event that you need to verify the ownership of an Embedded Wallet address
   A full React template example dapp can be found [here](https://github.com/0xsequence-demos/template-embedded-wallet-verification)
 </Callout>
 
-## Server Wallet Ownership Verification with Random Nonce
+## 1. Server Wallet Ownership Verification with Random Nonce
+The following sequence diagram flows showcase how to both generate and verify a nonce.
 
-Starting with a vite react app (using `pnpm create vite`), install using `pnpm`, `yarn`, or `npm`, both `@react-oauth/google` and `@0xsequence/waas`
+### Generate Nonce
+![generate nonce](/img/embedded_wallet/embedded_wallet_generate_nonce.png)
+
+### Verify Message Proof
+![verify signature](/img/embedded_wallet/embedded_wallet_verify_signature.png)
+
+### Implementation
 
 ::::steps
 ### User Logs in to Login Provider (e.g. Google) in Frontend
+
+Starting with a vite react app (using `pnpm create vite`), install using `pnpm`, `yarn`, or `npm`, both `@react-oauth/google` and `@0xsequence/waas`
 
 ```typescript
 import { SequenceWaaS } from '@0xsequence/waas'
@@ -136,7 +145,17 @@ console.log(isValid);
 ```
 :::::
 
-## Server Wallet Ownership Verification with Time Expiry
+## 2. Server Wallet Ownership Verification with Time Expiry
+
+The following sequence diagram flows showcase how to both generate and verify a nonce.
+
+### Generate Nonce
+[Same sequence diagram as no expiry](/solutions/wallets/embedded-wallet/examples/verification#generate-nonce)
+
+### Verify Message Proof and Validate Expiry
+![verify with time expiry](/img/embedded_wallet/embedded_wallet_verify_signature_time_expiry.png)
+
+### Implementation
 
 ::::steps
 
