@@ -14,6 +14,8 @@ This will provide you easy access to two authentication methods:
 Available on all platforms, email sign in leverages [Amazon Cognito](https://aws.amazon.com/cognito/) and provides the user with a 2FA challenge - a 6 digit code emailed to the entered address for the user to enter on the next page.
 Once the user successfully completes the 2FA challenge, the SDK will receive an idToken in JWT format from Amazon Cognito and proceed to establish the session with WaaS API.
 
+Note: Email sign in is not available to projects on the Community tier in the Builder. You will need to add `Email` as a login option when [setting up your embedded wallet in the Builder Console](/solutions/builder/embedded-wallet). For more info on upgrading your Builder Project Subscription Plan, please [see here](/solutions/builder/project-settings/#5-billing-settings).
+
 ## 2. Social Sign in
 
 Available on all platforms except WebGL (currently), social sign in uses [OIDC](https://openid.net/developers/how-connect-works/) with the [implicit flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow) to allow users to login via their existing Google, Discord, Facebook, or Apple accounts.
