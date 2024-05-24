@@ -19,7 +19,7 @@ In order to be able to sign valid proofs by an Embedded Wallet, a Parent Wallet 
 </Callout>
 
 ## 1. Server Wallet Ownership Verification with Random Nonce
-The following sequence diagram flows showcase how to both generate and verify a random unique nonce stored in an off-chain db.
+The following diagram flows showcase how to both generate and verify a random unique nonce stored in an off-chain db.
 
 ### Generate Nonce
 ![generate nonce](/img/embedded_wallet/embedded_wallet_generate_nonce.png)
@@ -92,7 +92,7 @@ function App(){
 
 ### Generate & Store Random Nonce
 
-Send the `walletAddress` to the server or decentralized compute, generate a random nonce, store it in a database, and return the nonce to the client when needed.
+Send the `walletAddress` to the server, generate a random nonce, store it in a database, and return the nonce to the client when needed.
 
 Example code in Typescript using `ethers@5.7.2`
 
@@ -157,13 +157,13 @@ console.log(isValid);
 
 ## 2. Server Wallet Ownership Verification with Time Expiry
 
-The following sequence diagram flows showcase how to both generate and verify a timestamped nonce stored in an off-chain db, that allows an application to validate a wallet can be authorized for a given period of time. 
+The following diagram flows showcase how to both generate and verify a timestamped nonce stored in an off-chain db, that allows an application to validate a wallet can be authorized for a given period of time. 
 
 ### Use Cases
 In games, this can be useful for creating checkpoints or levels in a timed fashion, showing metadata for a certain period of time, agreeing to an iterated terms of service, authorizing free-to-play economies on a trial, etc.
 
 ### Generate Nonce
-[Same sequence diagram as no expiry](/solutions/wallets/embedded-wallet/examples/verification#generate-nonce)
+[Same diagram as no expiry](/solutions/wallets/embedded-wallet/examples/verification#generate-nonce)
 
 ### Verify Message Proof and Validate Expiry
 ![verify with time expiry](/img/embedded_wallet/embedded_wallet_verify_signature_time_expiry.png)
