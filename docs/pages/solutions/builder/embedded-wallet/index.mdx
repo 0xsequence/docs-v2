@@ -1,6 +1,15 @@
 # Embedded Wallet in Sequence Builder
 You can configure a [Sequence Embedded Wallet](/solutions/wallets/embedded-wallet/overview) in Builder and integrate your own OAuth accounts to enable easy onboarding to your games. Configuration page in Builder [is available here](https://sequence.build/project/default/wallet/embedded-wallet).
 
+The following sections will explain the various ways to configure using an Embedded Wallet in Builder:
+- [Login Providers](/solutions/builder/embedded-wallet#login-providers): Web2 based authentication providers
+- [Allowed Origins](/solutions/builder/embedded-wallet#allowed-origins): Specify allowed URL origins to call your Embedded Wallet instance from to prevent configuration key misuse
+- [Recovery Wallet](/solutions/builder/embedded-wallet#recovery-wallet): In the event of a wallet ownership turnover for a compromised wallet, specify a recovery wallet to obtain ownership of embedded wallet instance post Trust recovery process
+- [Initial Configuration Password](/solutions/builder/embedded-wallet#initial-configuration-password): Create a password to secure your Embedded Wallet project instance in Builder
+- [Configuration Changes](/solutions/builder/embedded-wallet#configuration-changes): Update configuration details at anypoint with password protection
+- [Parent Wallet](/solutions/builder/embedded-wallet#parent-wallet): A 2/2 signer delegation of non-custodial security 
+- [SDK Integrations](/solutions/builder/embedded-wallet#sdk-integrations): Sequence SDK products that allow developers to implement an Embedded Wallet across platforms
+
 ## Login Providers
 Sequence Embedded Wallet supports the following login providers:
 
@@ -16,7 +25,7 @@ This additional security measure will prevent unauthorized usage of your WaaS co
 You must define allowed origins with a valid scheme (i.e. `https`).
 
 ## Recovery Wallet
-WaaS requires the public address for a recovery wallet that you control. This recovery wallet will be used for recovering user wallets in a disaster scenario, so it must be controlled by you and must be kept safe at all times.
+WaaS requires the public address for a recovery wallet that you control. This recovery wallet will be used for recovering user wallets in a disaster scenario where a wallet has been compromised, so it must be controlled by you and must be kept safe at all times.
 
 We recommend that:
 
@@ -26,11 +35,31 @@ We recommend that:
 
 Once the recovery wallet is setup properly, provide the public address for it. Recovery wallet cannot be modified once your configuration is saved.
 
-## Initial Configuration and Update Code
-Once you have all information prepared, go ahead and create your Embedded Wallet configuration. During initial setup, Builder will provide you with an update code. This code will be required for all subsequent modifications to your Embedded Wallet configuration, so it must be stored safely.
+## Initial Configuration Password
+Once you have all information prepared, go ahead and create your Embedded Wallet configuration. During initial setup, Builder will prompt you to assign a password to the Embedded Wallet. This password will be required for all subsequent modifications to your Embedded Wallet configuration, so it must be stored safely.
 
 ## Configuration Changes
-To make modifications to your Embedded Wallet configuration, navigate to the Embedded Wallet section again and make the necessary changes. Then click "Save Configuration" and enter your update code to deploy the changes.
+To make modifications to your Embedded Wallet configuration, navigate to the Embedded Wallet section again and make the necessary changes. Then click "Save Configuration" and enter your recovery wallet password to deploy the changes.
+
+## Parent Wallet
+
+Every embedded wallet parent wallet is a 2/2 signer where the two signers are:
+- Guard - fully controlled by Sequence
+- Authenticator - jointly controlled by Sequence and Quantstamp
+
+And, every child wallet is a 1/1 signer where the signer is the parent wallet of the specific project. So inherently, the custodial security of the 1/1 child wallet inherits the security of the 2/2 parent wallet, as no transactions or signatures can be created without both keys from the parent wallet.
+
+### Why deploying a Parent Wallet will future proof integrations
+
+Parent Wallet for an Embedded Wallet configuration must be deployed on-chain to prevent issues with message signing and increased gas cost during transactions. These Parent Wallets can be deployed from [Sequence Builder](https://sequence.build) when accessing your Embedded Wallet configuration.
+
+The possible states that an Embedded Wallet can be in and their behaviour:
+
+| Scenario      | Prerequisite   | `signMessage` Behaviour|
+| ---           | ---            | ---                    |
+| None deployed   | Default state | signMessage returns an invalid signature |
+| Only parent deployed | Manually deployed from Builder OR upon first ever transaction from any wallet | signMessage returns a valid 6492 signature (very low verification support; use Sequence to validate) |
+| Both parent and child deployed | Upon first ever transaction from that specific wallet | signMessage returns a valid 1271 signature (moderate verification support; still recommended to use Sequence to validate) |
 
 ## SDK Integrations
 Now that you have your Embedded Wallet configuration up, go ahead and follow our guides on how to integrate with the SDKs:
