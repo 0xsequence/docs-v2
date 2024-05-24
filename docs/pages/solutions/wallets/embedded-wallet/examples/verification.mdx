@@ -9,7 +9,7 @@ In the event that you need to verify the ownership of an Embedded Wallet address
 </Callout>
 
 ## 1. Server Wallet Ownership Verification with Random Nonce
-The following sequence diagram flows showcase how to both generate and verify a nonce.
+The following sequence diagram flows showcase how to both generate and verify a random unique nonce stored in an off-chain db.
 
 ### Generate Nonce
 ![generate nonce](/img/embedded_wallet/embedded_wallet_generate_nonce.png)
@@ -147,7 +147,7 @@ console.log(isValid);
 
 ## 2. Server Wallet Ownership Verification with Time Expiry
 
-The following sequence diagram flows showcase how to both generate and verify a nonce.
+The following sequence diagram flows showcase how to both generate and verify a timestamped nonce stored in an off-chain db, that allows an application to validate a wallet can be authorized for a given period of time.
 
 ### Generate Nonce
 [Same sequence diagram as no expiry](/solutions/wallets/embedded-wallet/examples/verification#generate-nonce)
