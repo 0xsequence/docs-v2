@@ -1,12 +1,14 @@
 # Embedded Wallet in Sequence Builder
 You can configure a [Sequence Embedded Wallet](/solutions/wallets/embedded-wallet/overview) in Builder and integrate your own OAuth accounts to enable easy onboarding to your games. Configuration page in Builder [is available here](https://sequence.build/project/default/wallet/embedded-wallet).
 
-The following sections explain how to configure Embedded Wallet in Builder:
-- [Login Providers](/solutions/builder/embedded-wallet#login-providers)
-- [Allowed Origins](/solutions/builder/embedded-wallet#allowed-origins)
-- [Recovery Wallet](/solutions/builder/embedded-wallet#recovery-wallet)
-- [Parent Wallet](/solutions/builder/embedded-wallet#parent-wallet)
-- [SDK Integrations](/solutions/builder/embedded-wallet#sdk-integrations)
+The following sections will explain the various ways to configure using an Embedded Wallet in Builder:
+- [Login Providers](/solutions/builder/embedded-wallet#login-providers): Web2 based authentication providers
+- [Allowed Origins](/solutions/builder/embedded-wallet#allowed-origins): Specify allowed URL origins to call your Embedded Wallet instance from to prevent configuration key misuse
+- [Recovery Wallet](/solutions/builder/embedded-wallet#recovery-wallet): In the event of a wallet ownership turnover for a compromised wallet, specify a recovery wallet to obtain ownership of embedded wallet instance post Trust recovery process
+- [Initial Configuration Password](/solutions/builder/embedded-wallet#initial-configuration-password): Create a password to secure your Embedded Wallet project instance in Builder
+- [Configuration Changes](/solutions/builder/embedded-wallet#configuration-changes): Update configuration details at anypoint with password protection
+- [Parent Wallet](/solutions/builder/embedded-wallet#parent-wallet): A 2/2 signer delegation of non-custodial security 
+- [SDK Integrations](/solutions/builder/embedded-wallet#sdk-integrations): Sequence SDK products that allow developers to implement an Embedded Wallet across platforms
 
 ## Login Providers
 Sequence Embedded Wallet supports the following login providers:
@@ -23,7 +25,7 @@ This additional security measure will prevent unauthorized usage of your WaaS co
 You must define allowed origins with a valid scheme (i.e. `https`).
 
 ## Recovery Wallet
-WaaS requires the public address for a recovery wallet that you control. This recovery wallet will be used for recovering user wallets in a disaster scenario, so it must be controlled by you and must be kept safe at all times.
+WaaS requires the public address for a recovery wallet that you control. This recovery wallet will be used for recovering user wallets in a disaster scenario where a wallet has been compromised, so it must be controlled by you and must be kept safe at all times.
 
 We recommend that:
 
@@ -33,8 +35,11 @@ We recommend that:
 
 Once the recovery wallet is setup properly, provide the public address for it. Recovery wallet cannot be modified once your configuration is saved.
 
+## Initial Configuration Password
+Once you have all information prepared, go ahead and create your Embedded Wallet configuration. During initial setup, Builder will prompt you to assign a password to the Embedded Wallet. This password will be required for all subsequent modifications to your Embedded Wallet configuration, so it must be stored safely.
+
 ## Configuration Changes
-To make modifications to your Embedded Wallet configuration, navigate to the Embedded Wallet section again and make the necessary changes. Then click "Save Configuration" and enter your update code to deploy the changes.
+To make modifications to your Embedded Wallet configuration, navigate to the Embedded Wallet section again and make the necessary changes. Then click "Save Configuration" and enter your recovery wallet password to deploy the changes.
 
 ## Parent Wallet
 
