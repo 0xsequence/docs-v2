@@ -3,6 +3,8 @@ title: Sequence - Web3 Gaming Platform - Unity SDK Overview
 description: Documentation for Unity SDK overview for the Sequence infrastructure stack for web3 gaming.
 ---
 
+import Video from "../../../components/Video";
+
 # Introduction
 
 The Sequence Unity Embedded Wallet SDK provides full Sequence [Embedded Wallet](/solutions/wallets/embedded-wallet/overview) and [Indexer](/api/indexer/overview) integration for your Unity Games, integrated with our own purpose-built for Unity SequenceEthereum library. That's right, no Nethereum required!
@@ -10,9 +12,20 @@ The Sequence Unity Embedded Wallet SDK provides full Sequence [Embedded Wallet](
 This SDK follows [Semantic Versioning](https://semver.org/) (`major.minor.patch`). While we're still in `0.x.y` builds, API breaking changes can be made at any time. After `1.0.0`, breaking changes will always cause a `major` version increment, non-breaking new features will cause a `minor` version increment, and bugfixes will cause a `patch` version increment.
 
 ## Requirements
+
 Unity 2021.3.6f1 or later
+
 - Android
 - iOS
 - PC standalone
 - Mac standalone -> (Mono builds only when using Social Sign in -> in our testing MacOS doesn't pick up custom URL schemes automatically unless you run some system commands first; these system commands only work on Mono -> see [OpenIdAuthentication.PlatformSpecificSetup](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Authentication/OpenIdAuthenticator.cs#L89))
 - WebGL (excluding Social Sign in)
+
+## Integration Video
+
+While a video will never be a full substitute for documentation, we've created a 20 minute video demonstrating the integration process and explaning some of the steps and thought process behind them which you may find helpful. Watch it on YouTube here: https://youtu.be/iNIeZKEscN8
+
+<Video
+  videoPreviewSrc={"/img/unity/unity-integration-preview.png"}
+  videoSrc={"/video/unity/UnityIntegrationDemo.mp4"}
+/>
