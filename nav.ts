@@ -458,7 +458,8 @@ export const sidebar = {
         {text: 'Transaction History Token Contract', link: '/api/indexer/examples/transation-history-token-contract'},
         {text: 'Native Network Balance', link: '/api/indexer/examples/native-network-balance'},
         {text: 'Metadata Tips', link: '/api/indexer/metadata-tips'},
-        {text: 'Webhooks', link: '/api/indexer/examples/webhook-listener'}
+        {text: 'Webhooks', link: '/api/indexer/examples/webhook-listener'},
+        {text: 'Subscriptions', link: '/api/indexer/examples/subscriptions'}
           ]
         }
       ]
