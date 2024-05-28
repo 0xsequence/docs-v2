@@ -79,6 +79,32 @@ GetTokenSuppliesReturn tokenSupplies = await chainIndexer.GetTokenSupplies(new G
 
 We don't expect this to be a very common operation, but it is exposed for you just in case you need it.
 
+### Get Token Supplies Map
+
+For `GetTokenSupplies` power users, we also provide a `GetTokenSuppliesMap` async Task that allows you to fetch the supplies for multiple token contracts and token ids in a map.
+
+```
+IIndexer indexer = new ChainIndexer(Chain.Polygon);
+string usdcAddress = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359".ToLower();
+string wmaticAddress = "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270".ToLower();
+string skyweaverAddress = "0x631998e91476da5b870d741192fc5cbc55f5a52e".ToLower();
+string skyweaverTokenId1 = "68657";
+string skyweaverTokenId2 = "66669";
+string skyweaverTokenId3 = "66668";
+GetTokenSuppliesMapReturn suppliesMapReturn = await indexer.GetTokenSuppliesMap(new GetTokenSuppliesMapArgs(
+    new Dictionary<string, string[]>()
+    {
+        { usdcAddress, new string[] { } },
+        { wmaticAddress, new string[] { "0" } },
+        { skyweaverAddress, new string[] { skyweaverTokenId1, skyweaverTokenId2, skyweaverTokenId3 } },
+    }));
+Dictionary<string, TokenSupply[]> suppliesMap = suppliesMapReturn.supplies;
+```
+
+Here, you can expect that `suppliesMap[usdcAddress].Length = 1` with the TokenSupply object relating to the supply of the ERC20 token.
+
+Similarly, you can expect that `suppliesMap[skyweaverAddress].Length = 3` with the TokenSupply object relating to the specified token ids.
+
 ## Get Transaction history
 
 To fetch the transaction history for a given account, you'll want to use the `GetTransactionHistory` method.
