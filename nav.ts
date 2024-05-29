@@ -85,6 +85,7 @@ export const sidebar = {
             text: 'Examples', collapsed: true, items: [
             {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
             {text: 'Use Wallets', link: '/solutions/wallets/embedded-wallet/examples/use-wallets'},
+            {text: 'On-ramp', link: '/solutions/wallets/embedded-wallet/examples/on-ramp'},
             {text: 'Validation', link: '/solutions/wallets/embedded-wallet/examples/validation'},
             {text: 'Verification', link: '/solutions/wallets/embedded-wallet/examples/verification'},
             {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
@@ -163,7 +164,7 @@ export const sidebar = {
       text: 'Payments',
       items: [
         // { text: 'NFT Checkout', link: '/solutions/nft-checkout' },
-        { text: 'Onramps', link: '/solutions/payments/onramps/fiat-on-ramps' },
+        { text: 'On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps' },
       ]
     },
     {
@@ -321,7 +322,7 @@ export const sidebar = {
     {
       text: 'Templates',
       items: [
-        { text: 'In-game Wallet Demo', link: '/guides/templates/template-in-game-wallet' },
+        { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
         { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
         // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
       ]
@@ -382,7 +383,7 @@ export const sidebar = {
           { text: 'Overview', link: '/sdk/sequence-kit/overview' },
           { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
           { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
-          { text: 'On-Ramp', link: '/sdk/sequence-kit/on-ramp' },
+          { text: 'On-ramp', link: '/sdk/sequence-kit/on-ramp' },
           { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
           { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
         ]
