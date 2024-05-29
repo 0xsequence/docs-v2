@@ -382,6 +382,7 @@ export const sidebar = {
           { text: 'Overview', link: '/sdk/sequence-kit/overview' },
           { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
           { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
+          { text: 'On-Ramp', link: '/sdk/sequence-kit/on-ramp' },
           { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
           { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
         ]

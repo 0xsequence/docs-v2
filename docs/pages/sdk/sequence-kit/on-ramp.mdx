@@ -1,0 +1,66 @@
+# On-Ramp Overview
+
+The on-ramp modal enables developers to easily facilitate on-ramp via fiat currency using a credit card into a cryptocurrency across many different networks and tokens.
+
+<div class="text--center">
+  <img src="/img/kit/kit-on-ramp.png" />
+</div>
+
+# Integration
+To integrate the on-ramp feature, follow these steps:
+
+
+::::steps
+
+## 1. Install the `kit-checkout` module:
+
+```bash
+npm install @0xsequence/kit-checkout
+# or
+pnpm install @0xsequence/kit-checkout
+# or
+yarn add @0xsequence/kit-checkout
+```
+
+## 2. Place the `KitCheckoutProvider` below the Sequence Kit Core provider in your app:
+
+```jsx
+import { KitCheckoutProvider } from '@0xsequence/kit-checkout'
+
+
+const App = () => {
+  return (
+    <WagmiConfig config={config}>
+      <QueryClientProvider client={queryClient}> 
+        <KitProvider>
+          <KitCheckoutProvider>
+            <Page />
+          </KitCheckoutProvider>
+        </KitProvider>
+      </QueryClientProvider>
+    </WagmiConfig>
+  )
+}
+```
+
+## 3. Adding Funds with a Credit Card
+Call the `triggerAddFunds` function to cause a modal to appear
+
+```js
+  import { useAddFundsModal } from '@0xsequence/kit-checkout'
+
+  const MyComponent = () => {
+    const { triggerAddFunds: toggleAddFunds } = useAddFundsModal()
+
+    const onClick = () => {
+      toggleAddFunds({
+        walletAddress: recipientAddress,
+      })
+    }
+
+    return (
+      <button onClick={onClick}>Add Funds</button>
+    )
+  }
+```
+::::
