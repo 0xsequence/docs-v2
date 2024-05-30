@@ -30,6 +30,12 @@ export const APIsSection = () => (
         link="/api/metadata/overview"
       />
       <Card
+        title="Analytics API"
+        icon="AnalyticsIcon"
+        body="Analyze, track, and report on vital metrics with our Analytics API."
+        link="/api/analytics/overview"
+      />
+      <Card
         title="Transactions API"
         icon="SequenceIcon"
         body="Send and optimize transactions on any chain through our performant Sequence Relayer."
