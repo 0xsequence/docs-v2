@@ -24,7 +24,7 @@ token metadata directly.
 
 <br />
 
-**Example: `GetTokenMetadata` of some tokens using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+**Example: `GetTokenMetadata` of some tokens using an `AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY`**
 
 :::info
 This code requires an API Access Key from [Sequence Builder](https://sequence.build).
@@ -33,14 +33,14 @@ This code requires an API Access Key from [Sequence Builder](https://sequence.bu
 :::code-group
 
 ```shell [cURL]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://metadata.sequence.app/rpc/Metadata/GetTokenMetadata -d '{"chainID":"polygon", "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["65537", "65538", "65539"] }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://metadata.sequence.app/rpc/Metadata/GetTokenMetadata -d '{"chainID":"polygon", "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "tokenIDs": ["65537", "65538", "65539"] }'
 ```
 
 ```ts [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceMetadata } from '@0xsequence/metadata'
 
-const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 const tokenMetadata = await metadataClient.getTokenMetadata({
   chainID: 'polygon',
@@ -56,7 +56,7 @@ import (
 	"github.com/0xsequence/go-sequence/metadata"
 )
 
-seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+seqMetadata := metadata.NewMetadata("AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 collectibleInfo, err := seqMetadata.GetTokenMetadata(context.Background(), "polygon", "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", []string{"1", "2"})
 ```
@@ -99,7 +99,7 @@ curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0p
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceMetadata } from '@0xsequence/metadata'
 
-const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 const jobID = await metadataClient.enqueueTokensForRefresh({
     chainID: 'polygon',
@@ -115,7 +115,7 @@ import (
 	"github.com/0xsequence/go-sequence/metadata"
 )
 
-seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+seqMetadata := metadata.NewMetadata("AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 refreshJob, err := seqMetadata.EnqueueTokensForRefresh(context.Background(), "polygon", "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", []string{"1", "2"}, nil)
 ```
@@ -144,7 +144,7 @@ curl -v -X POST -H "Content-type: application/json" -H "X-Access-Key: wuELppeX0p
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceMetadata } from '@0xsequence/metadata'
 
-const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+const metadataClient = new SequenceMetadata("https://metadata.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 const refreshJobStatus = await metadataClient.getTokenRefreshStatus({
     taskId: 1234
@@ -158,7 +158,7 @@ import (
 	"github.com/0xsequence/go-sequence/metadata"
 )
 
-seqMetadata := metadata.NewMetadata("c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+seqMetadata := metadata.NewMetadata("AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 refreshJobStatus, err := seqMetadata.GetTokenRefreshStatus(context.Background(), uint64(1234))
 ```

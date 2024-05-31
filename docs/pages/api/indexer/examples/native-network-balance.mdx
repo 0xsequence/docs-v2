@@ -16,7 +16,7 @@
 :::code-group
 
 ```bash [cURL]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetEtherBalance -d '{ "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9" }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://polygon-indexer.sequence.app/rpc/Indexer/GetEtherBalance -d '{ "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9" }'
 ```
 
 
@@ -24,7 +24,7 @@ curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9B
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY')
 
 // try any account address you'd like :)
 const accountAddress = '0xabc...'
@@ -48,16 +48,15 @@ import (
 	"github.com/0xsequence/go-sequence/indexer"
 )
 
-func GetTokenBalances(accountAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+func GetEtherBalance(accountAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
-	includeMetadata := true
-
-	tokenBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, nil, &includeMetadata, nil)
+	nativeBalance, err := seqIndexer.GetEtherBalance(context.Background(), &accountAddress)
+	
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("tokenBalances:", tokenBalances)
+	fmt.Println("nativeBalance:", nativeBalance)
 }
 ```
 

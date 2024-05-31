@@ -24,14 +24,14 @@ This code requires an API Access Key from [Sequence Builder](https://sequence.bu
 :::code-group
 
 ```shell [Curl]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenBalances -d '{ "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9", "includeMetadata": true }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenBalances -d '{ "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9", "includeMetadata": true }'
 ```
 
 ```ts [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY')
 
 // try any account address you'd like :)
 const accountAddress = '0xabc...'
@@ -55,7 +55,7 @@ import (
 )
 
 func GetTokenBalances(accountAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 	includeMetadata := true
 
@@ -97,12 +97,12 @@ See section below for more information.
 		- `includeContracts` ([]string - optional) -- list of specific contract addresses to always be included, even if verifiedOnly is enabled.
 <br />
 
-**Example: `GetTokenBalances` of a contract + account address on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+**Example: `GetTokenBalances` of a contract + account address on Polygon using an `PROJECT_ACCESS_KEY`**
 
 :::code-group
 
 ```bash [Curl]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenBalances -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9", "includeMetadata": true }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenBalances -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "accountAddress": "0x8e3E38fe7367dd3b52D1e281E4e8400447C8d8B9", "includeMetadata": true }'
 ```
 
 
@@ -110,7 +110,7 @@ curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9B
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY')
 
 // try any contract and account address you'd like :)
 const contractAddress = '0x631998e91476DA5B870D741192fc5Cbc55F5a52E'
@@ -137,14 +137,21 @@ import (
 )
 
 func GetTokenBalances(contractAddress, accountAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 	includeMetadata := true
 
-	nftBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, &contractAddress, &includeMetadata, nil, nil)
+	metadataOptions := indexer.MetadataOptions{
+		VerifiedOnly:     true, // Set to true if you want to fetch only verified contracts
+		UnverifiedOnly:   false,
+		IncludeContracts: nil, // Provide a list of specific contracts to include, if any
+	}
+
+	nftBalances, _, err := seqIndexer.GetTokenBalances(context.Background(), &accountAddress, nil, nil, nil, &metadataOptions, nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println("nftBalances:", nftBalances)
 }
 ```

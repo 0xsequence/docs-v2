@@ -17,19 +17,19 @@ sure to query the indexer of the corresponding network).
 
 <br />
 
-**Example: `GetTransactionHistory` of Skyweaver contract on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+**Example: `GetTransactionHistory` of Skyweaver contract on Polygon using an `API_ACCESS_KEY`**
 
 :::code-group
 
 ```bash [cURL]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTransactionHistory -d '{ "filter": { "accountAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E" }, "includeMetadata": true }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://polygon-indexer.sequence.app/rpc/Indexer/GetTransactionHistory -d '{ "filter": { "accountAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E" }, "includeMetadata": true }'
 ```
 
 ```typescript [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY')
 
 // here we query the Skyweaver contract address, but you can use any
 const contractAddress = '0x631998e91476DA5B870D741192fc5Cbc55F5a52E'
@@ -58,15 +58,20 @@ import (
 	"github.com/0xsequence/go-sequence/indexer"
 )
 
-func GetTransactionHistory(accountAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+func GetTransactionHistory(contractAddress string) {
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
 	filter := &indexer.TransactionHistoryFilter{
 		ContractAddress: &contractAddress,
 	}
-	includeMetadata := true
 
-	_, history, err := seqIndexer.GetTransactionHistory(context.Background(), filter, nil, &includeMetadata)
+	metadataOptions := indexer.MetadataOptions{
+		VerifiedOnly:     true, // Set to true if you want to fetch only verified contracts
+		UnverifiedOnly:   false,
+		IncludeContracts: nil, // Provide a list of specific contracts to include, if any
+	}
+
+	_, history, err := seqIndexer.GetTransactionHistory(context.Background(), filter, nil, nil, &metadataOptions)
 	if err != nil {
 		log.Fatal(err)
 	}

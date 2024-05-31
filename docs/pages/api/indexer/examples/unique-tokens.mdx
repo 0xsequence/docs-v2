@@ -24,19 +24,19 @@ sure to query the indexer of the corresponding network).
 
 <br />
 
-**Example: `GetTokenSupplies` of Skyweaver contract on Polygon using an `c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA`**
+**Example: `GetTokenSupplies` of Skyweaver contract on Polygon using an `AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY`**
 
 :::code-group
 
 ```bash [cURL]
-curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenSupplies -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "includeMetadata": true }'
+curl -X POST -H "Content-Type: application/json" -H "X-Access-Key: AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY" https://polygon-indexer.sequence.app/rpc/Indexer/GetTokenSupplies -d '{ "contractAddress": "0x631998e91476DA5B870D741192fc5Cbc55F5a52E", "includeMetadata": true }'
 ```
 
 ```ts [Typescript]
 // Works in both a Webapp (browser) or Node.js:
 import { SequenceIndexer } from '@0xsequence/indexer'
 
-const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA')
+const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY')
 
 // here we query the Skyweaver contract address, but you can use any
 const contractAddress = '0x631998e91476DA5B870D741192fc5Cbc55F5a52E'
@@ -62,17 +62,20 @@ import (
 )
 
 func GetTokenSupplies(contractAddress string) {
-	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "c3bgcU3LkFR9Bp9jFssLenPAAAAAAAAAA")
+	seqIndexer := indexer.NewIndexer("https://polygon-indexer.sequence.app", "AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY")
 
-	filter := &indexer.TransactionHistoryFilter{
-		ContractAddress: &contractAddress,
+	metadataOptions := indexer.MetadataOptions{
+		VerifiedOnly:     true, // Set to true if you want to fetch only verified contracts
+		UnverifiedOnly:   false,
+		IncludeContracts: nil, // Provide a list of specific contracts to include, if any
 	}
-	includeMetadata := true
 
-	_, tokenDetails, err := seqIndexer.GetTokenSupplies(context.Background(), filter, nil, &includeMetadata)
+	_, _, tokenDetails, err := seqIndexer.GetTokenSupplies(context.Background(), contractAddress, nil, &metadataOptions, nil)
+	
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println("token details:", tokenDetails)
 }
 ```
