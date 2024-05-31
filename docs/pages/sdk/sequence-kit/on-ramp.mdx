@@ -6,13 +6,13 @@ The checkout on-ramp modal enables developers to easily facilitate on-ramp via f
   <img src="/img/kit/kit-on-ramp.png" />
 </div>
 
-# Integration
+## Integration
 To integrate the on-ramp feature, follow these steps:
 
 
 ::::steps
 
-## 1. Install the `kit-checkout` Module:
+### 1. Install the `kit-checkout` Module:
 
 ```bash
 npm install @0xsequence/kit-checkout
@@ -22,7 +22,7 @@ pnpm install @0xsequence/kit-checkout
 yarn add @0xsequence/kit-checkout
 ```
 
-## 2. Place the `KitCheckoutProvider` Below the Sequence Kit Core Provider in your App:
+### 2. Place the `KitCheckoutProvider` Below the Sequence Kit Core Provider in your App:
 
 ```jsx
 import { KitCheckoutProvider } from '@0xsequence/kit-checkout'
@@ -43,7 +43,7 @@ const App = () => {
 }
 ```
 
-## 3. Adding Funds with a Credit Card
+### 3. Adding Funds with a Credit Card
 Call the `triggerAddFunds` function to cause a modal to appear
 
 ```js
