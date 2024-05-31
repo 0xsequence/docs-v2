@@ -45,6 +45,7 @@ export default defineConfig({
     //   light: '#442CA8',
     //   dark: '#99ADED',
     // },
+    colorScheme: 'dark',
     variables: {
       fontFamily: {
         default: 'Inter',

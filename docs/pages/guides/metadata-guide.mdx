@@ -18,10 +18,6 @@ This can be accomplished with 8 steps
 
 First follow [this section of the Collectible Minting Service Guide](/guides/mint-collectibles-serverless#1-setup-cloudflare-environment-with-wrangler-cli-and-deploy-a-test) guide to create a cloudflare worker
 
-<Callout type="info">
-    Full template code for this guide can be found [here](https://github.com/0xsequence-demos/template-cloudflare-worker-collections-api/tree/master)
-</Callout>
-
 ## 1. Obtain a Secret API Key
 In order to use the backend service, a `Secret API` Key must be obtained to authenticate requests to your project
 
@@ -69,67 +65,46 @@ We then set the `collectionID` from the returned response in the `wrangler.toml`
 
 ## 3. Create Token using TokenID
 
-```typescript
+Install the metadata package to use the `SequenceCollections` with `pnpm install @0xsequence/metadata`
 
+```typescript
+import { SequenceCollections } from '@0xsequence/metadata'
 import { ethers } from 'ethers'
 ...
 const METADATA_URL = 'https://metadata.sequence.app'
-const myHeaders: any = new Headers();
-myHeaders.append("Content-Type", "application/json");
-myHeaders.append("Authorization", `Bearer ${process.env.JWT_ACCESS_KEY}`);
-    
+const collectionsService = new SequenceCollections(METADATA_URL, JWT_ACCESS_KEY)
+
 const randomTokenIDSpace = ethers.BigNumber.from(ethers.utils.hexlify(ethers.utils.randomBytes(20)))
 
-// TODO: create token
-const stringBody = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"token": {
-		"tokenId": String(randomTokenIDSpace),
-		"name": "<token_name>",
-		"description": "<description>",
-		"decimals": 0,
-		"attributes": [
-			{
-				"trait_type": "<trait_type>", 
-				"value": "<value>"
-			}
-		]
+const res1 = await collectionsService.createToken({
+	projectId: projectID,
+	collectionId: collectionID,
+	token: {
+		tokenId: String(randomTokenIDSpace),
+		name: name,
+		description: description,
+		decimals: 0,
+		attributes: attributes // can leave blank
 	}
-});
+})
 
-const requestOptions = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody,
-};
-
-const res = await fetch(`${METADATA_URL}/rpc/Collections/CreateToken`, requestOptions)
 ```
 
 ## 4. Create Asset using TokenID
 
-In the request, set the `metadadaField` (assetType) to `image`, with the other neccessary fields completed to return an asset response to be used in the next step
+In the request, set the `metadadaField` (assetType) to `image`, with the other necessary fields completed to return an asset response to be used in the next step
 
 ```typescript
-// TODO: create asset
-const stringBody2 = JSON.stringify({
-	"projectID": projectID,
-	"asset": {
-		"collectionId": collectionID,
-		"tokenId": String(randomTokenIDSpace),
-		"metadataField": "image"
+const res2 = await collectionsService.createAsset({
+	projectId: projectID,
+	asset: {
+		id: Number(String(randomTokenIDSpace).slice(0,10)),
+		collectionId: collectionID,
+		tokenId: String(randomTokenIDSpace),
+		metadataField: "image"
 	}
-});
+})
 
-const requestOptions2 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody2,
-};
-
-const res2 = await fetch(`${METADATA_URL}/rpc/Collections/CreateAsset`, requestOptions2)
-const jsonCreateAsset: any = await res2.json()
 ```
 
 ## 5. Store Image Asset
@@ -182,21 +157,17 @@ Where the returned `uploadAssetRes.url` is the media file url living on Sequence
 Now, we make the token non-private by setting a `private` boolean to `false`
 
 ```typescript
-const stringBody3 = JSON.stringify({
-	"projectID": projectID,
-	"collectionID": collectionID,
-	"private": false,
-	"tokenID": String(randomTokenIDSpace)
-});
-
-const requestOptions3 = {
-	method: "POST",
-	headers: myHeaders,
-	body: stringBody3,
-};
-
-const res3 = await fetch(`${METADATA_URL}/rpc/Collections/UpdateToken`, requestOptions3)
-const json3 = await res3.json()
+const res3 = await collectionsService.updateToken({
+	projectId: projectID,
+	collectionId: collectionID,
+	private: false,
+	tokenId: String(randomTokenIDSpace),
+	token: {
+		name: name,
+		attributes: attributes,
+		tokenId: String(randomTokenIDSpace),
+	}
+})
 ```
 
 ---

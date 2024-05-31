@@ -1,9 +1,4 @@
----
-title: Sequence - Web3 Gaming Platform - Sequence Kit NFT Checkout
-description: Documentation for Sequence Kit NFT Checkout for the Sequence infrastructure stack for web3 gaming.
----
-
-# Overview
+# Checkout Overview
 The checkout modal enables developers to easily facilitate cryptocurrency payments.
 
 <div class="text--center">
@@ -12,7 +7,10 @@ The checkout modal enables developers to easily facilitate cryptocurrency paymen
 
 # Integration
 To integrate the checkout feature, follow these steps:
-1. Install the `kit-checkout` module:
+
+::::steps
+
+## 1. Install the `kit-checkout` Module:
 
 ```bash
 npm install @0xsequence/kit-checkout
@@ -22,7 +20,7 @@ pnpm install @0xsequence/kit-checkout
 yarn add @0xsequence/kit-checkout
 ```
 
-2. Place the KitCheckoutProvider below the Sequence Kit Core provider in your app:
+## 2. Place the `KitCheckoutProvider` below the Sequence Kit Core Provider in your App:
 
 ```jsx
 import { KitCheckoutProvider } from '@0xsequence/kit-checkout'
@@ -42,7 +40,7 @@ const App = () => {
   )
 }
 ```
-## Opening the Checkout modal
+## 3. Opening the Checkout modal
 Use the `useCheckoutModal` hook to open the checkout modal and pass a settings object:
 
 
@@ -64,8 +62,7 @@ Use the `useCheckoutModal` hook to open the checkout modal and pass a settings o
   }
 ```
 
-
-## Configuring the Checkout modal
+## 4. Configuring the Checkout modal
 Configure the checkout modal using the `checkoutSettings` object:
 
 
@@ -109,3 +106,5 @@ Example configuration:
       },
     ]
 ```
+
+::::
