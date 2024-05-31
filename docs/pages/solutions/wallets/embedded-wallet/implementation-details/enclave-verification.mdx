@@ -1,24 +1,27 @@
 # Enclave verification
 
-The security of an WaaS enclave depends on being able to independently verify the integrity of the code that powers it.
+The WaaS enclave's security relies on code integrity verification.
 
-You have two options when it comes to verifying the integrity of a running enclave depending on your risk tolerance and technical means.
+You have two verification options for a running enclave based on your risk tolerance and technical resources.
 
-## The easy way
+## Simple Verification Method
 
-### Prerequisites
+### Requirements
 
-The verification procedure will currently only work on Linux or macOS systems. Additionally, you need to have a recent versions of the following tools installed and configured locally:
-
+The verification process works only on Linux or macOS systems. You must have updated versions of these tools installed and set up locally:
 - [Docker](https://www.docker.com/)
 - git
 - make
 
-### Find out the PCR0
+### Determine the PCR0
 
-Open the following page in the browser or through curl: [https://waas.sequence.app/status](https://waas.sequence.app/status).
+Visit this page in your browser or through curl: https://waas.sequence.app/status.
 
-Note the values of `ver` and `pcr0` - these will be needed later.
+Take note of `ver` and `pcr0` values for later use.
+
+Sample output may appear like:
+
+Remember that the checksum can vary between runs, as it verifies the **file's** integrity. Conversely, the PCR0 for the same **code** remains constant, as demonstrated in the example above.
 
 Sample output might look like:
 
@@ -53,13 +56,12 @@ SHA256 checksum:
 
 Please note that the checksum might differ between runs as it's only used to verify the integrity of the **file**. However, the PCR0 for the same **code** will always be the same, as can be seen in the example above.
 
-## The hard way
+## Complex Verification Method
+The simple method allows us to compare the PCR0 of the created enclave file with the "live" enclave. This is not foolproof. A mere comparison of two values provides no real evidence. The enclave could have been tampered with, and what we see could be an illusion. Indeed, the PCR0 values for each release are available to the public (https://github.com/0xsequence/waas-authenticator/releases).
 
-The above lets us compare the PCR0 of the built enclave file with the "live" enclave. But it's not foolproof. You might notice that such a simple comparison of two values is not real proof. After all, the enclave might have been tampered with and what we see is make believe. Indeed, the PCR0 values for each release are [publicly available](https://github.com/0xsequence/waas-authenticator/releases).
+Here, *cryptographic attestation* becomes necessary. We have not published tools for validation yet, but you can perform it using this AWS guide (https://docs.aws.amazon.com/enclaves/latest/user/verify-root.html).
 
-This is where *cryptographic attestation* comes in. While we haven't yet published tools that would do the validation, it can be performed using [this great guide by AWS](https://docs.aws.amazon.com/enclaves/latest/user/verify-root.html).
-
-Every enclave request returns the attestation document in a Base64-encoded format in the `X-Attestation-Document` response header. A request might optionally include a `X-Attestation-Nonce` header containing a value that will be signed and included in the attestation document as well.
+Every enclave request returns the attestation document. It comes in a Base64-encoded format in the `X-Attestation-Document` response header. A request may also include a `X-Attestation-Nonce` header. It contains a value that will be signed and included in the attestation document.
 
 For example, you can get the attestation document by running:
 

@@ -1,0 +1,338 @@
+import {Callout} from 'vocs/components'
+
+# Verification
+
+In the event that you need to verify the ownership of an Embedded Wallet address, the following walkthrough and [template](https://github.com/0xsequence-demos/template-embedded-wallet-verification) can be used to prove ownership, with the help of an off-chain store of wallet nonces, and an option to include a time expiry. Begin by [deploying a Parent Wallet](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet) for your instance in the [Sequence Builder](https://sequence.build)
+
+<Callout type="info">
+  A full React template example dapp can be found [here](https://github.com/0xsequence-demos/template-embedded-wallet-verification)
+</Callout>
+
+## Prerequisite: Deployment of a Parent Wallet
+
+In order to be able to sign valid proofs by an Embedded Wallet, a Parent Wallet must be deployed for your Embedded Wallet instance so that the non-custodial nature of the Parent Wallet 2/2 signers is delegated to users' child wallets. This can be accomplished by navigating to the Embedded Wallet configuration page in the Sequence Builder project, clicking the `Deploy Parent Wallet` and selecting the network to deploy on.
+
+![deploy parent wallet](/img/builder/builder_embedded_wallet_parent_wallet.png)
+
+<Callout type="info">
+  Learn more about [Embedded Wallet Parent Wallets](/solutions/builder/embedded-wallet#parent-wallet)
+</Callout>
+
+## 1. Server Wallet Ownership Verification with Random Nonce
+The following diagram flows showcase how to both generate and verify a random unique nonce stored in an off-chain db.
+
+### Generate Nonce
+![generate nonce](/img/embedded_wallet/embedded_wallet_generate_nonce.png)
+
+### Verify Message Proof
+![verify signature](/img/embedded_wallet/embedded_wallet_verify_signature.png)
+
+### Implementation
+
+::::steps
+### User Logs in to Login Provider (e.g. Google) in Frontend
+
+Starting with a vite react app (using `pnpm create vite`), install using `pnpm`, `yarn`, or `npm`, both `@react-oauth/google` and `@0xsequence/waas`
+
+```typescript
+import { SequenceWaaS } from '@0xsequence/waas'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+ 
+const embeddedWallet = new SequenceWaaS({
+  projectAccessKey: import.meta.env.VITE_PROJECT_ACCESS_KEY!,
+  waasConfigKey:  import.meta.env.VITE_WAAS_CONFIG_KEY!,
+  network: 'arbitrum-sepolia'
+})
+
+function App(){
+  function useSessionHash() {
+      const [sessionHash, setSessionHash] = useState("")
+      const [error, setError] = useState<any>(undefined)
+
+      useEffect(() => {
+          const handler = async () => {
+              try {
+                  setSessionHash(await embeddedWallet.getSessionHash())
+              } catch (error) {
+                  console.error(error)
+                  setError(error)
+              }
+          }
+          handler()
+          return embeddedWallet.onSessionStateChanged(handler)
+      }, [setSessionHash, setError])
+
+      return {
+          sessionHash,
+          error,
+          loading: !!sessionHash,
+      }
+  }
+
+  const { sessionHash } = useSessionHash()
+
+  const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+    const res = await embeddedWallet.signIn({
+      idToken: tokenResponse.credential!
+    }, "Embbedded Wallet Verification")
+    
+    ... use res.wallet as walletAddress
+  }
+
+  return (
+    <GoogleOAuthProvider clientId="<GOOGLE_CLIENT_ID>" nonce={sessionHash} key={sessionHash}>
+      <GoogleLogin 
+        nonce={sessionHash}
+        key={sessionHash}
+        onSuccess={handleGoogleLogin} shape="circle" width={230} />
+    </GoogleOAuthProvider>
+  )
+}
+```
+
+### Generate & Store Random Nonce
+
+Send the `walletAddress` to the server, generate a random nonce, store it in a database, and return the nonce to the client when needed.
+
+Example code in Typescript using `ethers@5.7.2`
+
+```typescript
+import { ethers } from 'ethers'
+
+... recieve walletAddress
+
+const nonce = ethers.BigNumber.from(
+  ethers.utils.hexlify(ethers.utils.randomBytes(20))
+)
+
+... store nonce in a database with walletAddress
+... send nonce to front end
+```
+
+### Calls `sessionAuthProof`
+
+The client requests the `nonce` and runs `sessionAuthProof`
+
+```typescript
+... obtain nonce from database or from memory / storage in frontend
+const authProof = embeddedWallet.sessionAuthProof({ nonce }) 
+```
+
+### Transmittance of Signature & Session ID to Server
+
+Deconstruct the `authProof` and send `verificationObject`
+
+```typescript
+const verificationObject = {
+    walletAddress: walletAddress, 
+    nonce: nonce,
+    signature: authProof.data.signature,
+    sessionID: authProof.data.sessionId,
+    chainId: authProof.data.network,
+}
+... send to server
+```
+
+### Server Verification
+
+Finally, verify the signature and message came from the user owned wallet
+
+```typescript
+import { sequence } from "0xsequence";
+
+...
+const api = new sequence.api.SequenceAPIClient("https://api.sequence.app");
+const message = `SessionAuthProof ${sessionId} ${walletAddress} ${nonce}`
+
+const isValid = await api.isValidMessageSignature(
+    walletAddress,
+    message,
+    signature,
+    chainId // e.g. '1' for mainnet, '42161' for arbitrum one, etc.
+);
+ 
+console.log(isValid);
+```
+:::::
+
+## 2. Server Wallet Ownership Verification with Time Expiry
+
+The following diagram flows showcase how to both generate and verify a timestamped nonce stored in an off-chain db, that allows an application to validate a wallet can be authorized for a given period of time. 
+
+### Use Cases
+In games, this can be useful for creating checkpoints or levels in a timed fashion, showing metadata for a certain period of time, agreeing to an iterated terms of service, authorizing free-to-play economies on a trial, etc.
+
+### Generate Nonce
+[Same diagram as no expiry](/solutions/wallets/embedded-wallet/examples/verification#generate-nonce)
+
+### Verify Message Proof and Validate Expiry
+![verify with time expiry](/img/embedded_wallet/embedded_wallet_verify_signature_time_expiry.png)
+
+### Implementation
+
+::::steps
+
+### User Logs in to Login Provider (e.g. Google) in Frontend
+
+Starting with a vite react app (using `pnpm create vite`), install using `pnpm`, `yarn`, or `npm`, both `@react-oauth/google` and `@0xsequence/waas`
+
+```typescript
+import { SequenceWaaS } from '@0xsequence/waas'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+ 
+const embeddedWallet = new SequenceWaaS({
+  projectAccessKey: import.meta.env.VITE_PROJECT_ACCESS_KEY!,
+  waasConfigKey:  import.meta.env.VITE_WAAS_CONFIG_KEY!,
+  network: 'arbitrum-sepolia'
+})
+
+function App(){
+  function useSessionHash() {
+      const [sessionHash, setSessionHash] = useState("")
+      const [error, setError] = useState<any>(undefined)
+
+      useEffect(() => {
+          const handler = async () => {
+              try {
+                  setSessionHash(await embeddedWallet.getSessionHash())
+              } catch (error) {
+                  console.error(error)
+                  setError(error)
+              }
+          }
+          handler()
+          return embeddedWallet.onSessionStateChanged(handler)
+      }, [setSessionHash, setError])
+
+      return {
+          sessionHash,
+          error,
+          loading: !!sessionHash,
+      }
+  }
+
+  const { sessionHash } = useSessionHash()
+
+  const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+    const res = await embeddedWallet.signIn({
+      idToken: tokenResponse.credential!
+    }, "Embbedded Wallet Verification")
+    
+    ... use res.wallet as walletAddress
+  }
+
+  return (
+    <GoogleOAuthProvider clientId="<GOOGLE_CLIENT_ID>" nonce={sessionHash} key={sessionHash}>
+      <GoogleLogin 
+        nonce={sessionHash}
+        key={sessionHash}
+        onSuccess={handleGoogleLogin} shape="circle" width={230} />
+    </GoogleOAuthProvider>
+  )
+}
+```
+
+### Generate & Store Random Nonce
+
+On the server or decentralized compute, generate a timestamp nonce, store it in a database, and return the timestamp to the client when needed.
+
+```typescript
+import { ethers } from 'ethers'
+...
+
+const nonce = generateFutureTimestampBySeconds(30)
+
+function generateFutureTimestampBySeconds(seconds: any) {
+  const now = new Date();
+  Calculate the future time in milliseconds by adding the specified number of seconds
+  const futureTimeInMilliseconds = now.getTime() + seconds * 1000;
+  Return the future time in milliseconds
+  return futureTimeInMilliseconds;
+}
+
+... store nonce in a database
+... send nonce to front end
+```
+
+### Calls `sessionAuthProof` to Generate Proof
+
+The client requests the `nonce` and runs
+
+```typescript
+... obtain nonce from database or stored in frontend
+const authProof = embeddedWallet.sessionAuthProof({ nonce }) 
+```
+
+### Transmittance of Signature & Session ID to Server
+
+Deconstruct the `authProof` and send `verificationObject`
+
+```typescript
+const verificationObject = {
+    walletAddress: walletAddress, 
+    nonce: nonce,
+    signature: authProof.data.signature,
+    sessionID: authProof.data.sessionId,
+    chainId: authProof.data.network,
+    messageProof: authProof.data.message
+}
+... send to server
+```
+
+### Server Verification with Time Validation
+
+Finally, verify the signature and message came from the user owned wallet, by sending the `authProof.data.message` as the message proof to be deconstructed, and validated the parsed expiry against the current time.
+
+```typescript
+import { sequence } from "0xsequence";
+
+...
+function isSessionActive(sessionString: any) {
+  // Regular expression to extract the expiryTime from the string
+  const regex = /SessionAuthProof \S+ \S+ (\d+)/;
+  const match = sessionString.match(regex);
+
+  if (!match) {
+    console.error('Invalid session string format');
+    return false;
+  }
+
+  // Extract the expiryTime (assuming it's a Unix timestamp)
+  const expiryTime = parseInt(match[1], 10);
+
+  // Get the current time in Unix timestamp format
+  const currentTime = Date.now();
+
+  return currentTime < expiryTime;
+}
+
+...
+
+const api = new sequence.api.SequenceAPIClient("https://api.sequence.app");
+const message = `SessionAuthProof ${sessionId} ${walletAddress} ${nonce}`
+
+const hexString = messageProof;
+
+// Remove the '0x' prefix if present
+const cleanHexString = hexString.startsWith('0x') ? hexString.substring(2) : hexString;
+
+// Convert the hex string to a Buffer
+const buffer = Buffer.from(cleanHexString, 'hex');
+
+// Convert the Buffer to a UTF-8 string
+const decodedString = buffer.toString('utf8');
+
+const message = decodedString
+
+let active = isSessionActive(message)
+
+const isValid = await api.isValidMessageSignature(
+    walletAddress,
+    message,
+    signature,
+    chainId // e.g. '1' for mainnet, '42161' for arbitrum one, etc.
+);
+ 
+console.log(isValid && active);
+```
+:::::

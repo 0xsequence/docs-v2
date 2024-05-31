@@ -48,8 +48,8 @@ true
 ```
 
 #### onValidationRequired callback
-
-The `onValidationRequired` callback is triggered when a session validation is required. This can happen when a user tries to perform an action that requires validation, such as sending a transaction or signing a message. It determines whether the session validation should be triggered or not. If the callback returns `true`, the session validation is triggered. If it returns `false`, the action is cancelled.
+### **Control Session Validation**
+The **`onValidationRequired`** callback is used to determine the need for session validation during actions like sending transactions or signing messages. If the callback returns **`true`**, it triggers session validation. If it returns **`false`**, the related action is cancelled. This mechanism ensures that only validated sessions can proceed with sensitive operations.
 
 ```ts
 const tx = await waas.sendERC20({
@@ -79,9 +79,8 @@ await waas.sendTransaction({ chainId: 1 }, { to: "0x...", value: "1" });
 Session has been triggered for validation
 ```
 
-## Automatic session validation
-
-Session validation is automatic when certain actions requiring validation are performed. This can be managed using the `onValidationRequired` hook.
+## Manage Automatic session validation
+Automatic session validation occurs during actions that require validation. Manage this process using the onValidationRequired hook.  
 
 ```ts
 const tx = await waas.sendTransaction({
