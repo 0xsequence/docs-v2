@@ -16,6 +16,9 @@ Function
 1. [Register a Webhook Listener](/api/indexer/examples/webhook-listener#1-register-a-webhook-listener)
 2. [Remove a Webhook Listener](/api/indexer/examples/webhook-listener#2-remove-a-webhook-listener)
 
+Service response
+1. [Webhook Listener Response](/api/indexer/examples/webhook-listener#webhook-listener-response)
+
 Examples
 1. [Listen to All Mints of a Contract](/api/indexer/examples/webhook-listener#1-listen-to-all-mints-of-a-collectible-contract)
 2. [Listen to Mints of a Specific Token ID](/api/indexer/examples/webhook-listener#2-listen-to-a-specific-token-id-for-an-erc1155)
@@ -174,6 +177,49 @@ func RemoveWebhook(accountAddress string) {
 }
 ```
 :::
+
+## Webhook Listener Response
+
+Upon webhook listener response, an object is returned in the following structure
+
+- Response (in JSON):
+	- `id` (i32) -- the id of the response
+	- `type` (string), -- the type of event (i.e. `BLOCK_ADDED`)
+	- `blockNumber` (i32) -- the block number from the blockchain for when the event occured
+	- `blockHash` (string) -- the hash of the block for the transaction
+	- `parentBlockHash` (i32) -- the hash of the parent block
+	- `contractAddress` (string) -- the contract address from where the event came from
+	- `contractType` (string) -- the type of contract (e.g. `ERC20`, `ERC721`, `ERC1155`, etc.)
+	- `txnHash` (string) -- the transaction hash of the event
+	- `txnIndex` (i32) -- the index of the transaction in the blockchain block
+	- `txnData` (object) -- the transaction data of who sent to who
+		- `value` (string) -- the value of the transaction 
+		- `from` (string) -- the originator of the transaction, if there is a value
+		- `to` (string) -- the destination address of the transaction, if there is a value
+	- `txnLogIndex` (string) -- the log index in the transaction
+	- `logDataType` (string) -- the type of log event (e.g. `TOKEN_TRANSFER`)
+	- `logData` (string) -- 
+	- `Log` (object) -- the emitted event data
+		- `raw` (object) -- the raw transaction object
+			- `address` (string) -- the address from which the event came from
+			- `topics` (string[]) -- the topic event hashes emitted in the logs
+			- `data` (string) -- 
+			- `blockNumber` (string) -- the hex of the block number
+			- `transactionHash` (string) -- the transaction hash from the blockchain
+			- `transactionIndex` (string) -- the index of the transaction in the blockchain block in hex
+			- `blockHash` (string) -- the hash of the block for the transaction
+			- `logIndex` (string) -- the log index in the transaction
+			- `removed` (boolean) -- if the log of the event has been removed from servers
+		- `contractType` (string) -- the type of contract (e.g. `ERC20`, `ERC721`, `ERC1155`, etc.)
+		- `transferEvent` (object) -- the event object of the transfer event
+			- `operator` (string) -- the address of the operator
+			- `from` (string) -- the address of the operator
+			- `to` (string) -- the address of the operator
+			- `tokenIds` (string[]) -- an array of the token IDs transferred
+			- `amounts` (string[]) -- an array of the amounts of tokens transferred
+		- `OrderCreated` (string) --
+		- `OrderAccepted` (string) --
+		- `OrderCancelled` (string) --
 
 ## Examples
 
