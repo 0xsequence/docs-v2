@@ -13,6 +13,6 @@ This SDK follows [Semantic Versioning](https://semver.org/) (`major.minor.patch`
 Unity 2021.3.6f1 or later
 - Android
 - iOS
-- PC standalone
-- Mac standalone -> (Mono builds only when using Social Sign in -> in our testing MacOS doesn't pick up custom URL schemes automatically unless you run some system commands first; these system commands only work on Mono -> see [OpenIdAuthentication.PlatformSpecificSetup](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Authentication/OpenIdAuthenticator.cs#L89))
+- PC standalone -> (Mono builds only when using Social Sign in -> the system commands throw exceptions when doing IL2CPP builds -> see [OpenIdAuthentication.PlatformSpecificSetup](https://github.com/0xsequence/sequence-unity/blob/master/Assets/Sequence/SequenceSDK/Authentication/OpenIdAuthenticator.cs#L231))
+- Mac standalone -> (Mono builds only when using Social Sign in -> in our testing MacOS doesn't pick up custom URL schemes automatically unless you run some system commands first; these system commands only work on Mono -> see [OpenIdAuthentication.PlatformSpecificSetup](https://github.com/0xsequence/sequence-unity/blob/master/Assets/Sequence/SequenceSDK/Authentication/OpenIdAuthenticator.cs#L231))
 - WebGL (excluding Social Sign in)
