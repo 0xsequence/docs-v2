@@ -24,7 +24,7 @@ export const topNav = [
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
       { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
-      { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
+      { text: 'AI Treasure Chests', link: '/guides/treasure-chest-guide', match: '/guides/treasure-chest-guide' },
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' },
       { text: 'Embedded Wallet', link: '/guides/templates/template-in-game-wallet', match: '/guides/templates/template-in-game-wallet' },
       { text: 'Transaction Engine', link: '/guides/templates/building-relaying-server', match: '/guides/templates/building-relaying-server' },
@@ -283,9 +283,9 @@ export const sidebar = {
       // ]
     },
     {
-      text: 'Build a Lootbox with AI Minting',
+      text: 'Build a Treasure Chet with AI Minting',
       collapsed: true,
-      link: '/guides/lootbox-guide',
+      link: '/guides/treasure-chest-guide',
       // items: [
       //   { text: 'Sequence Builder Console Signup & Project Creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
       //   { text: 'Access Key Management', link: '/guides/lootbox-guide#2-access-key-management' },

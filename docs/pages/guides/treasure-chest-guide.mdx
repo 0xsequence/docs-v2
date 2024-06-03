@@ -1,33 +1,33 @@
 import { Callout } from "vocs/components";
 
-# Lootbox with AI Minting
+# Treasure Chests with AI Minting
 
 Time to complete: 50-60 minutes
 
-In this guide we will go through the process of integrating a static html/js maze into a web3 enabled react app, leveraging tools from the Sequence Stack to mint AI generated loot from lootboxes.
+In this guide we will go through the process of integrating a static html/js maze into a web3 enabled react app, leveraging tools from the Sequence Stack to mint AI generated loot from treasure chests.
 
 <Callout type="info">
   You can play a live version of the game [here](https://dungeon-minter.vercel.app/)
 
   Where the full code can be found in the respective repositories
-  - [Web3 react dapp](https://github.com/0xsequence-demos/demo-lootbox)
+  - [Web3 react dapp](https://github.com/0xsequence-demos/demo-dungeon-minter)
   - [Maze frontend](https://github.com/0xsequence-demos/integration-dungeon-minter-maze)
   - [Diablo loot API](https://github.com/0xsequence-demos/integration-diablo-loot-api)
-  - [Cloudflare worker](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/)
+  - [Cloudflare worker](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/)
 </Callout>
 
 The tools will enable you to perform:
 
-1. [Sequence Builder Console Signup & Project Creation](/guides/lootbox-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Builder
-2. [Access Key Management](/guides/lootbox-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
-3. [Sequence Kit Integration](/guides/lootbox-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
-4. [iframe-to-Dapp Communication](/guides/lootbox-guide#4-iframe-to-dapp-communication): Send iframe messages from a seperately deployed frontend to a react app
-5. [Deploy a Contract & Sponsor gas](/guides/lootbox-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
-6. [Deploy a Cloudflare Worker](/guides/lootbox-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
-7. [Generating AI Prompts & Images](/guides/lootbox-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
-8. [Store Media to Sequence Metadata service](/guides/lootbox-guide#8-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
-9. [Securing Your Cloudflare Worker](/guides/lootbox-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
-10. [(Optional) Naive Mint Restriction Per Wallet](/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+1. [Sequence Builder Console Signup & Project Creation](/guides/treasure-chest-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Builder
+2. [Access Key Management](/guides/treasure-chest-guide#2-access-key-management): Claim an public & secret access key to interact with the Sequence stack
+3. [Sequence Kit Integration](/guides/treasure-chest-guide#3-sequence-kit-integration): Integrate Sequence kit into the application
+4. [iframe-to-Dapp Communication](/guides/treasure-chest-guide#4-iframe-to-dapp-communication): Send iframe messages from a seperately deployed frontend to a react app
+5. [Deploy a Contract & Sponsor gas](/guides/treasure-chest-guide#5-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
+6. [Deploy a Cloudflare Worker](/guides/treasure-chest-guide#6-deploy-a-cloudflare-worker): Deploy a cloudflare worker for gasless and no-confirmation transactions
+7. [Generating AI Prompts & Images](/guides/treasure-chest-guide#7-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
+8. [Store Media to Sequence Metadata service](/guides/treasure-chest-guide#8-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
+9. [Securing Your Cloudflare Worker](/guides/treasure-chest-guide#9-securing-your-cloudflare-worker): Prevent outside requests to your cloudflare worker by restricting the referrer
+10. [(Optional) Naive Mint Restriction Per Wallet](/guides/treasure-chest-guide#10-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
 ## 1. Sequence Builder Console Signup & Project Creation
 
@@ -112,7 +112,7 @@ function Dapp() {
 		walletConnectProjectId: WALLET_CONNECT_ID,
 		defaultChainId: 421614,
 		//@ts-ignore
-		appName: 'Dungeon Crawler Lootbox Demo app',
+		appName: 'Dungeon Minter Demo app',
 		projectAccessKey
 	  })
 	
@@ -135,7 +135,7 @@ function Dapp() {
 			}
 		],
 		signIn: {
-			projectName: 'Demo Dungeon Crawler Lootbox',
+			projectName: 'Demo Dungeon Minter',
 			showEmailInput: true,
 			socialAuthOptions: ['google', 'apple'],
 			walletAuthOptions: ['wallet-connect']
@@ -240,8 +240,8 @@ With a single line of code contained within a click handler, one can send a mess
 ```js
 function onMouseClick(event){
 	...
-	// if clicked event intersects a lootbox
-	window.parent.postMessage({portal: 'loot'}, 'http://localhost:5173/demo-lootbox/');
+	// if clicked event intersects a treasure chest
+	window.parent.postMessage({portal: 'loot'}, 'http://localhost:5173/');
 }
 ```
 
@@ -287,11 +287,11 @@ And to sponsor gas, follow [this guide](/solutions/builder/gas-tank#watch-the-ga
 ### Minting A Token
 If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this default guide](/guides/mint-collectibles-serverless) on minting a serverless gasless minter with your deployed `ERC1155` contract
 
-### Add Lootbox Object Composition
+### Add Treasure Chest Object Composition
 
-Next, ensure that you can mint a token by making a request to the cloudflare API. Then, add the additional object composition design to include the lootbox specific functions, where the prior cloudflare worker can be integrated into this template [template lootbox cloudflare worker](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/tree/template). 
+Next, ensure that you can mint a token by making a request to the cloudflare API. Then, add the additional object composition design to include the treasure chest specific functions, where the prior cloudflare worker can be integrated into this template [template treasure chest cloudflare worker](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chest/tree/template). 
 
-And as seen in the [completed lootbox code](https://github.com/0xsequence-demos/demo-cloudflare-worker-lootbox/blob/master/proud-darkness-022a/src/index.ts#L505), the `callContract` is would need to be integrated into the `template`
+And as seen in the [completed treasure chest code](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chest/blob/master/src/index.ts#L532), the `callContract` is would need to be integrated into the `template`
 
 In this codebase (which has optional design), we use a style of javascript to assemble javascript object in a functional manner which can be seen here
 
@@ -301,7 +301,7 @@ Where in the following sections, we will complete the functions:
 - `Upload`: used to store metadata for future retrieval
 
 ```js
-let lootbox = ProcessInferencePool(
+let treasureChest = ProcessInferencePool(
 				Inference(
 					Time(
 						Strings(
@@ -378,8 +378,8 @@ and calling the method like so to return an `inferenceId`
 	if(mint){
 		...
 	} else {
-		const loot = await lootbox.generate()
-		const inferenceId = await lootbox.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
+		const loot = await treasureChest.generate()
+		const inferenceId = await treasureChest.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
 		...
 	}
 	...
@@ -433,9 +433,9 @@ and call the `getInferenceStatus` with the `inferenceId` passed in, where when y
 	if(mint){
 		...
 	} else {
-		const loot = await lootbox.generate()
-		const inferenceId = await lootbox.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
-		const resObject = await lootbox.getInferenceStatus(inferenceId)
+		const loot = await treasureChest.generate()
+		const inferenceId = await treasureChest.getInferenceWithItem(loot.loot.name + " " + loot.loot.type)
+		const resObject = await treasureChest.getInferenceStatus(inferenceId)
 		console.log(resObject.inference.images[0].url) // prints url
 		...
 	}
@@ -475,7 +475,7 @@ async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
 
 ## 10. (Optional) Naive mint restriction per wallet
 
-As an option to prevent overuse of the lootbox minting from specific wallets, a parameter called `DAILY_MINT_RESTRICTION` can be set in the `wrangler.toml` as a maximum mint allowance per day. And, if you feel it's necessary adding an `ADMIN` to your protocol, to be able to in the future mint to a marketplace, this can be included too.
+As an option to prevent overuse of the treasure chest minting from specific wallets, a parameter called `DAILY_MINT_RESTRICTION` can be set in the `wrangler.toml` as a maximum mint allowance per day. And, if you feel it's necessary adding an `ADMIN` to your protocol, to be able to in the future mint to a marketplace, this can be included too.
 
 These features can be implemented in the code with the following steps:
 
