@@ -283,7 +283,7 @@ export const sidebar = {
       // ]
     },
     {
-      text: 'Build a Treasure Chet with AI Minting',
+      text: 'Build a Treasure Chest with AI Minting',
       collapsed: true,
       link: '/guides/treasure-chest-guide',
       // items: [
