@@ -39,7 +39,7 @@ export const topNav = [
       { text: 'Sequence Kit', link: '/sdk/sequence-kit/overview', match: '/sdk/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
-      { text: 'React Native', link: '/sdk/reactnative', match: '/sdk/reactnative' },
+      { text: 'Mobile', link: '/sdk/mobile', match: '/sdk/mobile' },
       // { text: 'iOS', link: '/sdk/iOS', match: '/sdk/iOS' }
     ]
   },
