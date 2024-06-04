@@ -374,7 +374,7 @@ export const sidebar = {
       items: [
         // { text: 'Android', link: '/sdk/android' },
         // { text: 'iOS', link: '/sdk/iOS' },
-        { text: 'React Native', link: '/sdk/reactnative' }
+        { text: 'React Native', link: '/sdk/mobile' }
       ]
     },
 
