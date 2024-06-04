@@ -324,6 +324,7 @@ export const sidebar = {
       text: 'Templates',
       items: [
         { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
+        { text: 'React Native Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet-react-native' },
         { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
         // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
       ]
