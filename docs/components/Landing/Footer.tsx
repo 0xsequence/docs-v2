@@ -119,6 +119,7 @@ export const Footer = ({ logo }: { logo: ReactNode }) => {
             <img
               src="/img/horizon-logo.png"
               className="max-w-24 dark:invert-0 invert"
+              alt="Horizon Blockchain Gaming. We're building a new dimension, where Internet economies are fun, accessible, and for the benefit of all participants."
             />
           </SmartLink>
         </div>
