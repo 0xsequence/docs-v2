@@ -2,7 +2,7 @@
 
 The Sequence Embedded Wallet SDK can be used with React Native for complete Sequence [Embedded Wallet](/solutions/wallets/embedded-wallet/overview) and [Indexer](/api/indexer/overview) integration.
 
-You can see a full example of how to use the SDK in the [Embedded Wallet React Native Demo](https://github.com/0xsequence/demo-waas-react-native) repository.
+You can see a full example of how to use the SDK or download the template in the [Embedded Wallet React Native Demo](https://github.com/0xsequence/demo-waas-react-native) repository.
 
 ## Preview
 
@@ -58,7 +58,8 @@ Set the intent-filter in the AndroidManifest.xml file for Google sign in.
 
 ## Integration details
 
-### 1. Setup shims for ethers and other crypto related packages
+::::steps
+### Setup shims for ethers and other crypto related packages
 
 Firstly, make sure to do this step as early in your apps lifecycle as possible. In this demo these are imported and set at the top in [App.tsx](https://github.com/0xsequence/demo-waas-react-native/blob/main/App.tsx).
 
@@ -77,7 +78,7 @@ Secondly, we need to set aliases for the shims, in `babel.config.js` with help o
 
 (See https://github.com/ethers-io/ethers.js/issues/2250#issuecomment-1321134111 for more details on react-native-quick-crypto alias setup)
 
-### 2. Initialize Sequence WaaS
+### Initialize Sequence WaaS
 
 ```ts
 export const sequenceWaas = new SequenceWaaS(
@@ -94,7 +95,7 @@ export const sequenceWaas = new SequenceWaaS(
 
 (Check [waasSetup.ts](https://github.com/0xsequence/demo-waas-react-native/blob/main/waasSetup.ts) file for more details)
 
-### 3. Signing in
+### Signing in
 
 Once you have an initialized Sequence WaaS instance, you can use it to sign in with email, Google or Apple. See the google code snippet below for an example, and check the [App.tsx](https://github.com/0xsequence/demo-waas-react-native/blob/main/App.tsx) file for more details.
 
@@ -162,7 +163,7 @@ try {
 }
 ```
 
-### 4. Wallet operations
+### Wallet operations
 
 Once signed in, you can use the `sequenceWaas` instance to perform wallet operations like sending transactions, signing messages, etc. See the google code snippet below for an example, and check the [App.tsx](https://github.com/0xsequence/demo-waas-react-native/blob/main/App.tsx) file for more details.
 
@@ -180,3 +181,4 @@ const txn = await sequenceWaas.sendTransaction({
   ],
 });
 ```
+::::
