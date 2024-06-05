@@ -21,6 +21,7 @@ export const topNav = [
         { text: 'Overview', link: '/guides/webgl-guide', match: '/guides/webgl-guide' }, 
       ] 
     },
+    { text: 'Overview', link: '/guides/guide-overview', match: '/guides/guide-overview' },
       { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
       { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },

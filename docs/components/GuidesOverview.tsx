@@ -1,6 +1,6 @@
-import { SmartLink } from './SmartLink'
+import { SmartLink } from './Landing/SmartLink'
 
-export const GuidesSection = () => (
+export const GuidesOverview = () => (
   <section className="flex flex-col gap-5 border-t dark:border-white-10 border-black-10">
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Guides</h3>
@@ -8,6 +8,30 @@ export const GuidesSection = () => (
         Follow our step-by-step guides and open source code templates to
         accelerate your time to market.
       </p>
+    </div>
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <h4 className="text-2xl text-themed-primary font-bold">Game Developers</h4>
+    </div>
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <GuideCard
+        title="Build a Mobile Game with Unity + Sequence"
+        body="Learn how to build an engaging iOS and Android game that uses Sequence Embedded Wallets under the hood for an integrated marketplace and in-game currency."
+        link="/guides/unity-guide"
+      />
+      <GuideCard
+        title="Build a WebGL Game in Typescript"
+        body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
+        link="/guides/webgl-guide"
+      />
+      <GuideCard
+        title="Create a Dungeon Crawler game with AI generated rewards"
+        body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
+        link="/guides/treasure-chest-guide"
+      />
+    </div>
+
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <h4 className="text-2xl text-themed-primary font-bold pt-5">Web3</h4>
     </div>
     <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <GuideCard
@@ -26,7 +50,7 @@ export const GuidesSection = () => (
         link="/guides/treasure-chest-guide"
       />
       <GuideCard
-        title="Orderbook Marketplace"
+        title="Creating a Custom Marketplace with Sequence"
         body="Build an API-driven marketplace where players can mint, then sell or buy items using a custom web-based interface leveraging Sequence Orderbook APIs."
         link="/guides/custom-marketplace"
       />
