@@ -29,11 +29,17 @@ export const SDKsSection = () => (
         body="Leverage Sequence APIs easily from your Go backend."
         link="/sdk/go/overview"
       />
-      <Card
+        <Card
         icon="NodeJSIcon"
         title="Typescript"
         body="Integrate Sequence APIs with our TypeScript SDK."
         link="/sdk/typescript/guides/overview"
+      />
+      <Card
+        icon="ReactIcon"
+        title="Mobile"
+        body="Integrate Sequence APIs for your mobile game with our React Native SDK"
+        link="/sdk/mobile"
       />
       <Card
         icon="SequenceIcon"
