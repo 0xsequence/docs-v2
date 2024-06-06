@@ -65,6 +65,10 @@ We then set the `collectionID` from the returned response in the `wrangler.toml`
 
 ## 3. Create Token using TokenID
 
+<Callout type="info">
+If using a Clouflare worker, ensure to add `node_compat = true` to your `wrangler.toml` to allow the window object to be available to the `@0xsequence/metadata` package
+</Callout>
+
 Install the metadata package to use the `SequenceCollections` with `pnpm install @0xsequence/metadata`
 
 ```typescript
@@ -95,7 +99,7 @@ const res1 = await collectionsService.createToken({
 In the request, set the `metadadaField` (assetType) to `image`, with the other necessary fields completed to return an asset response to be used in the next step
 
 ```typescript
-const res2 = await collectionsService.createAsset({
+const jsonCreateAsset = await collectionsService.createAsset({
 	projectId: projectID,
 	asset: {
 		id: Number(String(randomTokenIDSpace).slice(0,10)),
