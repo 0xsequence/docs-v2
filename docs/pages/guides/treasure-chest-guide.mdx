@@ -353,13 +353,35 @@ If you want to learn how to deploy a Cloudflare Worker from scratch, you can fol
 Ensure that if you're using a Sequence Standard ERC1155 Items Contract, you grant the `MINTER_ROLE` for your relayer account address.
 </Callout>
 
+### Dapp Implementation
+
+Once the cloudflare worker has been deployed, you can call upon it from a frontend with the following code:
+
+```typescript
+const data = {
+	address: address,
+	mint: true,
+	tokenID: tokenID
+};
+
+const res = await fetch(ENDPOINT, {
+	method: 'POST',
+	headers: {
+	'Content-Type': 'application/json',
+	},
+	body: JSON.stringify(data),
+})
+
+const json = await res.json()
+```
+
 ## 6. Generating AI Prompts & Images
 
-When beginning your journey into AI image generation, you will require a source of AI model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/)
+When beginning your journey into AI image generation, you will require a source of AI model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/).
 
-In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself
+In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself.
 
-With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function:
+With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function within the Cloudflare worker:
 
 ```typescript
 const generate = async () => {
@@ -517,11 +539,15 @@ It should be noted, that you can design applications that return mulitple images
 
 With our media `url` from the Scenario API in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls.
 
+The complete process can be seen by this sequence diagram
+
+![dungeon minter sequence diagram](/img/guides/treasure-chest/dungeon_minter_sequence_diagram.png)
+
 ### 2-Step Consent Process
 
 Since each Dungeon Minter treasure chest opening undergoes a 2-step consent based process to minting, for every media generated, an adjacent image is stored to Sequence before actual minting.
 
-In this consent flow, metadata is first stored, the `url` and the generated random `tokenID` (which allows for parallel requests) is returned to the frontend, and the user later consents to minting the token where the `tokenID` with the `address` is passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
+In this consent flow, metadata is first stored, the `url` and the generated random `tokenID` (which allows for parallel requests) is returned to the frontend, and the user later consents after collectible inspection, to mint the token with the `tokenID` with the `address` passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
 
 ### Implementation
 
@@ -529,10 +555,11 @@ Complete and integrate [this guide](/guides/metadata-guide) in order to build yo
 
 Cloudflare workers allows developers to run minimal infrastructure so that you can spend less time worrying about up time and server use.
 
-Once complete, pass the stored media `tokenID` and `url` to the frontend:
+Once complete, pass the stored media `tokenID` and `url` to the frontend to be rendered, to allow a user to mint after first viewing what they're minting:
 
 ```typescript
 	const randomTokenIDSpace = ethers.BigNumber.from(ethers.utils.hexlify(ethers.utils.randomBytes(20)))
+	...
 	const jsonCreateAsset = await collectionsService.createAsset({...})
 	...
 	const response = await uploadAsset(env, projectID, collectionID, jsonCreateAsset.asset.id, String(randomTokenIDSpace), imageUrl)
