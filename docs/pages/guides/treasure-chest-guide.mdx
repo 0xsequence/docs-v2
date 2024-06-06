@@ -90,9 +90,6 @@ Next, we'll install the correct Wallet-as-a-Service (Waas) package to use the Em
 ```shell
 pnpm install @0xsequence/waas
 
-```shell
-pnpm install @0xsequence/waas
-
 # or
 npm install @0xsequence/waas
 
@@ -295,8 +292,6 @@ function LoginScreen () {
           <span >{wallet}</span>
           </div>
         </>
-      : 
-        <p>{wallet}</p>
       }
     </>
   )
@@ -339,7 +334,7 @@ In terms of the gas savings benefit, instead of deploying a new contract for eac
 
 To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`
 
-Then, for the minting function to work programmatically so that transactions are gasless for your relayer, you will need to make the Transactions API draw from your account credits on your upgrade billing plan by sponsoring your deployed smart contract address.
+Then, for the minting function to work programmatically so that transactions are gasless for your relayer, you will need to make the Transactions API draw from your account credits on your upgraded billing plan by sponsoring your deployed smart contract address.
 
 To allow the Transactions API to relay transactions without a fee, sponsor gas by following [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder) for the deployed contract
 
@@ -360,7 +355,7 @@ Ensure that if you're using a Sequence Standard ERC1155 Items Contract, you gran
 
 ## 6. Generating AI Prompts & Images
 
-When beginning your journey into AI image generation, you will require a source of model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/)
+When beginning your journey into AI image generation, you will require a source of AI model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/)
 
 In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself
 
@@ -387,13 +382,7 @@ const generate = async () => {
 }
 ```
 
-## 6. Generating AI Prompts & Images
-
-In the template, we've included code to call an already deployed API and code to parse the response that is free to call yourself
-
-With this API, we will showcase how to generate images from [Scenario.gg](https://scenario.gg/) by passing in a prompt.
-
-This can be accomplished by completing the `getInferenceWithItem` function and passing in a `prompt` which is basically the generated loot `name` and `type`, as well as some additional parameters
+Then complete the `getInferenceWithItem` function in order to get the instantiated inference reference from the Scenario API and pass in a `prompt` which is the generated loot `name` and `type`, as well as some additional parameters model parameters, which can be customized via the [Scenario API docs](https://docs.scenario.com/reference/postmodelsinferencesbymodelid):
 
 <Callout type='info'>
 For this guide, we landed on the `EulerDiscreteScheduler` scheduler type from the Scenario API based on quality and time, but if you want to experiment with using additional schedulers, you can use [this custom local cli](https://github.com/moskalyk/scenario-gg-benchmark-cli) and check the results in the [Scenario.gg](https://scenario.gg/) dashboard
@@ -532,7 +521,7 @@ With our media `url` from the Scenario API in hand, we can move onto storing the
 
 Since each Dungeon Minter treasure chest opening undergoes a 2-step consent based process to minting, for every media generated, an adjacent image is stored to Sequence before actual minting.
 
-In this consent flow, metadata is first stored, the `url` and `tokenID` is returned to the frontend, and the user later consents to minting the token where the `tokenID` with the `address` is passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
+In this consent flow, metadata is first stored, the `url` and the generated random `tokenID` (which allows for parallel requests) is returned to the frontend, and the user later consents to minting the token where the `tokenID` with the `address` is passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
 
 ### Implementation
 
