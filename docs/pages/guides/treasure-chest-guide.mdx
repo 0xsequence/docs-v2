@@ -14,6 +14,7 @@ We've wrapped this in a [dungeon crawler game](https://0xsequence-demos.github.i
   - [Template Embedded Wallet](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth)
   - [Cloudflare Worker](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/)
   - [Diablo Loot API](https://github.com/0xsequence-demos/integration-diablo-loot-api)
+
 </Callout>
 
 The tools will enable you to perform:
@@ -513,6 +514,7 @@ It should be noted, that you can design applications that return mulitple images
 
 ## 7. Store Media to Sequence Metadata Service
 
+
 With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls!
 
 Complete and integrate [this guide](/guides/metadata-guide) in order to build a Serverless Media Service that uses Cloudflare Workers.
@@ -681,3 +683,5 @@ const hasDailyMintAllowance = async (env: Env, address: string) => {
 	return count < env.DAILY_MINT_RESTRICTION
 }
 ```
+
+

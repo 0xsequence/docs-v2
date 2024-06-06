@@ -1,0 +1,45 @@
+# Analytics
+
+The Sequence Analytics API is ideal for measuring your progress, seeing how your game or application grows, tracking usage of Sequence solutions, or for ingesting into your own data pipeline for further analysis.
+
+By leveraging this API, you can gain deep insights into user behavior so whether you're aiming to enhance user engagement, optimize performance, or simply understand usage patterns, the Sequence Analytics API provides the robust analytics capabilities needed to drive success in your game.
+
+## Supported Networks & Endpoints
+
+You can see the [full list of supported networks here](/solutions/technical-references/chain-support).
+
+:::note
+[Analytics API documentation and testing](https://0xsequence.redoc.ly/tag/analytics)
+:::
+
+## Getting Started
+
+### Obtaining a Service Account & Token
+You will need to first obtain a Service Account & Token to call this from your backend. Importantly, this is a secret key and should not be exposed publicly.
+
+1. Create a New Project using our [Builder](https://sequence.build). Navigate to Settings > API Keys > Add Service Account.
+2. In the modal that pops up, click the dropdown for Permission and change to Write. After completed click Add.
+3. On the next screen, you will be given your Secret API Token. Copy the key and store it securely as it is not possible to see it again. Once this is done, click Confirm and you are all set to utilize the API.
+
+Keep in mind, in contrast to our Public API Access key - this Secret API Token should be stored securely and not be used publicly. You will pass this token as a normal JWT in the Request Headers as X-Access-Key
+
+### Send a Request
+
+Now you are ready to send a request, make sure to change the below the SECRET_API_ACCESS_KEY below with your access key as well as the PROJECT_ID which can be found in the URL as a set of integers while in your project on [sequence.build](https://sequence.build)
+
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsTotal' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23"}}'
+```
+
+
+
+### More Examples
+Now that you've gotten started - try out a few of our other examples:
+- [Fetch wallest within a time interval](/api/analytics/examples/wallets#fetch-wallets-for-a-time-interval-for-a-project-id)
+- [Fetch transactions by wallets](/api/analytics/examples/wallets#fetch-transactions-by-wallets)
+- [Fetch wallets by Device](/api/analytics/examples/wallets#fetch-wallets-by-device)
+- [Fetch transactions on your Sequence Marketplace](/api/analytics/examples/marketplace#fetch-transactions-on-your-marketplace)

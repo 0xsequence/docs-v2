@@ -48,11 +48,12 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Transactions API', link: '/api/transactions/overview' },
-      { text: 'Indexer API', link: '/api/indexer/overview' },
-      { text: 'Metadata API', link: '/api/metadata/overview' },
-      { text: 'Marketplace API', link: '/api/marketplace/overview' },
-      { text: 'Node Gateway', link: '/api/node-gateway' },
+      { text: 'Transactions API', link: '/api/transactions/overview', match: '/api/transactions/overview' },
+      { text: 'Analytics API', link: '/api/analytics/overview', match: '/api/analytics/overview'},
+      { text: 'Indexer API', link: '/api/indexer/overview',  match: '/api/indexer/overview' },
+      { text: 'Metadata API', link: '/api/metadata/overview',  match: '/api/metadata/overview' },
+      { text: 'Marketplace API', link: '/api/marketplace/overview',  match: '/api/marketplace/overview' },
+      { text: 'Node Gateway', link: '/api/node-gateway',  match: '/api/node-gateway' },
     ]
   },
 
@@ -463,6 +464,19 @@ export const sidebar = {
         {text: 'Metadata Tips', link: '/api/indexer/metadata-tips'},
         {text: 'Webhooks', link: '/api/indexer/examples/webhook-listener'},
         {text: 'Subscriptions', link: '/api/indexer/examples/subscriptions'}
+          ]
+        }
+      ]
+    },
+    {
+      text: 'Analytics',
+      collapsed: false,
+      link: '/api/analytics/overview',
+      items: [
+        {text: 'Overview', link: '/api/analytics/overview'},
+        {text: 'Examples', collapsed: false, link: '/api/analytics/examples/wallets', items: [
+        {text: 'Wallets', link: '/api/analytics/examples/wallets'},
+        {text: 'Marketplaces', link: '/api/analytics/examples/marketplace'},
           ]
         }
       ]

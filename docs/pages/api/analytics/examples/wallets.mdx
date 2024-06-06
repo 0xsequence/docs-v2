@@ -1,0 +1,229 @@
+---
+title: Sequence - Web3 Gaming Platform - Wallet Analytics
+description: Wallet analytics documentation for the Sequence infrastructure stack for web3 gaming.
+---
+
+# Wallet Analytics Examples
+A common use case is to see the number of wallets that are integrated with your project. We have a variety of endpoints that can be used for tracking and reporting fine-grained data such as device, country, and more so you can precisely identify
+
+:::info
+Replace the PROJECT_ID and SECRET_API_ACCESS_KEY variables with your project ID and secret token from Sequence Builder.
+:::
+
+## Fetch wallets for a time interval for a project ID
+Here we can pass a specific date range along with the dateInterval parameter in order to get wallets within a time interval. The endpoints can use "DAY", "WEEK" or "MONTH" as possible options.
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsDaily' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/WalletsDaily",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+
+## Fetch wallets by Country
+You can also fetch wallets by country to see where your users are logged in from.
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsByCountry' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/WalletsByCountry",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+
+## Fetch wallets by Device
+Additionally, you may want to query by device to get an aggregrated snapshot of where your users are authenticating from.
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsByDevice' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/WalletsByDevice",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+
+## Fetch transactions by wallets
+Lastly, you may want to fetch the number of transactions by wallets - these can used either by total or a fixed time interval.
+
+### Total
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsTxnSentTotal' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/WalletsTxnSentTotal",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+### Time Interval
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/WalletsTxnSentDaily' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/WalletsTxnSentDaily",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+
+## Schema
+
+All wallet analytic endpoints follow a similar request schema
+
+- Request: POST
+- Content-Type: application/json
+- Body (in JSON):
+  - `projectId` (uint64) -- projectID of your project, can be found in the URL of the Builder project.
+  - `startDate` (timestamp) -- starting date of the query in YYYY--MM--DD format
+  - `endDate` (timestamp) -- ending date of the query in YYYY--MM--DD format
+  - `dateInterval` (string) -- date interval for the query, options are "DAY", "WEEK", or "MONTH"
+- Response (in JSON):
+  - `walletStats` (walletStats[])
+    [
+    - `value` (uint64) -- # of wallets matching the query
+    - `label` (string) -- label associated with the corresponding endpoint
+      ]
