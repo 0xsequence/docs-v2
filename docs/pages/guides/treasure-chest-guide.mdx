@@ -26,7 +26,7 @@ The tools will enable you to perform:
 5. [Deploy a Cloudflare Worker](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker): Deploy a Cloudflare worker for gasless and no-confirmation transactions
 6. [Generating AI Prompts & Images](/guides/treasure-chest-guide#6-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
 7. [Store Media to Sequence Metadata service](/guides/treasure-chest-guide#7-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
-8. [Securing your Cloudflare Worker](/guides/treasure-chest-guide#8-securing-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer
+8. [Securing your Cloudflare Worker](/guides/treasure-chest-guide#8-securing-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer URL
 9. [(Optional) Naive Mint Restriction Per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
 ## 1. Sequence Builder Console Signup & Project Creation
@@ -85,7 +85,10 @@ yarn create vite
 npm create vite
 ```
 
-Next, we'll install the correct Wallet-as-a-Service (Waas) packages to use the Embedded Wallet
+Next, we'll install the correct Wallet-as-a-Service (Waas) package to use the Embedded Wallet:
+
+```shell
+pnpm install @0xsequence/waas
 
 ```shell
 pnpm install @0xsequence/waas
@@ -113,7 +116,7 @@ const sequence = new SequenceWaaS({
 export default sequence;
 ```
 
-Then create another file called `useSessionHash.ts` that generates a session hash from the SDK unique to the user
+Then create another file called `useSessionHash.ts` that generates a session hash from the SDK unique to the user:
 
 ```typescript
 import sequence from './SequenceEmbeddedWallet.ts'
@@ -215,6 +218,7 @@ function LoginScreen () {
     setWallet(res.wallet)
   }
 
+  // checks to see if there is a logged in user
   useEffect(() => {
     setTimeout(async () => {
       if(await sequence.isSignedIn()){
@@ -291,6 +295,8 @@ function LoginScreen () {
           <span >{wallet}</span>
           </div>
         </>
+      : 
+        <p>{wallet}</p>
       }
     </>
   )
@@ -326,8 +332,8 @@ pnpm run dev
 
 We will deploy an token contract so we are able to link the AI-generated images to the metadata for any given token. When deploying your contract, the recommended approach is to use an `ERC1155` over an `ERC721`. The benefits of using an `ERC1155`
 
-- semi-fungible which is ideal for game assets that can have multiple copies of the same underlying item.
-- massive gas savings for projects that require multiple tokens as a single ERC1155 can hold many different varieties.
+- Semi-Fungible: which is ideal for game assets that can have multiple copies of the same underlying item.
+- Gas Savings: for projects that require multiple tokens as a single ERC1155 can hold many different varieties.
 
 In terms of the gas savings benefit, instead of deploying a new contract for each token type, a single ERC1155 token contract can hold the entire system state, reducing deployment costs and complexity.
 
@@ -358,7 +364,7 @@ When beginning your journey into AI image generation, you will require a source 
 
 In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself
 
-With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function.
+With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function:
 
 ```typescript
 const generate = async () => {
@@ -381,7 +387,13 @@ const generate = async () => {
 }
 ```
 
-Then complete the `getInferenceWithItem` function in order to get the instantiated inference reference from the Scenario API and pass in a `prompt` which is the generated loot `name` and `type`, as well as some additional parameters model parameters, which can be customized via the [Scenario API docs](https://docs.scenario.com/reference/postmodelsinferencesbymodelid)
+## 6. Generating AI Prompts & Images
+
+In the template, we've included code to call an already deployed API and code to parse the response that is free to call yourself
+
+With this API, we will showcase how to generate images from [Scenario.gg](https://scenario.gg/) by passing in a prompt.
+
+This can be accomplished by completing the `getInferenceWithItem` function and passing in a `prompt` which is basically the generated loot `name` and `type`, as well as some additional parameters
 
 <Callout type='info'>
 For this guide, we landed on the `EulerDiscreteScheduler` scheduler type from the Scenario API based on quality and time, but if you want to experiment with using additional schedulers, you can use [this custom local cli](https://github.com/moskalyk/scenario-gg-benchmark-cli) and check the results in the [Scenario.gg](https://scenario.gg/) dashboard
@@ -438,7 +450,7 @@ Then we simply implement the above functions in the react code:
 	...
 ```
 
-Once we have the `inferenceId` we can call poll the inference status and return when complete, signified by the `succeeded` status descriptor
+Once we have the `inferenceId` we can call poll the inference status and return when complete, signified by the `succeeded` status descriptor:
 
 ```typescript
 const getInferenceObjectWithPolling = async (env: Env, id: any) => {
@@ -492,7 +504,7 @@ const getInferenceObjectWithPolling = async (env: Env, id: any) => {
 }
 ```
 
-Again, we add the above function to the react code and pass the inferenceId. When you receive the response, you can obtain the image url with `resObject.inference.images[0].url`
+Again, we add the above function to the react code and pass the inferenceId. When you receive the response, you can obtain the image url with `resObject.inference.images[0].url`:
 
 ```typescript
 	...
@@ -514,24 +526,33 @@ It should be noted, that you can design applications that return mulitple images
 
 ## 7. Store Media to Sequence Metadata Service
 
+With our media `url` from the Scenario API in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls.
 
-With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls!
+### 2-Step Consent Process
 
-Complete and integrate [this guide](/guides/metadata-guide) in order to build a Serverless Media Service that uses Cloudflare Workers.
+Since each Dungeon Minter treasure chest opening undergoes a 2-step consent based process to minting, for every media generated, an adjacent image is stored to Sequence before actual minting.
+
+In this consent flow, metadata is first stored, the `url` and `tokenID` is returned to the frontend, and the user later consents to minting the token where the `tokenID` with the `address` is passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
+
+### Implementation
+
+Complete and integrate [this guide](/guides/metadata-guide) in order to build your serverless Media Service that uses Cloudflare workers.
 
 Cloudflare workers allows developers to run minimal infrastructure so that you can spend less time worrying about up time and server use.
 
-Once complete, pass the stored media url to the frontend
+Once complete, pass the stored media `tokenID` and `url` to the frontend:
 
 ```typescript
+	const randomTokenIDSpace = ethers.BigNumber.from(ethers.utils.hexlify(ethers.utils.randomBytes(20)))
+	const jsonCreateAsset = await collectionsService.createAsset({...})
 	...
 	const response = await uploadAsset(env, projectID, collectionID, jsonCreateAsset.asset.id, String(randomTokenIDSpace), imageUrl)
-	return new Response(JSON.stringify({image: response.url }), { status: 200 });
+	return new Response(JSON.stringify({tokenID: String(randomTokenIDSpace), image: response.url }), { status: 200 });
 ```
 
 ## 8. Securing your Cloudflare Worker
 
-To secure your Cloudflare worker to only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`
+To secure your Cloudflare worker to only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`:
 
 ```typescript
 async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
@@ -560,7 +581,6 @@ It's clear how many components go into creating a scalable, secure, and **fun** 
 Lastly, you can see all the steps above incorporated in a complete experience with our [dungeon crawler game](https://0xsequence-demos.github.io/demo-dungeon-minter/) to brave the maze and get your own dungeon loot.
 
 Happy building!
-
 
 ## 9. (Optional) Native Mint Restriction Per Wallet
 
@@ -594,7 +614,7 @@ Where `hasDailyMintAllowance` is broken down into 2 functions:
 
 In order to use the Sequence Indexer, we'll need to `pnpm install @0xsequence/indexer`
 
-Then, to implement we use a while loop that gets the first batch of transactions and the `page.after` value from the indexer, and continuously checks if the timestamp is less than 24 hours appending to a temporary array for each pass. This ensures we get all of the available transactions.
+Then, to implement we use a while loop that gets the first batch of transactions and the `page.after` value from the indexer, and continuously checks if the timestamp is less than 24 hours appending to a temporary array for each pass. This ensures we get all of the available transactions:
 
 ```typescript
 import { SequenceIndexer } from '@0xsequence/indexer'
@@ -659,7 +679,7 @@ const fullPaginationDay = async (env: Env, address: string) => {
 }
 ```
 ### Mint Count For A Day
-All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address
+All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address:
 
 ```typescript
 const mintCount = (env: Env, txs: any) => {
@@ -683,5 +703,3 @@ const hasDailyMintAllowance = async (env: Env, address: string) => {
 	return count < env.DAILY_MINT_RESTRICTION
 }
 ```
-
-
