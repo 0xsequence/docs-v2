@@ -35,19 +35,14 @@ export const GuidesOverview = () => (
     </div>
     <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <GuideCard
-        title="Build a web3 game with WebGL"
-        body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
-        link="/guides/webgl-guide"
+        title="Build a scalable NFT Minting Service"
+        body="Leveraging Sequence's Transaction API and a serverless environment, you will build a scalable minting service for NFT mints or any other transactions that automatically handles blockchain complexities like reorgs, nonce management, and transaction parallelization."
+        link="/guides/mint-collectibles-serverless"
       />
       <GuideCard
-        title="Build a web3 game with Unity"
-        body="Learn how to build an engaging iOS and Android game that uses Sequence Embedded Wallets under the hood for an integrated marketplace and in-game currency."
-        link="/guides/unity-guide"
-      />
-      <GuideCard
-        title="Create web3 lootboxes"
-        body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
-        link="/guides/treasure-chest-guide"
+        title="Creating, storing, and managing collectibles metadata"
+        body="By utilizing Sequence's Metadata API, you can programatically create, manage, and store metadata associated with your NFTs from nearly any environment. We'll walk you through how to call these REST-APIs to organize your collections for your game or experience."
+        link="/guides/metadata-guide"
       />
       <GuideCard
         title="Creating a Custom Marketplace with Sequence"

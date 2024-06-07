@@ -15,20 +15,10 @@ export const topNav = [
 ]
 },
   {
-    text: 'Guides',
+    text: 'Resources',
     items: [
-      { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide', items: [
-        { text: 'Overview', link: '/guides/webgl-guide', match: '/guides/webgl-guide' }, 
-      ] 
-    },
-    { text: 'Overview', link: '/guides/guide-overview', match: '/guides/guide-overview' },
-      { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
-      { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
-      { text: 'AI Treasure Chests', link: '/guides/treasure-chest-guide', match: '/guides/treasure-chest-guide' },
-      { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' },
-      { text: 'Embedded Wallet', link: '/guides/templates/template-in-game-wallet', match: '/guides/templates/template-in-game-wallet' },
-      { text: 'Transaction Engine', link: '/guides/templates/building-relaying-server', match: '/guides/templates/building-relaying-server' },
+    { text: 'Guides', link: '/guides/guide-overview', match: '/guides/guide-overview' },
+      { text: 'Templates', link: '/guides/template-overview', match: '/guides/template-overview' },
     ]
   },
   { 
