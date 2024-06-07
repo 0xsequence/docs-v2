@@ -32,24 +32,24 @@ In order to create the project from scratch, first create a project with `mkdir`
 
 Next, make sure wrangler cli is installed in your project and set the `wrangler` keyword as an alias in your local bash session.
 
-```
+```shell
 pnpm install wrangler --save-dev
 alias wrangler='./node_modules/.bin/wrangler'
 ```
 
 Create an account on the [Cloudflare site](https://cloudflare.com/) and perform a login step to login to your Cloudflare dashboard to connect the Cloudflare platform to your local development environment.
 
-```
+```shell
 wrangler login
 ```
 
 Once logged in, initialize the project in the directory by accepting one of the randomly generated project folder names provided that you like, and follow the prompts to initialize your git tracked typescript `"Hello World" Worker` application.
 
-```
+```shell
 wrangler init
 ```
 
-To complete this step, you should press enter 4 times after `wrangler init` with the last step answered as `No` to decline deployment.
+To complete this step, you should press enter 4 times after `wrangler init` with the last 2 step answered as `No` to decline git versioning and deployment.
 
 This will clone down a starter repository that can be used to deploy code to the cloud.
 
@@ -135,7 +135,7 @@ Finally, in order to sponsor the contract follow [this guide](/solutions/builder
 
 Now that we have a contract deployed, we can return to the cloudflare worker directory and project, and install `ethers` and `0xsequence` to get access to sequence APIs in order to perform a proof validation that the request is coming from a trusted source, a sequence wallet.
 
-```
+```shell
 pnpm install 0xsequence @0xsequence/network
 ```
 
@@ -337,7 +337,7 @@ You can now redeploy using `wrangler deploy`
 
 And perform a curl request to test your endpoint like such:
 
-```
+```shell
 curl -X POST https://your-worker.your-subdomain.workers.dev \
 -H "Content-Type: application/json" \
 -d '{"proof": "<some_proof>", "address": "<some_address>", "tokenId": 0 }'
@@ -366,7 +366,7 @@ It should be noted, it is best not to share this `ETHAuthProof` with anyone as t
 
 Finally, replace the `url` with your app from [this step](/guides/mint-collectibles-serverless#deploy-test), the `<some_proof>` with the generated value copied from the viewer dapp, and `<some_address>` with your wallet address and it should return just the mocked `0x` string.
 
-```
+```shell
 curl -X POST https://your-worker.your-subdomain.workers.dev \
 -H "Content-Type: application/json" \
 -d '{"proof": "<some_proof>", "address": "<some_address>", "tokenId": 0 }'
@@ -376,7 +376,7 @@ curl -X POST https://your-worker.your-subdomain.workers.dev \
 
 Finally, to deploy and mint a collectible from the sponsored contract address, we install the following packages
 
-```
+```shell
 pnpm install @0xsequence/auth ethers@5.7.2
 ```
 

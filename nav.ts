@@ -25,6 +25,7 @@ export const topNav = [
       { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
       { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
       { text: 'AI Treasure Chests', link: '/guides/treasure-chest-guide', match: '/guides/treasure-chest-guide' },
+      { text: 'Serverless Analytics', link: '/guides/analytics-guide', match: '/guides/analytics-guide',},
       { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' },
       { text: 'Embedded Wallet', link: '/guides/templates/template-in-game-wallet', match: '/guides/templates/template-in-game-wallet' },
       { text: 'Transaction Engine', link: '/guides/templates/building-relaying-server', match: '/guides/templates/building-relaying-server' },
@@ -300,6 +301,11 @@ export const sidebar = {
       //   { text: '(Optional) Naive Mint Restriction Per Wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
 
       // ]
+    },
+    {
+      text: 'Build a Serverless Analytics Dashboard',
+      collapsed: true,
+      link: '/guides/analytics-guide',
     },
     {
       text: 'Build a Custom Marketplace',
