@@ -17,16 +17,19 @@ export const GuidesOverview = () => (
         title="Build a Mobile Game with Unity + Sequence"
         body="Learn how to build an engaging iOS and Android game that uses Sequence Embedded Wallets under the hood for an integrated marketplace and in-game currency."
         link="/guides/unity-guide"
+        image="/img/unity/jellyforest.webp"
+      />
+        <GuideCard
+        title="Create a Dungeon Crawler game with AI generated rewards"
+        body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
+        link="/guides/treasure-chest-guide"
+        image="/img/guides/treasure-chest/dungeonMintor.png"
       />
       <GuideCard
         title="Build a WebGL Game in Typescript"
         body="Follow a step by step guide to build a web-based game demo that leverages Sequence Embedded Wallet with custom in-game achievement tokens."
         link="/guides/webgl-guide"
-      />
-      <GuideCard
-        title="Create a Dungeon Crawler game with AI generated rewards"
-        body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
-        link="/guides/treasure-chest-guide"
+        image="/img/aviator.png"
       />
     </div>
 
@@ -38,17 +41,22 @@ export const GuidesOverview = () => (
         title="Build a scalable NFT Minting Service"
         body="Leveraging Sequence's Transaction API and a serverless environment, you will build a scalable minting service for NFT mints or any other transactions that automatically handles blockchain complexities like reorgs, nonce management, and transaction parallelization."
         link="/guides/mint-collectibles-serverless"
+        image="/img/guides/overview/sword.png"
+      />
+            <GuideCard
+        title="Creating a Custom Marketplace with Sequence"
+        body="Build an API-driven marketplace where players can mint, then sell or buy items using a custom web-based interface leveraging Sequence Orderbook APIs."
+        link="/guides/custom-marketplace"
+        image="/img/guides/overview/marketplace.png"
+
       />
       <GuideCard
         title="Creating, storing, and managing collectibles metadata"
         body="By utilizing Sequence's Metadata API, you can programatically create, manage, and store metadata associated with your NFTs from nearly any environment. We'll walk you through how to call these REST-APIs to organize your collections for your game or experience."
         link="/guides/metadata-guide"
+        image="/img/guides/overview/storage.png"
       />
-      <GuideCard
-        title="Creating a Custom Marketplace with Sequence"
-        body="Build an API-driven marketplace where players can mint, then sell or buy items using a custom web-based interface leveraging Sequence Orderbook APIs."
-        link="/guides/custom-marketplace"
-      />
+
     </div>
   </section>
 )
