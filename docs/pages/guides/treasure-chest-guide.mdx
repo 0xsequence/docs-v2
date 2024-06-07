@@ -23,11 +23,11 @@ The tools will enable you to perform:
 2. [Access Key Management](/guides/treasure-chest-guide#2-access-key-management): Claim a public, secret access key, and waas config key to interact with the Sequence stack
 3. [Embedded Wallet Integration](/guides/treasure-chest-guide#3-embedded-wallet-integration): Integrate an Embedded Wallet into the application
 4. [Deploy a Contract & Sponsor gas](/guides/treasure-chest-guide#4-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
-5. [Deploy a Cloudflare Worker](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker): Deploy a Cloudflare worker for gasless and no-confirmation transactions
+5. [Deploy Transactions API on a Cloudflare Worker](/guides/treasure-chest-guide#5-deploy-transactions-api-on-a-cloudflare-worker): Deploy a Cloudflare worker for gasless and no-confirmation transactions
 6. [Generating AI Prompts & Images](/guides/treasure-chest-guide#6-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
 7. [Store Media to Sequence Metadata service](/guides/treasure-chest-guide#7-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
-8. [Securing your Cloudflare Worker](/guides/treasure-chest-guide#8-securing-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer URL
-9. [(Optional) Native Mint Restriction Per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+8. [Minting with your Cloudflare Worker](/guides/treasure-chest-guide#8-minting-with-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer URL
+9. [(Optional) Naive Mint Restriction per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
 ## 1. Sequence Builder Console Signup & Project Creation
 
@@ -590,7 +590,7 @@ Lastly, you can see all the steps above incorporated in a complete experience wi
 
 Happy building!
 
-## 9. (Optional) Native Mint Restriction Per Wallet
+## 9. (Optional) Naive Mint Restriction per Wallet
 
 As an option to prevent overuse of the treasure chest minting from specific wallets, a parameter called `DAILY_MINT_RESTRICTION` can be set in the `wrangler.toml` as a maximum mint allowance per day. And, if you feel it's necessary to add an `ADMIN` to your protocol to be able to mint an infinite amount.
 
@@ -615,7 +615,7 @@ Where `hasDailyMintAllowance` is broken down into 2 functions:
 - `fullPaginationDay` of transactions of the users `address`
 - `mintCount` that corresponds to the `from` being the `0x` address
 
-### Full Pagination Of Indexer For A Day
+### Full Pagination Of Indexer for a Day
 <Callout type='info'>
 	As an aside, the Sequence Indexer stack only holds 30 days of transactions for this period, so you can extend the time frame from a day up to this max
 </Callout>
@@ -686,7 +686,7 @@ const fullPaginationDay = async (env: Env, address: string) => {
     return txs
 }
 ```
-### Mint Count For A Day
+### Mint Count for a Day
 All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address:
 
 ```typescript
