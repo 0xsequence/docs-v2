@@ -27,7 +27,7 @@ The tools will enable you to perform:
 6. [Generating AI Prompts & Images](/guides/treasure-chest-guide#6-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
 7. [Store Media to Sequence Metadata service](/guides/treasure-chest-guide#7-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
 8. [Securing your Cloudflare Worker](/guides/treasure-chest-guide#8-securing-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer URL
-9. [(Optional) Naive Mint Restriction Per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+9. [(Optional) Native Mint Restriction Per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
 ## 1. Sequence Builder Console Signup & Project Creation
 
@@ -332,54 +332,34 @@ We will deploy an token contract so we are able to link the AI-generated images 
 
 In terms of the gas savings benefit, instead of deploying a new contract for each token type, a single ERC1155 token contract can hold the entire system state, reducing deployment costs and complexity.
 
-To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`
+To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`.
 
 Then, for the minting function to work programmatically so that transactions are gasless for your relayer, you will need to make the Transactions API draw from your account credits on your upgraded billing plan by sponsoring your deployed smart contract address.
 
-To allow the Transactions API to relay transactions without a fee, sponsor gas by following [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder) for the deployed contract
+To allow the Transactions API to relay transactions without a fee, sponsor gas by following [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder) for the deployed contract.
 
 <Callout type="info">
 	All Sequence testnets are free
 </Callout>
 
-## 5. Deploy A Cloudflare Worker
+## 5. Deploy Transactions API on a Cloudflare Worker
 
-Following the previous step, the Sequence Transactions API can be implemented on a serverless Cloudflare worker so a game or app user interaction is seamless without a confirmation signature or gas payment. You'll also benefit from not having to be worried about transaction speed, throughput and re-orgs by the relayer, and experience automatic scaling with Cloudflare.
+Following the previous step, the Sequence Transactions API can be implemented on a serverless Cloudflare worker so a game or app user interaction is seamless without a confirmation signature or gas payment. In this case, the worker will leverage the Sequence Transactions API to mint tokens to the user's address. You'll also benefit from not having to be worried about transaction speed, throughput or re-orgs, and experience automatic scaling with Cloudflare.
 
 ### Minting A Token
-If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this guide](/guides/mint-collectibles-serverless) on minting a serverless gasless minter with your deployed `ERC1155` contract
+If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this guide](/guides/mint-collectibles-serverless) on minting a serverless NFT minting service with your deployed `ERC1155` contract or simply clone the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/) specific to this guide.
 
 <Callout type="danger">
 Ensure that if you're using a Sequence Standard ERC1155 Items Contract, you grant the `MINTER_ROLE` for your relayer account address.
 </Callout>
 
-### Dapp Implementation
-
-Once the cloudflare worker has been deployed, you can call upon it from a frontend with the following code:
-
-```typescript
-const data = {
-	address: address,
-	mint: true,
-	tokenID: tokenID
-};
-
-const res = await fetch(ENDPOINT, {
-	method: 'POST',
-	headers: {
-	'Content-Type': 'application/json',
-	},
-	body: JSON.stringify(data),
-})
-
-const json = await res.json()
-```
+Once setup, we will call the endpoint of the cloudflare instance to mint our NFTs in a later step.
 
 ## 6. Generating AI Prompts & Images
 
 When beginning your journey into AI image generation, you will require a source of AI model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/).
 
-In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself.
+In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response.
 
 With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function within the Cloudflare worker:
 
@@ -539,17 +519,11 @@ It should be noted, that you can design applications that return mulitple images
 
 With our media `url` from the Scenario API in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls.
 
-### 2-Step Consent Process
-
-Since each Dungeon Minter treasure chest opening undergoes a 2-step consent based process to minting, for every media generated, an adjacent image is stored to Sequence before actual minting.
-
-In this consent flow, metadata is first stored, the `url` and the generated random `tokenID` (which allows for parallel requests) is returned to the frontend, and the user later consents after collectible inspection, to mint the token with the `tokenID` with the `address` passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
+Each Dungeon Minter treasure chest reward follows the same process where metadata is first stored using the Sequence Metadata API, the `url` and the randomly generated `tokenID` (which allows for parallel requests) is returned to the client. The user then consents, after collectible inspection, to mint the token where the `tokenID` and the user's `address` passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
 
 ### Implementation
 
-Complete and integrate [this guide](/guides/metadata-guide) in order to build your serverless Media Service that uses Cloudflare workers.
-
-Cloudflare workers allows developers to run minimal infrastructure so that you can spend less time worrying about up time and server use.
+Complete and integrate [this guide](/guides/metadata-guide) in order to build your serverless Media Service leveraging the Sequence Metadata API that uses Cloudflare workers or simply clone our cloudflare [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/) for this guide.
 
 Once complete, pass the stored media `tokenID` and `url` to the frontend to be rendered, to allow a user to mint after first viewing what they're minting:
 
@@ -562,9 +536,29 @@ Once complete, pass the stored media `tokenID` and `url` to the frontend to be r
 	return new Response(JSON.stringify({tokenID: String(randomTokenIDSpace), image: response.url }), { status: 200 });
 ```
 
-## 8. Securing your Cloudflare Worker
+## 8. Minting with your Cloudflare Worker
 
-To secure your Cloudflare worker to only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`:
+The last step is to finally mint the corresponding tokenId that you linked the metadata to previously to the user's address. Here we post a request to the Cloudflare Worker we created in Step 5 which will mint the token to the user.
+
+```typescript
+const data = {
+	address: address,
+	mint: true,
+	tokenID: tokenID
+};
+
+const res = await fetch(ENDPOINT, {
+	method: 'POST',
+	headers: {
+	'Content-Type': 'application/json',
+	},
+	body: JSON.stringify(data),
+})
+
+const json = await res.json()
+```
+
+One important note is that you will likely want to ensure that your Cloudflare workers only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`:
 
 ```typescript
 async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
@@ -578,6 +572,8 @@ async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
 	...
 }
 ```
+
+
 
 ## Conclusion
 
