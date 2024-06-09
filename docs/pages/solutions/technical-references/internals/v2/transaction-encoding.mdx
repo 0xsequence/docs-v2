@@ -1,0 +1,37 @@
+import { Callout } from "vocs/components";
+
+# Transaction Encoding
+
+Sequence Wallets use a custom transaction encoding format to bundle multiple transactions into a single transaction. This is done to reduce the number of transactions required to interact with the wallet.
+This format also enables support for other features such as reverting the entire transaction bundle if any of the transactions fail.
+
+```solidity
+  struct Transaction {
+    bool delegateCall;   // Performs delegatecall
+    bool revertOnError;  // Reverts transaction bundle if tx fails
+    uint256 gasLimit;    // Maximum gas to be forwarded
+    address target;      // Address of the contract to call
+    uint256 value;       // Amount of ETH to pass with the call
+    bytes data;          // calldata to pass
+  }
+```
+
+The `Transaction` struct is used to encode the transaction data for the wallet. It is used in the `execute` function of the wallet contract.
+
+The `delegateCall` field is used to determine if the transaction should be executed using `delegatecall` instead of a regular `call`.
+This is useful when the target contract offers functionality that should be executed in the context of the wallet.
+
+<Callout type="warning">
+  As delegate call executes the target contract in the context of the wallet, it is important to ensure that the target contract is trusted and does not have any malicious code.
+</Callout>
+
+The `revertOnError` field is used to determine if the entire transaction bundle should be reverted if any of the transactions fail.
+When bundling multiple independent transactions, it may be advantageous to revert the entire bundle if any given transaction fails.
+
+The `gasLimit` field is used to specify the maximum amount of gas that should be forwarded to the target contract.
+
+The `target` field is the address of the contract to call.
+
+The `value` field is the amount of ETH to pass with the call. This ETH is sent from the wallet contract to the target contract.
+
+The `data` field is the calldata to pass to the target contract.
