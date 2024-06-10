@@ -49,7 +49,7 @@ const transaction2 = {
   data: data2
 }
 
-// Send a multiple transactions as a single bundle which is executed as one transaction on chain.
+// Send a multiple transactions as a single bundle which is executed as one transaction on-chain.
 const signer = wallet.getSigner()
 const txnResponse = await signer.sendTransactionBatch([transaction1, transaction2])
 console.log(txnResponse)
