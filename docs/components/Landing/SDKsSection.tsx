@@ -47,6 +47,12 @@ export const SDKsSection = () => (
         body="Add web onboarding for any web3 wallet."
         link="/sdk/sequence-kit/overview"
       />
+      <Card
+        icon="SequenceIcon"
+        title="Embedded Wallet Mobile SDK"
+        body="Onboard users using web2 socials to crypto, in native mobile apps."
+        link="/sdk/sequence-kit/overview"
+      />
     </div>
   </section>
 )
