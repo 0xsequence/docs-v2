@@ -23,11 +23,11 @@ The tools will enable you to perform:
 2. [Access Key Management](/guides/treasure-chest-guide#2-access-key-management): Claim a public, secret access key, and waas config key to interact with the Sequence stack
 3. [Embedded Wallet Integration](/guides/treasure-chest-guide#3-embedded-wallet-integration): Integrate an Embedded Wallet into the application
 4. [Deploy a Contract & Sponsor gas](/guides/treasure-chest-guide#4-deploy-a-contract--sponsor-gas): Deploy an items contract and sponsor gas
-5. [Deploy a Cloudflare Worker](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker): Deploy a Cloudflare worker for gasless and no-confirmation transactions
+5. [Deploy Transactions API on a Cloudflare Worker](/guides/treasure-chest-guide#5-deploy-transactions-api-on-a-cloudflare-worker): Deploy a Cloudflare worker for gasless and no-confirmation transactions
 6. [Generating AI Prompts & Images](/guides/treasure-chest-guide#6-generating-ai-prompts--images): Craft AI prompts from an API and generate images to be uploaded
 7. [Store Media to Sequence Metadata service](/guides/treasure-chest-guide#7-store-media-to-sequence-metadata-service): Upload collection and token metadata to Sequence
-8. [Securing your Cloudflare Worker](/guides/treasure-chest-guide#8-securing-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer
-9. [(Optional) Naive Mint Restriction Per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
+8. [Minting with your Cloudflare Worker](/guides/treasure-chest-guide#8-minting-with-your-cloudflare-worker): Prevent outside requests to your Cloudflare worker by restricting the referrer URL
+9. [(Optional) Naive Mint Restriction per Wallet](/guides/treasure-chest-guide#9-optional-naive-mint-restriction-per-wallet): Restrict daily mints per wallet
 
 ## 1. Sequence Builder Console Signup & Project Creation
 
@@ -85,7 +85,7 @@ yarn create vite
 npm create vite
 ```
 
-Next, we'll install the correct Wallet-as-a-Service (Waas) packages to use the Embedded Wallet
+Next, we'll install the correct Wallet-as-a-Service (Waas) package to use the Embedded Wallet:
 
 ```shell
 pnpm install @0xsequence/waas
@@ -113,7 +113,7 @@ const sequence = new SequenceWaaS({
 export default sequence;
 ```
 
-Then create another file called `useSessionHash.ts` that generates a session hash from the SDK unique to the user
+Then create another file called `useSessionHash.ts` that generates a session hash from the SDK unique to the user:
 
 ```typescript
 import sequence from './SequenceEmbeddedWallet.ts'
@@ -215,6 +215,7 @@ function LoginScreen () {
     setWallet(res.wallet)
   }
 
+  // checks to see if there is a logged in user
   useEffect(() => {
     setTimeout(async () => {
       if(await sequence.isSignedIn()){
@@ -326,39 +327,41 @@ pnpm run dev
 
 We will deploy an token contract so we are able to link the AI-generated images to the metadata for any given token. When deploying your contract, the recommended approach is to use an `ERC1155` over an `ERC721`. The benefits of using an `ERC1155`
 
-- semi-fungible which is ideal for game assets that can have multiple copies of the same underlying item.
-- massive gas savings for projects that require multiple tokens as a single ERC1155 can hold many different varieties.
+- Semi-Fungible: which is ideal for game assets that can have multiple copies of the same underlying item.
+- Gas Savings: for projects that require multiple tokens as a single ERC1155 can hold many different varieties.
 
 In terms of the gas savings benefit, instead of deploying a new contract for each token type, a single ERC1155 token contract can hold the entire system state, reducing deployment costs and complexity.
 
-To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`
+To deploy a contract, you can follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy your ERC1155, and update your `wrangler.toml` with the `CONTRACT_ADDRESS`.
 
-Then, for the minting function to work programmatically so that transactions are gasless for your relayer, you will need to make the Transactions API draw from your account credits on your upgrade billing plan by sponsoring your deployed smart contract address.
+Then, for the minting function to work programmatically so that transactions are gasless for your relayer, you will need to make the Transactions API draw from your account credits on your upgraded billing plan by sponsoring your deployed smart contract address.
 
-To allow the Transactions API to relay transactions without a fee, sponsor gas by following [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder) for the deployed contract
+To allow the Transactions API to relay transactions without a fee, sponsor gas by following [this guide](/solutions/builder/gas-tank#watch-the-gas-tank-in-action-in-builder) for the deployed contract.
 
 <Callout type="info">
 	All Sequence testnets are free
 </Callout>
 
-## 5. Deploy A Cloudflare Worker
+## 5. Deploy Transactions API on a Cloudflare Worker
 
-Following the previous step, the Sequence Transactions API can be implemented on a serverless Cloudflare worker so a game or app user interaction is seamless without a confirmation signature or gas payment. You'll also benefit from not having to be worried about transaction speed, throughput and re-orgs by the relayer, and experience automatic scaling with Cloudflare.
+Following the previous step, the Sequence Transactions API can be implemented on a serverless Cloudflare worker so a game or app user interaction is seamless without a confirmation signature or gas payment. In this case, the worker will leverage the Sequence Transactions API to mint tokens to the user's address. You'll also benefit from not having to be worried about transaction speed, throughput or re-orgs, and experience automatic scaling with Cloudflare.
 
 ### Minting A Token
-If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this guide](/guides/mint-collectibles-serverless) on minting a serverless gasless minter with your deployed `ERC1155` contract
+If you want to learn how to deploy a Cloudflare Worker from scratch, you can follow [this guide](/guides/mint-collectibles-serverless) on minting a serverless NFT minting service with your deployed `ERC1155` contract or simply clone the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/) specific to this guide.
 
 <Callout type="danger">
 Ensure that if you're using a Sequence Standard ERC1155 Items Contract, you grant the `MINTER_ROLE` for your relayer account address.
 </Callout>
 
+Once setup, we will call the endpoint of the cloudflare instance to mint our NFTs in a later step.
+
 ## 6. Generating AI Prompts & Images
 
-When beginning your journey into AI image generation, you will require a source of model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/)
+When beginning your journey into AI image generation, you will require a source of AI model prompts to produce media. For this guide and demo, we've sourced prompts from the items contained in the [Diablo game](https://d07riv.github.io/diabloweb/).
 
-In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response that is free to call yourself
+In the [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/), we've included code to call an already deployed API and code to parse the response.
 
-With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function.
+With this API, we will showcase how to generate images using the prompt from the deployed Diablo API within the `generate` function within the Cloudflare worker:
 
 ```typescript
 const generate = async () => {
@@ -381,7 +384,7 @@ const generate = async () => {
 }
 ```
 
-Then complete the `getInferenceWithItem` function in order to get the instantiated inference reference from the Scenario API and pass in a `prompt` which is the generated loot `name` and `type`, as well as some additional parameters model parameters, which can be customized via the [Scenario API docs](https://docs.scenario.com/reference/postmodelsinferencesbymodelid)
+Then complete the `getInferenceWithItem` function in order to get the instantiated inference reference from the Scenario API and pass in a `prompt` which is the generated loot `name` and `type`, as well as some additional parameters model parameters, which can be customized via the [Scenario API docs](https://docs.scenario.com/reference/postmodelsinferencesbymodelid):
 
 <Callout type='info'>
 For this guide, we landed on the `EulerDiscreteScheduler` scheduler type from the Scenario API based on quality and time, but if you want to experiment with using additional schedulers, you can use [this custom local cli](https://github.com/moskalyk/scenario-gg-benchmark-cli) and check the results in the [Scenario.gg](https://scenario.gg/) dashboard
@@ -438,7 +441,7 @@ Then we simply implement the above functions in the react code:
 	...
 ```
 
-Once we have the `inferenceId` we can call poll the inference status and return when complete, signified by the `succeeded` status descriptor
+Once we have the `inferenceId` we can call poll the inference status and return when complete, signified by the `succeeded` status descriptor:
 
 ```typescript
 const getInferenceObjectWithPolling = async (env: Env, id: any) => {
@@ -492,7 +495,7 @@ const getInferenceObjectWithPolling = async (env: Env, id: any) => {
 }
 ```
 
-Again, we add the above function to the react code and pass the inferenceId. When you receive the response, you can obtain the image url with `resObject.inference.images[0].url`
+Again, we add the above function to the react code and pass the inferenceId. When you receive the response, you can obtain the image url with `resObject.inference.images[0].url`:
 
 ```typescript
 	...
@@ -514,24 +517,48 @@ It should be noted, that you can design applications that return mulitple images
 
 ## 7. Store Media to Sequence Metadata Service
 
+With our media `url` from the Scenario API in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls.
 
-With our media `url` in hand, we can move onto storing the asset to the `Sequence Metadata Service`. This enables you to link the AI-generated image to the specific token metadata - all through REST-API calls!
+Each Dungeon Minter treasure chest reward follows the same process where metadata is first stored using the Sequence Metadata API, the `url` and the randomly generated `tokenID` (which allows for parallel requests) is returned to the client. The user then consents, after collectible inspection, to mint the token where the `tokenID` and the user's `address` passed back to the worker created in [Step 5](/guides/treasure-chest-guide#5-deploy-a-cloudflare-worker).
 
-Complete and integrate [this guide](/guides/metadata-guide) in order to build a Serverless Media Service that uses Cloudflare Workers.
+### Implementation
 
-Cloudflare workers allows developers to run minimal infrastructure so that you can spend less time worrying about up time and server use.
+Complete and integrate [this guide](/guides/metadata-guide) in order to build your serverless Media Service leveraging the Sequence Metadata API that uses Cloudflare workers or simply clone our cloudflare [template](https://github.com/0xsequence-demos/demo-cloudflare-worker-treasure-chests/) for this guide.
 
-Once complete, pass the stored media url to the frontend
+Once complete, pass the stored media `tokenID` and `url` to the frontend to be rendered, to allow a user to mint after first viewing what they're minting:
 
 ```typescript
+	const randomTokenIDSpace = ethers.BigNumber.from(ethers.utils.hexlify(ethers.utils.randomBytes(20)))
+	...
+	const jsonCreateAsset = await collectionsService.createAsset({...})
 	...
 	const response = await uploadAsset(env, projectID, collectionID, jsonCreateAsset.asset.id, String(randomTokenIDSpace), imageUrl)
-	return new Response(JSON.stringify({image: response.url }), { status: 200 });
+	return new Response(JSON.stringify({tokenID: String(randomTokenIDSpace), image: response.url }), { status: 200 });
 ```
 
-## 8. Securing your Cloudflare Worker
+## 8. Minting with your Cloudflare Worker
 
-To secure your Cloudflare worker to only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`
+The last step is to finally mint the corresponding tokenId that you linked the metadata to previously to the user's address. Here we post a request to the Cloudflare Worker we created in Step 5 which will mint the token to the user.
+
+```typescript
+const data = {
+	address: address,
+	mint: true,
+	tokenID: tokenID
+};
+
+const res = await fetch(ENDPOINT, {
+	method: 'POST',
+	headers: {
+	'Content-Type': 'application/json',
+	},
+	body: JSON.stringify(data),
+})
+
+const json = await res.json()
+```
+
+One important note is that you will likely want to ensure that your Cloudflare workers only process requests from a certain frontend origin, you can simply check the `request.headers` for the `Referrer` value and compare it against the `CLIENT_URL` in the `wrangler.toml`:
 
 ```typescript
 async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
@@ -545,6 +572,8 @@ async function handleRequest(request: any, env: Env, ctx: ExecutionContext) {
 	...
 }
 ```
+
+
 
 ## Conclusion
 
@@ -561,8 +590,7 @@ Lastly, you can see all the steps above incorporated in a complete experience wi
 
 Happy building!
 
-
-## 9. (Optional) Native Mint Restriction Per Wallet
+## 9. (Optional) Naive Mint Restriction per Wallet
 
 As an option to prevent overuse of the treasure chest minting from specific wallets, a parameter called `DAILY_MINT_RESTRICTION` can be set in the `wrangler.toml` as a maximum mint allowance per day. And, if you feel it's necessary to add an `ADMIN` to your protocol to be able to mint an infinite amount.
 
@@ -587,14 +615,14 @@ Where `hasDailyMintAllowance` is broken down into 2 functions:
 - `fullPaginationDay` of transactions of the users `address`
 - `mintCount` that corresponds to the `from` being the `0x` address
 
-### Full Pagination Of Indexer For A Day
+### Full Pagination Of Indexer for a Day
 <Callout type='info'>
 	As an aside, the Sequence Indexer stack only holds 30 days of transactions for this period, so you can extend the time frame from a day up to this max
 </Callout>
 
 In order to use the Sequence Indexer, we'll need to `pnpm install @0xsequence/indexer`
 
-Then, to implement we use a while loop that gets the first batch of transactions and the `page.after` value from the indexer, and continuously checks if the timestamp is less than 24 hours appending to a temporary array for each pass. This ensures we get all of the available transactions.
+Then, to implement we use a while loop that gets the first batch of transactions and the `page.after` value from the indexer, and continuously checks if the timestamp is less than 24 hours appending to a temporary array for each pass. This ensures we get all of the available transactions:
 
 ```typescript
 import { SequenceIndexer } from '@0xsequence/indexer'
@@ -658,8 +686,8 @@ const fullPaginationDay = async (env: Env, address: string) => {
     return txs
 }
 ```
-### Mint Count For A Day
-All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address
+### Mint Count for a Day
+All collectibles minted from the `ERC721` and `ERC1155` standard Sequence contracts are `from` the `0x` address:
 
 ```typescript
 const mintCount = (env: Env, txs: any) => {
@@ -683,5 +711,3 @@ const hasDailyMintAllowance = async (env: Env, address: string) => {
 	return count < env.DAILY_MINT_RESTRICTION
 }
 ```
-
-
