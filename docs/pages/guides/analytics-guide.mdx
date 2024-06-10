@@ -6,12 +6,12 @@ Time to complete: 20-30 minutes
 
 In this guide, we will show you how to use the [Sequence Builder](https://sequence.build/) analytics feature to query information about usage from your users for your specific project leveraging a serverless [Cloudflare Worker](https://www.cloudflare.com/).
 
-Showcase to your community how well you're doing via a [Dune](https://dune.com/) dashboard to give a sense of connectiveness, or, incorporate intelligent feedback loops into your game driven by user analytics.
+Showcase to your community how well you're doing via a [Dune](https://dune.com/) dashboard to give a sense of connectiveness, or, use the produced API to incorporate intelligent feedback loops into your game driven by user analytics.
 
 You can view an example of the output for this guide [here](https://dune.com/mmhorizon/dungon-minter-analytics)
 
 1. [Access Key Management](/guides/analytics-guide#1-access-key-management): Claim a secret access key to interact with the Sequence stack
-2. [Cloudflare Worker](/guides/analytics-guide#2-cloudflare-worker): Create a function that queries the Sequence Stack and produces project specific data points
+2. [Cloudflare Worker](/guides/analytics-guide#2-cloudflare-worker): Create a function that queries the Sequence stack and produces project specific data points
 3. [Dune Dashboard](/guides/analytics-guide#3-dune-dashboard): Create a view into the data as a shareable dashboard
 
 <Callout type="info">
@@ -20,24 +20,24 @@ A reference to the template code can be found [here](https://github.com/0xsequen
 
 ## 1. Access Key Management
 
-You'll need to acquire a Secret Access Key for your project in order to authenticate your application with the Sequence Stack. Use the following steps:
+You'll need to acquire a Secret Access Key for your project in order to authenticate your application with the Sequence stack. Use the following steps:
 
 ### Secret Access Key Creation
 
 ::::steps
 #### Access Settings
-First start by accessing settings, and selecting the API Keys
+First start by accessing settings, and selecting the API Keys card:
 
 ![builder settings access keys](/img/builder/builder_settings_access_keys.png)
 
 #### Add Service Account
 
-Scroll down and select `+ Add Service Account`
+Scroll down and select `+ Add Service Account`:
 
 ![builder settings add service account](/img/builder/builder_settings_add_service_account.png)
 
 #### Select Write Permission
-Then change the permission to `Write`, click on `+ Add Service Account`, and select `Confirm`
+Then change the permission to `Write`, click on `+ Add Service Account`, and select `Confirm`:
 
 ![builder settings add service account](/img/builder/builder_settings_add_service_account_confirm.png)
 
@@ -47,7 +47,7 @@ Finally `copy` the key and store it in a safe location, as you will not have acc
 
 ## 2. Cloudflare Worker
 
-Implementing a Cloudflare Worker is easy and you will experience automatic scaling based on dashboard use.
+Implement a Cloudflare Worker to experience automatic scaling based on dashboard use, and easy deployments from the cli.
 
 ::::steps
 ### Create Project
@@ -232,13 +232,13 @@ Now you can test your API by calling the respective paths with host name (`/dail
 First, sign up to [Dune](https://dune.com/)
 
 ### Create Query
-Access your account at `https://dune.com/<account>` and select the `create` button and `New query`
+Access your account at `https://dune.com/<account>` and select the `Create` button and `New query`.
 
 ![dune create query](/img/guides/analytics/dune_create_query.png)
 
 ### Daily Active Users Query
 
-Input the following SQL query in the console, and select `Run`
+Input the following SQL query in the console, and select `Run`:
 
 ```sql
 SELECT
@@ -257,7 +257,7 @@ Then, select `Add visualization` after the default `Bar chart` is selected from 
 
 ![add visualization](/img/guides/analytics/dune_add_visualization.png)
 
-Finally, click `Save` and add a name to your query
+Finally, click `Save` and add a name to your query.
 
 ![save query](/img/guides/analytics/dune_query_save.png)
 
@@ -296,6 +296,6 @@ Once created add the previous 2 queries by selecting `Edit` and `Add visualizati
 Once for each query, search for the name in the modal and select `Add` for each query, then `Done` in the modal, and `Done` in the dashboard.
 ::::
 
-Congratulations, you're now ready to share your project's data usage with your teammates or community, see an example of the [Sequence Dungeon Minter Dashboard](https://dune.com/mmhorizon/dungon-minter-analytics).
+Congratulations, you're now ready to share your project's data usage with your teammates or community. Finish by clicking the `Share` button. 
 
 ![dune share dashboard](/img/guides/analytics/dune_share_dashboard.png)
