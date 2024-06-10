@@ -18,7 +18,7 @@ export const topNav = [
     text: 'Resources',
     items: [
     { text: 'Guides', link: '/guides/guide-overview', match: '/guides/guide-overview' },
-      { text: 'Templates', link: '/guides/template-overview', match: '/guides/template-overview' },
+    { text: 'Templates', link: '/guides/template-overview', match: '/guides/template-overview' },
     ]
   },
   { 
@@ -292,6 +292,7 @@ export const sidebar = {
 
       // ]
     },
+    { text: 'Build a Backend Transaction Manager', collapsed: true, link: '/guides/templates/building-relaying-server' },
     {
       text: 'Build a Custom Marketplace',
       collapsed: true,
@@ -313,12 +314,12 @@ export const sidebar = {
     //   link: '/guides/discord'
     // },
     {
-      text: 'Templates',
-      items: [
-        { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
-        { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
-        // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
-      ]
+      text: 'Templates', link: '/guides/template-overview'
+      // items: [
+      //   { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
+      //   { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
+      //   // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
+      // ]
     }
 ],
 

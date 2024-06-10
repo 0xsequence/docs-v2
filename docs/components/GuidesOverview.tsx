@@ -50,6 +50,13 @@ export const GuidesOverview = () => (
         image="/img/guides/overview/marketplace.png"
 
       />
+            <GuideCard
+        title="Backend Transaction Manager for NodeJS"
+        body="Guide for a scalable transaction manager for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
+        link="/guides/templates/building-relaying-server"
+        image="/img/guides/overview/nodejs.png"
+
+      />
       <GuideCard
         title="Creating, storing, and managing collectibles metadata"
         body="By utilizing Sequence's Metadata API, you can programatically create, manage, and store metadata associated with your NFTs from nearly any environment. We'll walk you through how to call these REST-APIs to organize your collections for your game or experience."
