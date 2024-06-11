@@ -15,14 +15,87 @@ export const TemplatesOverview = () => (
     <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <TemplateCard
         title="Embedded Wallet Template for Web"
-        body="Example template for your web application to kickstart integrating embedded wallets."
+        body="Example template for your web application to integrate the use of an Embedded Wallet."
         link="https://github.com/0xsequence/demo-waas-auth"
         demolink="https://0xsequence.github.io/demo-waas-auth/"
       />
-            <TemplateCard
-        title="Embedded Wallet Template React Native"
-        body="Example template for your mobile to kickstart integrating embedded wallets in React Native."
+      <TemplateCard
+        title="Embedded Wallet Template for React Native"
+        body="Example template for your mobile to integrate the use of an Embedded Wallet in React Native."
         link="https://github.com/0xsequence/demo-waas-react-native"
+      />
+      <TemplateCard
+        title="Embedded Wallet Template for Wallet Linking"
+        body="Example template for integrators to allow players to link other EOA wallets they own for transferring assets or for verification purposes."
+        link="https://github.com/0xsequence-demos/demo-waas-wallet-link"
+        demolink='https://0xsequence.github.io/demo-waas-auth/'
+      />
+      <TemplateCard
+        title="Embedded Wallet Template for Wallet Verification"
+        body="Example template for your web application to verify the ownership of an Embedded Wallet using a backend nonce storing server, with the option to include an expiry."
+        link="https://github.com/0xsequence-demos/template-embedded-wallet-verification"
+      />
+      <TemplateCard
+        title="Embedded Wallet Template for Google & Apple Auth"
+        body="Example template for your web application project using an Embedded Wallet that enables the use of Google and Apple auth for deployed dapps."
+        link="https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth"
+      />
+      <TemplateCard
+        title="Sequence Kit Template using React"
+        body="Example template for your web application to integrate Sequence Kit using React to allow sign-in into your application."
+        link="https://github.com/0xsequence/kit/tree/master/examples/react"
+        demolink='https://0xsequence.github.io/kit/'
+      />
+      <TemplateCard
+        title="Sequence Kit Template using Next.js"
+        body="Example template for your web application to integrate Sequence Kit using Next.js to allow sign-in into your application."
+        link="https://github.com/0xsequence/kit/tree/master/examples/next"
+      />
+      <TemplateCard
+        title="Sequence Kit Template using WebGL & Vanilla Javascript"
+        body="Example template for your web application for a minimal WebGL JavaScript starter repo for using React based Sequence Kit."
+        link="https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter"
+      />
+      <TemplateCard
+        title="Wallet Analytics Template using a Cloudflare Worker"
+        body="Example template for querying data from the Sequence Stack in order to render analytics to your community."
+        link="https://github.com/0xsequence-demos/template-cloudflare-worker-wallets-analytics"
+      />
+      <TemplateCard
+        title="Sequence Market Protocol Template using Sequence Kit"
+        body="Example template for your web application to allow users to sign in with Sequence Kit and place orders on the Sequence Market Protocol contracts."
+        link="https://github.com/0xsequence-demos/template-simple-marketplace"
+      />
+      <TemplateCard
+        title="Transactions API Template using a Cloudflare Worker"
+        body="Example template for integrators allow users to mint collectibles using the Sequence Transactions API for gasless serverless transactions for infrastructure that can scale elastically."
+        link="https://github.com/0xsequence-demos/template-cloudflare-worker-sequence-transactions-api"
+      />
+      <TemplateCard
+        title="Transactions API Template using a NodeJS / Express Backend"
+        body="Example template for integrators to allow users to mint collectibles using the Sequence Transactions API for gasless transactions on infrastructure using NodeJs & Express."
+        link="https://github.com/0xsequence-demos/template-node-transactions-backend"
+      />
+      <TemplateCard
+        title="Indexer Webhooks Callback Template using a Cloudflare Worker"
+        body="Example template for integrators to build experiences that allows systems to be called upon across the internet based on the emission of a blockchain event using a Cloudflare Worker."
+        link="https://github.com/0xsequence-demos/template-cloudflare-worker-webhook"
+      />
+      <TemplateCard
+        title="Indexer Webhooks Callback Template using a Nodejs / Express Server"
+        body="Example template for integrators to build experiences that allows systems to be called upon across the internet based on the emission of a blockchain event for infrastructure using Nodejs & Express."
+        link="https://github.com/0xsequence-demos/template-nodejs-webhook-server"
+      />
+      <TemplateCard
+        title="Dungeon Crawler HUD Template in Javascript"
+        body="Example template for your web application to kickstart a dungeon crawler game with a map HUD."
+        link="https://github.com/0xsequence-demos/template-dungeon-crawler-map-hud"
+        demolink='https://0xsequence-demos.github.io/template-dungeon-crawler-map-hud/'
+      />
+      <TemplateCard
+        title="Transactions API Template in Go"
+        body="Example template for integrators to allow users to mint collectibles using the Sequence Transactions API for gasless transactions on infrastructure using Go."
+        link="https://github.com/0xsequence-demos/template-go-sequence-transactions-api"
       />
     </div>
   </section>

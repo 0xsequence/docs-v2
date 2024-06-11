@@ -3,8 +3,14 @@ title: Sequence - Web3 Gaming Platform - Universal Wallet Session Keys
 description: Documentation for Universal Wallet Session Keys for the Sequence infrastructure stack for web3 gaming.
 ---
 
+import {Callout} from 'vocs/components'
+
 # No-Wallet-Confirmation Signatures
 It is possible to build an application where users sign messages without requiring a confirmation in their Sequence wallet every time. This is possible using *session keys*, or ephemeral keys.
+
+<Callout type='info'>
+  The demo code for this walkthrough can be found [here](https://github.com/0xsequence-demos/demo-confirmation-free-signatures)
+</Callout>
 
 # Session Keys
 Session keys are ephemeral private keys that can be generated and stored client-side, typically in a user's local storage. They provide a convenient and secure way for users to authorize specific actions in a decentralized application without requiring them to confirm each action through their primary wallet.
