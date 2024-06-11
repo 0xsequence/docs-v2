@@ -55,9 +55,9 @@ export const GuidesOverview = () => (
         demoLink="https://template-aviator-custom-marketplace-ez9y.vercel.app/"
       />
       <GuideCard
-        title="Backend Transaction Manager for NodeJS"
-        body="Guide for a scalable transaction manager for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
-        link="/guides/templates/building-relaying-server"
+        title="Backend Transaction Service for NodeJS"
+        body="Guide for a scalable transaction service for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
+        link="/guides/building-relaying-server"
         image="/img/guides/overview/nodejs.png"
 
       />
