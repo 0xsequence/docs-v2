@@ -66,6 +66,10 @@ This should print a URL, which you can enter in the browser the URL `https://<ap
 
 ## 2. Deploy, Sponsor and Update Metadata for an ERC1155 Contract with Sequence Builder
 
+<Callout info="danger">
+To use the Transactions API, you'll need to upgrade your Billing to `Developer` for your project in Sequence Builder which can be with [this walkthrough](/solutions/builder/project-settings#5-billing-settings)
+</Callout>
+
 First, follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy a contract.
 
 Then, one must update the role access of the contract in the Builder to only receive requests from the minter wallet address, which can be done in 2 steps.
@@ -74,7 +78,7 @@ You can do this in Sequence Builder by providing `minter permission` to your `Se
 
 In order to know what the transactions API address you are working with is, one must first either:
 
-1. Have one generated for you using this [dapp](https://73eql-hyaaa-aaaad-qf5bq-cai.ic.fleek.co/) by selecting your network, and generating a wallet keypair with the `generate local wallet` button
+1. Have one generated for you using this [dapp](https://sequence-ethauthproof-viewer.vercel.app/) by selecting your network, and generating a wallet keypair with the `generate local wallet` button
 2. Or, you can print locally the account address produced from an EOA wallet private key using the following code snippet:
 
 ```ts
