@@ -73,8 +73,6 @@ export const GuidesOverview = () => (
         link="/guides/metadata-guide"
         image="/img/guides/overview/storage.png"
       />
-
-
     </div>
   </section>
 )
