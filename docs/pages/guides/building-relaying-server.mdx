@@ -155,7 +155,9 @@ const callContract = async (address: string, tokenID: number): Promise<ethers.pr
 }
 ```
 
-Finally, update the `.env` with a private key for a wallet that can be generated from the [following app](https://sequence-ethauthproof-viewer.vercel.app/):
+Finally, update the `.env` with a private key for a wallet that can be generated from the [following app](https://sequence-ethauthproof-viewer.vercel.app/) which is used for demo purposes. For production, we recommend to generate private keys securely locally on your computer via [this example script](https://github.com/0xsequence-demos/script-generate-evm-private-key) run locally.
+
+Then, update the `PKEY` variable with the key:
 
 ```shell
 ...
