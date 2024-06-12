@@ -10,7 +10,7 @@ export const TemplatesOverview = () => (
       </p>
     </div>
     <div className="flex flex-wrap gap-4 md:flex-row flex-col">
-    <h4 className="text-2xl text-themed-primary font-bold pt-5">Web3</h4>
+    <h4 className="text-2xl text-themed-primary font-bold pt-5">Onboarding</h4>
     </div>
     <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <TemplateCard
@@ -51,25 +51,32 @@ export const TemplatesOverview = () => (
         body="Example template for your web application to integrate Sequence Kit using Next.js to allow sign-in into your application."
         link="https://github.com/0xsequence/kit/tree/master/examples/next"
       />
+
       <TemplateCard
         title="Sequence Kit Template using WebGL & Vanilla Javascript"
         body="Example template for your web application for a minimal WebGL JavaScript starter repo for using React based Sequence Kit."
         link="https://github.com/0xsequence-demos/template-webgl-js-sequence-kit-starter"
       />
+      </div>
+      <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <h4 className="text-2xl text-themed-primary font-bold">APIs</h4>
+    </div>
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
       <TemplateCard
-        title="Wallet Analytics Template using a Cloudflare Worker"
+        title="Wallet Analytics API Template using a Cloudflare Worker"
         body="Example template for querying data from the Sequence Stack in order to render analytics to your community."
         link="https://github.com/0xsequence-demos/template-cloudflare-worker-wallets-analytics"
       />
-      <TemplateCard
-        title="Sequence Market Protocol Template using Sequence Kit"
-        body="Example template for your web application to allow users to sign in with Sequence Kit and place orders on the Sequence Market Protocol contracts."
-        link="https://github.com/0xsequence-demos/template-simple-marketplace"
-      />
+
       <TemplateCard
         title="Transactions API Template using a Cloudflare Worker"
         body="Example template for integrators allow users to mint collectibles using the Sequence Transactions API for gasless serverless transactions for infrastructure that can scale elastically."
         link="https://github.com/0xsequence-demos/template-cloudflare-worker-sequence-transactions-api"
+      />
+            <TemplateCard
+        title="Transactions API Template in Go"
+        body="Example template for integrators to allow users to mint collectibles using the Sequence Transactions API for gasless transactions on infrastructure using Go."
+        link="https://github.com/0xsequence-demos/template-go-sequence-transactions-api"
       />
       <TemplateCard
         title="Transactions API Template using a NodeJS / Express Backend"
@@ -86,16 +93,31 @@ export const TemplatesOverview = () => (
         body="Example template for integrators to build experiences that allows systems to be called upon across the internet based on the emission of a blockchain event for infrastructure using Nodejs & Express."
         link="https://github.com/0xsequence-demos/template-nodejs-webhook-server"
       />
-      <TemplateCard
+      </div>
+              <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <h4 className="text-2xl text-themed-primary font-bold">Monetization</h4>
+    </div>
+
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <TemplateCard
+        title="Sequence Market Protocol Template using Sequence Kit"
+        body="Example template for your web application to allow users to sign in with Sequence Kit and place orders on the Sequence Market Protocol contracts."
+        link="https://github.com/0xsequence-demos/template-simple-marketplace"
+      />
+
+      </div>
+
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+    <h4 className="text-2xl text-themed-primary font-bold">Games</h4>
+    </div>
+
+    <div className="flex flex-wrap gap-4 md:flex-row flex-col">
+
+          <TemplateCard
         title="Dungeon Crawler HUD Template in Javascript"
         body="Example template for your web application to kickstart a dungeon crawler game with a map HUD."
         link="https://github.com/0xsequence-demos/template-dungeon-crawler-map-hud"
         demolink='https://0xsequence-demos.github.io/template-dungeon-crawler-map-hud/'
-      />
-      <TemplateCard
-        title="Transactions API Template in Go"
-        body="Example template for integrators to allow users to mint collectibles using the Sequence Transactions API for gasless transactions on infrastructure using Go."
-        link="https://github.com/0xsequence-demos/template-go-sequence-transactions-api"
       />
     </div>
   </section>
@@ -130,7 +152,7 @@ const TemplateCard = ({
         href={link}
         className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
       >
-        Read guide
+        Repo
       </SmartLink>
       {demolink && <SmartLink
         href={demolink}

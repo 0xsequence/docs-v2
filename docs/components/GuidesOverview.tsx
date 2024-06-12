@@ -57,9 +57,15 @@ export const GuidesOverview = () => (
       <GuideCard
         title="Backend Transaction Manager for NodeJS"
         body="Guide for a scalable transaction manager for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
-        link="/guides/templates/building-relaying-server"
+        link="/guides/building-relaying-server"
         image="/img/guides/overview/nodejs.png"
 
+      />
+        <GuideCard
+        title="Creating, Storing, and Managing Collectibles Metadata"
+        body="By utilizing Sequence's Metadata API, you can programatically create, manage, and store metadata associated with your NFTs from nearly any environment. We'll walk you through how to call these REST-APIs to organize your collections for your game or experience."
+        link="/guides/metadata-guide"
+        image="/img/guides/overview/storage.png"
       />
        <GuideCard
         title="Confirmation Free Signatures using a Universal Sequence Wallet"
@@ -67,12 +73,7 @@ export const GuidesOverview = () => (
         link="/solutions/wallets/universal-wallet/examples/session-keys"
         image='/img/guides/confirmation-free-signatures/people-playing-paper-rock-scissors.jpg'
       />
-      <GuideCard
-        title="Creating, Storing, and Managing Collectibles Metadata"
-        body="By utilizing Sequence's Metadata API, you can programatically create, manage, and store metadata associated with your NFTs from nearly any environment. We'll walk you through how to call these REST-APIs to organize your collections for your game or experience."
-        link="/guides/metadata-guide"
-        image="/img/guides/overview/storage.png"
-      />
+
     </div>
   </section>
 )
