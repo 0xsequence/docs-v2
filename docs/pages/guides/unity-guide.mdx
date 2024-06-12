@@ -269,7 +269,7 @@ Our `TransactionQueuers` can be configured to submit transactions automatically 
 Here are some things to consider when determining how to configure your transaction queuers:
 
 - The more frequently you submit transactions, the more gas fees you'll pay. Of course, the EVM-compatible blockchain you select will heavily influence the number and complexity of transactions you can submit before costs become prohibitive.
-- The less often you submit tranactions, the further out of sync your game state (cache) will become with the information on chain. If a transaction were to fail, you will need a way to recover from this without hurting your players' experience of the game.
+- The less often you submit tranactions, the further out of sync your game state (cache) will become with the information on-chain. If a transaction were to fail, you will need a way to recover from this without hurting your players' experience of the game.
 
 As an example from Jelly Forest: we felt that the Shops' transactions were of high importance to the end user. We didn't want to risk a user thinking they had an upgrade/hat and then having the transaction fail and needing to either revoke the upgrade/hat or mint an extra one that the player may not have legitemately earned. So, we made it so that the user waits on the Shop pages until the purchase transaction (and all other transaction in the TransactionQueuers) have succeeded.
 
