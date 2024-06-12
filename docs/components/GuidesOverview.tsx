@@ -50,9 +50,16 @@ export const GuidesOverview = () => (
         image="/img/guides/overview/marketplace.png"
 
       />
-            <GuideCard
-        title="Backend Transaction Manager for NodeJS"
-        body="Guide for a scalable transaction manager for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
+      <GuideCard
+        title="Sequence Analytics API in Dune"
+        body="Guide for querying information about usage from your users for your specific project leveraging a serverless Cloudflare Worker."
+        link="/guides/analytics-guide"
+        image="/img/guides/analytics/dune-analytics.jpg"
+
+      />
+      <GuideCard
+        title="Backend Transaction Service for NodeJS"
+        body="Guide for a scalable transaction service for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
         link="/guides/templates/building-relaying-server"
         image="/img/guides/overview/nodejs.png"
 

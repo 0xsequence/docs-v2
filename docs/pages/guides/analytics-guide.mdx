@@ -1,6 +1,6 @@
 import {Callout} from 'vocs/components'
 
-# Serverless Analytics using Dune
+# Sequence Analytics API in Dune
 
 Time to complete: 20-30 minutes
 
@@ -47,7 +47,7 @@ Finally `copy` the key and store it in a safe location, as you will not have acc
 
 ## 2. Cloudflare Worker
 
-Implement a Cloudflare Worker to experience automatic scaling based on dashboard use, and easy deployments from the cli.
+In this example, we utilize a Cloudflare Worker to experience automatic scaling based on dashboard use, and easy deployments from the cli, but of course you can use your own backend or other serverless alternatives.
 
 ::::steps
 ### Create Project
@@ -164,7 +164,7 @@ const startDate = (env: Env) => {
 
 ### Daily Active Users 
 
-Now, handle the `Daily Active Users` request by using the following function, that calls the Sequence Stack API:
+Now, handle the `Daily Active Users` request by using the following function, that calls the Sequence Analytics API:
 
 ```ts
 const handleDailyWallets = async (env: Env, request: Request) => {
@@ -223,6 +223,10 @@ const handleTotalTxns = async (env: Env, request: Request) => {
 ::::
 
 Now you can test your API by calling the respective paths with host name (`/dailyActiveUsers` & `/totalTransactionsSent`) once you have redeployed with `wrangler deploy`.
+
+<Callout type="info">
+For more examples of endpoints available through the Analytics API, please check out the [overview](/api/analytics/overview) page.
+</Callout>
 
 ## 3. Dune Dashboard
 
