@@ -1,0 +1,304 @@
+import { Callout } from 'vocs/components'
+
+# Building a Relaying Transaction Server
+
+With Sequence, you can create a smart contract wallet your server can use to dispatch transactions for your users
+without you having to be worried about transaction speed, throughput and re-orgs. 
+
+The only difference from using a typical Sequence wallet when sending transactions to the blockchain, is at the smart contract level the `msg.sender` is one of the Sequence Relayers wallet addresses. For Sequence Builder standard contracts, this is not a problem when combined with a relayed Transactions API request.
+
+<Callout type='info'>
+  By default, Sequence transactions will be executed sequentially.
+</Callout>
+
+The following steps will guide you through how to create you server and mint collectibles to a wallet address:
+
+1. [Environment Setup with Express Server](/guides/building-relaying-server#environment-setup-with-express-server): Create a NodeJs based server using the library Express to accept HTTP requests
+2. [Project & Access Key Management](/guides/building-relaying-server#project--access-key-management): Claim a public access key to interact with the Sequence stack
+3. [Deploy Collectible Contract](/guides/building-relaying-server#deploy-collectible-contract): Deploy a collectible contract in order to be able to submit transactions to the blockchain to mint tokens to a wallet address
+4. [Construct Sponsored Relayer with Transactions API](/guides/building-relaying-server#construct-sponsored-relayer-with-the-transactions-api): Craft a function to be used in an Express route to call the Sequence Transactions API from a sponsored contract
+
+Additonal Features:
+- [(Optional) Relay with Wallet Owned Currency](): Craft a function to be used in an Express route to call the Sequence Transactions API paid for using a wallet owned currency
+- [(Optional) Relay Parallel Transactions](): Perform transaction batching to send a currency
+
+::::steps
+## Environment Setup with Express Server
+
+Ensure that `pnpm` (or some other node package manager) is installed with the following command:
+
+```shell
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+Then, clone down the [following express template code](https://github.com/0xsequence-demos/template-node-transactions-backend/tree/template-starter)
+
+<Callout type="info">
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications, which will be used in this guide.
+</Callout>
+
+After the code is locally on your machine, run your server and client with the following command:
+
+```shell
+pnpm run start
+```
+
+Contained in the code is a route called `/mint` that can be called from the cli for testing.
+
+Give a try with this example curl request:
+
+```shell
+curl -X POST http://localhost:3000/mint -d '{"tokenID": 0, "address": "0x"}'
+```
+
+You should see the following output:
+
+```shell
+{"txHash":"0x"}
+```
+
+## Project & Access Key Management
+
+First start by following [this walkthrough](/solutions/builder/project-management) for how to sign up to the [Sequence Builder](https://sequence.build/) and to learn how to create a project.
+
+Then, in order to use the Transactions API, you'll need to upgrade your Billing to `Developer` which can be with [this walkthrough](/solutions/builder/project-settings#5-billing-settings).
+
+Finally, a `Public Access Key` is required for the Transactions API, which can be acquired following [this walkthough](/solutions/builder/getting-started#claim-an-api-access-key).
+
+Finally update the update the `.env.example` to `.env` with the following:
+
+```shell
+CHAIN_HANDLE='<CHAIN_HANDLE>' # e.g. `mainnet`, `xr-sepolia`, etc.
+PROJECT_ACCESS_KEY='<PUBlIC_ACCESS_KEY>'
+```
+
+## Deploy Collectible Contract
+
+Follow [this walkthrough](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy a collectible contract.
+
+<Callout type="info">
+If you're using a non-testnet and need to sponsor your contract, you can perform this action by following [this walkthrough]()
+</Callout>
+
+Finally, update the `.env` with your deployed collectible contract:
+
+```shell
+...
+COLLECTIBLE_CONTRACT_ADDRESS="<ADDRESS>"
+```
+
+## Construct Sponsored Relayer with the Transactions API
+
+<Callout type="info">
+The full code for this section can be found [here](https://github.com/0xsequence-demos/template-node-transactions-backend)
+</Callout>
+
+First, using the template code provided in step #1, we'll need to add a few packages
+
+```typescript
+import { Session } from '@0xsequence/auth'
+import { findSupportedNetwork, NetworkConfig } from '@0xsequence/network'
+```
+
+Then, your server will need an EOA wallet that will be able to sign messages. It will be the owner of your server-side Sequence
+wallet which will be used to dispatch transactions.
+
+<Callout type='warning'>
+Openning a session may trigger a migration of your Sequence wallet to a new version, this could be `v1` to `v2` or `v2` to future versions.
+
+Migration is a one-way process, once your wallet is migrated it cannot be reverted to a previous version.
+
+To catch any unwanted migration, you can use the `onMigration` callback.
+</Callout>
+
+To implement the `callContract` function, include the following code that uses a single signer to relay transactions:
+
+```typescript
+const callContract = async (address: string, tokenID: number): Promise<ethers.providers.TransactionResponse> => {
+	
+	const chainConfig: NetworkConfig = findSupportedNetwork(process.env.CHAIN_HANDLE!)!
+	const provider = new ethers.providers.StaticJsonRpcProvider({
+		url: chainConfig.rpcUrl
+	})
+
+	const walletEOA = new ethers.Wallet(process.env.PKEY!, provider);
+	const relayerUrl = `https://${chainConfig.name}-relayer.sequence.app`
+
+	// Create a single signer sequence wallet session
+	const session = await Session.singleSigner({
+		signer: walletEOA,
+		projectAccessKey: process.env.PROJECT_ACCESS_KEY!
+	})
+
+	const signer = session.account.getSigner(chainConfig.chainId)
+	
+	// Standard interface for ERC1155 contract deployed via Sequence Builder
+	const collectibleInterface = new ethers.utils.Interface([
+		'function mint(address to, uint256 tokenId, uint256 amount, bytes data)'
+	])
+		
+	const data = collectibleInterface.encodeFunctionData(
+		'mint', [`${address}`, `${tokenID}`, "1", "0x00"]
+	)
+
+	const txn = {
+		to: process.env.COLLECTIBLE_CONTRACT_ADDRESS, 
+		data: data
+	}
+
+	try {
+		return await signer.sendTransaction(txn)
+	} catch (err) {
+		console.error(`ERROR: ${err}`)
+		throw err
+	}
+}
+```
+
+Finally, update the `.env` with a private key for a wallet that can be generated from the [following app](https://sequence-ethauthproof-viewer.vercel.app/):
+
+```shell
+...
+PKEY='<WALLET_PRIVATE_KEY>'
+```
+
+### Grant Minter Role to Relayer Wallet Address
+
+One must update the role access of the contract in the Builder to only receive requests from the minter wallet address.
+
+You can do this in Sequence Builder by providing `minter permission` to your `Sequence Wallet Transactions API Address`.
+
+To do so, open your project, navigate to the `Contracts` page, select your `Linked contracts` and under `Write Contract` tab expand the `grantRole` method.
+
+Complete with the following details:
+
+`bytes32 role`: `0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6`
+
+`address account`: `<Generated Sequence Transactions API Wallet Address>`
+
+<img src="/img/relayer/grant_role.png" alt="Grant a role for the relayer" />
+
+Where the `role` string inputted is the result of `keccak256("MINTER_ROLE")` in solidity or `ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"))` in javascript
+
+This makes it so that only your specific address can mint from the contract, it will error otherwise.
+
+Complete the role update by clicking `write` and sign the sponsored transaction.
+
+You application is now ready for you to send a test transaction from the client frontend by signing into your wallet and clicking mint. 
+
+Give it a try!
+
+<Callout type="danger">
+Don't forget to update the access key in the client in the `initWallet` function
+</Callout>
+
+::::
+
+## (Optional) Relay with Wallet Owned Currency
+
+You can also enforce a specific way to pay for gas fees:
+
+```ts
+import { Session } from '@0xsequence/auth'
+import { ethers } from 'ethers'
+
+// where the <chain_handle> corresponds to https://docs.sequence.xyz/solutions/technical-references/chain-support/
+const provider = new ethers.providers.JsonRpcProvider('https://nodes.sequence.app/<chain_handle>');
+
+// Create your server EOA
+const walletEOA = new ethers.Wallet(serverPrivateKey, provider)
+
+// Open a Sequence session, this will find or create
+// a Sequence wallet controlled by your server EOA
+const session = await Session.singleSigner({
+  signer: walletEOA,
+  projectAccessKey: '<access_key>'
+  // OPTIONAL: Multiple wallets could be found for the same EOA
+  // to enforce a specific wallet you can use the following callback
+  selectWallet: async (wallets: string[]) => {
+    const found = wallets.find(w => w === EXPECTED_WALLET_ADDRESS)
+    if (!found) throw Error('wallet not found')
+    // Returning the wallet address will make the session use it
+    // returning undefined will make the session create a new wallet
+    return found
+  }
+})
+
+const signer = session.account.getSigner(137, {
+  // OPTIONAL: You can also enforce a specific way to pay for gas fees
+  // if not provided the sdk will select one for you
+  selectFee: async (
+    _txs: any,
+    options: FeeOption[]
+  ) => {
+    // Find the option to pay with native tokens
+    const found = options.find(o => !o.token.contractAddress)
+    if (!found) throw Error('fee option not found')
+    return found
+  }
+})
+
+// Initialize the contract
+const usdc = new ethers.Contract(
+  '0x2791bca1f2de4661ed88a30c99a7a9449aa84174', // USDC on Polygon
+  ERC_20_ABI,
+  signer
+)
+
+// Send the transaction
+const txnResponse = await usdc.transfer(recipient, 1)
+
+// Check if transaction was successful
+if (txnReceipt.status != 1) {
+  console.log(`Unexpected status: ${txnReceipt.status}`)
+}
+```
+## (Optional) Relay Parallel Transactions
+
+If you want to send multiple independent transactions without needing to batch them, you can also send them in distinct nonce spaces.
+
+Using distinct nonce spaces for your transactions signals to the transactions API that there's no dependency between them and that
+they can be executed on-chain in any order.
+
+This allows the transactions to be dispatched immediately in an unbuffered way without having to wait for a full batch.
+
+Here is an example of how to do that:
+
+```js
+// Generate random nonce spaces with ~0% probability of collision
+const randomNonceSpace1 = ethers.BigNumber.from(
+  ethers.utils.hexlify(ethers.utils.randomBytes(20))
+);
+const randomNonceSpace2 = ethers.BigNumber.from(
+  ethers.utils.hexlify(ethers.utils.randomBytes(20))
+);
+
+// Create signers for each nonce space
+const signer1 = session.account.getSigner(137, {
+  nonceSpace: randomNonceSpace1,
+});
+
+const signer2 = session.account.getSigner(137, {
+  nonceSpace: randomNonceSpace2,
+});
+
+// Generate transactions
+const txn1 = {
+  to: tokenContract.address,
+  data: erc20Interface.encodeFunctionData("transfer", [recipient1, amount1]),
+};
+
+const txn2 = {
+  to: tokenContract.address,
+  data: erc20Interface.encodeFunctionData("transfer", [recipient2, amount2]),
+};
+
+// Dispatch transactions, which can now be executed in parallel
+await Promise.all([
+  signer1.sendTransaction(txn1),
+  signer2.sendTransaction(txn2),
+]);
+```
+
+If batching transactions is not a problem for your use-case, you can call `await wallet.sendTransaction(txns)`.
+You can read more about batch transactions in [Sending Batched Transactions](/solutions/wallets/universal-wallet/examples/send-batch-transactions).

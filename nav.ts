@@ -199,12 +199,12 @@ export const sidebar = {
             // {text: 'Transaction Encoding', link: '/solutions/technical-references/internals/v1/07-transaction-encoding'},
             {text: 'Signature Encoding', link: '/solutions/technical-references/internals/v1/signature-encoding'},
             {text: 'Wallet Context', link: '/solutions/technical-references/internals/v1/wallet-context'},
-            {text: 'Contract Audits', link: '/solutions/technical-references/internals/v1/contract-audits'},
           ]},
           { text: 'Sequence v2', collapsed: true, link: '/solutions/technical-references/internals/v2/deploy', items: [
             {text: 'Deploy', link: '/solutions/technical-references/internals/v2/deploy'},
             {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/configuration"},
-          ]}
+          ]},
+          {text: 'Contract Audits', link: '/solutions/technical-references/internals/contract-audits'},
         ]},
       ]
     },
@@ -292,7 +292,7 @@ export const sidebar = {
 
       // ]
     },
-    { text: 'Build a Backend Transaction Manager', collapsed: true, link: '/guides/templates/building-relaying-server' },
+    { text: 'Build a Backend Transaction Service', collapsed: true, link: '/guides/building-relaying-server' },
     {
       text: 'Build a Custom Marketplace',
       collapsed: true,
