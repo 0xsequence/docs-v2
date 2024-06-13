@@ -198,28 +198,13 @@ Upon webhook listener response, an object is returned in the following structure
 		- `to` (string) -- the destination address of the transaction, if there is a value
 	- `txnLogIndex` (string) -- the log index in the transaction
 	- `logDataType` (string) -- the type of log event (e.g. `TOKEN_TRANSFER`)
-	- `logData` (string) -- 
 	- `Log` (object) -- the emitted event data
-		- `raw` (object) -- the raw transaction object
-			- `address` (string) -- the address from which the event came from
-			- `topics` (string[]) -- the topic event hashes emitted in the logs
-			- `data` (string) -- 
-			- `blockNumber` (string) -- the hex of the block number
-			- `transactionHash` (string) -- the transaction hash from the blockchain
-			- `transactionIndex` (string) -- the index of the transaction in the blockchain block in hex
-			- `blockHash` (string) -- the hash of the block for the transaction
-			- `logIndex` (string) -- the log index in the transaction
-			- `removed` (boolean) -- if the log of the event has been removed from servers
+		- `raw` ([Log](/api/indexer/examples/webhook-listener#log-object)) -- the raw transaction object
 		- `contractType` (string) -- the type of contract (e.g. `ERC20`, `ERC721`, `ERC1155`, etc.)
-		- `transferEvent` (object) -- the event object of the transfer event
-			- `operator` (string) -- the address of the operator
-			- `from` (string) -- the address of the operator
-			- `to` (string) -- the address of the operator
-			- `tokenIds` (string[]) -- an array of the token IDs transferred
-			- `amounts` (string[]) -- an array of the amounts of tokens transferred
-		- `OrderCreated` (string) --
-		- `OrderAccepted` (string) --
-		- `OrderCancelled` (string) --
+		- `transferEvent` ([TransferEvent](/api/indexer/examples/webhook-listener#transferevent-object))
+		- `OrderCreated` ([OrderbookRequestCreated](/api/indexer/examples/webhook-listener#orderbookrequestcreated-object))
+		- `OrderAccepted` ([OrderbookRequestAccepted](/api/indexer/examples/webhook-listener#orderbookrequestaccepted-object))
+		- `OrderCancelled` ([OrderbookRequestCancelled](/api/indexer/examples/webhook-listener#orderbookrequestcancelled-object))
 
 ## Examples
 
@@ -297,3 +282,59 @@ const ok = await indexer.addWebhookListener({
 console.log('ok', ok)
 ```
 :::
+
+### Custom Return Data Types Glossary
+
+##### TransferEvent (object)
+| Field    | Type 	 | Description |
+| -------- | ------- | ------- 	   |
+|  operator 	| string    | the address of the operator |
+|  from 		| string    | the address of who the transaction came from |
+|  to 			| string    | the address of who the transaction is for |
+|  tokenIDs 	| []i32    	| an array of the token IDs transferred |
+|  amounts 		| []i32    	| an array of the amounts of tokens transferred |
+
+##### OrderbookRequestCreated (object)
+| Field    | Type 	 | Description |
+| -------- | ------- | ------- 	   |
+|  requestId 		| i32    | the request id as an incremented value of the order|
+|  creator 			| string    | the user address who created the order |
+|  tokenContract 	| string    | the token contract of that the order is for |
+|  tokenId 			| i32    | the token identifier |
+|  isListing 		| boolean    | whether the order is to list (true) or offer orders (false) |
+|  quantity 		| i32    | the number of tokens the order is for | 
+|  currency 		| string    | the currency address of the order |
+|  pricePerToken 	| i32    | the price per token for the order |
+|  expiry 			| i32    | the expiry of when the order is no longer valid |
+|  raw 				| [Log](/api/indexer/examples/webhook-listener#log-object)    | the raw log |
+
+##### OrderbookRequestAccepted (object)
+| Field    | Type 	 | Description |
+| -------- | ------- | ------- 	   |
+|  requestId 		| i32    | the request id as an incremented value of the order|
+|  buyer 			| string    | the user address for who purchased the order |
+|  tokenContract 	| string    | the token contract of that the order is for |
+|  receiver 		| string    | the user address for who who recieves the token |
+|  quantity 		| i32    | the number of tokens |
+|  quantityRemaining| i32    | the remaining number of tokens left in the order |
+|  raw 				| [Log](/api/indexer/examples/webhook-listener#log-object)| the raw log |
+
+##### OrderbookRequestCancelled (object)
+| Field    | Type | Description |
+| -------- | ------- | ------- |
+|  requestId 		| i32    | the request id as an incremented value of the order|
+|  tokenContract 	| string    | the token contract of that the order is for | 
+|  raw 				| [Log](/api/indexer/examples/webhook-listener#log-object)| the raw log |  
+
+##### Log (object)
+| Field    | Type | Description |
+| -------- | ------- | ------- |
+|  address 		| string    | the address from which the event came from |
+|  topics 		| []string    | the topic event hashes emitted in the logs |
+|  data 		| []string    | data |
+|  blockNumber 	| i64    | the hex of the block number |
+|  txHash 		| string    | the transaction hash from the blockchain |
+|  txIndex 		| i32    | the index of the transaction in the blockchain block in hex |
+|  blockHash 	| string    | the hash of the block for the transaction |
+|  index 		| i32    | the log index in the transaction |
+|  removed 		| boolean    | if the log of the event has been removed based on reorganizations |
