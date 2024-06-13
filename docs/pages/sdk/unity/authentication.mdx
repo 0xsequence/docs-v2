@@ -91,6 +91,10 @@ All other social platforms are supported by default, just be sure to add your cl
 
 No additional steps required.
 
+:::tip
+When configuring your social sign in web client credentials with Google (for example) for desktop platforms (and Android), you'll want to whitelist https://api.sequence.app/oauth/callback as "Authorized redirect URIs"
+:::
+
 ### Android
 
 1. In the Project window, browse to `Assets > Plugins > Android`.
@@ -158,9 +162,35 @@ b) Note: Unity 2022 versions prior to `2022.3.7f1` and 2023 versions prior to `2
 
 i.e. add `<meta-data android:name="unityplayer.UnityActivity" android:value="true" />` after your first `intent-filter`. Please see https://forum.unity.com/threads/deep-linking-in-unity-2022-the-app-is-restarted.1447300/ for more info.
 
-### WebGL
+### Web
 
-Coming soon.
+Social sign in on Web platforms uses React via the [WebGLTemplate](https://docs.unity3d.com/Manual/webgl-templates.html) found under `WebGLTemplates/SequenceReact`. This has been validated on WebGL and WebGPU. To learn how to enable WebGPU in Unity, please see [this forum post](https://forum.unity.com/threads/early-access-to-the-new-webgpu-backend-in-unity-2023-3.1516621/).
+
+#### One-time setup
+
+Drag this `WebGLTemplates` folder under `Assets` (or just drag the `SequenceReact` template into your existing `WebGLTemplates` folder is you already have one) such that you have `Assets/WebGLTemplates/SequenceReact`.
+
+:::warning
+It is very important that your `WebGLTemplates` are at `Assets/WebGLTemplates`. Much like the `Plugins` folder, if they aren't in this exact location, Unity will not pick them up!
+:::
+
+Once you've added the `SequenceReact` template, you'll want to restart the editor so that Unity picks up your newly added template.
+
+From here, you can select the template under `Project Settings > Player Settings > Resolution and Presentation`.
+
+#### Building
+
+After the one time setup, when you build your Unity project on Web platforms it will be built as part of a React project.
+
+1. Open up a command line at the root of your new build
+2. [Install pnpm](https://pnpm.io/installation) if you don't already have it
+3. `pnpm install` to install dependancies
+4. `pnpm dev` to run the project on your localhost (defaulting to port 4444 - configurable in `SequenceReact/package.json`)
+5. Open http://localhost:4444
+
+:::tip
+When configuring your social sign in credentials with Google (for example), you'll want to whitelist http://localhost:4444 and your game's eventual hosted URL as "Authorized Javascript origins"
+:::
 
 ## Connecting with WaaS
 
