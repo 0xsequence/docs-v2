@@ -20,4 +20,8 @@ description: Documentation for Unity SDK setup for the Sequence infrastructure s
 
     c) `WaaS Config Key` - You can get this key in [Sequence Builder](https://sequence.build/) under `Wallets > Embedded Wallet`
 
-    For a more detailed guide on how to configure Sequence Embedded Wallet, [read here](/solutions/builder/embedded-wallet).
+    d) `StoreSessionPrivateKeyInSecureStorage` - Available on select platforms: we have integrated with the platform's native secure storage system. If enabled, we will store session wallet info (including the private key) in secure storage and automatically attempt to recover the session for the user after closing the app (so they won't need to login again). With this disabled (default) or on an unsupported platform, the session wallet's private keys never leave the application's runtime memory; however, your user will need to sign in again anytime they close the app. The default `LoginPanel` UI (see [Authentication](/sdk/unity/authentication)) will handle this behaviour for you automatically, navigating to the appropriate page.
+
+:::info
+For a more detailed guide on how to configure Sequence Embedded Wallet, [read here](/solutions/builder/embedded-wallet).
+:::
