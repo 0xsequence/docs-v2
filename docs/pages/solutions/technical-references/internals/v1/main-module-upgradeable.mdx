@@ -1,2 +1,8 @@
-# MainModuleUpgradeable & configuration migration
+# Main Module Upgradeable & configuration migration
 
+The Main Module Upgradeable is the main contract that holds the logic for the wallet.
+It is upgradeable, meaning that the logic can be changed without changing the address of the wallet.
+
+When the wallet is deployed, the `MainModule` is used as the initial code implementation.
+This module uses the counterfactual address of the wallet to validate the `imageHash` of the wallet configuration.
+When the wallet configuration is updated, the `MainModule` will automatically replace the wallet code implementation with `MainModuleUpgradeable`, while handling the storage initialization.

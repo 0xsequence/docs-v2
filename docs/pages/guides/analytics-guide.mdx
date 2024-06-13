@@ -1,0 +1,305 @@
+import {Callout} from 'vocs/components'
+
+# Sequence Analytics API in Dune
+
+Time to complete: 20-30 minutes
+
+In this guide, we will show you how to use the [Sequence Builder](https://sequence.build/) analytics feature to query information about usage from your users for your specific project leveraging a serverless [Cloudflare Worker](https://www.cloudflare.com/).
+
+Showcase to your community how well you're doing via a [Dune](https://dune.com/) dashboard to give a sense of connectiveness, or, use the produced API to incorporate intelligent feedback loops into your game driven by user analytics.
+
+You can view an example of the output for this guide [here](https://dune.com/mmhorizon/dungon-minter-analytics)
+
+1. [Access Key Management](/guides/analytics-guide#1-access-key-management): Claim a secret access key to interact with the Sequence stack
+2. [Cloudflare Worker](/guides/analytics-guide#2-cloudflare-worker): Create a function that queries the Sequence stack and produces project specific data points
+3. [Dune Dashboard](/guides/analytics-guide#3-dune-dashboard): Create a view into the data as a shareable dashboard
+
+<Callout type="info">
+A reference to the template code can be found [here](https://github.com/0xsequence-demos/template-cloudflare-worker-wallets-analytics)
+</Callout>
+
+## 1. Access Key Management
+
+You'll need to acquire a Secret Access Key for your project in order to authenticate your application with the Sequence stack. Use the following steps:
+
+### Secret Access Key Creation
+
+::::steps
+#### Access Settings
+First start by accessing settings, and selecting the API Keys card:
+
+![builder settings access keys](/img/builder/builder_settings_access_keys.png)
+
+#### Add Service Account
+
+Scroll down and select `+ Add Service Account`:
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account.png)
+
+#### Select Write Permission
+Then change the permission to `Write`, click on `+ Add Service Account`, and select `Confirm`:
+
+![builder settings add service account](/img/builder/builder_settings_add_service_account_confirm.png)
+
+Finally `copy` the key and store it in a safe location, as you will not have access to this in the future from the Sequence Builder.
+
+::::
+
+## 2. Cloudflare Worker
+
+In this example, we utilize a Cloudflare Worker to experience automatic scaling based on dashboard use, and easy deployments from the cli, but of course you can use your own backend or other serverless alternatives.
+
+::::steps
+### Create Project
+In order to create the project from scratch, first create a project with `mkdir`, `cd` into the project, and run `pnpm init` to create a `package.json`.
+
+### "Hello World" Worker
+
+Make sure wrangler cli is installed in your project and set the `wrangler` keyword as an alias in your local bash session.
+
+```shell
+pnpm install wrangler --save-dev
+alias wrangler='./node_modules/.bin/wrangler'
+```
+
+Create an account on the [Cloudflare site](https://cloudflare.com/) and perform a login step to login to your Cloudflare dashboard to connect the Cloudflare platform to your local development environment.
+
+```shell
+wrangler login
+```
+
+Once logged in, initialize the project in the directory with the command `wrangler init` and accept one of the randomly generated project folder names provided that you like, and follow the prompts to initialize your git tracked typescript `"Hello World" Worker` application.
+
+```shell
+wrangler init
+```
+
+To complete this step, you should press enter 4 times after `wrangler init` with the last 2 step answered as `No` to decline git versioning and deployment.
+
+This will clone down a starter repository that can be used to deploy code to the cloud.
+
+<Callout type='info'>
+Local API Testing <br/>
+At any point in the guide, you can use the `wrangler dev` command in the project folder for local testing
+</Callout>
+
+#### Deploy Test
+
+Finally, `cd` into the randomly generated project folder, and perform a `wrangler deploy` command.
+
+This should print a URL, which you can enter in the browser the URL `https://<app>.<account>.workers.dev` to view the `Hello World!` result.
+
+### Setup Config, Routes, & Mock functions
+Once you have the project setup, update your `wrangler.toml` with the following variables, where `DAYS` is the time period you're looking at:
+
+```shell
+[vars]
+SECRET_API_ACCESS_KEY = "<SECRET_API_ACCESS_KEY>"
+PROJECT_ID = <PROJECT_ID>
+DAYS = <DAYS>
+```
+
+Then include the `Env` type with the variables in `index.ts`:
+
+```ts
+export interface Env {
+	PROJECT_ID: number;
+	SECRET_API_ACCESS_KEY: string;
+	DAYS: number;
+}
+```
+
+Replace the existing `fetch` function with the following mocked function calls:
+
+```ts
+export default {
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		const url = new URL(request.url);
+		
+		// Handle different endpoints
+		if (url.pathname === "/dailyActiveUsers") {
+			return handleDailyWallets(env, request);
+		} else if (url.pathname === "/totalTransactionsSent") {
+			return handleTotalTxns(env, request);
+		} else {
+			return new Response("No function for this URL", { status: 405 });
+		}
+	},
+};
+```
+
+Using the following functions:
+
+```ts
+const handleDailyWallets = async (env: Env, request: Request) => {
+	return new Response(JSON.stringify({endpoint: 'daily'}), { status: 200 });
+}
+
+const handleTotalTxns = async (env: Env, request: Request) => {
+	return new Response(JSON.stringify({endpoint: 'total'}), { status: 200 });
+}
+```
+
+### Date Formatting
+Next, include the following utility functions to parse the correct date from the updated value in the `wrangler.toml` for the `DAYS` variable:
+
+```ts
+const endDate = () => {
+	const today = new Date();
+	return today.toISOString().substring(0, 10); // only including the YYYY-MM-DD date
+}
+
+const startDate = (env: Env) => {
+	const today = new Date();
+
+	// Format today's date as a string
+	const daysBefore = new Date(today);
+	daysBefore.setDate(daysBefore.getDate() - env.DAYS);
+	
+	// Format the date 7 days before as a string by only including the YYYY-MM-DD date
+	const daysBeforeString = daysBefore.toISOString().substring(0, 10);
+	return daysBeforeString
+}
+```
+
+### Daily Active Users 
+
+Now, handle the `Daily Active Users` request by using the following function, that calls the Sequence Analytics API:
+
+```ts
+const handleDailyWallets = async (env: Env, request: Request) => {
+	const resp = await fetch(
+	`https://api.sequence.build/rpc/Builder/WalletsDaily`,
+		{
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${env.SECRET_API_ACCESS_KEY}`
+			},
+			body: JSON.stringify({
+			filter: {
+				dateInterval: 'DAY',
+				endDate: endDate(),
+				projectId: env.PROJECT_ID,
+				startDate: startDate(env)
+			}
+			})
+		}
+	)
+	
+	const data: any = await resp.json();
+	return new Response(JSON.stringify(data.walletStats), { status: 200 });
+}
+```
+### Total Transactions Sent
+
+Finally, add the following function for the `Total Transactions Sent`:
+
+```ts
+const handleTotalTxns = async (env: Env, request: Request) => {
+	const resp = await fetch(
+	`https://api.sequence.build/rpc/Builder/WalletsTxnSentTotal`,
+		{
+		  method: 'POST',
+		  headers: {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${env.SECRET_API_ACCESS_KEY}`
+		  },
+		  body: JSON.stringify({
+			filter: {
+			  dateInterval: 'DAY',
+			  endDate: endDate(),
+			  projectId: env.PROJECT_ID,
+			  startDate: startDate(env)
+			}
+		  })
+		}
+	)
+	
+	const data: any = await resp.json();
+	return new Response(JSON.stringify(data.walletStats), { status: 200 });
+}
+```
+::::
+
+Now you can test your API by calling the respective paths with host name (`/dailyActiveUsers` & `/totalTransactionsSent`) once you have redeployed with `wrangler deploy`.
+
+<Callout type="info">
+For more examples of endpoints available through the Analytics API, please check out the [overview](/api/analytics/overview) page.
+</Callout>
+
+## 3. Dune Dashboard
+
+::::steps
+
+### Dune Sign Up
+First, sign up to [Dune](https://dune.com/)
+
+### Create Query
+Access your account at `https://dune.com/<account>` and select the `Create` button and `New query`.
+
+![dune create query](/img/guides/analytics/dune_create_query.png)
+
+### Daily Active Users Query
+
+Input the following SQL query in the console, and select `Run`:
+
+```sql
+SELECT
+  t.label as "Date", -- converting the label to "Date"
+  t.value as "Count" -- converting the value field to "Count"
+FROM UNNEST(
+  TRY_CAST(
+    JSON_PARSE(HTTP_GET('https://<URL>/dailyActiveUsers')) AS ARRAY(ROW(label VARCHAR, value DOUBLE))
+  )
+) AS t(label, value)
+
+```
+Once the results have been returned, create a `New visualization`.
+
+Then, select `Add visualization` after the default `Bar chart` is selected from the dropdown (but feel free to customize this).
+
+![add visualization](/img/guides/analytics/dune_add_visualization.png)
+
+Finally, click `Save` and add a name to your query.
+
+![save query](/img/guides/analytics/dune_query_save.png)
+
+### Total Transactions Sent Query
+
+Repeat the steps from the [previous step](/guides/analytics-guide#create-query) and use the following SQL query:
+
+```sql
+SELECT
+  t.label,
+  t.value
+FROM UNNEST(
+  TRY_CAST(
+    JSON_PARSE(HTTP_GET('https://<URL>/totalTransactionsSent')) AS ARRAY(ROW(label VARCHAR, value DOUBLE))
+  )
+) AS t(label, value)
+
+```
+
+Once the results have been returned, create a `New visualization`.
+
+Then, select `Add visualization` and scroll down to `Counter` to create a counter widget that returns the absolute total returned from the API.
+
+### Create New Dashboard
+
+Access the buttons that read `Create` > `New dashboard` and input a name for the new dashboard.
+
+![dune create dashboard](/img/guides/analytics/dune_create_dashboard.png)
+
+Once created add the previous 2 queries by selecting `Edit` and `Add visualization`.
+
+![dune edit dashboard](/img/guides/analytics/dune_edit_dashboard.png)
+
+![dune add visualization from dashboard](/img/guides/analytics/dune_add_visualization_from_dashboard.png)
+
+Once for each query, search for the name in the modal and select `Add` for each query, then `Done` in the modal, and `Done` in the dashboard.
+::::
+
+Congratulations, you're now ready to share your project's data usage with your teammates or community. Finish by clicking the `Share` button. 
+
+![dune share dashboard](/img/guides/analytics/dune_share_dashboard.png)

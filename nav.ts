@@ -15,19 +15,10 @@ export const topNav = [
 ]
 },
   {
-    text: 'Guides',
+    text: 'Resources',
     items: [
-      { text: 'Web3 Game with WebGL', link: '/guides/webgl-guide', match: '/guides/webgl-guide', items: [
-        { text: 'Overview', link: '/guides/webgl-guide', match: '/guides/webgl-guide' }, 
-      ] 
-    },
-      { text: 'Web3 Game with Unity', link: '/guides/unity-guide', match: '/guides/unity-guide' },
-      { text: 'Collectible Minting', link: '/guides/mint-collectibles-serverless', match: '/guides/mint-collectibles-serverless' },
-      { text: 'Collection Management', link: '/guides/metadata-guide', match: '/guides/metadata-guide' },
-      { text: 'AI Lootboxes', link: '/guides/lootbox-guide', match: '/guides/lootbox-guide' },
-      { text: 'Custom Marketplace', link: '/guides/custom-marketplace', match: '/guides/custom-marketplace' },
-      { text: 'Embedded Wallet', link: '/guides/templates/template-in-game-wallet', match: '/guides/templates/template-in-game-wallet' },
-      { text: 'Transaction Engine', link: '/guides/templates/building-relaying-server', match: '/guides/templates/building-relaying-server' },
+    { text: 'Guides', link: '/guides/guide-overview', match: '/guides/guide-overview' },
+    { text: 'Templates', link: '/guides/template-overview', match: '/guides/template-overview' },
     ]
   },
   { 
@@ -39,7 +30,7 @@ export const topNav = [
       { text: 'Sequence Kit', link: '/sdk/sequence-kit/overview', match: '/sdk/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
-      { text: 'React Native', link: '/sdk/reactnative', match: '/sdk/reactnative' },
+      { text: 'Mobile', link: '/sdk/mobile', match: '/sdk/mobile' },
       // { text: 'iOS', link: '/sdk/iOS', match: '/sdk/iOS' }
     ]
   },
@@ -48,11 +39,12 @@ export const topNav = [
   { 
     text: 'APIs',
     items: [
-      { text: 'Transactions API', link: '/api/transactions/overview' },
-      { text: 'Indexer API', link: '/api/indexer/overview' },
-      { text: 'Metadata API', link: '/api/metadata/overview' },
-      { text: 'Marketplace API', link: '/api/marketplace/overview' },
-      { text: 'Node Gateway', link: '/api/node-gateway' },
+      { text: 'Transactions API', link: '/api/transactions/overview', match: '/api/transactions/overview' },
+      { text: 'Analytics API', link: '/api/analytics/overview', match: '/api/analytics/overview'},
+      { text: 'Indexer API', link: '/api/indexer/overview',  match: '/api/indexer/overview' },
+      { text: 'Metadata API', link: '/api/metadata/overview',  match: '/api/metadata/overview' },
+      { text: 'Marketplace API', link: '/api/marketplace/overview',  match: '/api/marketplace/overview' },
+      { text: 'Node Gateway', link: '/api/node-gateway',  match: '/api/node-gateway' },
     ]
   },
 
@@ -207,12 +199,12 @@ export const sidebar = {
             // {text: 'Transaction Encoding', link: '/solutions/technical-references/internals/v1/07-transaction-encoding'},
             {text: 'Signature Encoding', link: '/solutions/technical-references/internals/v1/signature-encoding'},
             {text: 'Wallet Context', link: '/solutions/technical-references/internals/v1/wallet-context'},
-            {text: 'Contract Audits', link: '/solutions/technical-references/internals/v1/contract-audits'},
           ]},
           { text: 'Sequence v2', collapsed: true, link: '/solutions/technical-references/internals/v2/deploy', items: [
             {text: 'Deploy', link: '/solutions/technical-references/internals/v2/deploy'},
             {text: 'Wallet Configuration', link: "/solutions/technical-references/internals/v2/configuration"},
-          ]}
+          ]},
+          {text: 'Contract Audits', link: '/solutions/technical-references/internals/contract-audits'},
         ]},
       ]
     },
@@ -283,9 +275,9 @@ export const sidebar = {
       // ]
     },
     {
-      text: 'Build a Lootbox with AI Minting',
+      text: 'Build a Treasure Chest with AI Minting',
       collapsed: true,
-      link: '/guides/lootbox-guide',
+      link: '/guides/treasure-chest-guide',
       // items: [
       //   { text: 'Sequence Builder Console Signup & Project Creation', link: '/guides/lootbox-guide#1-builder-console-signup--project-creation' },
       //   { text: 'Access Key Management', link: '/guides/lootbox-guide#2-access-key-management' },
@@ -299,6 +291,12 @@ export const sidebar = {
       //   { text: '(Optional) Naive Mint Restriction Per Wallet', link: '/guides/lootbox-guide#10-optional-naive-mint-restriction-per-wallet' },
 
       // ]
+    },
+    { text: 'Build a Backend Transaction Service', collapsed: true, link: '/guides/templates/building-relaying-server' },
+    {
+      text: 'Leverage Sequence Analytics API in Dune',
+      collapsed: true,
+      link: '/guides/analytics-guide',
     },
     {
       text: 'Build a Custom Marketplace',
@@ -321,12 +319,12 @@ export const sidebar = {
     //   link: '/guides/discord'
     // },
     {
-      text: 'Templates',
-      items: [
-        { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
-        { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
-        // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
-      ]
+      text: 'Templates', link: '/guides/template-overview'
+      // items: [
+      //   { text: 'Embedded Wallet Demo', link: '/guides/templates/template-embedded-wallet' },
+      //   { text: 'Build a Backend Transaction Manager', link: '/guides/templates/building-relaying-server' }
+      //   // { text: 'Marketplace API Demo', link: '/guides/templates/template-marketplace-api' }
+      // ]
     }
 ],
 
@@ -345,6 +343,7 @@ export const sidebar = {
           { text: 'Read from Blockchain', link: '/sdk/unity/read-from-blockchain' },
           { text: 'Sign Messages', link: '/sdk/unity/sign-messages' },
           { text: 'Deploy Contracts', link: '/sdk/unity/deploy-contracts' },
+          { text: 'On-Ramp Funds via Credit Card', link: '/sdk/unity/onboard-user-funds'},
           { text: 'Wallet UI', link: '/sdk/unity/wallet-ui' },
           { text: 'Advanced', collapsed: true,  items: [
             { text: 'Introduction', link: '/sdk/unity/Advanced/introduction' },
@@ -373,7 +372,7 @@ export const sidebar = {
       items: [
         // { text: 'Android', link: '/sdk/android' },
         // { text: 'iOS', link: '/sdk/iOS' },
-        { text: 'React Native', link: '/sdk/reactnative' }
+        { text: 'React Native', link: '/sdk/mobile' }
       ]
     },
 
@@ -462,6 +461,19 @@ export const sidebar = {
         {text: 'Metadata Tips', link: '/api/indexer/metadata-tips'},
         {text: 'Webhooks', link: '/api/indexer/examples/webhook-listener'},
         {text: 'Subscriptions', link: '/api/indexer/examples/subscriptions'}
+          ]
+        }
+      ]
+    },
+    {
+      text: 'Analytics',
+      collapsed: false,
+      link: '/api/analytics/overview',
+      items: [
+        {text: 'Overview', link: '/api/analytics/overview'},
+        {text: 'Examples', collapsed: false, link: '/api/analytics/examples/wallets', items: [
+        {text: 'Wallets', link: '/api/analytics/examples/wallets'},
+        {text: 'Marketplaces', link: '/api/analytics/examples/marketplace'},
           ]
         }
       ]

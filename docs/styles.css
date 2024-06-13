@@ -342,3 +342,9 @@ td {
 .network-logo {
   border-radius: 15px;
 }
+
+.button-container {
+  display: flex;
+  gap: 10px; /* This adds space between the buttons */
+  align-items: center; /* This centers the buttons vertically */
+}

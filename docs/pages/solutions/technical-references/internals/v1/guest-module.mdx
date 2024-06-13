@@ -1,2 +1,13 @@
-# GuestModule and on-demand deployment
+# Guest Module
 
+The Guest Module is an implementation of the Sequence wallet that does not support signatures, nonces or replay protection.
+Executing transactions using this wallet is not an authenticated process, and can be done by any address.
+
+This contract is completely public with no security, designed to execute pre-signed transactions and use Sequence tools without using the wallets.
+
+## On Demand deployment
+
+When a user interacts with their wallet on-chain for the first time, the transaction will include the deployment of the wallet contract.
+
+This is done by batching the requested transaction with the wallet deployment transaction.
+The batched transactions are processed by the Guest Module.

@@ -23,7 +23,7 @@ export const GuidesSection = () => (
       <GuideCard
         title="Create web3 lootboxes"
         body="With this tutorial, build a web-based maze where lootbox items are generated using AI and dynamically minted into the player's universal wallet."
-        link="/guides/lootbox-guide"
+        link="/guides/treasure-chest-guide"
       />
       <GuideCard
         title="Orderbook Marketplace"

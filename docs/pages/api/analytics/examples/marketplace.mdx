@@ -1,0 +1,186 @@
+---
+title: Sequence - Web3 Gaming Platform - Marketplace Analytics
+description: Marketplace analytics documentation for the Sequence infrastructure stack for web3 gaming.
+---
+
+# Marketplace Analytics Examples
+
+Additionally, you can get deep insights into how your Sequence Marketplace is performing so you can report, track, and refine to earn more revenue.
+
+:::info
+Replace the PROJECT_ID and SECRET_API_ACCESS_KEY variables with your project ID and secret token from Sequence Builder.
+:::
+
+
+## Fetch Transactions on your Marketplace
+Fetching the number of transaction events on the Sequence marketplace - these can used either be by total or a fixed time interval.
+### Total
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/MarketTxnEventTotal' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/MarketTxnEventTotal",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+### Time Interval
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/MarketTxnEventDaily' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/MarketTxnEventDaily",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+## Fetch Wallets on your Marketplace
+Fetch wallets that have interacted with your marketplace - either by total across all time or broken down by days, weeks or months.
+
+### Total
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/MarketWalletsTotal' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/MarketWalletsTotal",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+### Time Interval
+
+:::code-group
+```sh [cURL]
+curl 'https://api.sequence.build/rpc/Builder/MarketWalletsDaily' \
+  -H 'accept: */*' \
+  -H 'authorization: BEARER <SECRET_API_ACCESS_KEY>' \
+  -H 'content-type: application/json' \
+  --data-raw '{"filter":{"projectId":<PROJECT_ID>,"startDate":"2024-04-23","endDate":"2024-05-23", "dateInterval":"DAY"}}'
+```
+
+```ts twoslash [TypeScript]
+// Works in both a Webapp (browser) or Node.js by importing cross-fetch:
+// import fetch from "cross-fetch";
+(async () => {
+  const res = await fetch(
+    "https://api.sequence.build/rpc/Builder/MarketWalletsDaily",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+		"filter":{
+			"projectId":4859,
+			"startDate":"2024-01-23",
+			"endDate":"2024-05-23",
+			"dateInterval":"DAY"
+			}
+		}),
+    }
+  );
+  console.log("res", await res.json());
+})();
+```
+:::
+
+
+## Schema
+
+All wallet analytic endpoints follow a similar request schema
+
+- Request: POST
+- Content-Type: application/json
+- Body (in JSON):
+  - `projectId` (uint64) -- projectID of your project, can be found in the URL of the Builder project.
+  - `startDate` (timestamp) -- starting date of the query in YYYY--MM--DD format
+  - `endDate` (timestamp) -- ending date of the query in YYYY--MM--DD format
+  - `dateInterval` (OPTIONAL string) -- date interval for the query, options are "DAY", "WEEK", or "MONTH"
+- Response (in JSON):
+  - `marketStats` (marketStats[])
+    [
+    - `value`
+        - `buyItems` (uint64) -- number of items bought.
+        - `sellItems` (uint64) -- number of items sold
+    - `label` (string) -- label associated with the corresponding endpoint
+      ]

@@ -1,0 +1,35 @@
+# Onboard User Funds
+
+If you wish for your users to be able to pay for things in your game using cryptocurrencies, you'll find our Transak integration to be very helpful.
+Transak allows users to purchase a variety of cryptocurrencies on a variety of blockchains using their credit card using a user friendly web interface. Learn more about Transak [here](https://transak.com/).
+
+## On-Ramp User Funds via Credit Card
+
+To generate a link for your user's Transak on-ramping:
+
+```
+Transak onRamp = new TransakOnRamp(userWalletAddress);
+string onRampLink = onRamp.GetTransakLink(); // You'll notice via IntelliSense that there are a number of default values you can provide to help tailor your UX
+```
+
+From here, you can open the `onRampLink` via `Application.OpenURL` or similar. Or, you can also use:
+
+```
+Transak onRamp = new TransakOnRamp(userWalletAddress);
+onRamp.OpenTransakLink(); // You'll notice via IntelliSense that there are a number of default values you can provide to help tailor your UX
+```
+
+This will automatically call `Application.OpenURL` on the generated Transak On-Ramp link.
+
+## Check Supported Countries
+
+To check the countries supported by Transak (and learn about how they are supported), use the `GetSupportedCountries` Task.
+
+```
+try {
+    SupportedCountry[] supportedCountries = await TransakOnRamp.GetSupportedCountries();
+}
+catch (Exception e) {
+    Debug.LogError($"Encountered error fetching supported countries from Transak: {e.Message}");
+}
+```

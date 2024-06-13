@@ -32,24 +32,24 @@ In order to create the project from scratch, first create a project with `mkdir`
 
 Next, make sure wrangler cli is installed in your project and set the `wrangler` keyword as an alias in your local bash session.
 
-```
+```shell
 pnpm install wrangler --save-dev
 alias wrangler='./node_modules/.bin/wrangler'
 ```
 
 Create an account on the [Cloudflare site](https://cloudflare.com/) and perform a login step to login to your Cloudflare dashboard to connect the Cloudflare platform to your local development environment.
 
-```
+```shell
 wrangler login
 ```
 
 Once logged in, initialize the project in the directory by accepting one of the randomly generated project folder names provided that you like, and follow the prompts to initialize your git tracked typescript `"Hello World" Worker` application.
 
-```
+```shell
 wrangler init
 ```
 
-To complete this step, you should press enter 4 times after `wrangler init` with the last step answered as `No` to decline deployment.
+To complete this step, you should press enter 4 times after `wrangler init` with the last 2 step answered as `No` to decline git versioning and deployment.
 
 This will clone down a starter repository that can be used to deploy code to the cloud.
 
@@ -66,6 +66,10 @@ This should print a URL, which you can enter in the browser the URL `https://<ap
 
 ## 2. Deploy, Sponsor and Update Metadata for an ERC1155 Contract with Sequence Builder
 
+<Callout info="danger">
+To use the Transactions API, you'll need to upgrade your Billing to `Developer` for your project in Sequence Builder which can be with [this walkthrough](/solutions/builder/project-settings#5-billing-settings)
+</Callout>
+
 First, follow [this guide](/solutions/collectibles/contracts/deploy-an-item-collection) to deploy a contract.
 
 Then, one must update the role access of the contract in the Builder to only receive requests from the minter wallet address, which can be done in 2 steps.
@@ -74,8 +78,8 @@ You can do this in Sequence Builder by providing `minter permission` to your `Se
 
 In order to know what the transactions API address you are working with is, one must first either:
 
-1. Have one generated for you using this [dapp](https://73eql-hyaaa-aaaad-qf5bq-cai.ic.fleek.co/) by selecting your network, and generating a wallet keypair with the `generate local wallet` button
-2. Or, you can print locally the account address produced from an EOA wallet private key using the following code snippet:
+1. Have one generated for you using this [app](https://sequence-ethauthproof-viewer.vercel.app/) by selecting your network, and generating a wallet key with the `generate local wallet` button (for demo purposes only)
+2. `Recommended`: You can also print locally the account address produced from an EOA wallet private key using the following code snippet:
 
 ```ts
 import { Session } from "@0xsequence/auth";
@@ -113,9 +117,9 @@ Complete with the following details:
 
 `bytes32 role`: `0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6`
 
-`address account`: `<Generated Sequence Trnasactions API Wallet Address>`
+`address account`: `<Generated Sequence Transactions API Wallet Address>`
 
-<img src="/img/relayer/grant_role.png" />
+<img src="/img/relayer/grant_role.png" alt="Grant a role for the relayer" />
 
 Where the `role` string inputted is the result of `keccak256("MINTER_ROLE")` in solidity or `ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"))` in javascript
 
@@ -135,7 +139,7 @@ Finally, in order to sponsor the contract follow [this guide](/solutions/builder
 
 Now that we have a contract deployed, we can return to the cloudflare worker directory and project, and install `ethers` and `0xsequence` to get access to sequence APIs in order to perform a proof validation that the request is coming from a trusted source, a sequence wallet.
 
-```
+```shell
 pnpm install 0xsequence @0xsequence/network
 ```
 
@@ -337,7 +341,7 @@ You can now redeploy using `wrangler deploy`
 
 And perform a curl request to test your endpoint like such:
 
-```
+```shell
 curl -X POST https://your-worker.your-subdomain.workers.dev \
 -H "Content-Type: application/json" \
 -d '{"proof": "<some_proof>", "address": "<some_address>", "tokenId": 0 }'
@@ -348,7 +352,7 @@ curl -X POST https://your-worker.your-subdomain.workers.dev \
 success
 ```
 
-You can acquire your wallet address proof by using this [dapp](https://73eql-hyaaa-aaaad-qf5bq-cai.ic.fleek.co/) and follow the below steps.
+You can acquire your wallet address proof by using this [dapp](https://sequence-ethauthproof-viewer.vercel.app/) and follow the below steps.
 
 #### Using the ETHAuthProof Viewer dapp
 
@@ -366,7 +370,7 @@ It should be noted, it is best not to share this `ETHAuthProof` with anyone as t
 
 Finally, replace the `url` with your app from [this step](/guides/mint-collectibles-serverless#deploy-test), the `<some_proof>` with the generated value copied from the viewer dapp, and `<some_address>` with your wallet address and it should return just the mocked `0x` string.
 
-```
+```shell
 curl -X POST https://your-worker.your-subdomain.workers.dev \
 -H "Content-Type: application/json" \
 -d '{"proof": "<some_proof>", "address": "<some_address>", "tokenId": 0 }'
@@ -376,7 +380,7 @@ curl -X POST https://your-worker.your-subdomain.workers.dev \
 
 Finally, to deploy and mint a collectible from the sponsored contract address, we install the following packages
 
-```
+```shell
 pnpm install @0xsequence/auth ethers@5.7.2
 ```
 
