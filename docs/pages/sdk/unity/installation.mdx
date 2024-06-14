@@ -2,19 +2,30 @@
 
 ## Package Manager - Recommended
 
+### OpenUPM
+
+1. [Install OpenUPM](https://openupm.com/#get-started-with-cli-optional)
+2. Open a command line at the root of your Unity project
+3. `openupm add xyz.0xsequence.waas-unity`
+
+### or using Package Manager UI 
+
 1. Ensure you have Git 2.14.0 or above installed on your machine
 2. Open Package Manager (Window > Package Manager)
 3. Click the "+" icon in the Package Manager window > "Add package from git URL..."
 4. Paste this url and click Add or press Enter on your keyboard `https://github.com/0xsequence/sequence-unity.git?path=/Assets`
-5. From Package Manager, click on "Samples"
-6. Import "Setup" from Samples
+
+### Setup
+1. Open Package Manager (Window > Package Manager)
+2. From Package Manager, click on "Samples"
+3. Import "Setup" from Samples
 ![Setup](/img/unity/unity-import-setup.png)
 
 a) This will import a Resources folder with the SequenceConfig scriptable object (more on this in Setup).
 
 b) This will also import an Editor folder with a Post Process Build script that will setup social sign in for you automatically on MacOS and iOS.
 
-7. Import `TMP Essentials` (if you haven't already). Note: Unity should prompt you to do this automatically if you attempt to Play or Build with a TextMeshPro object in your scene.
+4. Import `TMP Essentials` (if you haven't already). Note: Unity should prompt you to do this automatically if you attempt to Play or Build with a TextMeshPro object in your scene.
 
 ![Import TMPro](/img/unity/unity-import-tmpro.png)
 
