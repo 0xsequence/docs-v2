@@ -292,7 +292,7 @@ export const sidebar = {
 
       // ]
     },
-    { text: 'Build a Backend Transaction Service', collapsed: true, link: '/guides/templates/building-relaying-server' },
+    { text: 'Build a Backend Transaction Service', collapsed: true, link: '/guides/building-relaying-server' },
     {
       text: 'Leverage Sequence Analytics API in Dune',
       collapsed: true,
