@@ -1,6 +1,7 @@
 import type { Sidebar, TopNav } from 'vocs'
 
 export const topNav = [
+  { text: 'Try Sequence Builder', link: 'https://sequence.build' },
   { text: 'Solutions', 
   items: [
     { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
@@ -47,7 +48,6 @@ export const topNav = [
       { text: 'Node Gateway', link: '/api/node-gateway',  match: '/api/node-gateway' },
     ]
   },
-
   { 
     text: 'Support',
     items: [
