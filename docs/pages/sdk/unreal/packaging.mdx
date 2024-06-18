@@ -1,37 +1,44 @@
+---
+title: Sequence - Web3 Gaming Platform - Unreal SDK Authentication
+description: Documentation for Unreal SDK authentication for the Sequence infrastructure stack for web3 gaming.
+---
+
 # Packaging
 
 To set your system up for Packaging please refer to the following links:
 
-- [Windows and macOS](https://docs.unrealengine.com/5.0/en-US/packaging-unreal-engine-projects/)
-- [Android](https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/Mobile/Android/PackagingAndroidProject/)
-- [iOS](https://docs.unrealengine.com/5.0/en-US/packaging-ios-projects-in-unreal-engine/)
+- [Windows and macOS](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-unreal-engine-projects?application_version=5.3)
+- [Setting up Visual Studio for Unreal on Windows](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine)
+- [Android](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-android-projects-in-unreal-engine?application_version=5.3)
+- [iOS](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-ios-projects-in-unreal-engine?application_version=5.3)
+- [Mac Specific Software Requirements](https://dev.epicgames.com/documentation/en-us/unreal-engine/hardware-and-software-specifications-for-unreal-engine)
 
-### Google SSO Setup
-In order to be able to properly use Google Auth, create and place the Keystore file by following [these instructions](https://docs.unrealengine.com/5.1/en-US/signing-android-projects-for-release-on-the-google-play-store-with-unreal-engine/).
+## iOS
+For iOS apps you also need to setup provisioning, [following these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-ios-tvos-and-ipados-provisioning-profiles-and-signing-certificates-for-unreal-engine-projects?application_version=5.3)
 
-You will also need to generate an `[Android client ID]` and a `[Web Application client ID]` for your application, as well as place the `[Web Application client ID]` in the `Config/Config.h` `FAuthenticatorConfig.GoogleClientID` field.
+## Android
+When setting up your project to build for Android you'll need to update the following settings:
+In ProjectSettings/Android SDK
+Set SDK API Level to Android-34
+Set NDK API Level to anything in the range [26,33] (We personally used android-32)
 
-Refer to [these docs](https://developers.google.com/identity/one-tap/android/get-started#api-console) to generate `[Android client ID]` and `[Web Application client ID]`.
+## Hardware Requirements
+For Hardware Requirements with Unreal please refer to [these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/hardware-and-software-specifications-for-unreal-engine?application_version=5.3)
 
-[This guide](https://developers.google.com/android/guides/client-auth) helps explain how to collect SHA-1 key fingerprints for the `[Android client ID]`.
-
-### iOS
-For iOS apps you also need to setup provisioning, [following these docs](https://docs.unrealengine.com/5.1/en-US/setting-up-ios-tvos-and-ipados-provisioning-profiles-and-signing-certificates-for-unreal-engine-projects/).
-
-### Unreal and Xcode Specifics
-During the Unreal Package process there is a very high chance that it will fail due to a code signing error, in the event that this happens please take the following steps within XCode to get your packaged .app file
+## Unreal and Xcode Specifics
+During the Unreal Package process in the event a code signing error occurs you can take the following steps within XCode to get your packaged .app file
 
 1) After packaging the project in Unreal, open the Xcode project (Sequence-unreal folder -> Intermediate -> ProjectFilesIOS -> SequenceUnreal.xcodeproj)
 2) Click on the project name on the left hand side to open up project settings
 3) Click the Build Phase Tab
-4) Click on the "+" icon at the top left
+4) Click on the ‘+’ icon at the top left
 5) Select Run Script
 6) Drag the new run script to one below from the last item in the phase list
 7) Expand the run script
-8) In the script box, add the following command: `xattr -cr /path-to-your-project/sequence-unreal/Binaries/IOS/Payload/SequenceUnreal.app`
+8) In the script box, add the following command: `xattr -cr /[path-to-your-project]/[your-project-name]/Binaries/IOS/Payload/[your-project-name.app]`
 9) Click on the Build Settings tab
 10) Click on each item under the Architectures header that contains macOS and hit the delete key
 11) Click on the General tab
 12) Click on Mac and Applevision Pro under supported destinations and hit the delete key
 13) Now the project can be built (if the build fails at first, wait a few moments then try again. It can sometimes take a bit before the build registers the run script)
-14) Once you have finished running the project, and want to make changes to the code, REMEMBER to delete this xcodeproj file in the sequence-unreal folder to ensure that a new xcodeproj is creating when you packaging the project again.
+14) Once you have finished running the project, and want to make changes to the code, REMEMBER to delete this xcodeproj file in the sequence-unreal folder to ensure that a new xcodeproj is creating when you packaging the project again._

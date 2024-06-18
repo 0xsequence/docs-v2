@@ -359,10 +359,11 @@ export const sidebar = {
         { text: 'Unreal', collapsed: true, link: '/sdk/unreal/overview', items: [
           { text: 'Overview', link: '/sdk/unreal/overview' },
           { text: 'Installation', link: '/sdk/unreal/installation' }, 
+          { text: 'Upgrading', link: '/sdk/unreal/upgrading' },
           { text: 'Setup', link: '/sdk/unreal/setup' },
           { text: 'Authentication', link: '/sdk/unreal/authentication' },
-          { text: 'API Integration', link: '/sdk/unreal/api-integration' },
-          { text: 'Packaging', link: '/sdk/unreal/packaging' }
+          { text: 'Packaging', link: '/sdk/unreal/packaging' },
+          { text: 'API', link: '/sdk/unreal/api' }
           ] 
         }
       ]

@@ -1,0 +1,61 @@
+---
+title: Sequence - Web3 Gaming Platform - Unreal SDK Authentication
+description: Documentation for Unreal SDK authentication for the Sequence infrastructure stack for web3 gaming.
+---
+
+# Upgrading
+
+## Manually Upgrading from previous versions
+IF you are using release Beta_1_0_3 or older please backup the values you stored in `PluginConfig/Config.h` or `Config/Config.h`
+After you've backed up your configuration data, Delete the entirety of the SequencePlugin directory. And drop
+in the new updated version.
+
+We now are opting to use .ini files to store configurations for the plugin rather than storing them in the plugin itself.
+This will make integrating updates to the plugin much simpler.
+
+To do this please go to [YourProjectDirectory]/Config And create a file named **[SequenceConfig.ini]**
+
+Within **[SequenceConfig.ini]** add the following lines:
+
+      [/Script/Sequence.Config]
+      FallbackEncryptionKey = ""
+      WaaSTenantKey = ""
+      ProjectAccessKey = ""
+      GoogleClientID = ""
+      AppleClientID = ""
+      FacebookClientID = ""
+      DiscordClientID = ""
+      RedirectUrl = "https://api.sequence.app"
+
+Here is where you'll fill in the various configuration values for the plugin.
+For the time being we don't support Facebook or Discord authentication so feel free to ignore those 2 clientId's for now.
+
+### Upgrading to Unreal 5.4
+If your project is currently on 5.2 or 5.3, then for this version you'll want to upgrade to 5.4.
+To do this close the Unreal Editor, Close your Code Editor. Right click on your Unreal Project
+file. Then select Switch Unreal Engine Version, Choose 5.4 and click okay. Once done. Open your
+code editor and rebuild your source code.
+
+As way of future proofing we recommend installing visual studio 2022 in accordance with [these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine)
+as Unreal 5.4 and onward will be dropping support for visual studio 2019.
+
+### YourProject.Build.cs
+
+In some instances your build.cs may not update properly for your project when this happens you'll be unable to import plugin,
+if this occurs in your Projects Build.cs file please check the private Dependency module such that it includes "SequencePlugin":
+```
+    public SequenceTest(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+
+        //The line below is what you want
+		PrivateDependencyModuleNames.AddRange(new string[] { "SequencePlugin" });
+
+		// Uncomment if you are using Slate UI
+		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+		// Uncomment if you are using online features
+		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
+		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
+	}
+    ```

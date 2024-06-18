@@ -5,84 +5,144 @@ description: Documentation for Unreal SDK authentication for the Sequence infras
 
 # Authentication
 
+### Customizing the builtin GUI
+
+In the folder located at All/Plugins/SequencePlugin Content/Core/Style you'll find a struct F_SequenceUIStyle,
+In the default values section of this struct you'll be able to update the colours and images displayed throughout the UI.
+For beta we currently only read from Sequence_Style_Dark_Mode
+
 ### Custom UI Integration
 
-In a C++ backend with a series of pass through `[UFUNCTIONS]` setup similarly to `[SequenceBackendManager.h/.cpp]`. Each of these calls are implemented in `[UAuthenticator]` you just need to pass through the data with YOUR UAuthenticator UObject
+In a C++ UObject with a series of pass through `[UFUNCTIONS]` setup similarly to `[SequenceBackendManager.h/.cpp]`. Each of these calls are implemented in **[UAuthenticator]** you just need to pass through the data with YOUR UAuthenticator UObject
 
-```cpp
-//This call is platform dependent on windows & mac this is required for SSO WIP
-UFUNCTION(BlueprintCallable, CATEGORY = "Login")
+```
+/*
+   Used to initiate mobile Social Signin
+   (No other calls need to be made to complete mobile SSO)
+*/
+void InitiateMobileSSO(const ESocialSigninType& Type)
+
+/*
+   Optional Call,
+   Used to set a custom encryptor implementation for the Authentication Process
+*/
+void SetCustomEncryptor(UGenericNativeEncryptor * EncryptorIn);
+
+/*
+   This call is for generating a login URL for Desktop based Social Signin
+   the received URL is fed into a WebBrowser to begin the login process
+*/
 FString GetLoginURL(const ESocialSigninType& Type); 
 
-//This Call is made after you've collected the ID_Token (Mac & Windows only) WIP
-UFUNCTION(BlueprintCallable, CATEGORY = "Login")
+/*
+   This is call is for undergoing social login once an ID_Token has been collected.
+*/
 void SocialLogin(const FString& IDTokenIn);
 
-//This Call is made after you've collected the email address from the Users in the UI
-UFUNCTION(BlueprintCallable, CATEGORY = "Login")
+/*
+   This Call is made after you've collected the email address from the Users in the UI
+   The Delegate **[AuthRequiresCode]** will fire when a code is ready to be received
+   by the UAuthenticator
+*/
 void EmailLogin(const FString& EmailIn);
 
-//This is call is made after the Delegate `[AuthRequiresCode]` is fired
-UFUNCTION(BlueprintCallable, CATEGORY = "Login")
+/*
+   This is call is made after the Delegate **[AuthRequiresCode]** is fired
+   The Code collected from the User in the GUI is sent in via this call
+*/
 void EmailCode(const FString& CodeIn);
 
-//Optional call used to check if the credentials on disk are valid or not//
-UFUNCTION(BlueprintCallable, Category = "Login")
+/*
+   Optional call used to retrieve stored credentials on disk
+*/
+FStoredCredentials_BE GetStoredCredentials() const;
+
+/*
+   Optional call used to check if the credentials on disk are valid or not
+*/
 bool StoredCredentialsValid();
 ```
 
-
-To start you'll want to create a `[UAuthenticator]` UObject like so `[UAuthenticator + Auth = NewObject<UAuthenticator>()]`, this UObject manages the authentication side of Sequence.
+To start you'll want to create a `[UAuthenticator]` UObject like so `[UAuthenticator * Auth = NewObject<UAuthenticator>()]`, this UObject manages the authentication side of Sequence.
 
 Be sure to bind to the Delegates for `[AuthSuccess]`, `[AuthFailure]`, `[AuthRequiresCode]` prior to making any signin calls You can bind to these delegates like so:
 
-```cpp
+```
 this->authenticator->AuthRequiresCode.AddDynamic(this, &AYourClass::YourCallReadyToReceiveCode);
 this->authenticator->AuthFailure.AddDynamic(this, &AYourClass::YourCallShowAuthFailureScreen);
 ```
 
-In the case of `[AuthSuccess]` since a parameter is also passed we bind to it like this
+In the case of **[AuthSuccess]** since a parameter is also passed we bind to it like this
 
-```cpp
+```
 FScriptDelegate del;
 del.BindUFunction(this, "CallShowAuthSuccessScreen");
 this->authenticator->AuthSuccess.Add(del);
 ```
 
-Where `[CallShowAuthSuccessScreen]` is defined in `SequenceBackendManager.h` like so:
+Note: Replace the usage of the SequenceBackendManager.h/.cpp with you're own when building a custom GUI,
+it is only used here as a reference in the event more context is needed with these instructions.
+Where `[CallShowAuthSuccessScreen]` is defined in `SequenceBackendManager.h` as an example like so:
 
-```cpp
+```
 UFUNCTION()
 void CallShowAuthSuccessScreen(const FCredentials_BE& CredentialsIn);
 ```
 
 And in `SequenceBackendManager.cpp` like so:
 
-```cpp
+```
 void ASequenceBackendManager::CallShowAuthSuccessScreen(const FCredentials_BE& CredentialsIn) 
 {
 this->Credentials = CredentialsIn;
 if (this->ShowAuthSuccessDelegate.IsBound())
   this->ShowAuthSuccessDelegate.Broadcast(Credentials);
 else
-  UE_LOG(LogTemp, Error, TEXT("`[Nothing bound to: ShowAuthSuccessDelegate]`"));
+  UE_LOG(LogTemp, Error, TEXT("**[Nothing bound to: ShowAuthSuccessDelegate]**"));
 }
 ```
 
-### Email based Authentication
+### Email based Authentication With CustomUI
 
-1) To start email based authentication you'll start it with this call `[EmailLogin(const FString& EmailIn)]`, supplying an email you've collected from the User in your GUI.
+1) To start email based authentication you'll start it with this call **[EmailLogin(const FString& EmailIn)]**, supplying an email you've collected from the User in your GUI.
 
-2) Next `[AuthRequiresCode]` will fire when the backend is ready to receive the Code from your UI. Collect this code from your GUI and send it to the authenticator using `[EmailCode(CodeIn)]`.
+2) Next **[AuthRequiresCode]** will fire when the **[UAuthenticator]** is ready to receive the Code from your UI. Collect this code from your GUI and send it to the authenticator using **[EmailCode(CodeIn)]**.
 
-3) Finally `[AuthSuccess]` will fire with a Credentials_BE struct as a parameter. This is your non registered credentials from EmailAuth. You are done Email Based Auth.
+3) Finally **[AuthSuccess]** will fire with a Credentials_BE struct as a parameter. You are done Email Based Auth.
 
-### Social Signin based Authentication on Desktop
+### Social Signin based Authentication on Desktop With CustomUI
 
 1) To start SSO based authentication with desktop you can either use your own implementation to get the necessary id_token or you can make use of Unreal's web browser plugin.
 
-2) With whatever implementation you chose you can forward the colleted id_token to the UAuthenticator object with `[SocialLogin(const FString& IDTokenIn)]`, after which `[AuthSuccess]` will fire and you're done desktop based SSO.
+2) To get the URL to navigate to you can use the UAuthenticator supplied call **[FString GetSigninURL(const ESocialSigninType& Type)]** where Type is the social login type you wish to use
 
-### Social Signin based Authentication on Mobile
+3) With whatever implementation you chose you can forward the collected id_token to the UAuthenticator object with **[SocialLogin(const FString& IDTokenIn)]**, after which **[AuthSuccess]** will fire and you're done desktop based SSO.
 
-WIP
+### Social Signin based Authentication on Mobile With CustomUI
+
+1) To start mobile SSO you will need to make use of the **[UAuthenticator::InitiateMobileSSO(const ESocialSigninType& Type)]**
+   where type is the Type of SSO you want to use. IE) Google or Apple, for the time being Discord & Facebook aren't supported.
+   This function call is all that's required for Mobile SSO.
+
+### Android SSO Requirements
+
+Google:
+
+In order to be able to properly use Google Auth, create and place the Keystore file by following [these instructions](https://docs.unrealengine.com/5.1/en-US/signing-android-projects-for-release-on-the-google-play-store-with-unreal-engine/).
+
+You will also need to generate an **[Android client ID]** and a **[Web Application client ID]** for your application. And place the **[Web Application client ID]** in the [YourProject/Config/SequenceConfig.ini], [GoogleClientID] field.
+
+Refer to [these docs](https://developers.google.com/identity/one-tap/android/get-started#api-console) to generate **[Android client ID]** and **[Web Application client ID]**.
+
+[This guide](https://developers.google.com/android/guides/client-auth) helps explain how to collect SHA-1 key fingerprints for the **[Android client ID]**.
+
+Apple: Please ensure you have a proper **[AppleClientID]** set in **[YourProject/Config/SequenceConfig.ini]**
+
+### IOS SSO Requirements
+Google: Please ensure you have a proper **[GoogleClientID]** set in **[YourProject/Config/SequenceConfig.ini]**
+
+Apple: Please ensure you have a proper **[AppleClientID]** set in **[YourProject/Config/SequenceConfig.ini]**,
+be sure you register and set your bundle identifier properly for your app
+
+### Apple Specific SSO Requirements
+For Apple SSO to work please be sure to register the **[RedirectUrl]** in **[YourProject/Config/SequenceConfig.ini]** appropriately for your app.

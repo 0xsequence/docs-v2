@@ -7,13 +7,22 @@ description: Documentation for Unreal SDK Installation for the Sequence infrastr
 
 ## Credentials
 
-Before you can use this plugin, you need to acquire the following credentials from Sequence:
+Before you can use this plugin, you need to acquire the following credentials from [Sequence](https://sequence.xyz/builder)
 
-- `WaaSTenantKey`: This key will be given to you by the Sequence team during WaaS onboarding
-- `ProjectAccessKey`: This key can be found in [Sequence Builder](https://sequence.build/) under `Settings > API Access Keys`
+- `WaaSTenantKey`
+- `ProjectAccessKey`
 
-You can then add these credentials in the `[Config.h]` file under `SequencePlugin/Source/SequencePlugin/Private/Config/Config.h`.
+You can then add these credentials in the **[SequenceConfig.ini]** file under [YourProject]/Config/SequenceConfig.ini
 
 ## Security
 
-You must provide an encryption key implementation at `[SequenceEncryptor.cpp]` function `[GetStoredKey]`. This function must be implemented to provide a securely stored private key that will be used to encrypt and decrypt client information. Failure to do so will result in NO information being stored or in the event you do not use a securely stored key, can result in client information being stored insecurely on their systems.
+You must provide a 32 character encryption key in the **[SequenceConfig.ini]** file under [YourProject]/Config/SequenceConfig.ini
+under the config variable `FallbackEncryptionKey`
+
+In order to prevent tampering with data you must encrypt your packaged project using Unreals packaging settings
+You can refer to [these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-unreal-engine-projects?application_version=5.3)
+
+Note: For generating secure keys feel free to use tools such as:
+Lastpass Password generator or equivalent,
+Encryption Key Generators,
+etc
