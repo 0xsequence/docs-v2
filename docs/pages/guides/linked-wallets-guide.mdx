@@ -1,0 +1,656 @@
+import { Callout } from "vocs/components";
+
+# Embedded Wallet & EOA Linking Verification
+
+Time to complete: XX-XX minutes
+
+In this guide, we will showcase how to sign into an Embedded Wallet using Web2 Auth, then enable users to sign into an EOA wallet in a different application to have the wallet linked to server storage with the Embedded Wallet account. 
+
+This feature is very useful for when users are being onboarded into an Embedded Wallet ecosystem, with prior history and assets in EOA wallets. The system can enable token-gating experiences to perform querying of inventory, leaving assets in respective wallets untouched.
+
+<Callout type="info">
+ The full code can be found in the respective repositories:
+  - [Demo WaaS Auth](https://github.com/0xsequence/demo-waas-auth/blob/master/src/components/views/EOALinkView.tsx)
+  - [Demo WaaS Wallet Link](https://github.com/0xsequence-demos/demo-waas-wallet-link)
+Where the example can be tested from [this demo](https://0xsequence.github.io/demo-waas-auth/) at the bottom of the screen, from the card titled "EOA Link"
+</Callout>
+
+The Sequence tools in this guide will enable you to perform:
+
+1. [Sequence Builder Console Signup & Project Creation](/guides/linked-wallets-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Sequence Builder
+2. [Access Key Management](/guides/linked-wallets-guide#2-access-key-management): Claim a public access key, and WaaS config key to interact with the Sequence stack
+3. [Embedded Wallet Integration](/guides/linked-wallets-guide#3-embedded-wallet-integration): Integrate an Embedded Wallet into the application
+4. [Deploy a Cloudflare Worker with KV Storage](/guides/linked-wallets-guide#4-deploy-a-cloudflare-worker-with-kv-storage): Leverage a serverless Cloudflare worker to hold state on wallet linking and wallet signature verification
+5. [Nonce Generation](/guides/linked-wallets-guide#5-nonce-generation): Generate a signature directly from a signed in Embedded Wallet and generate and store a unique nonce 
+6. [Embedded Wallet Verification](/guides/linked-wallets-guide#6-embedded-wallet-verification): Reconstruct a message to be verified by the Sequence API to check the validity of a authenticated user session
+7. [Embedded Wallet Signature ](/guides/linked-wallets-guide#7-embedded-wallet-signature): Use Sequence Kit connector to sign a user in with their EOA wallet
+8. [Sequence Kit Login for EOA Authentication](/guides/linked-wallets-guide#8-sequence-kit-login-for-eoa-authentication): Use Sequence Kit connector to sign a user in with their EOA wallet
+9. [(Optional) Query Balances in Singular Interface](/guides/linked-wallets-guide#9-optional-query-balances-in-singular-interface): Use the Sequence Indexer to query multiple wallets to aggregate tokens into a singular interface
+
+## 1. Sequence Builder Console Signup & Project Creation
+
+First start by following [this walkthrough](/solutions/builder/project-management) for how to sign up to the [Sequence Builder](https://sequence.build/) and to learn how to create a project.
+
+## 2. Access Key Management
+
+Now that you have a project, you'll need to acquire 2 different Access Keys for your project in order to authenticate your application with the Sequence Stack:
+1. `Waas Config Key` used for the Embedded Wallet, which can be learned about [here](/solutions/builder/embedded-wallet)
+2. `Public Access Key` used for the Embedded Wallet, Sequence Kit, & Sequence Indexer, which can be done [here](/solutions/builder/getting-started#claim-an-api-access-key)
+
+## 3. Embedded Wallet Integration
+
+<Callout type="info">
+You can view and clone the template repository [here](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth)
+</Callout>
+
+We'll start from scratch building up the project with the necessary pieces, to enable the use of a Sequence Embedded Wallet which enables users to be onboarded to your application using web2 authentication providers.
+
+First start by creating a project folder with `mkdir <project>`, then `cd <project>` and create a `vite` project using React:
+
+```shell
+pnpm create vite
+
+# or 
+yarn create vite
+
+# or 
+npm create vite
+```
+
+Next, we'll install the correct Wallet-as-a-Service (Waas) package to use the Embedded Wallet:
+
+```shell
+pnpm install @0xsequence/waas
+
+# or
+npm install @0xsequence/waas
+
+# or
+yarn add @0xsequence/waas
+```
+
+For all of the new files created in the follows steps, have them be created in `/src`
+
+First, create a file called something like `SequenceEmbeddedWallet.ts` with the following initialization code:
+
+```typescript
+import { SequenceWaaS } from '@0xsequence/waas'
+
+const sequence = new SequenceWaaS({
+    projectAccessKey: import.meta.env.VITE_PROJECT_ACCESS_KEY!,
+    waasConfigKey:  import.meta.env.VITE_WAAS_CONFIG_KEY!,
+    network: 'arbitrum-nova'
+})
+
+export default sequence;
+```
+
+Then create another file called `useSessionHash.ts` that generates a session hash from the SDK unique to the user, which can be imported and used as a React hook:
+
+```typescript
+import sequence from './SequenceEmbeddedWallet.ts'
+import { useEffect, useState } from "react";
+
+export function useSessionHash() {
+    const [sessionHash, setSessionHash] = useState("")
+    const [error, setError] = useState<any>(undefined)
+
+    useEffect(() => {
+        const handler = async () => {
+            try {
+                setSessionHash(await sequence.getSessionHash())
+            } catch (error) {
+                console.error(error)
+                setError(error)
+            }
+        }
+        handler()
+        return sequence.onSessionStateChanged(handler)
+    }, [setSessionHash, setError])
+
+    return {
+        sessionHash,
+        error,
+        loading: !!sessionHash,
+    }
+}
+```
+
+Finally, to implement Google auth, you will need the `GoogleOAuthProvider` to wrap your application. The following command will install it and Apple Auth sign in, which will be used later:
+
+```shell
+pnpm i @react-oauth/google react-apple-signin-auth
+```
+
+<Callout type="warning">
+Apple authentication can not be used with localhost applications, so to test you'll need to deploy your application and update the `Allowed Origins` for the bundle id
+</Callout>
+
+Then, the starter code is implemented with the previous imported files, in the following code within the `main.tsx` file, where the `GoogleOAuthProvider` wraps the application:
+
+```typescript
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+import { useSessionHash } from "./useSessionHash.ts";
+
+import { ThemeProvider } from '@0xsequence/design-system'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+
+
+function Dapp() {
+  const { sessionHash } = useSessionHash()
+
+  return (
+	<GoogleOAuthProvider clientId="<GOOGLE_CLIENT_ID>" nonce={sessionHash} key={sessionHash}>
+		<App />
+	</GoogleOAuthProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <Dapp />
+  </React.StrictMode>
+)
+```
+
+Once your `main.tsx` is ready, lets create the login buttons, which will look like this:
+
+![embedded wallet social login](/img/guides/treasure-chest/guide_treasure_chest_embedded_wallet_template.png)
+
+In `App.tsx` use the following code that checks to see if a user is connected and presents a wallet address based on the signed in user, with the various social auth buttons and handlers:
+
+```typescript
+import { useState, useEffect } from 'react'
+import './App.css'
+import sequence from './SequenceEmbeddedWallet'
+import { useSessionHash } from './useSessionHash'
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import AppleSignin from 'react-apple-signin-auth';
+import playImage from './assets/play.svg'
+
+function LoginScreen () {
+  const { sessionHash } = useSessionHash()
+
+  const [wallet, setWallet] = useState<any>(null)
+
+  const handleGoogleLogin = async (tokenResponse: CredentialResponse) => {
+    const res = await sequence.signIn({
+      idToken: tokenResponse.credential! // inputted id credential from google
+    }, "template")
+    setWallet(res.wallet)
+  }
+
+  const handleAppleLogin = async (response: any) => {
+    const res = await sequence.signIn({
+      idToken: response.authorization.id_token! // inputted id token from apple
+    }, "template")
+ 
+    setWallet(res.wallet)
+  }
+
+  // checks to see if there is a logged in user
+  useEffect(() => {
+    setTimeout(async () => {
+      if(await sequence.isSignedIn()){
+        setWallet(await sequence.getAddress())
+      }
+    }, 0)
+  }, [])
+
+  useEffect(() => {
+
+  }, [wallet])
+
+  const signOut = async () => {
+    try {
+      const sessions = await sequence.listSessions()
+
+      for(let i = 0; i < sessions.length; i++){
+        await sequence.dropSession({ sessionId: sessions[i].id })
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  return (
+    <>
+      {
+        !wallet 
+      ? 
+        <>
+          <span className='sign-in-via'>SIGN IN VIA</span>
+          <br/>
+          <br/>
+          <br/>
+          <div className="login-container">
+          <div className='dashed-box-google'>
+              <p className='content'>
+                <div className='gmail-login' style={{overflow: 'hidden', opacity: '0', width: '90px', position: 'absolute', zIndex: 1, height: '100px'}}>
+                  <GoogleLogin 
+                    nonce={sessionHash}
+                    key={sessionHash}
+                    onSuccess={handleGoogleLogin} shape="circle" width={230} />
+                  </div>
+                  <span className='gmail-login'>Gmail</span>
+              </p>
+          </div>
+          <div className='dashed-box-apple'>
+            <p className='content' 
+            style={{position:'relative'}}>
+                <span className='apple-login'>
+                  {/* @ts-ignore */}
+                  <AppleSignin
+                    key={sessionHash}
+                    authOptions={{
+                      clientId: '<replce with com. bundle id>',
+                      scope: 'openid email',
+                      redirectURI: '<must be a deployed URL>',
+                      usePopup: true,
+                      nonce: sessionHash
+                    }}
+                    onError={(error: any) => console.error(error)}
+                    onSuccess={handleAppleLogin}
+                  />Apple
+                </span>
+            </p>
+            </div>
+          </div>
+        </>
+      : 
+        <>
+          <div className="login-container">
+          <p style={{cursor: 'pointer'}} onClick={() =>signOut()}>sign out</p>
+          &nbsp;&nbsp;&nbsp;
+          <span >{wallet}</span>
+          </div>
+        </>
+      }
+    </>
+  )
+}
+
+function App() {
+  return (
+    <LoginScreen/>
+  )
+}
+
+export default App
+```
+
+Then, include a `.env` file in the root of your project, adding it to `.gitignore`, and updating the file with the following values from the Sequence Builder:
+
+```
+VITE_PROJECT_ACCESS_KEY=
+VITE_WAAS_CONFIG_KEY=
+```
+
+<Callout type="warning">
+All environment variables must start with `VITE_` to be included in the environment of a vite application
+</Callout>
+
+Run your code with the following command in the root folder and give it a try:
+
+```shell
+pnpm run dev
+```
+
+<Callout type="danger">
+In order to allow for a custom sign in page without the Web2 widgets, you'll need to actually hide the standard sign-in buttons from the recommended npm packages. It is best to just copy and paste the whole `App.css` [found here](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth/blob/master/src/App.css) and include it in your code that has the correct css classes.
+</Callout>
+
+## 4. Deploy a Cloudflare Worker with KV Storage
+
+In order to create the Cloudflare worker project from scratch, first create a project with `mkdir`, `cd` into the project, and run `pnpm init` to create a `package.json`.
+
+Next, make sure wrangler cli is installed in your project and set the `wrangler` keyword as an alias in your local bash session.
+
+```shell
+pnpm install wrangler --save-dev
+alias wrangler='./node_modules/.bin/wrangler'
+```
+
+Create an account on the [Cloudflare site](https://cloudflare.com/) and perform a login step to login to your Cloudflare dashboard to connect the Cloudflare platform to your local development environment.
+
+```shell
+wrangler login
+```
+
+Once logged in, initialize the project in the directory by accepting one of the randomly generated project folder names provided that you like, and follow the prompts to initialize your git tracked typescript `"Hello World" Worker` application.
+
+```shell
+wrangler init
+```
+
+To complete this step, you should press enter 4 times after `wrangler init` with the last 2 step answered as `No` to decline git versioning and deployment.
+
+This will clone down a starter repository that can be used to deploy code to the cloud.
+
+<Callout type='info'>
+Local API Testing <br/>
+At any point in the guide, you can use the `wrangler dev` command in the project folder for local testing
+</Callout>
+
+#### Deploy Test
+
+Next, `cd` into the randomly generated project folder, and perform a `wrangler deploy` command.
+
+This should print a URL, which you can enter in the browser the URL `https://<app>.<account>.workers.dev` to view the `Hello World!` result.
+
+#### Add a Key-Value Storage Environment Object
+
+Finally, for this guide we will enable the system to store data in a Key-Value (KV) storage environment object. To start we will create a single variable that stores just a single nonce based on new requests.
+
+Add the following to the top of your `index.ts` file:
+
+```typescript
+export interface Env {
+    waas_wallet_link_db: KVNamespace;
+}
+```
+
+Then in the rest of your code include the following testing code generate a valid nonce that is stored:
+
+```typescript
+import { ethers } from 'ethers'
+
+...
+
+async function handleRequest(request: Request, env: Env, ctx: ExecutionContext) {
+    if (request.method === "OPTIONS") {
+            return new Response(null, {
+                headers: {
+                    // Allow requests from any origin - adjust this as necessary
+                    "Access-Control-Allow-Origin": "*",
+                    
+                    // Allow POST method - add any other methods you need to support
+                    "Access-Control-Allow-Methods": "GET",
+                    
+                    // Optional: allow credentials
+                    "Access-Control-Allow-Credentials": "true",
+                    
+                    // Preflight cache period
+                    "Access-Control-Max-Age": "86400", // 24 hours
+                }
+            });
+    }
+
+    const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))
+	await env.waas_wallet_link_db.put('NONCE', String(nonce))
+    
+    return new Response(JSON.stringify({nonce: await env.waas_wallet_link_db.get('NONCE')}), {
+        status: 200,
+    });
+}
+
+export default {
+    async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+        // Process the request and create a response
+        const response = await handleRequest(request, env, ctx);
+
+        // Set CORS headers
+        response.headers.set("Access-Control-Allow-Origin", "*");
+        response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+
+        // return response
+        return response;
+    }
+}
+```
+Then, you'll need to create a namespace for your variable, which can be done with the following cli command:
+
+```shell
+wrangler kv:namespace create waas_wallet_link_db
+```
+
+Then, you'll need to add the generated namespace id to your `wrangler.toml`
+
+For example:
+
+```shell
+kv_namespaces = [
+    { binding = "waas_wallet_link_db", id = "<YOUR_GENERATE_ID>" }
+]
+```
+
+Finally, deploy your worker with `wrangler deploy` and enter in the browser the URL `https://<app>.<account>.workers.dev` to view the nonce stored.
+
+## 5. Nonce Generation
+
+Now that we have an application that can log in a user, and a Cloudflare worker that can receive requests to generate a simple nonce, let create the structure of the worker to both generate a nonce for a wallet address, store it, and later verify the nonce using the Sequence API.
+
+### `generateNonce`
+
+To generate a nonce, use the following code that handles a POST with the `walletAddress` passed in the body
+
+```typescript
+
+export interface Env {
+    ...
+    VERIFICATION_URL: string;
+    ...
+}
+
+...
+
+if (url.pathname === "/generateNonce") {
+    const payload = await request.json()
+    const { walletAddress }: any = payload
+
+    if (!walletAddress) {
+        return new Response(null, {
+            status: 400,
+            statusText: "Bad Request",
+        });
+    }
+
+    // generate a random nonce
+    const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32))
+
+    // store the nonce
+    await env.waas_wallet_link_db.put(nonce, walletAddress)
+
+    return new Response(JSON.stringify({
+        nonce: nonce,
+        verificationUrl: env.VERIFICATION_URL
+    }), {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+}
+```
+
+And for this demo, set the `VERIFICATION_URL` in your `wrangler.toml`, which will be used to reference your app. 
+
+In the future, for maximal optionality this `VERIFICATION_URL` can always be changed on the fly to redirect your user to a different location with "behind-the-scenes" redeployments of your Cloudflare Worker.
+
+To run a test, redploy with `wrangler deploy`, and call the function with:
+
+```shell
+curl -X POST https://<app>.<account>.workers.dev -d '{"walletAddress": "<wallet_address>"}'
+```
+
+After a successful response, integrate into the frontend with the following code attached to a button click handler:
+
+```typescript
+const generateNonce = async () => {
+    const response = await fetch(`${SERVER_URL}/generateNonce`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ walletAddress })
+    });
+}
+...
+<button onClick={() => generateNonce()}>
+```
+
+You'll need to store the returned nonce response in the frontend to be able to be used in a subsequent request to verify
+
+## 6. Embedded Wallet Verification
+
+Returning to the backend, create a statement block with the following code to handle the path of `/verifyNonce` that checks that all variables are passed correctly:
+
+```typescript
+if (url.pathname === "/verifyNonce") {
+    const payload = await request.json()
+    const { nonce, signature, sessionId, chainId }: any = payload
+
+    if (!nonce || !signature || !sessionId || !chainId) {
+        return new Response(null, {
+            status: 400,
+            statusText: "Bad Request",
+        });
+    }
+
+    ...
+```
+
+Then, get the `walletAddress` stored from before using the `nonce`:
+
+```typescript
+    let walletAddress = await env.waas_wallet_link_server_db.get(nonce)
+
+    if (!walletAddress) {
+        return new Response(null, {
+            status: 404,
+            statusText: "Not Found",
+        });
+    }
+```
+
+Reconstruct the `authProof` with the following string:
+
+```typescript
+const authProof = `SessionAuthProof ${sessionId} ${walletAddress} ${nonce}`
+```
+
+And verify the `authProof` using the sequence api, handle the case the where the signature is not valid, and return the `walletAddress` when the signature is valid:
+
+```typescript
+import { sequence } from "0xsequence"
+
+export interface Env {
+    ...
+    PROJECT_ACCESS_KEY: string;
+    ...
+}
+...
+
+let api = new sequence.api.SequenceAPIClient(
+    "https://api.sequence.app",
+    env.PROJECT_ACCESS_KEY
+)
+
+let isValid = await api.isValidMessageSignature({
+    walletAddress: walletAddress,
+    message: authProof,
+    signature: signature,
+    chainId: chainId
+})
+
+if (!isValid) {
+    return new Response(null, {
+        status: 401,
+        statusText: "Unauthorized",
+    });
+} else {
+    return new Response(JSON.stringify({
+        walletAddress
+    }), {
+        status: 200,
+        statusText: "OK",
+    });
+}
+
+```
+
+Great, the backend Cloudflare worker is complete, now it's time to create a Embedded Wallet Signature from the frontend to test verification works.
+
+## 7. Embedded Wallet Signature
+
+In your frontend code, you'll need to generate a signature, which can be done with the following code passing in the nonce generated from before and the network name chain handle:
+
+<Callout type="info"> 
+The `network` value is the network name in plain text e.g. `mainnet`, `avalanche`, `base`, etc.
+</Callout>
+
+```typescript
+const authProof = await sequence.sessionAuthProof({ 
+    nonce, 
+    network
+})
+
+const sessionId = authProof.data.sessionId
+const signature = authProof.data.signature
+```
+
+Where the `sequence` variable is the Embedded Wallet authorized object imported from the `SequenceEmbeddedWallet.ts` file we created prior.
+
+Then, call the `/verifyNonce` endpoint and pass with the variables of the `nonce` we generated prior, `sessionId` from the Embedded Wallet hook, `signature`, and `chainId` to your Cloudflare Worker, where the `chainId` is the number for the network you're dealing with:
+
+```typescript
+const response = await fetch(`${SERVER_URL}/verifyNonce`, {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json"
+    },
+    body: JSON.stringify({nonce, signature, chainId, sessionId})
+});
+```
+
+## 8. Sequence Kit Login for EOA Authentication
+
+In the second dapp, follow the provided walkthrough [here](/sdk/sequence-kit/getting-started#getting-started-with-sequence-kit) to create an application that enables users to sign in with an Ethereum Owned Account (EOA) using Metamask, or, a Coinbase wallet where the `VERIFICATION_URL` links to from [step 5](/guides/linked-wallets-guide#5-nonce-generation).
+
+## 9. (Optional) Query Balances in Singular Interface
+
+Once you have an application with at least 2 signed in wallet addresses, you can use the Sequence Indexer to query multiple balances and aggregate balances based on the `contractAddress` returned from the Indexer. 
+
+This can be accomplished with the following function and example:
+
+```typescript
+import {SequenceIndexer} from '@0xsequence/indexer'
+...
+const multiQuery = async (addresses: string[]) => {
+    const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY');
+
+    const balancePromises: any = addresses.map(accountAddress => 
+        indexer.getTokenBalances({
+            accountAddress: accountAddress,
+            includeMetadata: true
+        })
+    );
+
+    const results:any = await Promise.all(balancePromises);
+    
+    // Aggregate the balances
+    const aggregatedBalances = results.reduce((acc: any, result: any) => {
+        result.balances.forEach((balance: any) => {
+            const existingBalance = acc.find((b: any) => b.contractAddress === balance.contractAddress);
+            if (existingBalance) {
+                existingBalance.balance = (Number(existingBalance.balance) + Number(balance.balance)).toString();
+            } else {
+                // Convert balance to string as the balance is being stored in that format
+                balance.balance = balance.balance.toString();
+                acc.push(balance);
+            }
+        });
+        return acc;
+    }, []);
+
+    return aggregatedBalances;
+};
+
+const query = async () => {
+    const res = await multiQuery(['0xC27F2c24daaf28161982f131e47AcF6734a04598', '0xd5Ba5624E48871B9CA7D73ec28451e0c0f1d0BdD']);
+    console.log('Aggregated token balances:', res);
+};
+```

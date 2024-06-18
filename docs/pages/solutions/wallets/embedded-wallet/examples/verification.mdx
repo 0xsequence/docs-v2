@@ -244,9 +244,9 @@ const nonce = generateFutureTimestampBySeconds(30)
 
 function generateFutureTimestampBySeconds(seconds: any) {
   const now = new Date();
-  Calculate the future time in milliseconds by adding the specified number of seconds
+  // Calculate the future time in milliseconds by adding the specified number of seconds
   const futureTimeInMilliseconds = now.getTime() + seconds * 1000;
-  Return the future time in milliseconds
+  // Return the future time in milliseconds
   return futureTimeInMilliseconds;
 }
 

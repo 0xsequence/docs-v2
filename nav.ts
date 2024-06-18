@@ -299,6 +299,11 @@ export const sidebar = {
       link: '/guides/analytics-guide',
     },
     {
+      text: 'Build an Embedded Wallet Linking Service',
+      collapsed: true,
+      link: '/guides/linked-wallets-guide'
+    },
+    {
       text: 'Build a Custom Marketplace',
       collapsed: true,
       link: '/guides/custom-marketplace',
