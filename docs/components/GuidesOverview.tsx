@@ -74,6 +74,12 @@ export const GuidesOverview = () => (
         link="/guides/metadata-guide"
         image="/img/guides/overview/storage.png"
       />
+      <GuideCard
+        title="Embedded Wallet & EOA Linking in a Multi-App Experience"
+        body="By utilizing Sequence Embedded Wallet and signature verification, authorize an EOA wallet session in a frontend to enable bringing together assets in a singular interface tied together using a Cloudflare Worker backend."
+        link="/guides/wallet-linking-guide"
+        image="/img/guides/overview/wallet_linking_guide_overview.png"
+      />
        <GuideCard
         title="Confirmation Free Signatures using a Universal Sequence Wallet"
         body="This code demonstrates how to create a simple Rock Paper Scissors game using the Sequence Wallet and session keys for streamlined user interactions."
