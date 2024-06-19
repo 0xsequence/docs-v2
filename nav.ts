@@ -117,7 +117,13 @@ export const sidebar = {
           {text: 'Fiat On-Ramps', link: '/solutions/wallets/universal-wallet/fiat-on-ramps'},
           {text: 'Key Management', link: '/solutions/wallets/universal-wallet/key-management'}
         ]
-        }
+        },
+        { text: 'Wallet Linking', collapsed: false, link: '/solutions/wallets/link-wallets/overview', 
+        items: [
+          {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
+        ]
+      }
+
       ]
     },
     {

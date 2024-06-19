@@ -1,35 +1,35 @@
 import { Callout } from "vocs/components";
 
-# Embedded Wallet & EOA Linking Verification
+# Wallet Linking Integration Guide
 
-Time to complete: 60-80 minutes
+In this guide, we will showcase how to sign into an Embedded Wallet using traditional authentication like email or social login. A verifiable link is generated from the session which redirects a user to separate application to sign into an external wallet via [Sequence Kit](/sdk/sequence-kit/overview). We will then showcase how to create a link via a backend to server storage with the Embedded Wallet account from the authorized frontend web session.
 
-In this guide, we will showcase how to sign into an Embedded Wallet using Web2 Auth, then, enable users to sign into an Externally-Owned Account (EOA) wallet in a different application to have the wallet linked to server storage with the Embedded Wallet account in an authorized frontend web session.
-
-This feature is very useful for when users are being onboarded into an Embedded Wallet ecosystem, with prior history and assets in EOA wallets. The system can enable token-gating experiences to perform querying of inventory, leaving assets in respective wallets untouched.
+This feature is very useful for when users are being onboarded with Embedded Wallets, with prior history and assets in external wallets. This architecture enables read-access of multiple linked wallets to perform querying of inventory, leaving assets in respective wallets untouched as well as enhancing the ability from liquidity or funds to flow from external wallets to wallets associated with a game.
 
 <Callout type="info">
- The full code can be found in the respective repositories:
-  - [Demo WaaS Auth](https://github.com/0xsequence/demo-waas-auth/blob/master/src/components/views/EOALinkView.tsx)
-  - [Demo WaaS Wallet Link](https://github.com/0xsequence-demos/demo-waas-wallet-link)
-Where the example can be tested from [this demo](https://0xsequence.github.io/demo-waas-auth/) at the bottom of the screen, from the card titled "EOA Link"
+ The full templated code can be found in the respective repositories to jumpstart your development:
+  - [Template WaaS Auth](https://github.com/0xsequence/demo-waas-auth/blob/master/src/components/views/EOALinkView.tsx) - Logic associated with the embedded wallet for generating verifiable a link.
+  - [Template WaaS Wallet Link](https://github.com/0xsequence-demos/demo-waas-wallet-link) - Application user is redirected to link their external account and view assets in their wallets.
+  - The end to end example can be tested from this [Wallet Linking Demo](https://0xsequence.github.io/demo-waas-auth/) where at the bottom of the screen, select the card titled "EOA Link".
 </Callout>
 
 The Sequence tools in this guide will enable you to perform:
 
-1. [Sequence Builder Console Signup & Project Creation](/guides/linked-wallets-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Sequence Builder
-2. [Access Key Management](/guides/linked-wallets-guide#2-access-key-management): Claim a public access key, and WaaS config key to interact with the Sequence stack
-3. [Embedded Wallet Integration](/guides/linked-wallets-guide#3-embedded-wallet-integration): Integrate an Embedded Wallet into the application
-4. [Deploy a Cloudflare Worker with KV Storage](/guides/linked-wallets-guide#4-deploy-a-cloudflare-worker-with-kv-storage): Leverage a serverless Cloudflare worker to hold state on wallet linking and wallet signature verification
-5. [Nonce Generation](/guides/linked-wallets-guide#5-nonce-generation): Generate a signature directly from a signed in Embedded Wallet and generate and store a unique nonce 
-6. [Embedded Wallet Verification](/guides/linked-wallets-guide#6-embedded-wallet-verification): Reconstruct a message to be verified by the Sequence API to check the validity of an authenticated user session
-7. [Embedded Wallet Signature ](/guides/linked-wallets-guide#7-embedded-wallet-signature): Use Sequence Kit connector to sign a user in with their EOA wallet
-8. [Sequence Kit Login for EOA Authentication](/guides/linked-wallets-guide#8-sequence-kit-login-for-eoa-authentication): Use Sequence Kit connector to sign a user in with their EOA wallet
-9. [(Optional) Query Balances in Singular Interface](/guides/linked-wallets-guide#9-optional-query-balances-in-singular-interface): Use the Sequence Indexer to query multiple wallets to aggregate tokens into a singular interface
+1. [Sequence Builder Console Signup & Project Creation](/solutions/wallets/link-wallets/integration-guide#1-sequence-builder-console-signup--project-creation): Create a project with the Sequence Builder
+2. [Access Key Management](/solutions/wallets/link-wallets/integration-guide#2-access-key-management): Claim a public access key, and WaaS config key to interact with the Sequence stack
+3. [Embedded Wallet Integration](/solutions/wallets/link-wallets/integration-guide#3-embedded-wallet-integration): Integrate an Embedded Wallet into the application
+4. [Deploy a Cloudflare Worker with KV Storage](/solutions/wallets/link-wallets/integration-guide#4-deploy-a-cloudflare-worker-with-kv-storage): Leverage a serverless Cloudflare worker to hold state on wallet linking and wallet signature verification
+5. [Nonce Generation](/solutions/wallets/link-wallets/integration-guide#5-nonce-generation): Generate a signature directly from a signed in Embedded Wallet and generate and store a unique nonce 
+6. [Embedded Wallet Verification](/solutions/wallets/link-wallets/integration-guide#6-embedded-wallet-verification): Reconstruct a message to be verified by the Sequence API to check the validity of an authenticated user session
+7. [Embedded Wallet Signature ](/solutions/wallets/link-wallets/integration-guide#7-embedded-wallet-signature): Use Sequence Kit connector to sign a user in with their EOA wallet
+8. [Sequence Kit Login for EOA Authentication](/solutions/wallets/link-wallets/integration-guide#8-sequence-kit-login-for-eoa-authentication): Use Sequence Kit connector to sign a user in with their EOA wallet
+9. [(Optional) Query Balances in Singular Interface](/solutions/wallets/link-wallets/integration-guide#9-optional-query-balances-in-singular-interface): Use the Sequence Indexer to query multiple wallets to aggregate tokens into a singular interface
 
-## Sequence Diagram Flow
+**Time to complete: 30-40 minutes**
 
-![wallet linking guide sequence diagram](/img/guides/wallet-linking/wallet_linking_guide_sequence_diagram.png)
+## Wallet Linking Diagram Flow
+
+![wallet linking guide sequence diagram](/img/guides/wallet-linking/wallet-linking-diagram.png)
 
 ## 1. Sequence Builder Console Signup & Project Creation
 
@@ -42,7 +42,7 @@ Now that you have a project, you'll need to acquire 2 different Access Keys for 
 2. `Public Access Key` used for the Embedded Wallet, Sequence Kit, & Sequence Indexer, which can be done [here](/solutions/builder/getting-started#claim-an-api-access-key)
 
 <Callout type="info">
-For this guide, while you're configuring your Embbedded Wallet, in order to generate signatures a Parent Wallet will have to be deployed. You can learn about this [here](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet).
+For this guide, while you're configuring your Embedded Wallet, in order to generate signatures a Parent Wallet will have to be deployed. You can learn about this [here](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet).
 </Callout>
 
 ## 3. Embedded Wallet Integration
@@ -51,7 +51,7 @@ For this guide, while you're configuring your Embbedded Wallet, in order to gene
 You can view and clone the template repository [here](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth) for the Embedded Wallet sign in
 </Callout>
 
-We'll start from scratch building up the project with the necessary pieces, to enable the use of a Sequence Embedded Wallet which enables users to be onboarded to your application using web2 authentication providers.
+We'll start from scratch building up the project with the necessary pieces, to enable the use of a Sequence Embedded Wallet so users are onboarded to your application using web2 authentication providers.
 
 First start by creating a project folder with `mkdir <project>`, then `cd <project>` and create a `vite` project using React:
 
@@ -634,11 +634,11 @@ const signature = authProof.data.signature
 
 Where the `sequence` variable is the Embedded Wallet authorized object imported from the `SequenceEmbeddedWallet.ts` file we created prior.
 
-### Produce Verification Link for 2nd App
+### Produce Verification Link for Wallet Linking app
 
-Once you have the variables required to verify a session, the variables are passed in a URL to redirect your users to a 2nd app, which will be parsed to verify a session so that an EOA can be used to sign in.
+Once you have the variables required to verify a session, the variables are passed in a URL to redirect your users to the Wallet Linking app, which will be parsed to verify a session so that an EOA can be used to sign in.
 
-To construct the URL, use the base `VERIFICATION_URL` from [step 5](/guides/linked-wallets-guide#5-nonce-generation) link as the domain, and append the necessary variables using URL query params using the following code:
+To construct the URL, use the base `VERIFICATION_URL` from [step 5](/solutions/wallets/link-wallets/integration-guide#5-nonce-generation) link as the domain, and append the necessary variables using URL query params using the following code:
 
 ```typescript
 const externalNonce = nonce
@@ -656,9 +656,9 @@ And prompt the verification link to the user to redirect using something like an
 </a>
 ```
 
-## 8. Sequence Kit Login for EOA Authentication
+## 8. Sequence Kit Login for External Wallet Authentication
 
-In the second dapp, follow the provided walkthrough [here](/sdk/sequence-kit/getting-started#getting-started-with-sequence-kit) to create an application that enables users to sign in with an Externally-Owned Account (EOA) using Metamask, or, a Coinbase wallet, where the `VERIFICATION_URL` from [step 5](/guides/linked-wallets-guide#5-nonce-generation) links to for this 2nd app.
+In the second dapp, follow the provided walkthrough [here](/sdk/sequence-kit/getting-started#getting-started-with-sequence-kit) to create an application that enables users to sign in with an Externally-Owned Account (EOA) using Metamask, or, a Coinbase wallet, where the `VERIFICATION_URL` from [step 5](/solutions/wallets/link-wallets/integration-guide#5-nonce-generation) links to for this 2nd app.
 
 ### verifyNonce
 
@@ -683,7 +683,7 @@ const response = await fetch(`${SERVER_URL}/verifyNonce`, {
 });
 ```
 
-The Embedded Wallet from the first application should be returned successfully. After this, change the UI to accomodate the additional flow for signing in a user with an EOA wallet.
+The Embedded Wallet from the first application should be returned successfully. After this, change the UI to accomodate the additional flow for signing in a user with an external wallet.
 
 ## 9. (Optional) Query Balances in Singular Interface
 
@@ -732,4 +732,6 @@ const query = async () => {
 
 ### Conclusion
 
-Great, you've created 1 application that sign's in a user with an Embedded Wallet and another application that is linked to from the first application that enables a user to sign into an EOA wallet, all tied together and authorized with a backend Cloudflare Worker. 
+To sum up, we've created an application to authenticate a user, instantiate a non-custodial embedded wallet, and create a cryptographically verifiable URL. This verifiable URL links to another application that validates the previous embedded wallet session and enables a user to connect any external wallet. This relationship is stored in a backend of your choosing, in this case, Cloudflare to retrieve or query at a later time.
+
+While we utilized web technologies for the embedded wallet application, this same logic can be easily extended to Unity, Unreal, or any other framework to create the same verifiable link from nearly any platforms.
