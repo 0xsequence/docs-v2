@@ -4,7 +4,7 @@ import { Callout } from "vocs/components";
 
 Time to complete: 60-80 minutes
 
-In this guide, we will showcase how to sign into an Embedded Wallet using Web2 Auth, then, enable users to sign into an EOA wallet in a different application to have the wallet linked to server storage with the Embedded Wallet account. 
+In this guide, we will showcase how to sign into an Embedded Wallet using Web2 Auth, then, enable users to sign into an Externally-Owned Account (EOA) wallet in a different application to have the wallet linked to server storage with the Embedded Wallet account in an authorized frontend web session.
 
 This feature is very useful for when users are being onboarded into an Embedded Wallet ecosystem, with prior history and assets in EOA wallets. The system can enable token-gating experiences to perform querying of inventory, leaving assets in respective wallets untouched.
 
@@ -27,6 +27,10 @@ The Sequence tools in this guide will enable you to perform:
 8. [Sequence Kit Login for EOA Authentication](/guides/linked-wallets-guide#8-sequence-kit-login-for-eoa-authentication): Use Sequence Kit connector to sign a user in with their EOA wallet
 9. [(Optional) Query Balances in Singular Interface](/guides/linked-wallets-guide#9-optional-query-balances-in-singular-interface): Use the Sequence Indexer to query multiple wallets to aggregate tokens into a singular interface
 
+## Sequence Diagram Flow
+
+![wallet linking guide sequence diagram](/img/guides/wallet-linking/wallet_linking_guide_sequence_diagram.png)
+
 ## 1. Sequence Builder Console Signup & Project Creation
 
 First start by following [this walkthrough](/solutions/builder/project-management) for how to sign up to the [Sequence Builder](https://sequence.build/) and to learn how to create a project.
@@ -38,13 +42,13 @@ Now that you have a project, you'll need to acquire 2 different Access Keys for 
 2. `Public Access Key` used for the Embedded Wallet, Sequence Kit, & Sequence Indexer, which can be done [here](/solutions/builder/getting-started#claim-an-api-access-key)
 
 <Callout type="info">
-For this guide, in order to generate signatures a Parent Wallet will have to be deployed. You can learn about this [here](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet)
+For this guide, while you're configuring your Embbedded Wallet, in order to generate signatures a Parent Wallet will have to be deployed. You can learn about this [here](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet).
 </Callout>
 
 ## 3. Embedded Wallet Integration
 
 <Callout type="info">
-You can view and clone the template repository [here](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth)
+You can view and clone the template repository [here](https://github.com/0xsequence-demos/template-embedded-wallet-web2-auth) for the Embedded Wallet sign in
 </Callout>
 
 We'll start from scratch building up the project with the necessary pieces, to enable the use of a Sequence Embedded Wallet which enables users to be onboarded to your application using web2 authentication providers.
@@ -120,17 +124,17 @@ export function useSessionHash() {
 }
 ```
 
-Finally, to implement Google auth, you will need the `GoogleOAuthProvider` to wrap your application. The following command will install it and Apple Auth sign in, which will be used later:
+Finally, to implement Google auth, you will need the `GoogleOAuthProvider`. The following command will install the provider as well as the Apple Auth sign in, which will be used later:
 
 ```shell
 pnpm i @react-oauth/google react-apple-signin-auth
 ```
 
 <Callout type="warning">
-Apple authentication can not be used with localhost applications, so to test you'll need to deploy your application and update the `Allowed Origins` for the bundle id
+Apple authentication can not be used with localhost applications, so to test you'll need to deploy your application and update the `Allowed Origins` for the bundle id.
 </Callout>
 
-Then, the starter code is implemented with the previous imported files, in the following code within the `main.tsx` file, where the `GoogleOAuthProvider` wraps the application:
+Then, the starter code is implemented with the previous imported files, in the following code within the `main.tsx` file, where the `GoogleOAuthProvider` wraps the application, where the `GOOGLE_CLIENT_ID` is obtained from the Google Developer Console. More on this [here](/solutions/builder/embedded-wallet/google-configuration):
 
 ```typescript
 import React from 'react'
@@ -359,7 +363,7 @@ Then in the rest of your code include the following testing code to generate a v
 
 First, install ethers with the following command:
 
-```
+```shell
 pnpm install ethers@5.7.2
 ```
 
@@ -424,7 +428,7 @@ For example:
 
 ```shell
 kv_namespaces = [
-    { binding = "waas_wallet_link_db", id = "<YOUR_GENERATE_ID>" }
+    { binding = "waas_wallet_link_db", id = "<YOUR_GENERATED_ID>" }
 ]
 ```
 
@@ -437,10 +441,6 @@ Now that we have an application that can log in a user and a Cloudflare worker t
 ### `generateNonce`
 
 To generate a nonce, use the following code that handles a POST with the `walletAddress` passed in the body:
-
-```shell
-VERIFICATION_URL = '<SECOND_APP_URL>' # e.g. http://localhost:5174
-```
 
 ```typescript
 
@@ -486,6 +486,10 @@ async function handleRequest(request: Request, env: Env, ctx: ExecutionContext) 
 ```
 
 And for this demo, set the `VERIFICATION_URL` in your `wrangler.toml`, which will be used to reference your app. 
+
+```shell
+VERIFICATION_URL = '<SECOND_APP_URL>' # e.g. http://localhost:5174
+```
 
 In the future, for maximal optionality this `VERIFICATION_URL` can always be changed on the fly to redirect your user to a different location with "behind-the-scenes" redeployments of your Cloudflare Worker.
 
@@ -539,6 +543,8 @@ async function handleRequest(request: Request, env: Env, ctx: ExecutionContext) 
 Then, get the `walletAddress` stored from before using the `nonce`:
 
 ```typescript
+  if (url.pathname === "/verifyNonce") {
+    ...
     let walletAddress = await env.waas_wallet_link_db.get(nonce)
 
     if (!walletAddress) {
@@ -547,6 +553,8 @@ Then, get the `walletAddress` stored from before using the `nonce`:
             statusText: "Not Found",
         });
     }
+    ...
+  }
 ```
 
 Reconstruct the `authProof` with the following string:
@@ -555,7 +563,7 @@ Reconstruct the `authProof` with the following string:
 const authProof = `SessionAuthProof ${sessionId} ${walletAddress} ${nonce}`
 ```
 
-And verify the `authProof` using the sequence api (installed with `pnpm install 0xsequence`), handle the case where the signature is not valid, and return the `walletAddress` when the signature is valid:
+And verify the `authProof` using the sequence API (installed with `pnpm install 0xsequence`), handling the case where the signature is not valid, and returning the `walletAddress` when the signature is valid:
 
 ```typescript
 import { sequence } from "0xsequence"
@@ -650,7 +658,7 @@ And prompt the verification link to the user to redirect using something like an
 
 ## 8. Sequence Kit Login for EOA Authentication
 
-In the second dapp, follow the provided walkthrough [here](/sdk/sequence-kit/getting-started#getting-started-with-sequence-kit) to create an application that enables users to sign in with an Ethereum Owned Account (EOA) using Metamask, or, a Coinbase wallet, where the `VERIFICATION_URL` from [step 5](/guides/linked-wallets-guide#5-nonce-generation) links to with this 2nd app.
+In the second dapp, follow the provided walkthrough [here](/sdk/sequence-kit/getting-started#getting-started-with-sequence-kit) to create an application that enables users to sign in with an Externally-Owned Account (EOA) using Metamask, or, a Coinbase wallet, where the `VERIFICATION_URL` from [step 5](/guides/linked-wallets-guide#5-nonce-generation) links to for this 2nd app.
 
 ### verifyNonce
 
@@ -663,7 +671,7 @@ const sessionId: string | null = urlParams.get("sessionId");
 const chainId: string | null = urlParams.get("chainId");
 ```
 
-Then, the make a call to the Cloudflare Worker performed as:
+Then, make a call to the Cloudflare Worker performed as:
 
 ```typescript
 const response = await fetch(`${SERVER_URL}/verifyNonce`, {
@@ -675,19 +683,19 @@ const response = await fetch(`${SERVER_URL}/verifyNonce`, {
 });
 ```
 
-The Embedded Wallet from the first application should be returned successfully.
+The Embedded Wallet from the first application should be returned successfully. After this, change the UI to accomodate the additional flow for signing in a user with an EOA wallet.
 
 ## 9. (Optional) Query Balances in Singular Interface
 
 Once you have an application with at least 2 signed in wallet addresses, you can use the Sequence Indexer to query multiple balances and aggregate balances based on the `contractAddress` returned from the Indexer. 
 
-This can be accomplished with the following function and example:
+This can be accomplished with the following function and example after you've downloaded the Indexer with `pnpm @0xsequence/indexer`:
 
 ```typescript
 import {SequenceIndexer} from '@0xsequence/indexer'
 ...
 const multiQuery = async (addresses: string[]) => {
-    const indexer = new SequenceIndexer('https://polygon-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY');
+    const indexer = new SequenceIndexer('https://<CHAIN_HANDLE>-indexer.sequence.app', 'AQAAAAAAAF_JvPALhBthL7VGn6jV0YDqaFY');
 
     const balancePromises: any = addresses.map(accountAddress => 
         indexer.getTokenBalances({
@@ -717,7 +725,11 @@ const multiQuery = async (addresses: string[]) => {
 };
 
 const query = async () => {
-    const res = await multiQuery(['0xC27F2c24daaf28161982f131e47AcF6734a04598', '0xd5Ba5624E48871B9CA7D73ec28451e0c0f1d0BdD']);
+    const res = await multiQuery([<wallet_address>, <wallet_address>]);
     console.log('Aggregated token balances:', res);
 };
 ```
+
+### Conclusion
+
+Great, you've created 1 application that sign's in a user with an Embedded Wallet and another application that is linked to from the first application that enables a user to sign into an EOA wallet, all tied together and authorized with a backend Cloudflare Worker. 
