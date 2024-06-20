@@ -7,22 +7,16 @@ description: Documentation for Unreal SDK Installation for the Sequence infrastr
 
 ## Credentials
 
-Before you can use this plugin, you need to acquire the following credentials from [Sequence](https://sequence.xyz/builder)
+Before you can use this plugin, you need to acquire the following credentials from [Sequence Builder](https://sequence.xyz/builder)
 
-- `WaaSTenantKey`
-- `ProjectAccessKey`
+- `WaaS Configuration Key`
+- `Project Access Key`
 
 You can then add these credentials in the **[SequenceConfig.ini]** file under [YourProject]/Config/SequenceConfig.ini
 
 ## Security
 
 You must provide a 32 character encryption key in the **[SequenceConfig.ini]** file under [YourProject]/Config/SequenceConfig.ini
-under the config variable `FallbackEncryptionKey`
+under the config variable `FallbackEncryptionKey`.
 
-In order to prevent tampering with data you must encrypt your packaged project using Unreals packaging settings
-You can refer to [these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-unreal-engine-projects?application_version=5.3)
-
-Note: For generating secure keys feel free to use tools such as:
-Lastpass Password generator or equivalent,
-Encryption Key Generators,
-etc
+In order to prevent tampering with data you must encrypt your packaged project using Unreals packaging settings. You can refer to [these docs](https://dev.epicgames.com/documentation/en-us/unreal-engine/packaging-unreal-engine-projects?application_version=5.3) for more information.
