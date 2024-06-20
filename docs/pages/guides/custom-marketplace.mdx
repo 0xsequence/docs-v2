@@ -604,7 +604,12 @@ We begin with the same flow as before, accounting for sending multi-batch transa
       [topOrder.orderId, quantity, address, [], []],
     );
 
-    setAcceptData(data) // we'll need this later
+    setAcceptData(data) // we'll need this later, only for sequence kit enabled transactions
+
+    const tx = {
+      to: MarketPlaceContract, // 0xB537a160472183f2150d42EB1c3DD6684A55f74c
+      data: data
+    }
 
     if(await checkERC20Balance(requiredAmount)){
       if((await checkERC20Approval(address!,MarketPlaceContract,ArbSepoliaUSDCContract,requiredAmount))){
