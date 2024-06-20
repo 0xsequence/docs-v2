@@ -5,14 +5,14 @@ description: Documentation for Unreal SDK Installation for the Sequence infrastr
 
 # Installation
 
-## Credentials
+## Configuration Key Management
 
-Before you can use this plugin, you need to acquire the following credentials from Sequence:
+Before you can use the Sequence Unreal SDK, you need to acquire the following configuration keys from the Sequence Builder:
 
-- `WaaSTenantKey`: This key will be given to you by the Sequence team during WaaS onboarding
-- `ProjectAccessKey`: This key can be found in [Sequence Builder](https://sequence.build/) under `Settings > API Access Keys`
+- `WaaSConfigKey`: This key can be learned about [here](/solutions/builder/embedded-wallet)
+- `ProjectAccessKey`: This key can be learned about [here](/solutions/builder/getting-started#claim-an-api-access-key)
 
-You can then add these credentials in the `[Config.h]` file under `SequencePlugin/Source/SequencePlugin/Private/Config/Config.h`.
+You can then add these configuration keys in the `[Config.h]` file under `SequencePlugin/Source/SequencePlugin/Private/Config/Config.h`.
 
 ## Security
 
