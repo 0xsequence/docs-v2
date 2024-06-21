@@ -75,9 +75,9 @@ export const GuidesOverview = () => (
         image="/img/guides/overview/storage.png"
       />
       <GuideCard
-        title="Embedded Wallet & EOA Linking in a Multi-App Experience"
-        body="By utilizing Sequence Embedded Wallet and signature verification, authorize an EOA wallet session in a frontend to enable bringing together assets in a singular interface tied together using a Cloudflare Worker backend."
-        link="/guides/wallet-linking-guide"
+        title="Link a Embedded Wallet associated with your game to an External Wallet"
+        body="Combine Sequence Embedded Wallets and signature verification to authorize an external wallet session in a web app, linking two verified wallet instances together."
+        link="/solutions/wallets/link-wallets/integration-guide"
         image="/img/guides/overview/wallet_linking_guide_overview.png"
       />
        <GuideCard

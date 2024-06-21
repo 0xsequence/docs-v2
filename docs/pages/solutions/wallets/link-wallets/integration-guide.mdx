@@ -7,7 +7,7 @@ In this guide, we will showcase how to sign into an Embedded Wallet using tradit
 This feature is very useful for when users are being onboarded with Embedded Wallets, with prior history and assets in external wallets. This architecture enables read-access of multiple linked wallets to perform querying of inventory, leaving assets in respective wallets untouched as well as enhancing the ability from liquidity or funds to flow from external wallets to wallets associated with a game.
 
 <Callout type="info">
- The full templated code can be found in the respective repositories to jumpstart your development:
+ The full templated code can be found in the respective repositories if you would like to start integration right away:
   - [Template WaaS Auth](https://github.com/0xsequence/demo-waas-auth/blob/master/src/components/views/EOALinkView.tsx) - Logic associated with the embedded wallet for generating verifiable a link.
   - [Template WaaS Wallet Link](https://github.com/0xsequence-demos/demo-waas-wallet-link) - Application user is redirected to link their external account and view assets in their wallets.
   - The end to end example can be tested from this [Wallet Linking Demo](https://0xsequence.github.io/demo-waas-auth/) where at the bottom of the screen, select the card titled "EOA Link".
@@ -38,8 +38,8 @@ First start by following [this walkthrough](/solutions/builder/project-managemen
 ## 2. Access Key Management
 
 Now that you have a project, you'll need to acquire 2 different Access Keys for your project in order to authenticate your application with the Sequence Stack:
-1. `Waas Config Key` used for the Embedded Wallet, which can be learned about [here](/solutions/builder/embedded-wallet)
-2. `Public Access Key` used for the Embedded Wallet, Sequence Kit, & Sequence Indexer, which can be done [here](/solutions/builder/getting-started#claim-an-api-access-key)
+1. `Waas Config Key` used for the Embedded Wallet, which can be learned about [here](/solutions/builder/embedded-wallet).
+2. `Project Access Key` used for the Embedded Wallet, Sequence Kit, & Sequence Indexer, which can be done [here](/solutions/builder/getting-started#claim-an-api-access-key).
 
 <Callout type="info">
 For this guide, while you're configuring your Embedded Wallet, in order to generate signatures a Parent Wallet will have to be deployed. You can learn about this [here](/solutions/wallets/embedded-wallet/examples/verification#prerequisite-deployment-of-a-parent-wallet).
@@ -438,8 +438,6 @@ Finally, deploy your worker with `wrangler deploy` and enter in the browser the 
 
 Now that we have an application that can log in a user and a Cloudflare worker that can receive requests to generate a simple nonce, let's create the structure of the worker to both generate a nonce for a wallet address, store it, and later verify the nonce using the Sequence API.
 
-### `generateNonce`
-
 To generate a nonce, use the following code that handles a POST with the `walletAddress` passed in the body:
 
 ```typescript
@@ -685,7 +683,7 @@ const response = await fetch(`${SERVER_URL}/verifyNonce`, {
 
 The Embedded Wallet from the first application should be returned successfully. After this, change the UI to accomodate the additional flow for signing in a user with an external wallet.
 
-## 9. (Optional) Query Balances in Singular Interface
+## 9. Query Balances across Wallets
 
 Once you have an application with at least 2 signed in wallet addresses, you can use the Sequence Indexer to query multiple balances and aggregate balances based on the `contractAddress` returned from the Indexer. 
 
@@ -734,4 +732,4 @@ const query = async () => {
 
 To sum up, we've created an application to authenticate a user, instantiate a non-custodial embedded wallet, and create a cryptographically verifiable URL. This verifiable URL links to another application that validates the previous embedded wallet session and enables a user to connect any external wallet. This relationship is stored in a backend of your choosing, in this case, Cloudflare to retrieve or query at a later time.
 
-While we utilized web technologies for the embedded wallet application, this same logic can be easily extended to Unity, Unreal, or any other framework to create the same verifiable link from nearly any platforms.
+While we utilized web technologies for the embedded wallet application, this same logic can be easily extended to Unity, Unreal, or any other framework to create the same verifiable link from nearly any platform.
