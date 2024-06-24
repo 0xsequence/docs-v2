@@ -2,14 +2,14 @@ import { Callout } from "vocs/components";
 
 # Fee Options
 
-When implementing an Embedded Wallet, one will need to be able to pay for the gas fees on a non-testnet network in order to send a transaction. 
+When implementing an Embedded Wallet, one will need to be able to pay for the gas fees on a non-testnet network to send a transaction. 
 
-Fee options are used which provide a quote to cover the gas fees only useable for a certain period of time (which is unique to the Sequence stack).
+Fee options provide a quote to cover the gas fees only useable for a certain period of time (which is unique to the Sequence stack).
 
-In order to send a transaction successfully, you have a few directions you can take:
-- **Testnets**: By using a testnet, transactions with Sequence are free, not requiring a fee option inputted into the SDK call.
+To send a transaction successfully, you have a few directions you can take:
+- **Testnets**: Using a testnet, transactions with Sequence are free, not requiring a fee option inputted into the SDK call.
 - **Sponsored Contract or Wallet**: Having the smart contract or wallet sponsored, not requiring a fee option inputted into the SDK call. You can learn about sponsoring a contract or wallet [here](/solutions/builder/gas-tank).
-- **Fee Options**: Using a Sequence API to get a custom fee quote and fee options object, and pass both into the waas sdk call. [See below](/solutions/wallets/embedded-wallet/examples/fee-options#implementing-fee-options).
+- **Fee Options**: Using a Sequence API to get a custom fee quote and fee options object, pass both into the waas sdk call. [See below](/solutions/wallets/embedded-wallet/examples/fee-options#implementing-fee-options).
 
 <Callout type="info">
 You will know if you need to either sponsor your contract or wallet, or, implement fee options if you receive the following response from the WaaS API:
@@ -39,7 +39,7 @@ pnpm install @0xsequence/waas ethers@5.7.2
 ::::steps
 ### Generalized API for Fee Options & Fee Quote
 
-In order to implement fee options passed into the request, a first call to `sequence.feeOptions({...})` is required, which is wrapped in the following function `checkTransactionFeeOptions`:
+To implement fee options passed into the request, a first call to `sequence.feeOptions({...})` is required, which is wrapped in the following function `checkTransactionFeeOptions`:
 
 <Callout type="info">
 In the following examples, the `sequence` variable is an Embbeded Wallet object intialized from the `@0xsequence/waas` npm package with the `WaasConfigKey` and `ProjectAccessKey`. Learn how to do this [here](/solutions/wallets/embedded-wallet/quickstart)
