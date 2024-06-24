@@ -78,6 +78,7 @@ export const sidebar = {
             {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
             {text: 'Use Wallets', link: '/solutions/wallets/embedded-wallet/examples/use-wallets'},
             {text: 'On-ramp', link: '/solutions/wallets/embedded-wallet/examples/on-ramp'},
+            {text: 'Fee Options', link: '/solutions/wallets/embedded-wallet/examples/fee-options'},
             {text: 'Validation', link: '/solutions/wallets/embedded-wallet/examples/validation'},
             {text: 'Verification', link: '/solutions/wallets/embedded-wallet/examples/verification'},
             {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
