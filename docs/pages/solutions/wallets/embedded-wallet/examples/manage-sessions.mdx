@@ -224,13 +224,11 @@ The following are details included in the returned JWT's:
 - **hd** (aka Hosted Domain) (string) - It means that the user who has authenticated is from the respective domain.
 - **email** (string) - The user's email address, as registered in the authentication service.
 - **email_verified** (boolean) (string) - A boolean representing whether the email address has been verified as genuine.
-- **at_hash** (string) - Access token hash. A value used to validate the token integrity and ensure it hasn't been tampered with.
 - **nonce** (string) - A string used to associate a client session with an ID token and to mitigate replay attacks.
 - **name** (string) - The full name of the user as registered in the authentication service.
 - **picture** (string) - URL of the user's profile picture.
 - **given_name** (string) - The user's first name.
 - **family_name** (string) - The user's last name.
-- **locale** (string) - The locale of the user, representing the user's language and region settings.
 - **iat** (aka Issued at) (number) - The timestamp when the token was issued, represented in Unix time (seconds since Jan 1, 1970).
 - **exp** (aka Expiration time) (number) - The expiration timestamp of the token, beyond which the token should not be considered valid.
 
@@ -242,7 +240,6 @@ The following are details included in the returned JWT's:
 - **email_verified** (boolean) - "true" if the user's email has been verified; "false" otherwise.
 - **is_private_email** (boolean) - "true" if the email address is a private relay email specific to your application; "false" otherwise.
 - **auth_time** (number) - The timestamp when the user authenticated.
-- **nonce_supported** (boolean) - Whether the nonce claim is supported.
 - **nonce** (string) - The nonce value passed during the authorization request.
 - **exp** (aka Issued at) (number) - The expiration time of the token, in Unix time.
 - **iat** (aka Expiration time) (number) - The time at which the token was issued, in Unix time.
