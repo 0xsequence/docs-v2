@@ -356,6 +356,7 @@ export const sidebar = {
           { text: 'Sign Messages', link: '/sdk/unity/sign-messages' },
           { text: 'Deploy Contracts', link: '/sdk/unity/deploy-contracts' },
           { text: 'On-Ramp Funds via Credit Card', link: '/sdk/unity/onboard-user-funds'},
+          { text: 'Connect with External Wallets', link: '/sdk/unity/connecting-external-wallets' },
           { text: 'Wallet UI', link: '/sdk/unity/wallet-ui' },
           { text: 'Advanced', collapsed: true,  items: [
             { text: 'Introduction', link: '/sdk/unity/Advanced/introduction' },

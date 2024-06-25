@@ -1,0 +1,23 @@
+# Connecting External Wallets
+
+While the majority of user interactions will happen using the embedded wallet, some of your users may have existing wallets they wish to connect with your games. This allows you to validate a user holds a token(s) without requiring them to transfer it to their embedded wallet.
+
+You can [connect an external wallet with an embedded wallet](/solutions/wallets/link-wallets/overview/) via a web interface.
+
+First, you'll want to configure a server to facilitate this connection. Please [read this guide](/solutions/wallets/link-wallets/integration-guide/) and come back once you've configured your server (you can skip the first few steps on Builder configuration and integrating embedded wallet into a web app since you've already done this on the Unity side; similarly, you can skip the sections on signing the session auth proof).
+
+Now that you've configured your server, you can create an `EOAWalletLinker`.
+
+```
+EOAWalletLinker linker = new EOAWalletLinker(wallet, "yourServersBaseUrl/generateNonce");
+```
+
+You can generate the url for wallet linking with 
+```
+string url = await linker.GenerateEOAWalletlink(chain);
+```
+
+or you can generate it and open it with the device's default browser (via [Application.OpenURL](https://docs.unity3d.com/ScriptReference/Application.OpenURL.html))
+```
+linker.OpenEOAWalletLink(chain); // note: this is an awaitable async method.
+```
