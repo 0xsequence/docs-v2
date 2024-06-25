@@ -2,34 +2,36 @@
 
 Sequence Auth + Embedded Wallet handles the following aspects of your application:
 
-- Creating accounts
-- Authenticating accounts
-- Managing sessions
+- [Account Management](/solutions/wallets/embedded-wallet/examples/manage-sessions#account-management): Manage blockchain accounts to sign up or sign in users.
+- [Authenticating Accounts](/solutions/wallets/embedded-wallet/examples/manage-sessions#authenticating-accounts): Authentication sessions to return important details to be consumed by your application to enhance the experience of games and applications.
+- [Session Management](/solutions/wallets/embedded-wallet/examples/manage-sessions#managing-sessions): Manage the listing and dropping of sessions handled by the WaaS stack.
 
 This means you don't need to implement an account system yourself; instead, you interact with the Auth + WaaS SDK whenever you need to authenticate a user.
 
-## Sign in / Sign Up
+## Account Management
+
+### Sign Up / Sign In
 
 Signing in and signing up are the same operation; the account is automatically created if it doesn't already exist.
 
 ```ts
 import { SequenceWaaS } from '@0xsequence/waas'
 
-const waas = new SequenceWaaS({
-  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
   network: 'arbitrum-nova'
 })
 
 // Get a sessionHash
-const sessionHash = await waas.getSessionHash()
+const sessionHash = await sequence.getSessionHash()
 
 // Get an idToken using the social auth provider of your choice
 // (Google, Facebook, Twitter, etc.)
 // Note: remember to pass the sessionHash as a nonce!
 
 // Then sign in with Sequence WaaS
-const res = await waas.signIn({ idToken }, "MacBook Pro - Chrome")
+const res = await sequence.signIn({ idToken }, "MacBook Pro - Chrome")
 
 console.log(res)
 ```
@@ -47,6 +49,8 @@ Sessions opened with some providers might require a second step in order to be u
 See [Email validation](/solutions/wallets/embedded-wallet/examples/validation).
 :::
 
+## Authenticating Accounts
+
 ### Email Sign In / Sign Up
 
 **Validate Email and Initiate Session** 
@@ -59,18 +63,18 @@ See [Email validation](/solutions/wallets/embedded-wallet/examples/validation).
 ```ts
 import { SequenceWaaS } from '@0xsequence/waas'
 
-const waas = new SequenceWaaS({
-  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
   network: 'arbitrum-nova'
 })
 
 // Send validation email to the user with an OTP code
-const { instance } = await waas.email.initiateAuth({ email })
+const { instance } = await sequence.email.initiateAuth({ email })
 const sessionHash = await sequence.getSessionHash()
 
 // Obtain OTP code from user and pass to finalizeAuth for validation
-const { idToken } = await waas.email.finalizeAuth({ instance, answer, email, sessionHash })
+const { idToken } = await sequence.email.finalizeAuth({ instance, answer, email, sessionHash })
 
 // Log in using the idToken, as usual
 await waas.signIn({ idToken })
@@ -83,8 +87,6 @@ await waas.signIn({ idToken })
 - **Open Sessions**: Open sessions using idTokens obtained from the social auth providers.
 - **Explore Examples**: Start with a main.tsx file to set up the WaaS SDK, router, and Google OAuth provider. For more details, view the repository and functional [demo-waas-auth](https://github.com/0xsequence/demo-waas-auth).
 
- 
-
 Begin with a simple `main.tsx` file that sets up the WaaS SDK, the router, and the Google OAuth provider.
 
 ```ts
@@ -92,9 +94,9 @@ import { SequenceWaaS } from '@0xsequence/waas'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 
-const waas = new SequenceWaaS({
-  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
   network: 'arbitrum-nova'
 })
 
@@ -194,7 +196,7 @@ function Login() {
 export default Login
 ```
 
-## Check if a User is Signed-In
+### Check if a User is Signed-In
 
 A user session can be checked to see if they are logged in with the following function call:
 
@@ -206,22 +208,100 @@ if (await sequence.isSignedIn()){
 }
 ```
 
-## List Sessions
+### `idToken` JWT Parsing
+
+Based on the way that your application is configured from perspective of the Authentication Providers, you have the option to parse user details that can be shared with applications to be integrated in some way. 
+
+For example, as a simple way to create social inclusion of profiling in your experience, you can reference Profile photos used already within the respective ecosystems: Google & Apple.
+
+The following are details included in the returned JWT's:
+
+#### Google JWT Parsing `idToken` Contents
+- **iss** (aka Issuer) (string) - The issuer of the token. For tokens from Google, this is usually a URL like https://accounts.google.com or something similiar.
+- **azp** (aka Authorized party) (string) - The client ID of the authorized presenter. This claim is used in Google OAuth 2.0 to identify the party using the token.
+- **aud** (aka Audience) (string) - Intended audience of the token. Typically, this is your application's client ID.
+- **sub** (aka Subject) (string) - The unique identifier for the user. It is intended to be used to identify the user across multiple systems.
+- **hd** (aka Hosted Domain) (string) - It means that the user who has authenticated is from the respective domain.
+- **email** (string) - The user's email address, as registered in the authentication service.
+- **email_verified** (boolean) (string) - A boolean representing whether the email address has been verified as genuine.
+- **at_hash** (string) - Access token hash. A value used to validate the token integrity and ensure it hasn't been tampered with.
+- **nonce** (string) - A string used to associate a client session with an ID token and to mitigate replay attacks.
+- **name** (string) - The full name of the user as registered in the authentication service.
+- **picture** (string) - URL of the user's profile picture.
+- **given_name** (string) - The user's first name.
+- **family_name** (string) - The user's last name.
+- **locale** (string) - The locale of the user, representing the user's language and region settings.
+- **iat** (aka Issued at) (number) - The timestamp when the token was issued, represented in Unix time (seconds since Jan 1, 1970).
+- **exp** (aka Expiration time) (number) - The expiration timestamp of the token, beyond which the token should not be considered valid.
+
+#### Apple JWT Parsing `idToken` Contents
+- **iss** (aka Issuer) (string) - The issuer of the token, typically https://appleid.apple.com.
+- **aud** (aka Audience) (string) - The audience for the token, which is your application's client ID.
+- **sub** (aka Subject) (string) - The subject of the token, a unique identifier for the user.
+- **email** (string) - The user's email address (only provided if requested and the user consents).
+- **email_verified** (boolean) - "true" if the user's email has been verified; "false" otherwise.
+- **is_private_email** (boolean) - "true" if the email address is a private relay email specific to your application; "false" otherwise.
+- **auth_time** (number) - The timestamp when the user authenticated.
+- **nonce_supported** (boolean) - Whether the nonce claim is supported.
+- **nonce** (string) - The nonce value passed during the authorization request.
+- **exp** (aka Issued at) (number) - The expiration time of the token, in Unix time.
+- **iat** (aka Expiration time) (number) - The time at which the token was issued, in Unix time.
+
+#### Example JS Code for Parsing
+
+```typescript
+function parseJwt(token) {
+    try {
+        // Split the token into its three parts
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            throw new Error('JWT token must consist of three parts');
+        }
+
+        // The payload is the second part. We decode it from base64 URL encoding.
+        const decodedPayload = atob(parts[1].replace(/_/g, '/').replace(/-/g, '+'));
+
+        // Parse the decoded payload as JSON
+        const payload = JSON.parse(decodedPayload);
+
+        // Return the payload object, which includes all the claims
+        return payload;
+    } catch (e) {
+        console.error('Failed to parse JWT:', e);
+        return null;
+    }
+}
+
+// Example usage
+const token = 'eyJ...'; // Your JWT token here
+const jwtDetails = parseJwt(token);
+
+if (jwtDetails) {
+    console.log('Email:', jwtDetails.email);
+    console.log('Name:', jwtDetails.name);
+    console.log('Picture:', jwtDetails.picture);
+    // Access other fields similarly
+}
+```
+
+## Managing Sessions
+
+### List Sessions
 
 This function returns a list of sessions for the current user and only includes sessions that are still valid.
 
 ```ts
 import { SequenceWaaS } from '@0xsequence/waas'
 
-const waas = new SequenceWaaS({
-  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
   network: 'arbitrum-nova'
 })
 
-await waas.signIn({ idToken }, "MacBook Pro - Chrome")
+await sequence.signIn({ idToken }, "MacBook Pro - Chrome")
 
-const sessions = await waas.listSessions()
+const sessions = await sequence.listSessions()
 console.log(sessions)
 ```
 
@@ -256,21 +336,21 @@ console.log(sessions)
 ]
 ```
 
-## Close Session
+### Close Session
 
 A session can be closed using the `id` of the session. Any session can be closed from any device with an active session.
 
 ```ts
 import { SequenceWaaS } from '@0xsequence/waas'
 
-const waas = new SequenceWaaS({
-  projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-  waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+const sequence = new SequenceWaaS({
+  projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+  waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
   network: 'arbitrum-nova'
 })
 
-await waas.signIn({ idToken }, "MacBook Pro - Chrome")
+await sequence.signIn({ idToken }, "MacBook Pro - Chrome")
 
-const sessions = await waas.listSessions()
-await waas.dropSession({ sessionId: sessions[0].id })
+const sessions = await sequence.listSessions()
+await sequence.dropSession({ sessionId: sessions[0].id })
 ```
