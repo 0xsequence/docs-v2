@@ -354,6 +354,7 @@ export const sidebar = {
           { text: 'Write to blockchain', link: '/sdk/unity/write-to-blockchain' },
           { text: 'Read from Blockchain', link: '/sdk/unity/read-from-blockchain' },
           { text: 'Sign Messages', link: '/sdk/unity/sign-messages' },
+          { text: 'Recovering Sessions', link: '/sdk/unity/recovering-sessions'},
           { text: 'Deploy Contracts', link: '/sdk/unity/deploy-contracts' },
           { text: 'On-Ramp Funds via Credit Card', link: '/sdk/unity/onboard-user-funds'},
           { text: 'Wallet UI', link: '/sdk/unity/wallet-ui' },
