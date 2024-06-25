@@ -1,0 +1,18 @@
+# Recovering Sessions 
+
+By default, the SDK will require users to sign in everytime the app is closed completely. This is because, by default, we do not write the session wallet information (e.g. private keys) to any form of persistent storage for user security.
+
+However, on select platforms, we have integrated with the platform's native secure storage offering.
+
+If you enable `StoreSessionPrivateKeyInSecureStorage` in your `SequenceConfig` ScriptableObject, we will automatically store the session wallet information for you (on supported platforms) and expose the ability to attempt to recover the session in `WaaSLogin`. The default `LoginPanel` will automatically handle the UI flow for this as well. If the platform is not supported, this flag will have no effect.
+
+See below the supported platforms and to learn about the platform's secure storage solution - it is important to understand the basics of how these systems work and think carefully about the security implications of storing private keys (or any secret for that matter) in persistent storage.
+
+## iOS 
+
+On iOS, we leverage the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services?language=objc).
+
+## MacOS 
+
+On MacOS, we leverage the [MacOS Keychain](https://developer.apple.com/documentation/security/keychain_services?language=objc).
+
