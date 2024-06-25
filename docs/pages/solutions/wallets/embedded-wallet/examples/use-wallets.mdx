@@ -1,42 +1,88 @@
 import { Callout } from "vocs/components";
 
-# Wallets and transactions
-**Access Wallets and Manage Transactions:**
-- **Initialize SDK**: Ensure the SDK is initialized and the user is authenticated to begin operations.
-- **Wallet Access**: Access the wallet linked to the user's authenticated account. This wallet serves as the gateway to all account operations.
+# Wallets and Transactions
 
-## Wallet address
+- [**Initialize SDK & Perform Authentication**](/solutions/wallets/embedded-wallet/examples/use-wallets#initialize-sdk--perform-authentication): Ensure the SDK is initialized and the user is authenticated via one of our offered social options to begin using WaaS functions.
+- [**Wallet Access**](/solutions/wallets/embedded-wallet/examples/use-wallets#wallet-address): Access the wallet linked to the user's authenticated account. This wallet serves as the gateway to all account functions.
+- [**Social Identifiers**](/solutions/wallets/embedded-wallet/examples/use-wallets#authenticated-email-address): Access the email linked to the user's authenticated account. This email is only available upon authenticating a session.
+- [**Send Transactions**](/solutions/wallets/embedded-wallet/examples/use-wallets#send-transactions): After a user has been authenticated, use the WaaS SDK to send transactions using crafted EVM calldata.
 
-Each user's wallet address is unique, cannot be changed, and is 42 characters long, starting with `0x`.
+## Install SDK
 
-```ts
+```sh
+npm install @0xsequence/waas
+```
+
+or
+
+```sh
+pnpm install @0xsequence/waas
+```
+
+or
+
+```sh
+yarn add @0xsequence/waas
+```
+
+## Initialize SDK & Perform Authentication
+
+Before you can use the Sequence WaaS SDK, you need to acquire the following configuration keys from the Sequence Builder:
+
+- `WaaSConfigKey`: This key can be learned about [here](/solutions/builder/embedded-wallet)
+- `ProjectAccessKey`: This key can be learned about [here](/solutions/builder/getting-started#claim-an-api-access-key)
+
+Then, you'll need to input the [JWT](https://jwt.io/introduction) `idToken` from the social auth method, usually looking in the form of `eyJh...`:
+
+```typescript
 import { SequenceWaaS } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
-    projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
-    waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+    projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+    waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
     network: "arbitrum-nova",
   }
 );
 
-await waas.signIn({ idToken }, "Session name");
+await sequence.signIn({ idToken }, "Session name");
+```
 
-const address = await waas.getAddress();
+## Wallet Address
+
+Each user's wallet address is unique, cannot be changed, and is 42 characters long, starting with `0x`:
+
+```ts
+import { SequenceWaaS } from "@0xsequence/waas";
+
+const sequence = new SequenceWaaS(
+  {
+    projectAccessKey: `${process.env.VITE_PROJECT_ACCESS_KEY}`,
+    waasConfigKey: `${process.env.VITE_WAAS_CONFIG_KEY}`,
+    network: "arbitrum-nova",
+  }
+);
+
+const { wallet } = await sequence.signIn({ idToken }, "Session name")
+const address = await sequence.getAddress();
+
+console.log(address == wallet) // true
+
+console.log(address)
 ```
 
 ```
 0xE4b10c53aa75E19E088cfDD0cff7D46a0E4206F0
 ```
 
-## Sign messages
+## Sign Messages
 
-Wallets can sign messages, which can be validated both onchain and offchain.
+Wallets can sign messages, which can be validated both onchain and offchain:
 
 ```ts
 import { SequenceWaaS } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
     projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
     waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
@@ -44,9 +90,9 @@ const waas = new SequenceWaaS(
   }
 );
 
-await waas.signIn({ idToken }, "Session name");
+await sequence.signIn({ idToken }, "Session name");
 
-const signature = await waas.signMessage({
+const signature = await sequence.signMessage({
   chainId: 137,
   message: "Hello world",
 });
@@ -64,11 +110,35 @@ console.log(signature);
 }
 ```
 
-## Send transactions
+## Authenticated Email Address
+
+When the WaaS object is called upon to sign in a user using an `idToken`, the email address of the user authenticated is returned in an `email` property of the returned object:
+
+```typescript
+import { SequenceWaaS } from "@0xsequence/waas";
+
+const sequence = new SequenceWaaS(
+  {
+    projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
+    waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
+    network: "arbitrum-nova",
+  }
+);
+
+await sequence.signIn({ idToken }, "Session name");
+
+const { email } = await sequence.signIn({ idToken }, "Session name")
+```
+
+```
+email@horizon.io
+```
+
+## Send Transactions
 
 All wallets can send transactions right after creation. No extra steps are required to create the wallet, as all users have a wallet by default.
 
-### Raw transaction
+### Raw Transaction
 
 - **Immediate Transactions:** Wallets are ready to send transactions immediately upon creation.
 - **Raw Transactions:** Specify transaction parameters such as recipient, value, and data. Gas limits and nonce are managed automatically.
@@ -81,7 +151,7 @@ Error Handling: Use `isSentTransactionResponse` to verify transactions before ex
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
     projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
     waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
@@ -89,9 +159,9 @@ const waas = new SequenceWaaS(
   }
 );
 
-await waas.signIn({ idToken }, "Session name");
+await sequence.signIn({ idToken }, "Session name");
 
-const tx = await waas.sendTransaction({
+const tx = await sequence.sendTransaction({
   chainId: 42161,
   transactions: [
     {
@@ -121,14 +191,14 @@ if (isSentTransactionResponse(tx)) {
 }
 ```
 
-### Send ERC20 tokens
+### Send ERC20 Tokens
 
-Helper methods are available for common operations, such as sending ERC20 tokens. This automatically handles the `data` field of the transaction.
+Helper methods are available for common operations, such as sending ERC20 tokens. This automatically handles the `data` field of the transaction:
 
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
     projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
     waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
@@ -137,9 +207,9 @@ const waas = new SequenceWaaS(
   defaults.TEST
 );
 
-await waas.signIn({ idToken }, "Session name");
+await sequence.signIn({ idToken }, "Session name");
 
-const tx = await waas.sendERC20({
+const tx = await sequence.sendERC20({
   chainId: 42161,
   token: "0x6b175474e89094c44da98b954eedeac495271d0f", // DAI
   to: "0x27CabC9700EE6Db2797b6AC1e1eCe81C72A2cD8D", // Recipient
@@ -165,12 +235,12 @@ if (isSentTransactionResponse(tx)) {
 }
 ```
 
-### Send ERC721 tokens
-Sending ERC721 tokens  has a helper method. This automatically handles the `data` field of the transaction.
+### Send ERC721 Tokens
+Sending ERC721 tokens  has a helper method. This automatically handles the `data` field of the transaction:
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
     projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
     waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
@@ -178,9 +248,9 @@ const waas = new SequenceWaaS(
   }
 );
 
-await waas.signIn({ idToken });
+await sequence.signIn({ idToken });
 
-const tx = await waas.sendERC721({
+const tx = await sequence.sendERC721({
   chainId: 42161,
   token: "0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d", // Decentraland LAND
   to: "0x27CabC9700EE6Db2797b6AC1e1eCe81C72A2cD8D", // Recipient
@@ -206,14 +276,14 @@ if (isSentTransactionResponse(tx)) {
 }
 ```
 
-### Send ERC1155 tokens
+### Send ERC1155 Tokens
 
-Sending ERC1155 tokens is also supported.
+Sending ERC1155 tokens is also supported:
 
 ```ts
 import { Sequence, isSentTransactionResponse } from "@0xsequence/waas";
 
-const waas = new SequenceWaaS(
+const sequence = new SequenceWaaS(
   {
     projectAccessKey: `${process.env.PROJECT_ACCESS_KEY}`,
     waasConfigKey: `${process.env.WAAS_CONFIG_KEY}`,
@@ -221,9 +291,9 @@ const waas = new SequenceWaaS(
   }
 );
 
-await waas.signIn({ idToken });
+await sequence.signIn({ idToken });
 
-const tx = await waas.sendERC1155({
+const tx = await sequence.sendERC1155({
   chainId: 137,
   token: "0x631998e91476da5b870d741192fc5cbc55f5a52e", // Skyweaver assets
   values: [
@@ -239,15 +309,15 @@ const tx = await waas.sendERC1155({
 });
 ```
 
-### Call any contract
+### Call any Contract
 
 Use **`callContract`** to interact with any contract method, either through a function signature or ABI, supporting both named and positional arguments.
 
-### Function signature
+### Function Signature
 
 Providing a function signature is the easiest way to call a contract method, as it doesn't require an ABI. The function signature can be provided with named parameters or positional parameters.
 
-##### Named arguments
+##### Named Arguments
 
 ```ts
 const tx = await sequence.callContract({
@@ -262,7 +332,7 @@ const tx = await sequence.callContract({
 });
 ```
 
-##### Positional arguments
+##### Positional Arguments
 
 Notice that passing a named function signature with positional arguments is allowed.
 
