@@ -1,4 +1,5 @@
-# Advanced - Introduction
+# Advanced Blockchain Interactions
+## Introduction
 
 For advanced users with experience developing applications on EVM-based blockchains, we've provided our own lightweight, custom-made for Unity, Ethereum library: [SequenceEthereum](https://github.com/0xsequence/sequence-unity/tree/master/Assets/SequenceSDK/Ethereum).
 SequenceEthereum should provide everything you need to build your Unity app on the EVM, without all the extra bells and whistles that the popular [Nethereum](https://github.com/Nethereum/Nethereum) library provides.
@@ -6,25 +7,25 @@ SequenceEthereum should provide everything you need to build your Unity app on t
 While SequenceEthereum is heavily tested, in general, when working with asynchronous methods in the library, you should consider them to be "unsafe", in that they <i>may</i> throw Exceptions when used improperly.
 In general, wrapping async calls that can potentially throw Exceptions in try catch blocks is a best practice; particularly in Unity, where `Tasks` can fail silently when throwing exceptions - making debugging difficult when not wrapping calls in try catch blocks.
 
-## Important Components
+### Important Components
 
 When working with the SequenceEthereum library it can be helpful to understand some of the main "components" and how they logically fit together.
 
-### [Client](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Provider/IEthClient.cs)
+#### [Client](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Provider/IEthClient.cs)
 
 Clients handle the connection to blockchain networks, making various RPC requests. Any time you wish to query the blockchain or submit a transaction, you will need a client. As a rule of thumb, if a method requires a client, you should expect that you will be making a web request and will need to work with async tasks and be prepared to catch any exceptions that are thrown.
 
-### [Wallet](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Wallet/IWallet.cs)
+#### [Wallet](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Wallet/IWallet.cs)
 
 A wallet keeps track of its own private/public key pair and address and is responsible for providing its private key to the signer when signing transactions.
 
-### [Transaction](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Transaction/EthTransaction.cs)
+#### [Transaction](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Transaction/EthTransaction.cs)
 
 A transaction, as implemented in `EthTransaction`, contains all the data and parameters for an EVM transaction. The object is used for initiating its [RLP encoding](https://ethereum.org/en/developers/docs/data-structures-and-encoding/rlp/) (transactions must be signed and RLP encoded when submitted). 
 
 Note that all transactions are encoded with a chain id included to protect against replay attacks, see [EIP-155](https://eips.ethereum.org/EIPS/eip-155).
 
-### [Contract](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Contract/Contract.cs)
+#### [Contract](https://github.com/0xsequence/sequence-unity/blob/master/Assets/SequenceSDK/Ethereum/Contract/Contract.cs)
 
 A contract is responsible for creating transactions (for method calls) and messages (for queries) agaisnt it. These transactions are later signed by the wallet and submitted (along with query messages) using a client.
 

@@ -357,7 +357,7 @@ export const sidebar = {
           { text: 'Deploy Contracts', link: '/sdk/unity/deploy-contracts' },
           { text: 'On-Ramp Funds via Credit Card', link: '/sdk/unity/onboard-user-funds'},
           { text: 'Wallet UI', link: '/sdk/unity/wallet-ui' },
-          { text: 'Advanced', collapsed: true,  items: [
+          { text: 'Advanced Blockchain Interactions', collapsed: true,  items: [
             { text: 'Introduction', link: '/sdk/unity/Advanced/introduction' },
             { text: 'Wallets', link: '/sdk/unity/Advanced/wallets' },
             { text: 'Clients', link: '/sdk/unity/Advanced/clients' },
