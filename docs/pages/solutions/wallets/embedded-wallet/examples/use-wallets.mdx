@@ -3,8 +3,8 @@ import { Callout } from "vocs/components";
 # Wallets and Transactions
 
 - [**Initialize SDK & Perform Authentication**](/solutions/wallets/embedded-wallet/examples/use-wallets#initialize-sdk--perform-authentication): Ensure the SDK is initialized and the user is authenticated via one of our offered social options to begin using WaaS functions.
-- [**Wallet Access**](/solutions/wallets/embedded-wallet/examples/use-wallets#wallet-address): Access the wallet linked to the user's authenticated account. This wallet serves as the gateway to all account functions.
-- [**Social Identifiers**](/solutions/wallets/embedded-wallet/examples/use-wallets#authenticated-email-address): Access the email linked to the user's authenticated account. This email is only available upon authenticating a session.
+- [**Wallet Access**](/solutions/wallets/embedded-wallet/examples/use-wallets#wallet-access): Access the wallet linked to the user's authenticated account. This wallet serves as the gateway to all account functions.
+- [**Social Identifiers**](/solutions/wallets/embedded-wallet/examples/use-wallets#social-identifiers): Access the email linked to the user's authenticated account. This email is only available upon authenticating a session.
 - [**Send Transactions**](/solutions/wallets/embedded-wallet/examples/use-wallets#send-transactions): After a user has been authenticated, use the WaaS SDK to send transactions using crafted EVM calldata.
 
 ## Install SDK
@@ -48,7 +48,9 @@ const sequence = new SequenceWaaS(
 await sequence.signIn({ idToken }, "Session name");
 ```
 
-## Wallet Address
+## Wallet Access
+
+### Wallet Address
 
 Each user's wallet address is unique, cannot be changed, and is 42 characters long, starting with `0x`:
 
@@ -75,7 +77,7 @@ console.log(address)
 0xE4b10c53aa75E19E088cfDD0cff7D46a0E4206F0
 ```
 
-## Sign Messages
+### Sign Messages
 
 Wallets can sign messages, which can be validated both onchain and offchain:
 
@@ -110,7 +112,9 @@ console.log(signature);
 }
 ```
 
-## Authenticated Email Address
+## Social Identifiers
+
+### Authenticated Email Address
 
 When the WaaS object is called upon to sign in a user using an `idToken`, the email address of the user authenticated is returned in an `email` property of the returned object:
 
