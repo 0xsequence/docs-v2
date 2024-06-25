@@ -95,7 +95,7 @@ const sequence = new SequenceWaaS(
 await sequence.signIn({ idToken }, "Session name");
 
 const signature = await sequence.signMessage({
-  chainId: 137,
+  chainId: 42170,
   message: "Hello world",
 });
 
