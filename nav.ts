@@ -67,7 +67,7 @@ export const sidebar = {
   // Overview
   '/solutions': [
     {
-      text: 'Wallets',
+      text: 'Onboarding',
       items: [
         { text: 'Overview', link: '/solutions/wallets/overview' },
         { text: 'Embedded Wallet', link: '/solutions/wallets/embedded-wallet/overview', match: '/solutions/wallets/embedded-wallet/overview', items: [
@@ -95,6 +95,15 @@ export const sidebar = {
           },
         ]
       },
+      { text: 'Sequence Kit', collapsed: true, items: [
+        { text: 'Overview', link: '/sdk/sequence-kit/overview' },
+        { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
+        { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
+        { text: 'On-ramp', link: '/sdk/sequence-kit/on-ramp' },
+        { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
+        { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
+      ]
+     },
         { text: 'Universal Wallet', link: '/solutions/wallets/universal-wallet/overview',
         items: [
           {text: 'Overview', link: '/solutions/wallets/universal-wallet/overview'},
@@ -122,13 +131,12 @@ export const sidebar = {
         items: [
           {text: 'Overview', link: '/solutions/wallets/link-wallets/overview'},
           {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
-        ]
-      }
-
+          ]
+        }
       ]
     },
     {
-      text: 'Marketplace',
+      text: 'Monetize',
       // collapsed: true,
       items: [
         { text: 'Overview', link: '/solutions/marketplaces/overview' },
@@ -136,13 +144,13 @@ export const sidebar = {
         { text: 'Build your Custom Marketplace', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/marketplaces/orderbook/overview'},
           {text: 'Quickstart', link: '/solutions/marketplaces/orderbook/quickstart'},
-          
         ]
-       }
+       },
+       { text: 'On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
       ]
     },
     {
-      text: 'Collectibles',
+      text: 'Power',
       items: [
         { text: 'Deployable Contracts' , collapsed: true, items: [
           { text: 'Deploy a Collectible Contract', link: '/solutions/collectibles/contracts/deploy-an-item-collection'},
@@ -160,14 +168,7 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Payments',
-      items: [
-        // { text: 'NFT Checkout', link: '/solutions/nft-checkout' },
-        { text: 'On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
-      ]
-    },
-    {
-      text: 'Builder Console',
+      text: 'Builder Developer Console',
       link: '/solutions/builder/overview',
       match: '/solutions/builder/overview',
       items: [
@@ -392,15 +393,6 @@ export const sidebar = {
     {
       text: 'Web3',
       items: [
-        { text: 'Sequence Kit', collapsed: true, items: [
-          { text: 'Overview', link: '/sdk/sequence-kit/overview' },
-          { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
-          { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
-          { text: 'On-ramp', link: '/sdk/sequence-kit/on-ramp' },
-          { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
-          { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
-        ]
-       },
         { text: 'TypeScript', collapsed: true, items: [
           {text: 'Overview', link: '/sdk/typescript/guides/overview'},
           {text: 'Connect Wallet', link: '/sdk/typescript/guides/connect-wallet'},
