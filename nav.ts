@@ -27,7 +27,7 @@ export const topNav = [
       { text: 'Unity', link: '/sdk/unity/overview', match: '/sdk/unity/overview' },
       { text: 'Unreal', link: '/sdk/unreal/overview', match: '/sdk/unreal/overview' },
       { text: 'Typescript', link: '/sdk/typescript/guides/overview', match: '/sdk/typescript/guides/overview' },
-      { text: 'Sequence Kit', link: '/sdk/sequence-kit/overview', match: '/sdk/sequence-kit/overview' },
+      { text: 'Sequence Kit', link: '/solutions/wallets/sequence-kit/overview', match: '/solutions/wallets/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
       { text: 'Mobile', link: '/sdk/mobile', match: '/sdk/mobile' },
@@ -67,12 +67,26 @@ export const sidebar = {
   // Overview
   '/solutions': [
     {
-      text: 'Onboarding',
+      text: 'Overview',
+      link: '/solutions/builder/overview',
+    },
+    {
+      text: 'Getting Started',
+      link: '/solutions/builder/getting-started',
+    },
+    {
+      text: 'Onboard',
       items: [
         { text: 'Overview', link: '/solutions/wallets/overview' },
-        { text: 'Embedded Wallet', link: '/solutions/wallets/embedded-wallet/overview', match: '/solutions/wallets/embedded-wallet/overview', items: [
+        { text: 'Embedded Wallet', link: '/solutions/wallets/embedded-wallet/overview', collapsed: false, items: [
           {text: 'Overview', link: '/solutions/wallets/embedded-wallet/overview'},
           {text: 'Quickstart', link: '/solutions/wallets/embedded-wallet/quickstart'},
+          {text: 'Setup', collapsed: true, items: [
+            {text: 'Configuration', link: '/solutions/builder/embedded-wallet'},
+            {text: 'Google Setup', link: '/solutions/builder/embedded-wallet/google-configuration'},
+            {text: 'Apple Setup', link: '/solutions/builder/embedded-wallet/apple-configuration'},
+          ]
+        },
           {
             text: 'Examples', collapsed: true, items: [
             {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
@@ -96,15 +110,22 @@ export const sidebar = {
         ]
       },
       { text: 'Sequence Kit', collapsed: true, items: [
-        { text: 'Overview', link: '/sdk/sequence-kit/overview' },
-        { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
-        { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
-        { text: 'On-ramp', link: '/sdk/sequence-kit/on-ramp' },
-        { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
-        { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
+        { text: 'Overview', link: '/solutions/wallets/sequence-kit/overview' },
+        { text: 'Quickstart', link: '/solutions/wallets/sequence-kit/getting-started' },
+        { text: 'Configuration', link: '/solutions/wallets/sequence-kit/configuration' },
+        { text: 'On-ramp', link: '/solutions/wallets/sequence-kit/on-ramp' },
+        { text: 'Checkout', link: '/solutions/wallets/sequence-kit/checkout' },
+        { text: 'Custom Connectors', link: '/solutions/wallets/sequence-kit/custom-connectors' }
       ]
      },
-        { text: 'Universal Wallet', link: '/solutions/wallets/universal-wallet/overview',
+
+        { text: 'Wallet Linking', collapsed: true, 
+        items: [
+          {text: 'Overview', link: '/solutions/wallets/link-wallets/overview'},
+          {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
+          ]
+        },
+        { text: 'Universal Wallet', collapsed: true, link: '/solutions/wallets/universal-wallet/overview',
         items: [
           {text: 'Overview', link: '/solutions/wallets/universal-wallet/overview'},
           {text: 'Quickstart', link: '/solutions/wallets/universal-wallet/quickstart'},
@@ -127,12 +148,6 @@ export const sidebar = {
           {text: 'Key Management', link: '/solutions/wallets/universal-wallet/key-management'}
         ]
         },
-        { text: 'Wallet Linking', collapsed: true, 
-        items: [
-          {text: 'Overview', link: '/solutions/wallets/link-wallets/overview'},
-          {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
-          ]
-        }
       ]
     },
     {
@@ -146,13 +161,15 @@ export const sidebar = {
           {text: 'Quickstart', link: '/solutions/marketplaces/orderbook/quickstart'},
         ]
        },
-       { text: 'On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
+       { text: 'Fiat On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
       ]
     },
     {
       text: 'Power',
       items: [
+        { text: 'Overview', link: '/solutions/power-overview' },
         { text: 'Deployable Contracts' , collapsed: true, items: [
+          { text: 'Overview', link: '/solutions/builder/contracts'},
           { text: 'Deploy a Collectible Contract', link: '/solutions/collectibles/contracts/deploy-an-item-collection'},
           // {text: 'Mint In-Game Items and Achievements (ERC1155)', link: '/solutions/collectibles/contracts/900-mint-items-from-ERC1155'},
           // {text: 'Mint Digital Collectibles (ERC721)', link: '/solutions/collectibles/contracts/902-mint-collectibles-from-ERC721'},
@@ -160,38 +177,35 @@ export const sidebar = {
         ],
       },
         { 
-          text: 'Metadata', collapsed: true, items: [
-          { text: 'Manage Metadata in Builder', link: '/solutions/collectibles/metadata/manage-metadata-builder' }
-        ],
-      }
+          text: 'Manage Collections', link: '/solutions/builder/collections'
+      },
+      { 
+        text: 'Querying Blockchain Data', collapsed: false,
+        items: [
+            { text: 'Indexer', link: '/solutions/builder/indexer' },
+            { text: 'Webhooks', link: '/solutions/builder/webhooks'},
+          ],
+      },
+      { 
+        text: 'Analytics', link: '/solutions/builder/analytics' 
+      },
+      { 
+        text: 'Transaction Manager', link: '/solutions/builder/transactions' 
+      },
+      { 
+        text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
+      },
+      { 
+        text: 'Node Gateway', link: '/solutions/builder/node-gateway' 
+      },
         // { text: 'Minter', link: '/solutions/minter' }
       ]
     },
-    {
-      text: 'Builder Developer Console',
-      link: '/solutions/builder/overview',
-      match: '/solutions/builder/overview',
-      items: [
-        {text: 'Overview', link: '/solutions/builder/overview'},
-        {text: 'Get Started', link: '/solutions/builder/getting-started'},
-        {text: 'Project Management', link: '/solutions/builder/project-management'},
-        {text: 'Collections', link: '/solutions/builder/collections'},
-        {text: 'Contracts', link: '/solutions/builder/contracts'},
-        {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
-        {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
-        {text: 'Embedded Wallet', collapsed: true, items: [
-          {text: 'Overview', link: '/solutions/builder/embedded-wallet'},
-          {text: 'Google Configuration', link: '/solutions/builder/embedded-wallet/google-configuration'},
-          {text: 'Apple Configuration', link: '/solutions/builder/embedded-wallet/apple-configuration'},
-        ]},
-        {text: 'Node Gateway', link: '/solutions/builder/node-gateway'},
-        {text: 'Marketplaces', link: '/solutions/builder/marketplaces'},
-        {text: 'Indexer', link: '/solutions/builder/indexer'},
-        {text: 'Webhooks', link: '/solutions/builder/webhooks'},
-        {text: 'Analytics', link: '/solutions/builder/analytics'},
-        {text: 'Settings', link: '/solutions/builder/project-settings'},
-      ]
-    },
+    // {
+    //   text: 'Sequence Builder',
+    //   link: '/solutions/builder/overview',
+    //   match: '/solutions/builder/overview',
+    // },
     {
       text: 'Technical References',
       items: [
@@ -523,7 +537,10 @@ export const sidebar = {
   ],
   
   // Support
-  '/support': {
+  '/support': 
+    [
+      {
+    text: 'Support',
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
@@ -533,8 +550,18 @@ export const sidebar = {
       { text: 'Discord', link: 'https://discord.gg/sequence' },
       { text: 'We\'re hiring!', link: 'https://horizon.io/careers' },
       { text: 'Contact Us', link: 'https://support.sequence.xyz' },
-    ]
+    ], 
   },
+  {
+  text: 'Sequence Builder Admin',
+  items: [
+    { text: 'Project Management', link: '/support/builder/project-management' },
+    { text: 'Project Settings', link: '/support/builder/project-settings' },
+    ],
+  }
+]
+
+
 
 
 
