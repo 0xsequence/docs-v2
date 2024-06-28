@@ -24,6 +24,7 @@ Try out the Transactions API with [your own deployed template](https://railway.a
 :::
 
 #### Google Key Management Serice Cloud Management
+Google Key Management Service (KMS) is a cloud service provided by Google Cloud that enables you to manage cryptographic keys for your cloud services in a secure and compliant manner. 
 
 ##### 1. Create an account in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
 ##### 2. Download Google CLI locally
@@ -35,7 +36,21 @@ Follow the walkthrough on Google's site to install the cli locally to create EVM
 gcloud auth application-default login
 ```
 
-##### 4. Create Key Ring 
+##### 4. Enabled API & Billing 
+
+Make sure [Billing is enabled](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled#console) and you have Enabled the [Cloud KMS API](https://console.cloud.google.com/flows/enableapi?apiid=cloudkms.googleapis.com&redirect=https://console.cloud.google.com&_ga=2.21571387.1641992167.1719602769-587765847.1712674892) 
+
+##### 5. Initialize the CLI
+
+```shell
+gcloud init
+```
+
+<Callout type="warning">
+Important: This quickstart creates Cloud KMS resources such as key rings and keys. Once created, these resources cannot be deleted. For more information, see Why can't I delete keys or key rings?.
+</Callout>
+
+##### 6. Create Key Ring 
 
 The following creates a key ring called `test` where it's available globally:
 
@@ -44,7 +59,7 @@ gcloud kms keyrings create "test" \
     --location "global"
 ```
 
-##### 5. Create Signing Key in Cloud
+##### 7. Create Signing Key in Cloud
 Using the previous parameters key ring, and creating a Hardware Security Module (HSM) asymmetric-signing key of the EVM based Elliptic Curve
 
 ```shell
