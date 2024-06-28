@@ -3,15 +3,10 @@ import type { Sidebar, TopNav } from 'vocs'
 export const topNav = [
   { text: 'Solutions', 
   items: [
-    { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
-    { text: 'Marketplace', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
-    { text: 'Collectibles', link: '/solutions/collectibles/contracts/deploy-an-item-collection', match: '/solutions/collectibles/contracts/deploy-an-item-collection' },
-    { text: 'Payments', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
-    { text: 'Builder Console', link: '/solutions/builder/overview', match: '/solutions/builder/overview', items: [
-      { text: 'Overview', link: '/solutions/builder/overview', match: '/solutions/builder/overview' }, 
-    ]
-  },
-  { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
+    { text: 'Onboard', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
+    { text: 'Monetize', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
+    { text: 'Power', link: '/solutions/power-overview', match: '/solutions/power-overview' },
+    // { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
 ]
 },
   {
