@@ -1,0 +1,100 @@
+import {Callout} from 'vocs/components'
+
+# Transactions API Service
+
+The Sequence Transactions API (or the technical term Relayer service) offers a simple interface for dispatching meta-transactions on Ethereum-compatible networks.
+
+Meta-transactions are the idea of a transaction inside of a transaction. 
+
+The best part: transactions with Sequence Transactions API are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Transactions API doesn't require any changes to your contracts or dapp. 
+
+The only cavet is that the `msg.sender` is one of the Sequence Relayer addresses.
+
+[See benefits](/api/transactions/overview#benefits)
+
+## Quickstart
+
+### Try your own Deployable Template 
+
+::::steps
+#### Access Railway Template
+
+:::info
+Try out the Transactions API with [your own deployed template](https://railway.app/template/ERJVm2)
+:::
+
+#### Google Key Management Serice Cloud Management
+
+##### 1. Create an account in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
+##### 2. Download Google CLI locally
+Follow the walkthrough on Google's site to install the cli locally to create EVM access keys [here](https://cloud.google.com/sdk/docs/install)
+
+##### 3. Login to the developer Console locally 
+
+```shell
+gcloud auth application-default login
+```
+
+##### 4. Create Key Ring 
+
+The following creates a key ring called `test` where it's available globally:
+
+```shell
+gcloud kms keyrings create "test" \
+    --location "global"
+```
+
+##### 5. Create Signing Key in Cloud
+Using the previous parameters key ring, and creating a Hardware Security Module (HSM) asymmetric-signing key of the EVM based Elliptic Curve
+
+```shell
+gcloud kms keys create evm_key     \ 
+    --location "global" \
+    --keyring "test" \     
+    --purpose "asymmetric-signing" \     
+    --default-algorithm "ec-sign-secp256k1-sha256" \     
+    --protection-level "hsm"
+```
+
+#### Sequence Builder Project Management
+
+Create a project using this [walkthrough](/solutions/builder/getting-started).
+
+#### Access Key Management
+
+Obtain a Project Access Key using this [walkthrough](/solutions/builder/getting-started#claim-an-api-access-key).
+
+#### Deploy an ERC1155 or ERC721 Collectible Contract
+
+Deploy a collectible contract by following this [walkthrough](/solutions/collectibles/contracts/deploy-an-item-collection).
+
+#### Complete Railway Template Variables
+Use all the values from the previous steps to complete and deploy the online template.
+
+#### Update Exposed Port in Interface
+Access settings for your deployment update the exposed port to `3000`:
+
+##### Generate Domain
+![update exposed port](/img/payments/transactions_api_service_deployed_generate_domain.png)
+
+##### Set Port
+![update exposed port](/img/payments/transactions_api_service_deployed_set_port_generate_domain.png)
+
+#### Clone the Frontend Template
+
+Clone the [following template](https://github.com/moskalyk/nodejs-transactions-api/tree/master) and update the [`SERVER_URL`](https://github.com/moskalyk/nodejs-transactions-api/blob/master/client/src/App.tsx#L8) with your deployed template url.
+
+Finally, sign in and mint!
+
+<Callout type='info'>
+The backend Transactions API template will only accept requests from `http://localhost:5173`
+</Callout>
+::::
+
+## Template Source Code
+
+Want to further customize?
+
+:::info
+Get started quickly with the source code of the [template](https://github.com/0xsequence-demos/template-node-transactions-backend) using Transactions API
+:::

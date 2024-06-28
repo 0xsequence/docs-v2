@@ -165,7 +165,7 @@ export const sidebar = {
       ]
     },
     {
-      text: 'Power',
+      text: 'Empower',
       items: [
         { text: 'Overview', link: '/solutions/power-overview' },
         { text: 'Deployable Contracts' , collapsed: true, items: [
@@ -175,29 +175,29 @@ export const sidebar = {
           // {text: 'Mint Digital Collectibles (ERC721)', link: '/solutions/collectibles/contracts/902-mint-collectibles-from-ERC721'},
           { text: 'Deploy an In-Game Currency (ERC20)', link: '/solutions/collectibles/contracts/deploy-ERC20-currency'},
         ],
-      },
+        },
         { 
           text: 'Manage Collections', link: '/solutions/builder/collections'
-      },
-      { 
-        text: 'Querying Blockchain Data', collapsed: false,
-        items: [
-            { text: 'Indexer', link: '/solutions/builder/indexer' },
-            { text: 'Webhooks', link: '/solutions/builder/webhooks'},
-          ],
-      },
-      { 
-        text: 'Analytics', link: '/solutions/builder/analytics' 
-      },
-      { 
-        text: 'Transaction Manager', link: '/solutions/builder/transactions' 
-      },
-      { 
-        text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
-      },
-      { 
-        text: 'Node Gateway', link: '/solutions/builder/node-gateway' 
-      },
+        },
+        { 
+          text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
+        },
+        { 
+          text: 'Transactions API Service', link: '/solutions/payments/transactions-api/quickstart' 
+        },
+        { 
+          text: 'Querying Blockchain Data', collapsed: false,
+          items: [
+              { text: 'Indexer', link: '/solutions/builder/indexer' },
+              { text: 'Webhooks', link: '/solutions/builder/webhooks'},
+            ],
+        },
+        { 
+          text: 'Analytics', link: '/solutions/builder/analytics' 
+        },
+        { 
+          text: 'Node Gateway', link: '/solutions/builder/node-gateway' 
+        },
         // { text: 'Minter', link: '/solutions/minter' }
       ]
     },
