@@ -19,14 +19,15 @@ The only cavet is that the `msg.sender` is one of the Sequence Relayer addresses
 ::::steps
 #### Access Railway Template
 
-:::info
 Try out the Transactions API with [your own deployed template](https://railway.app/template/ERJVm2)
-:::
 
 #### Google Key Management Serice Cloud Management
 Google Key Management Service (KMS) is a cloud service provided by Google Cloud that enables you to manage cryptographic keys for your cloud services in a secure and compliant manner. 
 
-##### 1. Create an account in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
+##### 1. Create an account & project in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
+
+The project ID you create will be used for `GOOGLE_KMS_PROJECT`.
+
 ##### 2. Download Google CLI locally
 Follow the walkthrough on Google's site to install the cli locally to create EVM access keys [here](https://cloud.google.com/sdk/docs/install)
 
@@ -47,7 +48,9 @@ gcloud init
 ```
 
 <Callout type="warning">
-Important: This quickstart creates Cloud KMS resources such as key rings and keys. Once created, these resources cannot be deleted. For more information, see Why can't I delete keys or key rings?.
+Important: This quickstart creates Cloud KMS resources such as key rings and keys. Once created, these resources cannot be deleted. 
+
+For more information, see [Why can't I delete keys or key rings?](https://cloud.google.com/kms/docs/faq#cannot_delete)
 </Callout>
 
 ##### 6. Create Key Ring 
@@ -59,29 +62,40 @@ gcloud kms keyrings create "test" \
     --location "global"
 ```
 
+What you put for `"test"` will be used for `GOOGLE_KMS_KEY_RING`.
+
 ##### 7. Create Signing Key in Cloud
 Using the previous parameters key ring, and creating a Hardware Security Module (HSM) asymmetric-signing key of the EVM based Elliptic Curve
 
 ```shell
-gcloud kms keys create evm_key     \ 
+gcloud kms keys create "evm_key"     \ 
     --location "global" \
     --keyring "test" \     
     --purpose "asymmetric-signing" \     
     --default-algorithm "ec-sign-secp256k1-sha256" \     
     --protection-level "hsm"
 ```
+What you put for `--location` will be used for `GOOGLE_KMS_LOCATION`.
+
+What you replace `evm_key` with will be used for `GOOGLE_KMS_CRYPTO_KEY`.
 
 #### Sequence Builder Project Management
 
 Create a project using this [walkthrough](/solutions/builder/getting-started).
 
+What network you assign to the project will be used for `CHAIN_HANDLE`. See Chain [Support](/solutions/technical-references/chain-support). 
+
 #### Access Key Management
 
 Obtain a Project Access Key using this [walkthrough](/solutions/builder/getting-started#claim-an-api-access-key).
 
+This will be used for `PROJECT_ACCESS_KEY`.
+
 #### Deploy an ERC1155 or ERC721 Collectible Contract
 
 Deploy a collectible contract by following this [walkthrough](/solutions/collectibles/contracts/deploy-an-item-collection).
+
+This contract will be used for `COLLECTIBLE_CONTRACT_ADDRESS`.
 
 #### Complete Railway Template Variables
 Use all the values from the previous steps to complete and deploy the online template.
@@ -102,7 +116,7 @@ Clone the [following template](https://github.com/moskalyk/nodejs-transactions-a
 Finally, sign in and mint!
 
 <Callout type='info'>
-The backend Transactions API template will only accept requests from `http://localhost:5173`
+The backend Transactions API template will only accept requests from `http://localhost:5173`.
 </Callout>
 ::::
 
