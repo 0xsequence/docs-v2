@@ -67,30 +67,9 @@ Finally, to start building you'll need to claim an access key from the Builder, 
 
 ![open project settings](/img/builder/builder_open_access_key_settings.png)
 
-Within the `settings` of the `API Access Keys` select the `dev` access key, which is typically used for development environments, whereas the `prod` key is used for production envrionments for applications in front of your users.
+Within the `settings` of the `API Access Keys` select the `dev` access key, which is typically used for development environments, whereas the `prod` key is used for production environments for applications in front of your users.
 
 ![settings api keys](/img/builder/builder_settings_api_keys.png)
-
-Finally copy the key from the settings by selecting the `copy`
-
-![copy access key](/img/builder/builder_settings_copy_key.png)
-
-To test it in action, create a js/ts frontend project in your terminal install the following packages
-
-```shell
-pnpm install 0xsequence ethers@5.7.2
-```
-
-and run the following code from the browser:
-
-```js
-import { sequence } from "0xsequence";
-const wallet = sequence.initWallet("<access_key>", {
-  defaultNetwork: "polygon",
-});
-const connectDetails = await wallet.connect({ app: "Your app name" });
-console.log("=> connected?", connectDetails.connected);
-```
 
 ### (Optional for Development) Create a Service Account
 

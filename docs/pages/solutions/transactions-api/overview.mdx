@@ -1,0 +1,126 @@
+import {Callout} from 'vocs/components'
+
+# Transactions Manager
+
+The Sequence Transactions Manager offers a simple interface for dispatching transactions on Ethereum-compatible networks to service your game or app and scale to millions of users through a enormous amount of [benefits](/api/transactions/overview#benefits).
+
+The best part: transactions with Sequence Transaction Manager are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Transactions Manager doesn't require any changes to your contracts or dapp. 
+
+## Quickstart
+
+### Try your own Deployable Template 
+
+::::steps
+#### Access Railway Template
+
+Try out the Transactions Manager with [your own deployed template](https://railway.app/template/ERJVm2)
+
+#### Google Key Management Serice Cloud Management
+Google Key Management Service (KMS) is a cloud service provided by Google Cloud that enables you to manage cryptographic keys for your cloud services in a secure and compliant manner. 
+
+##### 1. Create an Account & Project in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
+
+The project ID you create should be used for `GOOGLE_KMS_PROJECT`.
+
+##### 2. Download Google CLI Locally
+Follow the walkthrough on Google's site to install the cli locally to create EVM access keys [here](https://cloud.google.com/sdk/docs/install)
+
+##### 3. Login to the Developer Console Locally 
+
+```shell
+$ gcloud auth application-default login
+```
+
+##### 4. Enabled API & Billing 
+
+Make sure [Billing is enabled](https://cloud.google.com/billing/docs/how-to/verify-billing-enabled#console) and you have Enabled the [Cloud KMS API](https://console.cloud.google.com/flows/enableapi?apiid=cloudkms.googleapis.com&redirect=https://console.cloud.google.com&_ga=2.21571387.1641992167.1719602769-587765847.1712674892) 
+
+##### 5. Initialize the CLI
+
+```shell
+$ gcloud init
+```
+
+##### 6. Create Key Ring 
+
+<Callout type="warning">
+Important: This quickstart creates Cloud KMS resources such as key rings and keys. Once created, these resources cannot be deleted. 
+
+For more information, see [Why can't I delete keys or key rings?](https://cloud.google.com/kms/docs/faq#cannot_delete)
+</Callout>
+
+The following creates a key ring called `test` where it's available globally:
+
+```shell
+$ gcloud kms keyrings create "test" \
+    --location "global"
+```
+
+What you put for `"test"` should be used for `GOOGLE_KMS_KEY_RING`.
+
+What you put for `--location` should be used for `GOOGLE_KMS_LOCATION`.
+
+##### 7. Create Signing Key in Cloud
+Using the previous parameters key ring and create a Hardware Security Module (HSM) asymmetric-signing key called `"evm_key"` or (something different) of the EVM based Elliptic Curve.
+
+```shell
+$ gcloud kms keys create "evm_key"     \ 
+    --location "global" \
+    --keyring "test" \     
+    --purpose "asymmetric-signing" \     
+    --default-algorithm "ec-sign-secp256k1-sha256" \     
+    --protection-level "hsm"
+```
+
+What you replace `"evm_key"` with should be used for `GOOGLE_KMS_CRYPTO_KEY`.
+
+#### Sequence Builder Project Management
+
+Create a project using this [walkthrough](/solutions/builder/getting-started).
+
+What network you assign to the project should be used for `CHAIN_HANDLE`. 
+
+See [Chain Support](/solutions/technical-references/chain-support). 
+
+#### Access Key Management
+
+Obtain a Project Access Key using this [walkthrough](/solutions/builder/getting-started#claim-an-api-access-key).
+
+This should be used for `PROJECT_ACCESS_KEY`.
+
+#### Deploy an ERC1155 or ERC721 Collectible Contract
+
+Deploy a collectible contract by following this [walkthrough](/solutions/collectibles/contracts/deploy-an-item-collection).
+
+This contract should be used for `COLLECTIBLE_CONTRACT_ADDRESS`.
+
+#### Complete Railway Template Variables
+Use all the values from the previous steps to complete and deploy the online template with the `Deploy` button.
+
+#### Update Exposed Port in Interface
+Access settings for your deployment and update the exposed port to `3000`:
+
+##### Generate Domain
+![update exposed port](/img/payments/transactions_api_service_deployed_generate_domain.png)
+
+##### Set Port
+![update exposed port](/img/payments/transactions_api_service_deployed_set_port_generate_domain.png)
+
+#### Clone the Frontend Template
+
+Clone the [following template](https://github.com/moskalyk/nodejs-transactions-api/tree/master) and update the [`SERVER_URL`](https://github.com/moskalyk/nodejs-transactions-api/blob/master/client/src/App.tsx#L8) with your deployed template url.
+
+Finally, sign in and mint!
+
+<Callout type='info'>
+The backend Transactions Manager template will only accept requests from `http://localhost:5173`.
+</Callout>
+::::
+
+## Template Source Code
+
+Want to further customize?
+
+:::info
+Get started quickly with the source code of the [template](https://github.com/0xsequence-demos/template-node-transactions-backend) using Transactions API.
+:::

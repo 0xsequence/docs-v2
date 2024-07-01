@@ -6,20 +6,32 @@ export const SolutionsSection = () => (
     <div className="flex flex-col gap-1 py-5">
       <h3 className="text-3xl text-themed-primary font-bold">Solutions</h3>
       <p className="text-md leading-6 font-medium max-w-xl dark:text-white-80 text-black-80 mr-8">
-        Follow our solution guides to boost your game's acquisition,
-        monetization and retention with the power of web3.
+        Follow our solution guides to boost your game's onboarding experience,
+        unlock new ways to monetize and power your game with the Sequence platform.
       </p>
     </div>
     <div className="flex md:flex-row flex-col gap-4">
       <SolutionsGroup
         theme="purple"
-        heading="Acquire players"
+        heading="Onboard players"
         items={[
           {
             icon: 'WalletIcon',
             title: 'Embedded Wallet',
-            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence Wallet-as-a-Service embedded into your game or app.',
+            body: 'Gasless Transactions. No popups. Deliver a seamless experience for both web2 and web3 players with Sequence embedded into your game or app, compatible with nearly any platform or game engine.',
             link: '/solutions/wallets/embedded-wallet/overview',
+          },
+          {
+            icon: 'MinterIcon',
+            title: 'Sequence Kit',
+            body: 'Built on top of wagmi, onboard web2 users or native crypto users with an existing wallet to your web game or app.',
+            link: '/solutions/wallets/sequence-kit/overview',
+          },
+          {
+            icon: 'AirdropperIcon',
+            title: 'Wallet Linking',
+            body: 'Enable users to link their embedded wallet in your game with an external wallet - allowing you to query assets, balances, and allow easy flow of liquidity to your game.',
+            link: '/solutions/wallets/link-wallets/overview',
           },
           {
             icon: 'WalletIcon',
@@ -27,18 +39,6 @@ export const SolutionsSection = () => (
             body: 'Easily onboard web3-native players with a complete Universal Wallet.',
             link: '/solutions/wallets/universal-wallet/overview',
           },
-          {
-            icon: 'CollectiblesIcon',
-            title: 'Collectibles',
-            body: 'Manage contracts and collections with our no-code Builder.',
-            link: '/solutions/collectibles/contracts/deploy-an-item-collection',
-          },
-          // {
-          //   icon: 'AirdropperIcon',
-          //   title: 'Airdropper',
-          //   body: 'Create airdrop campaigns and target players with airdrops.',
-          //   link: '/',
-          // },
         ]}
       />
       <SolutionsGroup
@@ -57,29 +57,35 @@ export const SolutionsSection = () => (
             body: 'Integrate custom in-game marketplaces with our APIs.',
             link: '/solutions/marketplaces/orderbook/overview',
           },
-          // {
-          //   icon: 'CartIcon',
-          //   title: 'NFT Checkout',
-          //   body: 'Offer easy purchases with credit card, crypto, IAP support.',
-          //   link: '/',
-          // },
           {
-            icon: 'SequenceIcon',
-            title: 'Onramps',
-            body: 'Allow players to convert from fiat to any crypto globally.',
+            icon: 'CartIcon',
+            title: 'NFT Checkout',
+            body: 'Offer easy purchases with credit card, crypto, IAP support.',
+            link: '/solutions/wallets/sequence-kit/checkout',
+          },
+          {
+            icon: 'NodeGatewayIcon',
+            title: 'Fiat On-ramps',
+            body: 'Allow players to convert from fiat to crypto globally.',
             link: '/solutions/payments/onramps/fiat-on-ramps',
           },
         ]}
       />
       <SolutionsGroup
         theme="yellow"
-        heading="Retain and grow"
+        heading="Power your game"
         items={[
           {
-            icon: 'MinterIcon',
-            title: 'Minter',
-            body: 'Securely mint achievement tokens tied to your game.',
-            link: '/guides/mint-collectibles-serverless/',
+            icon: 'IndexerIcon',
+            title: 'Indexer',
+            body: 'Performantly query wallets and contracts to use in your game or app.',
+            link: '/solutions/builder/indexer',
+          },
+          {
+            icon: 'CollectiblesIcon',
+            title: 'Contracts & Collectibles',
+            body: 'Import any contract or deploy a new one with our audited smart contract suite. Manage your collection metadata at scale.',
+            link: '/solutions/collectibles/contracts/deploy-an-item-collection',
           },
           {
             icon: 'AnalyticsIcon',
@@ -87,11 +93,17 @@ export const SolutionsSection = () => (
             body: 'Track every aspect of web3 activity within your games.',
             link: '/solutions/builder/analytics',
           },
+          {
+            icon: 'MinterIcon',
+            title: 'Transaction Manager',
+            body: 'Scalable transactions with batching, access-control, parallelization, automatic reorg management with our transactions API.',
+            link: '/solutions/transactions-api/overview',
+          },
           // {
-          //   icon: 'DiscordIcon',
-          //   title: 'Discord Bot',
-          //   body: 'Manage contracts and collections with our no-code Builder.',
-          //   link: '/',
+          //   icon: 'MinterIcon',
+          //   title: 'Minter',
+          //   body: 'Securely mint achievement tokens tied to your game.',
+          //   link: '/guides/mint-collectibles-serverless/',
           // },
         ]}
       />

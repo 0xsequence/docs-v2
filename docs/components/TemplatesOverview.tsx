@@ -82,6 +82,7 @@ export const TemplatesOverview = () => (
         title="Transactions API Template using a NodeJS / Express Backend"
         body="Example template for integrators to allow users to mint collectibles using the Sequence Transactions API for gasless transactions on infrastructure using NodeJs & Express."
         link="https://github.com/0xsequence-demos/template-node-transactions-backend"
+        deployLink="https://railway.app/template/ERJVm2"
       />
       <TemplateCard
         title="Indexer Webhooks Callback Template using a Cloudflare Worker"
@@ -127,14 +128,16 @@ const TemplateCard = ({
   title,
   body,
   link,
-  demolink,
+  deployLink,
   image,
+  demolink
 }: {
   title: string
   body: string
   link: string
-  demolink?: string
+  deployLink?: string,
   image?: string
+  demolink?: string
 }) => {
   return (
     <div className="flex flex-col gap-4 p-4 dark:bg-white-10 bg-white rounded-xl md:w-[calc(50%-8px)]">
@@ -159,6 +162,12 @@ const TemplateCard = ({
         className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
       >
         Demo
+      </SmartLink>}
+      {deployLink && <SmartLink
+        href={deployLink}
+        className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
+      >
+        Deploy
       </SmartLink>}
       </div>
     </div>
