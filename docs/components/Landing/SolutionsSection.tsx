@@ -22,16 +22,16 @@ export const SolutionsSection = () => (
             link: '/solutions/wallets/embedded-wallet/overview',
           },
           {
-            icon: 'AirdropperIcon',
+            icon: 'MinterIcon',
             title: 'Sequence Kit',
             body: 'Built on top of wagmi, onboard web2 users or native crypto users with an existing wallet to your web game or app.',
-            link: '/',
+            link: '/solutions/wallets/sequence-kit/overview',
           },
           {
             icon: 'AirdropperIcon',
             title: 'Wallet Linking',
             body: 'Enable users to link their embedded wallet in your game with an external wallet - allowing you to query assets, balances, and allow easy flow of liquidity to your game.',
-            link: '/',
+            link: '/solutions/wallets/link-wallets/overview',
           },
           {
             icon: 'WalletIcon',
@@ -64,8 +64,8 @@ export const SolutionsSection = () => (
             link: '/solutions/wallets/sequence-kit/checkout',
           },
           {
-            icon: 'SequenceIcon',
-            title: 'Fiat onramps',
+            icon: 'NodeGatewayIcon',
+            title: 'Fiat On-ramps',
             body: 'Allow players to convert from fiat to crypto globally.',
             link: '/solutions/payments/onramps/fiat-on-ramps',
           },
@@ -76,15 +76,15 @@ export const SolutionsSection = () => (
         heading="Power your game"
         items={[
           {
-            icon: 'DiscordIcon',
+            icon: 'IndexerIcon',
             title: 'Indexer',
-            body: 'Manage contracts and collections with our no-code Builder.',
-            link: '/',
+            body: 'Performantly query wallets and contracts to use in your game or app.',
+            link: '/solutions/builder/indexer',
           },
           {
             icon: 'CollectiblesIcon',
-            title: 'Collectibles',
-            body: 'Import any contract or deploy a new one with our audited smart contract suite. Manage your NFT collections at scale all with Sequence Builder.',
+            title: 'Contracts & Collectibles',
+            body: 'Import any contract or deploy a new one with our audited smart contract suite. Manage your collection metadata at scale.',
             link: '/solutions/collectibles/contracts/deploy-an-item-collection',
           },
           {
@@ -95,9 +95,9 @@ export const SolutionsSection = () => (
           },
           {
             icon: 'MinterIcon',
-            title: 'Transactions',
+            title: 'Transaction Manager',
             body: 'Scalable transactions with batching, access-control, parallelization, automatic reorg management with our transactions API.',
-            link: '/',
+            link: '/solutions/transactions-api/overview',
           },
           // {
           //   icon: 'MinterIcon',

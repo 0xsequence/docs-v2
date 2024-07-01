@@ -3,8 +3,9 @@ import type { Sidebar, TopNav } from 'vocs'
 export const topNav = [
   { text: 'Solutions', 
   items: [
+    { text: 'Sequence Builder', link: '/solutions/builder/overview', match: '/solutions/builder/overview' },
     { text: 'Onboard', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
-    { text: 'Monetize', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
+    { text: 'Monetize', link: '/solutions/monetization-overview', match: '/solutions/monetization-overview' },
     { text: 'Power', link: '/solutions/power-overview', match: '/solutions/power-overview' },
     // { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
 ]
@@ -22,7 +23,6 @@ export const topNav = [
       { text: 'Unity', link: '/sdk/unity/overview', match: '/sdk/unity/overview' },
       { text: 'Unreal', link: '/sdk/unreal/overview', match: '/sdk/unreal/overview' },
       { text: 'Typescript', link: '/sdk/typescript/guides/overview', match: '/sdk/typescript/guides/overview' },
-      { text: 'Sequence Kit', link: '/solutions/wallets/sequence-kit/overview', match: '/solutions/wallets/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
       { text: 'Mobile', link: '/sdk/mobile', match: '/sdk/mobile' },
@@ -104,7 +104,7 @@ export const sidebar = {
           },
         ]
       },
-      { text: 'Sequence Kit', collapsed: true, items: [
+      { text: 'Sequence Kit', collapsed: false, items: [
         { text: 'Overview', link: '/solutions/wallets/sequence-kit/overview' },
         { text: 'Quickstart', link: '/solutions/wallets/sequence-kit/getting-started' },
         { text: 'Configuration', link: '/solutions/wallets/sequence-kit/configuration' },
@@ -149,18 +149,20 @@ export const sidebar = {
       text: 'Monetize',
       // collapsed: true,
       items: [
-        { text: 'Overview', link: '/solutions/marketplaces/overview' },
-        { text: 'White-label Marketplace', link: '/solutions/marketplaces/white-label-marketplace' },
+        { text: 'Overview', link: '/solutions/monetization-overview' },
+        { text: 'Marketplaces', collapsed: true, items: [{ text: 'White-label Marketplace', link: '/solutions/marketplaces/white-label-marketplace' },
         { text: 'Build your Custom Marketplace', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/marketplaces/orderbook/overview'},
           {text: 'Quickstart', link: '/solutions/marketplaces/orderbook/quickstart'},
         ]
        },
+      ]
+      },
        { text: 'Fiat On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
       ]
     },
     {
-      text: 'Empower',
+      text: 'Power',
       items: [
         { text: 'Overview', link: '/solutions/power-overview' },
         { text: 'Deployable Contracts' , collapsed: true, items: [
@@ -175,12 +177,6 @@ export const sidebar = {
           text: 'Manage Collections', link: '/solutions/builder/collections'
         },
         { 
-          text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
-        },
-        { 
-          text: 'Transactions API Service', link: '/solutions/payments/transactions-api/quickstart' 
-        },
-        { 
           text: 'Querying Blockchain Data', collapsed: false,
           items: [
               { text: 'Indexer', link: '/solutions/builder/indexer' },
@@ -188,8 +184,15 @@ export const sidebar = {
             ],
         },
         { 
+          text: 'Transactions Manager', link: '/solutions/transactions-api/overview' 
+        },
+        { 
           text: 'Analytics', link: '/solutions/builder/analytics' 
         },
+        { 
+          text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
+        },
+
         { 
           text: 'Node Gateway', link: '/solutions/builder/node-gateway' 
         },
