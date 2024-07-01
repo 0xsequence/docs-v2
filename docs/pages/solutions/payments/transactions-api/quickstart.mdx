@@ -24,14 +24,14 @@ Try out the Transactions API with [your own deployed template](https://railway.a
 #### Google Key Management Serice Cloud Management
 Google Key Management Service (KMS) is a cloud service provided by Google Cloud that enables you to manage cryptographic keys for your cloud services in a secure and compliant manner. 
 
-##### 1. Create an account & project in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
+##### 1. Create an Account & Project in the [Google Developer Console](https://console.cloud.google.com/apis/dashboard)
 
-The project ID you create will be used for `GOOGLE_KMS_PROJECT`.
+The project ID you create should be used for `GOOGLE_KMS_PROJECT`.
 
-##### 2. Download Google CLI locally
+##### 2. Download Google CLI Locally
 Follow the walkthrough on Google's site to install the cli locally to create EVM access keys [here](https://cloud.google.com/sdk/docs/install)
 
-##### 3. Login to the developer Console locally 
+##### 3. Login to the Developer Console Locally 
 
 ```shell
 gcloud auth application-default login
@@ -47,13 +47,13 @@ Make sure [Billing is enabled](https://cloud.google.com/billing/docs/how-to/veri
 gcloud init
 ```
 
+##### 6. Create Key Ring 
+
 <Callout type="warning">
 Important: This quickstart creates Cloud KMS resources such as key rings and keys. Once created, these resources cannot be deleted. 
 
 For more information, see [Why can't I delete keys or key rings?](https://cloud.google.com/kms/docs/faq#cannot_delete)
 </Callout>
-
-##### 6. Create Key Ring 
 
 The following creates a key ring called `test` where it's available globally:
 
@@ -62,10 +62,12 @@ gcloud kms keyrings create "test" \
     --location "global"
 ```
 
-What you put for `"test"` will be used for `GOOGLE_KMS_KEY_RING`.
+What you put for `"test"` should be used for `GOOGLE_KMS_KEY_RING`.
+
+What you put for `--location` should be used for `GOOGLE_KMS_LOCATION`.
 
 ##### 7. Create Signing Key in Cloud
-Using the previous parameters key ring, and creating a Hardware Security Module (HSM) asymmetric-signing key of the EVM based Elliptic Curve
+Using the previous parameters key ring and create a Hardware Security Module (HSM) asymmetric-signing key called `"evm_key"` or (something different) of the EVM based Elliptic Curve.
 
 ```shell
 gcloud kms keys create "evm_key"     \ 
@@ -75,33 +77,34 @@ gcloud kms keys create "evm_key"     \
     --default-algorithm "ec-sign-secp256k1-sha256" \     
     --protection-level "hsm"
 ```
-What you put for `--location` will be used for `GOOGLE_KMS_LOCATION`.
 
-What you replace `evm_key` with will be used for `GOOGLE_KMS_CRYPTO_KEY`.
+What you replace `"evm_key"` with should be used for `GOOGLE_KMS_CRYPTO_KEY`.
 
 #### Sequence Builder Project Management
 
 Create a project using this [walkthrough](/solutions/builder/getting-started).
 
-What network you assign to the project will be used for `CHAIN_HANDLE`. See Chain [Support](/solutions/technical-references/chain-support). 
+What network you assign to the project should be used for `CHAIN_HANDLE`. 
+
+See [Chain Support](/solutions/technical-references/chain-support). 
 
 #### Access Key Management
 
 Obtain a Project Access Key using this [walkthrough](/solutions/builder/getting-started#claim-an-api-access-key).
 
-This will be used for `PROJECT_ACCESS_KEY`.
+This should be used for `PROJECT_ACCESS_KEY`.
 
 #### Deploy an ERC1155 or ERC721 Collectible Contract
 
 Deploy a collectible contract by following this [walkthrough](/solutions/collectibles/contracts/deploy-an-item-collection).
 
-This contract will be used for `COLLECTIBLE_CONTRACT_ADDRESS`.
+This contract should be used for `COLLECTIBLE_CONTRACT_ADDRESS`.
 
 #### Complete Railway Template Variables
-Use all the values from the previous steps to complete and deploy the online template.
+Use all the values from the previous steps to complete and deploy the online template with the `Deploy` button.
 
 #### Update Exposed Port in Interface
-Access settings for your deployment update the exposed port to `3000`:
+Access settings for your deployment and update the exposed port to `3000`:
 
 ##### Generate Domain
 ![update exposed port](/img/payments/transactions_api_service_deployed_generate_domain.png)
