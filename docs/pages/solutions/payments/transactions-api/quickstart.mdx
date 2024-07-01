@@ -34,7 +34,7 @@ Follow the walkthrough on Google's site to install the cli locally to create EVM
 ##### 3. Login to the Developer Console Locally 
 
 ```shell
-gcloud auth application-default login
+$ gcloud auth application-default login
 ```
 
 ##### 4. Enabled API & Billing 
@@ -44,7 +44,7 @@ Make sure [Billing is enabled](https://cloud.google.com/billing/docs/how-to/veri
 ##### 5. Initialize the CLI
 
 ```shell
-gcloud init
+$ gcloud init
 ```
 
 ##### 6. Create Key Ring 
@@ -58,7 +58,7 @@ For more information, see [Why can't I delete keys or key rings?](https://cloud.
 The following creates a key ring called `test` where it's available globally:
 
 ```shell
-gcloud kms keyrings create "test" \
+$ gcloud kms keyrings create "test" \
     --location "global"
 ```
 
@@ -70,7 +70,7 @@ What you put for `--location` should be used for `GOOGLE_KMS_LOCATION`.
 Using the previous parameters key ring and create a Hardware Security Module (HSM) asymmetric-signing key called `"evm_key"` or (something different) of the EVM based Elliptic Curve.
 
 ```shell
-gcloud kms keys create "evm_key"     \ 
+$ gcloud kms keys create "evm_key"     \ 
     --location "global" \
     --keyring "test" \     
     --purpose "asymmetric-signing" \     
