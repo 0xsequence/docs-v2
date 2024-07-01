@@ -4,16 +4,17 @@
 [Transactions API documentation and endpoints](https://0xsequence.redoc.ly/tag/relayer)
 :::
 
-The Sequence Relayer service offers a simple interface for dispatching meta-transactions on Ethereum-compatible networks.
+The Sequence Transactions API (or the technical term Relayer service) offers a simple interface for dispatching meta-transactions on Ethereum-compatible networks.
 
 Meta-transactions are the idea of a transaction inside of a transaction. The benefits of Sequence meta-transactions are that they allow:
 
+## Benefits
 - Gas abstraction -- whereby users can pay for network gas in a variety of tokens (ie. USDC, DAI, etc.)
 - Sponsored gas -- projects may sponsor the gas of specific contracts to allow free gas for their users
 - Batched transactions -- group a bunch of independent transactions and allow them to be mined as a single transaction
 - Parallel transactions -- parallelize the dispatch of transactions in some cases
 - Fire + forget model -- easily send transactions to the transactions api which will automatically manage nonces, bump gas, and other features which will ensure fast delivery
-- Optimal gas pricing for transactions
+- Optimal gas pricing for transactions -- will be attempted once and if not included from the mempool within 3 blocks, the transaction will be resubmitted
 
 The best part: transactions with Sequence Transactions API are compatible with any existing/deployed Ethereum contract, and thus, integrating the Sequence Relayer doesn't require any changes to your contracts or dapp.
 

@@ -66,7 +66,7 @@ export const GuidesOverview = () => (
         body="Guide for a scalable transaction service for your NodeJS backend to eliminate complexities around re-orgs, nonce management, parallelization, and more."
         link="/guides/templates/building-relaying-server"
         image="/img/guides/overview/nodejs.png"
-
+        deployLink="https://railway.app/template/ERJVm2"
       />
         <GuideCard
         title="Creating, Storing, and Managing Collectibles Metadata"
@@ -96,6 +96,7 @@ const GuideCard = ({
   body,
   link,
   image,
+  deployLink,
   demoLink,
   demoLinkiOS,
   demoLinkAndroid
@@ -104,6 +105,7 @@ const GuideCard = ({
   body: string
   link: string
   image?: string
+  deployLink?: string
   demoLink?: string
   demoLinkiOS?: string
   demoLinkAndroid?: string
@@ -132,6 +134,14 @@ const GuideCard = ({
           className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
         >
           Play demo
+        </SmartLink>
+        }
+        {deployLink && 
+        <SmartLink
+          href={deployLink}
+          className="hover-fade rounded-md dark:bg-white-15 bg-black-7 px-4 py-3 text-themed-primary text-sm font-bold w-fit"
+        >
+          Deploy
         </SmartLink>
         }
         {demoLinkiOS && 

@@ -1,0 +1,183 @@
+import { Callout } from "vocs/components";
+
+# Fee Options
+
+When implementing an Embedded Wallet, one will need to be able to pay for the gas fees on a non-testnet network to send a transaction. 
+
+Fee options provide a quote to cover the gas fees only useable for a certain period of time (which is unique to the Sequence stack).
+
+To send a transaction successfully, you have a few directions you can take:
+- **Testnets**: Using a testnet, transactions with Sequence are free, not requiring a fee option inputted into the SDK call.
+- **Sponsored Contract or Wallet**: Having the smart contract or wallet sponsored, not requiring a fee option inputted into the SDK call. You can learn about sponsoring a contract or wallet [here](/solutions/builder/gas-tank).
+- **Fee Options**: Using a Sequence API to get a custom fee quote and fee options object, pass both into the waas sdk call. [See below](/solutions/wallets/embedded-wallet/examples/fee-options#implementing-fee-options).
+
+<Callout type="info">
+You will know if you need to either sponsor your contract or wallet, or, implement fee options if you receive the following response from the WaaS API:
+```shell
+{
+    "error": "WebrpcEndpoint",
+    "code": 0,
+    "msg": "endpoint error",
+    "cause": "sending transaction: WebrpcEndpoint 0: endpoint error: failed to send transaction: Aborted 1005: Request aborted: failed to relay transaction: Aborted 1005: Request aborted: refusing to dispatch: missing required fee payment",
+    "status": 400
+}
+```
+</Callout>
+
+## Implementing Fee Options 
+
+Before implementing the following "Fee Options" flow, you will need to ensure that your wallet has sufficienct funds to pay for your transaction on the specific network in the native currency. 
+
+You can either transfer tokens to your wallet, or, use the [on-ramp feature](/solutions/wallets/sequence-kit/on-ramp) using the Sequence Kit solution.
+
+And ensure that the following packages are installed:
+
+```shell
+pnpm install @0xsequence/waas ethers@5.7.2
+```
+
+::::steps
+### Generalized API for Fee Options & Fee Quote
+
+To implement fee options passed into the request, a first call to `sequence.feeOptions({...})` is required, which is wrapped in the following function `checkTransactionFeeOptions`:
+
+<Callout type="info">
+In the following examples, the `sequence` variable is an Embbeded Wallet object intialized from the `@0xsequence/waas` npm package with the `WaasConfigKey` and `ProjectAccessKey`. Learn how to do this [here](/solutions/wallets/embedded-wallet/quickstart)
+</Callout>
+
+```typescript
+import { FeeOption, Network, Transaction } from "@0xsequence/waas"
+
+....
+
+async function checkTransactionFeeOptions({transactions, network}: {transactions: Transaction[], network: string | number }): Promise<{feeQuote: string | undefined, feeOptions: FeeOption[] | undefined, isSponsored: boolean}> {
+  const resp = await sequence.feeOptions({
+    transactions: transactions,
+    network: network,
+  })
+
+  if (resp.data.feeQuote && resp.data.feeOptions) {
+    return {feeQuote: resp.data.feeQuote, feeOptions: resp.data.feeOptions, isSponsored: false}
+  }
+  return {feeQuote: resp.data.feeQuote, feeOptions: resp.data.feeOptions, isSponsored: true}
+}
+```
+
+### Crafting Fee Options & Fee Quote with Transaction
+
+#### Implementing an ERC20 Transaction
+
+```typescript
+import { ethers } from 'ethers'
+import { erc20 } from '@0xsequence/waas'
+
+...
+
+const response = await checkTransactionFeeOptions({
+    transactions: [erc20({
+        token: customTokenAddress,
+        to: destinationAddress,
+        value: ethers.utils.parseUnits(amount, decimals).toString()
+    })],
+    network: 'arbitrum-nova' // i.e. network or chainID e.g. 42170 
+})
+
+const tx = await sequence.sendERC20({
+    token: customTokenAddress,
+    to: destinationAddress,
+    value: ethers.utils.parseUnits(amount, decimals),
+    network: 'arbitrum-nova',
+    transactionsFeeOption: response.feeOptions,
+    transactionsFeeQuote: response.feeQuote
+})
+```
+
+#### Implementing an ERC1155 / ERC721 Transaction 
+
+For ERC721 just replace `erc1155({...})` with `erc721({...})` and call `sequence.sendERC721({...})`
+
+```typescript
+import { ethers } from 'ethers'
+import { erc1155, erc721 } from '@0xsequence/waas'
+
+...
+
+const response = await checkTransactionFeeOptions({
+    transactions: [erc1155({
+        token: customTokenAddress,
+        to: destinationAddress,
+        values: [{
+          id: tokenID,
+          amount: ethers.utils.parseUnits(amount, 0)
+        }]
+    })],
+    network: 'arbitrum-nova' // i.e. network or chainID e.g. 42170 
+})
+
+const tx = await sequence.sendERC1155({
+    token: customTokenAddress,
+    to: destinationAddress,
+    values: [{
+        id: tokenID,
+        amount: ethers.utils.parseUnits(amount, 0)
+    }],
+    network: 'arbitrum-nova',
+    transactionsFeeOption: response.feeOptions,
+    transactionsFeeQuote: response.feeQuote
+})
+```
+
+#### Implementing an Native Currency Transaction
+
+```typescript
+import { ethers } from 'ethers'
+
+const to = '0x...'
+
+const response = await checkTransactionFeeOptions({
+    transactions: [{
+        to, value: ethers.utils.parseEther(amount),
+    }],
+    network: 'arbitrum-nova'
+})
+
+const tx = await sequence.sendTransaction({
+    transactions: [{
+        to, value: ethers.utils.parseEther(amount),
+    }],
+    network: 'arbitrum-nova',
+    transactionsFeeOption: feeOption,
+    transactionsFeeQuote: feeQuote
+})
+```
+
+#### Implementing a Custom Contract Transaction
+
+```typescript
+import { delayedEncode } from '@0xsequence/waas'
+
+...
+
+const response = await checkTransactionFeeOptions({
+    transactions: [delayedEncode({
+        to: contractAddress,
+        abi: contractAbi,
+        func: contractMethod, // e.g. "transfer"
+        args: JSON.parse(contractMethodArgs), // e.g. [0x..., 1000] or named { "to": "0x...", "amount": "1000" }
+        value: "0"
+    })],
+    network: 'arbitrum-nova'
+})
+
+const tx = await sequence.callContract({
+    network: 'arbitrum-nova',
+    to: contractAddress,
+    abi: contractAbi,
+    func: contractMethod, // e.g. "transfer"
+    args: JSON.parse(contractMethodArgs),
+    value: 0,
+    transactionsFeeOption: response.feeOption,
+    transactionsFeeQuote: response.feeQuote
+})
+```
+::::

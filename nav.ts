@@ -3,15 +3,11 @@ import type { Sidebar, TopNav } from 'vocs'
 export const topNav = [
   { text: 'Solutions', 
   items: [
-    { text: 'Wallets', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
-    { text: 'Marketplace', link: '/solutions/marketplaces/overview', match: '/solutions/marketplaces/overview' },
-    { text: 'Collectibles', link: '/solutions/collectibles/contracts/deploy-an-item-collection', match: '/solutions/collectibles/contracts/deploy-an-item-collection' },
-    { text: 'Payments', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
-    { text: 'Builder Console', link: '/solutions/builder/overview', match: '/solutions/builder/overview', items: [
-      { text: 'Overview', link: '/solutions/builder/overview', match: '/solutions/builder/overview' }, 
-    ]
-  },
-  { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
+    { text: 'Sequence Builder', link: '/solutions/builder/overview', match: '/solutions/builder/overview' },
+    { text: 'Onboard', link: '/solutions/wallets/overview', match: '/solutions/wallets/overview' },
+    { text: 'Monetize', link: '/solutions/monetization-overview', match: '/solutions/monetization-overview' },
+    { text: 'Power', link: '/solutions/power-overview', match: '/solutions/power-overview' },
+    // { text: 'Chain Support', link: '/solutions/technical-references/chain-support', match: '/solutions/technical-references/chain-support' },
 ]
 },
   {
@@ -27,7 +23,6 @@ export const topNav = [
       { text: 'Unity', link: '/sdk/unity/overview', match: '/sdk/unity/overview' },
       { text: 'Unreal', link: '/sdk/unreal/overview', match: '/sdk/unreal/overview' },
       { text: 'Typescript', link: '/sdk/typescript/guides/overview', match: '/sdk/typescript/guides/overview' },
-      { text: 'Sequence Kit', link: '/sdk/sequence-kit/overview', match: '/sdk/sequence-kit/overview' },
       { text: 'Go', link: '/sdk/go/overview', match: '/sdk/go/overview' },
       // { text: 'Android', link: '/sdk/android', match: '/sdk/android' },
       { text: 'Mobile', link: '/sdk/mobile', match: '/sdk/mobile' },
@@ -67,17 +62,32 @@ export const sidebar = {
   // Overview
   '/solutions': [
     {
-      text: 'Wallets',
+      text: 'Overview',
+      link: '/solutions/builder/overview',
+    },
+    {
+      text: 'Getting Started',
+      link: '/solutions/builder/getting-started',
+    },
+    {
+      text: 'Onboard',
       items: [
         { text: 'Overview', link: '/solutions/wallets/overview' },
-        { text: 'Embedded Wallet', link: '/solutions/wallets/embedded-wallet/overview', match: '/solutions/wallets/embedded-wallet/overview', items: [
+        { text: 'Embedded Wallet', link: '/solutions/wallets/embedded-wallet/overview', collapsed: false, items: [
           {text: 'Overview', link: '/solutions/wallets/embedded-wallet/overview'},
           {text: 'Quickstart', link: '/solutions/wallets/embedded-wallet/quickstart'},
+          {text: 'Setup', collapsed: true, items: [
+            {text: 'Configuration', link: '/solutions/builder/embedded-wallet'},
+            {text: 'Google Setup', link: '/solutions/builder/embedded-wallet/google-configuration'},
+            {text: 'Apple Setup', link: '/solutions/builder/embedded-wallet/apple-configuration'},
+          ]
+        },
           {
             text: 'Examples', collapsed: true, items: [
             {text: 'Manage Sessions', link: '/solutions/wallets/embedded-wallet/examples/manage-sessions'},
             {text: 'Use Wallets', link: '/solutions/wallets/embedded-wallet/examples/use-wallets'},
             {text: 'On-ramp', link: '/solutions/wallets/embedded-wallet/examples/on-ramp'},
+            {text: 'Fee Options', link: '/solutions/wallets/embedded-wallet/examples/fee-options'},
             {text: 'Validation', link: '/solutions/wallets/embedded-wallet/examples/validation'},
             {text: 'Verification', link: '/solutions/wallets/embedded-wallet/examples/verification'},
             {text: 'Transaction Receipts', link: '/solutions/wallets/embedded-wallet/examples/transaction-receipts'},
@@ -95,7 +105,23 @@ export const sidebar = {
           },
         ]
       },
-        { text: 'Universal Wallet', link: '/solutions/wallets/universal-wallet/overview',
+      { text: 'Sequence Kit', collapsed: false, items: [
+        { text: 'Overview', link: '/solutions/wallets/sequence-kit/overview' },
+        { text: 'Quickstart', link: '/solutions/wallets/sequence-kit/getting-started' },
+        { text: 'Configuration', link: '/solutions/wallets/sequence-kit/configuration' },
+        { text: 'On-ramp', link: '/solutions/wallets/sequence-kit/on-ramp' },
+        { text: 'Checkout', link: '/solutions/wallets/sequence-kit/checkout' },
+        { text: 'Custom Connectors', link: '/solutions/wallets/sequence-kit/custom-connectors' }
+      ]
+     },
+
+        { text: 'Wallet Linking', collapsed: true, 
+        items: [
+          {text: 'Overview', link: '/solutions/wallets/link-wallets/overview'},
+          {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
+          ]
+        },
+        { text: 'Universal Wallet', collapsed: true, link: '/solutions/wallets/universal-wallet/overview',
         items: [
           {text: 'Overview', link: '/solutions/wallets/universal-wallet/overview'},
           {text: 'Quickstart', link: '/solutions/wallets/universal-wallet/quickstart'},
@@ -118,79 +144,67 @@ export const sidebar = {
           {text: 'Key Management', link: '/solutions/wallets/universal-wallet/key-management'}
         ]
         },
-        { text: 'Wallet Linking', collapsed: true, 
-        items: [
-          {text: 'Overview', link: '/solutions/wallets/link-wallets/overview'},
-          {text: 'Integration Guide', link: '/solutions/wallets/link-wallets/integration-guide'}
-        ]
-      }
-
       ]
     },
     {
-      text: 'Marketplace',
+      text: 'Monetize',
       // collapsed: true,
       items: [
-        { text: 'Overview', link: '/solutions/marketplaces/overview' },
-        { text: 'White-label Marketplace', link: '/solutions/marketplaces/white-label-marketplace' },
+        { text: 'Overview', link: '/solutions/monetization-overview' },
+        { text: 'Marketplaces', collapsed: true, items: [{ text: 'White-label Marketplace', link: '/solutions/marketplaces/white-label-marketplace' },
         { text: 'Build your Custom Marketplace', collapsed: true, items: [
           {text: 'Overview', link: '/solutions/marketplaces/orderbook/overview'},
           {text: 'Quickstart', link: '/solutions/marketplaces/orderbook/quickstart'},
-          
         ]
-       }
+       },
+      ]
+      },
+       { text: 'Fiat On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
       ]
     },
     {
-      text: 'Collectibles',
+      text: 'Power',
       items: [
+        { text: 'Overview', link: '/solutions/power-overview' },
         { text: 'Deployable Contracts' , collapsed: true, items: [
+          { text: 'Overview', link: '/solutions/builder/contracts'},
           { text: 'Deploy a Collectible Contract', link: '/solutions/collectibles/contracts/deploy-an-item-collection'},
           // {text: 'Mint In-Game Items and Achievements (ERC1155)', link: '/solutions/collectibles/contracts/900-mint-items-from-ERC1155'},
           // {text: 'Mint Digital Collectibles (ERC721)', link: '/solutions/collectibles/contracts/902-mint-collectibles-from-ERC721'},
           { text: 'Deploy an In-Game Currency (ERC20)', link: '/solutions/collectibles/contracts/deploy-ERC20-currency'},
         ],
-      },
+        },
         { 
-          text: 'Metadata', collapsed: true, items: [
-          { text: 'Manage Metadata in Builder', link: '/solutions/collectibles/metadata/manage-metadata-builder' }
-        ],
-      }
+          text: 'Manage Collections', link: '/solutions/builder/collections'
+        },
+        { 
+          text: 'Querying Blockchain Data', collapsed: false,
+          items: [
+              { text: 'Indexer', link: '/solutions/builder/indexer' },
+              { text: 'Webhooks', link: '/solutions/builder/webhooks'},
+            ],
+        },
+        { 
+          text: 'Transactions Manager', link: '/solutions/transactions-api/overview' 
+        },
+        { 
+          text: 'Analytics', link: '/solutions/builder/analytics' 
+        },
+        { 
+          text: 'Gas Sponsorship', link: '/solutions/builder/gas-tank' 
+        },
+
+        { 
+          text: 'Node Gateway', link: '/solutions/builder/node-gateway' 
+        },
         // { text: 'Minter', link: '/solutions/minter' }
       ]
     },
-    {
-      text: 'Payments',
-      items: [
-        // { text: 'NFT Checkout', link: '/solutions/nft-checkout' },
-        { text: 'On-ramps', link: '/solutions/payments/onramps/fiat-on-ramps', match: '/solutions/payments/onramps/fiat-on-ramps' },
-      ]
-    },
-    {
-      text: 'Builder Console',
-      link: '/solutions/builder/overview',
-      match: '/solutions/builder/overview',
-      items: [
-        {text: 'Overview', link: '/solutions/builder/overview'},
-        {text: 'Get Started', link: '/solutions/builder/getting-started'},
-        {text: 'Project Management', link: '/solutions/builder/project-management'},
-        {text: 'Collections', link: '/solutions/builder/collections'},
-        {text: 'Contracts', link: '/solutions/builder/contracts'},
-        {text: 'Gas Tank', link: '/solutions/builder/gas-tank'},
-        {text: 'Wallet SDKs', link: '/solutions/builder/wallet-sdks'},
-        {text: 'Embedded Wallet', collapsed: true, items: [
-          {text: 'Overview', link: '/solutions/builder/embedded-wallet'},
-          {text: 'Google Configuration', link: '/solutions/builder/embedded-wallet/google-configuration'},
-          {text: 'Apple Configuration', link: '/solutions/builder/embedded-wallet/apple-configuration'},
-        ]},
-        {text: 'Node Gateway', link: '/solutions/builder/node-gateway'},
-        {text: 'Marketplaces', link: '/solutions/builder/marketplaces'},
-        {text: 'Indexer', link: '/solutions/builder/indexer'},
-        {text: 'Webhooks', link: '/solutions/builder/webhooks'},
-        {text: 'Analytics', link: '/solutions/builder/analytics'},
-        {text: 'Settings', link: '/solutions/builder/project-settings'},
-      ]
-    },
+    // {
+    //   text: 'Sequence Builder',
+    //   link: '/solutions/builder/overview',
+    //   match: '/solutions/builder/overview',
+    // },
     {
       text: 'Technical References',
       items: [
@@ -392,15 +406,6 @@ export const sidebar = {
     {
       text: 'Web3',
       items: [
-        { text: 'Sequence Kit', collapsed: true, items: [
-          { text: 'Overview', link: '/sdk/sequence-kit/overview' },
-          { text: 'Quickstart', link: '/sdk/sequence-kit/getting-started' },
-          { text: 'Configuration', link: '/sdk/sequence-kit/configuration' },
-          { text: 'On-ramp', link: '/sdk/sequence-kit/on-ramp' },
-          { text: 'Checkout', link: '/sdk/sequence-kit/checkout' },
-          { text: 'Custom Connectors', link: '/sdk/sequence-kit/custom-connectors' }
-        ]
-       },
         { text: 'TypeScript', collapsed: true, items: [
           {text: 'Overview', link: '/sdk/typescript/guides/overview'},
           {text: 'Connect Wallet', link: '/sdk/typescript/guides/connect-wallet'},
@@ -531,7 +536,10 @@ export const sidebar = {
   ],
   
   // Support
-  '/support': {
+  '/support': 
+    [
+      {
+    text: 'Support',
     items: [
       { text: 'Support', link: '/support' },
       { text: 'Changelog', link: 'https://0xsequence.canny.io/changelog' },
@@ -541,8 +549,18 @@ export const sidebar = {
       { text: 'Discord', link: 'https://discord.gg/sequence' },
       { text: 'We\'re hiring!', link: 'https://horizon.io/careers' },
       { text: 'Contact Us', link: 'https://support.sequence.xyz' },
-    ]
+    ], 
   },
+  {
+  text: 'Sequence Builder Admin',
+  items: [
+    { text: 'Project Management', link: '/support/builder/project-management' },
+    { text: 'Project Settings', link: '/support/builder/project-settings' },
+    ],
+  }
+]
+
+
 
 
 
