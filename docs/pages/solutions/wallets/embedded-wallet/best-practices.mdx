@@ -1,0 +1,66 @@
+# Sequence Embedded Wallet Best Practices
+
+An Embedded Wallet is a new product in the ecosystem that bring new design and architecture to applications. 
+
+The following are a few best practices that can reviewed to enable developers to architect solutions to meet the needs of their users.
+
+1. [Designs for Implementing a Collectible Mint](/solutions/wallets/embedded-wallet/best-practices#1-designs-for-implementing-a-collectible-mint)
+2. [Building an Ecosystem](/solutions/wallets/embedded-wallet/best-practices#2-building-an-ecosystem)
+3. [Prevent Multiple Transactions by Repeat User Clicks](/solutions/wallets/embedded-wallet/best-practices#3-prevent-multiple-transactions-by-repeat-user-clicks)
+4. [Updating Allowed Origins to Prevent Misuse](/solutions/wallets/embedded-wallet/best-practices#4-updating-allowed-origins-to-prevent-misuse)
+5. [Keeping Your WaasConfigKey Hidden for Unity or Unreal Engine](/solutions/wallets/embedded-wallet/best-practices#5-keeping-your-waasconfigkey-hidden-for-unity-or-unreal-engine)
+6. [Memetic Balance & Data Ownership](/solutions/wallets/embedded-wallet/best-practices#6-memetic-balance--data-ownership)
+
+## 1. Designs for Implementing a Collectible Mint
+
+### Using a Standard Builder Collectible Contract
+With developers implementing an Embedded Wallet experience for their users that have the goal to create a minting function using a contract, developers have the options to either: (1) offer sponsored cloudflare workers minting as a feature, or, (2) have an allowed list of wallet addresses. 
+
+#### (1) Sponsored Minting
+When performing these mints using the Transactions API, developers have the option to pay for relayed transactions. Only the authentication from the Embedded Wallet is used, and the off-chain cloud compute performs the transaction with a Relayer Wallet set with a `MINTER_ROLE` on the standard ERC721 or ERC1155. You can implement a [Serverless Mint with this guide](/guides/mint-collectibles-serverless), or, see it in action with [this WebGL game](https://0xsequence.github.io/waas-airplane-demo/)
+
+#### (2) Allowed List Minting
+When performing these mints, users mint directly with their Embedded Wallet, only if the address is a part of an allowed list of wallets. A guide for an Allowed List Collectible Sale coming shortly.
+
+### Using a Custom Deployed Contract
+If you want to bring your own contract to deploy with the Builder, you wouldn't need to implement a cloudflare worker. You can bypass the need for a role on the contract and in-turn an Embedded Wallet would have no confirmation popups with transaction signing. However, this also means anyone can call the contract which is one of the reasons why the Standard Builder Contracts have a role feature.
+
+## 2. Building an Ecosystem
+
+Developers implementing an Embedded Wallet experience for their users have the opportunity to build ecosystems based on their Embedded Wallet instance. This means, if a user logs into one game, that same user with same login flow can log into another game and be provided the same wallet address to sign or make transactions from.
+
+This is achieved by utilizing the same Client IDs (provided by Google or Apple) in these different gaming experiences registered in the [Sequence Builder](https://sequence.build) in order to yield the same authentication access flow for signing in users.
+
+## 3. Prevent Multiple Transactions by Repeat User Clicks
+
+Due to the fact that transactions are not instant and take time, it is recommended to include some type of loading UI change to prevent making additional transactions by the user. 
+
+Making multiple transactions by accident can also be prevented by implementing the use of a local mutex to hold state until a transaction is complete, only then making UI changes.
+
+## 4. Updating Allowed Origins to Prevent Misuse
+
+If in a web environment, always ensure your allowed origins match your intended production deployment. 
+
+When complete with testing, make sure to remove any localhost origins so others do not also do gain local access to your Embedded Wallet environment.
+
+## 5. Keeping Your WaasConfigKey Hidden for Unity or Unreal Engine
+
+Ensure not to publish your WaaS Config Key anywhere online (e.g. github), so that your Embedded Wallet instance is not used by someone not yourself, as allowed origins do not apply to mobile games because the applications contain hidden code from public users.
+
+## 6. Memetic Balance & Data Ownership
+
+In the transition from Universal Wallets to Embedded Wallets, an Embedded based system puts engagement first to the benefit of every user. With integrations, there are doors that lead to thresholds informationally, therefore setting boundaries and being open to change is a key tool to use in communication and function. 
+
+### Why? 
+When accessing possibilities of experience for various games, ensuring to construct complimentary and adjusting practices of information or affordance can help maintain healthy ownership of the values you put out into the world. As an example, conserving features that include: safety, accessibility, and intended value via a complimentary structure in memes can better accomodate the downstream effect on social and community.
+
+### Possible Solution(s)
+
+#### Analytics
+Using the Sequence Builder, and both off-chain and on-chain data to gather interaction and feedback on how your game is being played is a key tool in the Sequence developer stack.
+
+#### Internal Testing: Practice your values
+Through practices of integrations, following function, and embodying your virtues with developing a game, teams should strive for experiential values that are played out (if possible) and settled through time. This allows the time for sandboxed environments to impact players and user stories via an iterated sequence of adjustments.
+
+#### External Testing: Surveys
+Providing users a non-leading testimonial community survey for feedback loops driving research and engineering.

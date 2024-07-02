@@ -103,6 +103,7 @@ export const sidebar = {
             {text: 'Intents', link: '/solutions/wallets/embedded-wallet/implementation-details/intents'},
             ]
           },
+          { text: 'Best Practices', link: '/solutions/wallets/embedded-wallet/best-practices' },
         ]
       },
       { text: 'Sequence Kit', collapsed: false, items: [
